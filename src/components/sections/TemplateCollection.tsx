@@ -45,7 +45,12 @@ const ROW_CENTER = 1174;
 const NAME_TOP = 185;
 const BUTTON = { top: 257, width: 230, height: 56 };
 
-const MARQUEE = { top: 1607, height: 56, gap: 66 };
+/*
+ * 하단 문구 띠. 시안 서체가 Playfair Display 보다 낱글자가 좁아서, 06 과 같은
+ * 기준으로 캡 높이(39px 상당)보다 낱말 폭이 맞는 35px 을 골랐습니다.
+ * 그만큼 좁아진 어절 사이는 word-spacing 으로 되돌립니다.
+ */
+const MARQUEE = { top: 1607, height: 56, size: 35, wordSpacing: 3.6, gap: 66 };
 /** 시안은 첫 문구의 P 가 화면 왼쪽으로 잘린 지점에서 멈춰 있습니다. */
 const MARQUEE_START = 22;
 
@@ -188,7 +193,14 @@ export function TemplateCollection() {
         aria-hidden
       >
         <div style={{ transform: `translateX(-${MARQUEE_START}px)` }}>
-          <div className="template-marquee flex w-max whitespace-pre font-display text-[39px] font-normal leading-[56px] text-forest">
+          <div
+            className="template-marquee flex w-max whitespace-pre font-display font-normal text-forest"
+            style={{
+              fontSize: `${MARQUEE.size}px`,
+              lineHeight: `${MARQUEE.height}px`,
+              wordSpacing: `${MARQUEE.wordSpacing}px`,
+            }}
+          >
             {[0, 1].map((copy) =>
               templateCollection.marquee.map((phrase) => (
                 <span
