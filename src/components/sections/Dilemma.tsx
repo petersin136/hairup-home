@@ -2,13 +2,16 @@ import { Canvas } from "@/components/layout/Canvas";
 import { dilemma } from "@/content/site";
 
 /**
- * 02_The Dilemma — 아트보드 1440 × 1510, 배경 #f9f8f4
+ * 02_The Dilemma — 아트보드 1440 × 1423, 배경 #f9f8f4
  *
  * 시안이 550×1024 결합본(Dilemma+Experience)으로 와서 배율 2.618 로 역산했습니다.
  * ±수 px 오차가 남아 있습니다. Experience 는 네이티브 1440 시안으로 이미 맞춰
  * 두었고, 이 섹션만 새로 올립니다.
  *
- * 시안에서 잰 잉크 좌표(1440 역산)
+ * 시안 상단 여백(박스 기준 149)이 히어로 하단(62)보다 넓어, 경계가 어색하다는
+ * 피드백으로 전체를 87 올려 상단을 62 로 맞췄습니다. (HEIGHT 도 같이 87 줄임)
+ *
+ * 시안에서 잰 잉크 좌표(1440 역산, 보정 전)
  *   아이브로우  y 298, 중앙, 폭 ≈217
  *   H2          1행 y 363 (행간 96), 중앙
  *   본문        1행 y 586 (행간 36), 중앙 · 두 덩어리 사이 빈 줄 ≈50
@@ -21,19 +24,21 @@ import { dilemma } from "@/content/site";
  *   ZERO STRESS x 361,  y 1376
  *   SOLUTION    y 1473, 중앙
  */
-const HEIGHT = 1510;
+/** 히어로 하단 여백(62)에 맞추려고 시안 상단(149)에서 덜어낸 값 */
+const LIFT = 87;
+const HEIGHT = 1510 - LIFT;
 
-const EYEBROW_TOP = 294;
-const HEADLINE_TOP = 344;
-const BODY_TOP = 576;
-const BODY_ASIDE_TOP = 755;
+const EYEBROW_TOP = 294 - LIFT;
+const HEADLINE_TOP = 344 - LIFT;
+const BODY_TOP = 576 - LIFT;
+const BODY_ASIDE_TOP = 755 - LIFT;
 /** 작은 "01 /" 는 큰 글자보다 베이스라인이 7px 위에 있습니다. */
 const INDEX_RISE = 7;
 
 const BOXES = [
-  { left: 1107, top: 149, width: 333, height: 377 },
-  { left: 0, top: 626, width: 367, height: 280 },
-  { left: 848, top: 1005, width: 466, height: 306 },
+  { left: 1107, top: 149 - LIFT, width: 333, height: 377 },
+  { left: 0, top: 626 - LIFT, width: 367, height: 280 },
+  { left: 848, top: 1005 - LIFT, width: 466, height: 306 },
 ] as const;
 
 /*
@@ -41,11 +46,11 @@ const BOXES = [
  * brand 가 smart 보다 작고 살짝 위에 있습니다.
  */
 const FLOATS = {
-  brand: { left: 120, top: 1033, size: 18 },
-  smart: { left: 178, top: 1035, size: 22 },
-  realtime: { left: 279, top: 1320, size: 22, tracking: 0.4 },
-  zero: { left: 362, top: 1370, size: 24, tracking: 0.8 },
-  solution: { left: 612, top: 1468, size: 24, tracking: 0.6 },
+  brand: { left: 120, top: 1033 - LIFT, size: 18 },
+  smart: { left: 178, top: 1035 - LIFT, size: 22 },
+  realtime: { left: 279, top: 1320 - LIFT, size: 22, tracking: 0.4 },
+  zero: { left: 362, top: 1370 - LIFT, size: 24, tracking: 0.8 },
+  solution: { left: 612, top: 1468 - LIFT, size: 24, tracking: 0.6 },
 } as const;
 
 export function Dilemma() {

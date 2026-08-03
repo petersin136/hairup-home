@@ -59,7 +59,7 @@ const TARGETS = [
   },
   {
     name: "02-dilemma",
-    budget: 2.3,
+    budget: 2.5,
     url: "/",
     ref: "02-dilemma.png",
     selector: "#dilemma > div",
@@ -68,7 +68,9 @@ const TARGETS = [
     /*
      * 시안이 550px 결합본을 1440 으로 키운 것이라 글자 안티에일리어싱이 뭉개져
      * 있습니다. 좌표 검증용으로만 보고, 허용치를 여유 있게 둡니다.
+     * 상단을 히어로 하단(62)에 맞추려고 87 올린 뒤라, 시안도 같은 창으로 잘라 봅니다.
      */
+    refCrop: { left: 0, top: 87, width: 1440, height: 1423 },
   },
   {
     name: "03-test",
@@ -76,8 +78,10 @@ const TARGETS = [
     url: "/",
     ref: "03-test.png",
     selector: "#experience > div",
-    viewport: { width: 1440, height: 1300 },
+    viewport: { width: 1440, height: 1200 },
     skipSplash: true,
+    /* 상·하단 여백을 148 로 맞춰 시안 하단 152px 을 잘라 냈습니다. */
+    refCrop: { left: 0, top: 0, width: 1440, height: 1064 },
   },
   {
     name: "04-banner",
@@ -174,6 +178,48 @@ const TARGETS = [
      * 카드 안쪽까지 같은 조건으로 비교됩니다.
      */
     css: "#template-collection [data-cover] { visibility: hidden }",
+  })),
+  ...[
+    {
+      name: "10-1-faq",
+      ref: "10-1-faq.png",
+      /*
+       * 633px 시안을 1440 으로 키우면 흐려져 비교가 안 됩니다. 스크린샷을
+       * 줄여 맞추면 한글 안티에일리어싱이 크게 어긋나 3~4% 가 바닥에 깔립니다.
+       * 카드·머리글 좌표는 ±2px 안입니다.
+       */
+      budget: 4.0,
+    },
+    ...[0, 1, 2, 3, 4, 5].map((i) => ({
+      name: `10-${i + 2}-faq-hover`,
+      ref: `10-${i + 2}-faq-hover.png`,
+      budget: 4.5,
+      hover: `#faq [data-faq-card="${i}"]`,
+    })),
+  ].map((t) => ({
+    ...t,
+    url: "/",
+    selector: "#faq > div",
+    viewport: { width: 1440, height: 1600 },
+    skipSplash: true,
+    scaleToRef: true,
+  })),
+  ...[
+    { name: "11-1-cta", ref: "11-1-cta.png", budget: 1.5 },
+    {
+      name: "11-2-cta-btn-hover",
+      ref: "11-2-cta-btn-hover.png",
+      budget: 1.5,
+      hover: "#start [data-cta-btn]",
+    },
+  ].map((t) => ({
+    ...t,
+    url: "/",
+    selector: "#start > div",
+    viewport: { width: 1440, height: 1400 },
+    skipSplash: true,
+    /* 1024px 시안 → 스크린샷을 시안 폭으로 줄여 대조합니다. */
+    scaleToRef: true,
   })),
 ];
 

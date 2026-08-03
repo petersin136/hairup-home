@@ -90,6 +90,10 @@ body {
   .template-marquee {
     animation: none;
   }
+
+  .faq-card-inner {
+    transition: none !important;
+  }
 }
 
 /* ============================================================================

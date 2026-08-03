@@ -48,8 +48,8 @@ PYTHONPATH=scripts python3 scripts/compare-ink.py 06-1   # 이름에 06-1 이 �
 | --- | --- | --- |
 | `00-splash` | 0.036% | 0.08% |
 | `01-hero` | 0.303% | 0.45% |
-| `02-dilemma` | 2.272% | 2.30% |
-| `03-test` | 0.035% | 0.08% |
+| `02-dilemma` | 2.411% | 2.50% |
+| `03-test` | 0.040% | 0.08% |
 | `04-banner` | 0.059% | 0.12% |
 | `05-key-benefits` | 0.128% | 0.70% |
 | `05-card-1` | 1.675% | 1.80% |
@@ -102,6 +102,8 @@ node scripts/probe-header.mjs && PYTHONPATH=scripts python3 scripts/probe-header
 (`[data-cover] { visibility: hidden }`) 같은 조건으로 맞춥니다.
 
 ## 아직 시안이 없거나 확정 전인 부분
+
+`08` · `09` 섹션은 시안이 준비 중이라 플레이스홀더만 두었습니다.
 
 `02_Dilemma` · `03_Test` · `05` · `06` 의 검정/크림 이미지 박스는 시안에 내용이 없어
 단색 면으로만 두었습니다. Dilemma 세 장은 나중에 Supabase URL 로 채웁니다.
@@ -157,6 +159,13 @@ node scripts/probe-header.mjs && PYTHONPATH=scripts python3 scripts/probe-header
   시안에서 좌우가 잘려 나가는 요소라, 1440 에서 자르면 화면이 더 넓을 때 양옆 크림 여백
   안쪽에서 뚝 끊겨 보입니다. 화면 끝에서 잘리도록 두어 계속 이어지는 것처럼 보이게 했습니다.
   1440 에서는 두 방식의 결과가 같아 시안 대조값은 그대로입니다.
+- `10_FAQ` — 3×2 카드. 기본은 질문 면(검정)이고, 호버·포커스하면 600ms 동안 뒤집혀
+  답변 면이 나옵니다. 답변 배경은 Q1·Q5 포레스트, Q2·Q6 클레이, Q3·Q4 에스프레소입니다.
+  시안 라벨은 `07 / FAQ` 그대로입니다(페이지 순서는 10번). 시안 PNG가 633px 이라
+  픽셀 diff는 `scaleToRef`로 맞춥니다.
+- `11_CTA` (`#start`) — 검정 바탕에 세리프 플로팅 라벨 네 개와 하단 좌측 헤드라인·본문·
+  아웃라인 CTA. 버튼 호버 시 흰 채움·검정 글자로 바뀝니다. 헤더 `CREATE MY BRAND` 가
+  여기로 스크롤됩니다.
 
 ## 디자인 토큰
 

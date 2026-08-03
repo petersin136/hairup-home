@@ -13,10 +13,14 @@ import { experience } from "@/content/site";
  *   H2          x 843, 1행 y 228 (행간 96px)
  *   본문        x 844, 1행 y 544 (행간 36px)
  *
+ * 시안 아트보드는 1216 이라 하단 여백이 300 으로 상단(148)보다 넓습니다.
+ * 상·하단을 같게 달라는 요청으로 높이를 148+768+148 = 1064 로 잘랐습니다.
+ *
  * 타입 스케일은 히어로와 완전히 동일합니다(잉크 높이 74/66/21px, 행간 96/36px).
  * left/top 은 위 잉크 좌표가 나오도록 스크린샷 대조로 맞춘 박스 좌표입니다.
  */
 const PANEL = { left: 120, top: 148, width: 600, height: 768 };
+const HEIGHT = PANEL.top + PANEL.height + PANEL.top;
 const EYEBROW = { left: 843, top: 159 };
 const HEADLINE = { left: 841, top: 209 };
 const BODY = { left: 842, top: 535 };
@@ -26,7 +30,7 @@ const INDEX_RISE = 7;
 
 export function Experience() {
   return (
-    <Canvas id="experience" height={1216} background="bg-paper">
+    <Canvas id="experience" height={HEIGHT} background="bg-paper">
       <div
         className="absolute rounded-[6px] bg-ink"
         style={{
