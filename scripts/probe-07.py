@@ -14,8 +14,15 @@ def s(v):
     return v * SCALE
 
 
+REFS = {
+    "07-1": "07-1-template",
+    "07-2": "07-2-template-hover",
+    "07-3": "07-3-button-hover",
+}
+
+
 def load(name):
-    return Image.open(f"design/refs/raw/{name}.png").convert("RGB")
+    return Image.open(f"design/refs/{REFS[name]}.png").convert("RGB")
 
 
 def lum(p):

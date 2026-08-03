@@ -80,6 +80,49 @@ export const keyBenefits = {
   ],
 } as const;
 
+export const templateCollection = {
+  eyebrow: { index: "04 /", label: "TEMPLATE COLLECTION" },
+  headline: ["수많은 디자이너 중", "하나가 아닌", "단 하나의 브랜드로."],
+  body: [
+    "플랫폼의 획일화된 목록 속에서는 당신의 미학을 온전히 보여줄 수 없습니다.",
+    "당신의 작업, 당신의 색, 당신의 이야기를 담은",
+    "독점 페이지로 고객에게 깊은 인상을 남기세요.",
+  ],
+  cta: "VIEW DEMO",
+  /*
+   * 대문 이미지는 scripts/capture-templates.mjs 로 각 데모 사이트의 첫 화면을
+   * 1600 × 1000 으로 찍어 둔 것입니다. 사이트가 바뀌면 다시 돌리면 됩니다.
+   * 01 만 시안에 이름이 적혀 있고, 02·03 이름은 확정 전 임시값입니다.
+   */
+  templates: [
+    {
+      index: "01",
+      name: "Studio Signature",
+      href: "https://maranathahomepage.vercel.app/",
+      image: "/templates/studio-signature.webp",
+    },
+    {
+      index: "02",
+      name: "Editorial Portrait",
+      href: "https://hair-up-template-2.vercel.app/",
+      image: "/templates/editorial-portrait.webp",
+    },
+    {
+      index: "03",
+      name: "Elevate Studio",
+      href: "https://hairup-template3.vercel.app/",
+      image: "/templates/elevate-studio.webp",
+    },
+  ],
+  /* 시안에서 양끝 문구가 잘려 있어 첫 단어와 마지막 문구는 추정입니다. */
+  marquee: [
+    "PURE DESIGN FOCUS",
+    "UNINTERRUPTED CRAFT",
+    "AI SALON SUPPORT",
+    "EFFORTLESS BOOKING",
+  ],
+} as const;
+
 export const process = {
   eyebrow: ["THE", "PROCESS"],
   steps: [

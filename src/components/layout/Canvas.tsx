@@ -8,6 +8,8 @@ type CanvasProps = {
   children: ReactNode;
   className?: string;
   id?: string;
+  /** 아트보드 밖으로 나가는 요소를 1440 경계에서 잘라냅니다. */
+  clip?: boolean;
 };
 
 /**
@@ -21,11 +23,12 @@ export function Canvas({
   children,
   className,
   id,
+  clip,
 }: CanvasProps) {
   return (
     <section id={id} className={`w-full ${background} ${className ?? ""}`}>
       <div
-        className="relative mx-auto w-[1440px]"
+        className={`relative mx-auto w-[1440px] ${clip ? "overflow-hidden" : ""}`}
         style={{ height: `${height}px` }}
       >
         {children}

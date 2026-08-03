@@ -87,6 +87,26 @@ body {
   }
 }
 
+/*
+ * 07_Template Collection 하단 문구 띠. 문구 목록을 두 벌 이어 붙이고 한 벌
+ * 만큼(=50%) 밀어내면 이음매 없이 오른쪽에서 왼쪽으로 계속 흐릅니다.
+ */
+@keyframes template-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.template-marquee {
+  animation: template-marquee 42s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .template-marquee {
+    animation: none;
+  }
+}
+
 /* ============================================================================
    SPLASH SCREEN 모션
    0~0.4s 등장 / 0.4~1.2s 정지 / 1.2~1.6s 커튼업

@@ -4,6 +4,7 @@ import { Hero } from "@/components/sections/Hero";
 import { KeyBenefits } from "@/components/sections/KeyBenefits";
 import { Process } from "@/components/sections/Process";
 import { SectionPlaceholder } from "@/components/sections/SectionPlaceholder";
+import { TemplateCollection } from "@/components/sections/TemplateCollection";
 import { SplashScreen } from "@/components/splash/SplashScreen";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
         <Banner />
         <KeyBenefits />
         <Process />
+        <TemplateCollection />
       </main>
     </>
   );
