@@ -31,7 +31,12 @@ def box(im, bg, tol, x0, x1, y0, y1):
     return (min(xs), max(xs), min(ys), max(ys))
 
 
-def report(title, ref_path, act_path, bg, tol, items):
+def report(title, ref_path, act_path, bg, tol, items, act_dx=0):
+    """act_dx 는 구현 스크린샷이 시안보다 왼쪽으로 얼마나 잘려 있는지입니다.
+
+    06 처럼 시안 좌우 여백을 덜어낸 폭으로 찍는 섹션에서, 구현 쪽 좌표를 시안
+    좌표계로 되돌려 놓고 비교하기 위한 값입니다.
+    """
     if only and only not in title:
         return
     ref, act = load(ref_path), load(act_path)
@@ -39,10 +44,11 @@ def report(title, ref_path, act_path, bg, tol, items):
     print(f"   {'요소':<20} {'시안 x/y':<24} {'구현 x/y':<24} 차이")
     for name, x0, x1, y0, y1 in items:
         r = box(ref, bg, tol, x0, x1, y0, y1)
-        a = box(act, bg, tol, x0, x1, y0, y1)
+        a = box(act, bg, tol, x0 - act_dx, x1 - act_dx, y0, y1)
         if r is None or a is None:
             print(f"   {name:<20} 측정 실패 (ref={r} act={a})")
             continue
+        a = (a[0] + act_dx, a[1] + act_dx, a[2], a[3])
         dl, dr = a[0] - r[0], a[1] - r[1]
         dt, db = a[2] - r[2], a[3] - r[3]
         flag = "" if max(abs(dl), abs(dr), abs(dt), abs(db)) <= 1 else "   <-- 보정"
@@ -147,4 +153,5 @@ for tag, bg, lines in [
         bg,
         18,
         PROCESS_COMMON + lines,
+        act_dx=60,
     )
