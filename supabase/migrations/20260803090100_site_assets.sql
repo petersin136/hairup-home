@@ -91,7 +91,9 @@ on conflict (key) do nothing;
 -- ----------------------------------------------------------------------------
 -- 완성된 public URL 까지 붙여 주는 뷰
 -- ----------------------------------------------------------------------------
-create or replace view public.site_asset_urls as
+-- security_invoker: 뷰를 조회한 사용자의 권한으로 RLS 를 평가합니다.
+create or replace view public.site_asset_urls
+with (security_invoker = on) as
 select
   a.key,
   a.bucket,
