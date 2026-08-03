@@ -129,6 +129,17 @@ if (targets.length === 0) {
 
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
+/** PNG 인코딩 종류를 타지 않도록 디코딩은 sharp 로 통일합니다. */
+async function decode(buffer) {
+  const { data, info } = await sharp(buffer)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const png = new PNG({ width: info.width, height: info.height });
+  png.data = data;
+  return png;
+}
+
 const browser = await chromium.launch();
 let failed = false;
 
@@ -149,6 +160,15 @@ for (const target of targets) {
 
   const page = await context.newPage();
   await page.goto(`${BASE_URL}${target.url}`, { waitUntil: "networkidle" });
+  /*
+   * 스플래시는 fixed 라서 뷰포트보다 긴 섹션을 찍을 때 화면 위쪽을 덮습니다.
+   * sessionStorage 만으로는 첫 페인트 타이밍을 못 잡을 때가 있어 직접 감춥니다.
+   */
+  if (target.skipSplash) {
+    await page.evaluate(() =>
+      document.documentElement.classList.add("splash-seen"),
+    );
+  }
   await page.evaluate(() => document.fonts.ready);
 
   if (target.css) await page.addStyleTag({ content: target.css });
@@ -198,8 +218,8 @@ for (const target of targets) {
     shot = await sharp(shot).resize({ width: rw, kernel: "lanczos3" }).png().toBuffer();
   }
 
-  const actual = PNG.sync.read(shot);
-  const expected = PNG.sync.read(
+  const actual = await decode(shot);
+  const expected = await decode(
     fs.readFileSync(path.join(REF_DIR, target.ref)),
   );
 
