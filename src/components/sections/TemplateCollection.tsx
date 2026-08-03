@@ -58,27 +58,25 @@ const MARQUEE = { top: 1607, height: 56, size: 35.2, wordSpacing: 3.2, gap: 64 }
 const MARQUEE_START = 20;
 
 const TEMPLATES = templateCollection.templates;
-/**
- * 좌우 이웃이 항상 있어야 해서 목록을 세 벌 이어 붙이고 가운데 벌 안에서만
- * 움직입니다. 스트립이 세 벌 주기로 똑같이 생겼으므로, 가운데 벌을 벗어나면
- * 전환 없이 한 벌만큼 되돌려도 화면은 그대로입니다.
- */
-const COPIES = 3;
-const STRIP = Array.from(
-  { length: TEMPLATES.length * COPIES },
-  (_, i) => TEMPLATES[i % TEMPLATES.length],
-);
-const FIRST = TEMPLATES.length;
-const LAST = TEMPLATES.length * 2 - 1;
 
-/** 스트립에서 i 번째 카드를 화면 가운데(x 720)에 놓기 위한 이동 거리 */
+/*
+ * 카드는 목록을 몇 벌 이어 붙인 유한한 줄이 아니라, 끝없이 뻗은 자리 번호 위에
+ * 놓습니다. 자리 번호 i 는 음수로도 커지고 어떤 목록 항목인지는 나머지로 정하므로,
+ * 몇 번을 넘겨도 되돌릴 일이 없습니다. 되돌리는 순간이 없으니 튀지도 않습니다.
+ */
+const at = (i: number) =>
+  TEMPLATES[((i % TEMPLATES.length) + TEMPLATES.length) % TEMPLATES.length];
+
+/** 가운데 자리 좌우로 몇 장까지 그려 둘지. 3 장이면 5300px 폭까지 빈자리가 없습니다. */
+const REACH = 3;
+
+/** i 번 자리를 화면 가운데(x 720)에 놓기 위한 줄 전체의 이동 거리 */
 const originFor = (i: number) => 720 - i * PITCH - CARD.width / 2;
 
 export function TemplateCollection() {
-  const [index, setIndex] = useState<number>(FIRST);
+  const [index, setIndex] = useState(0);
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
-  const [snapping, setSnapping] = useState(false);
   const startX = useRef(0);
   const offset = useRef(0);
   /** 드래그로 끝난 동작이 옆 카드 클릭까지 발동시키지 않도록 남겨 둡니다. */
@@ -109,7 +107,7 @@ export function TemplateCollection() {
       /* 카드 한 장을 다 끌지 않아도 20% 만 넘기면 다음 장으로 넘어갑니다. */
       const raw = -offset.current / PITCH;
       const steps = Math.sign(raw) * Math.floor(Math.abs(raw) + 1 - SNAP);
-      setIndex((i) => Math.min(STRIP.length - 2, Math.max(1, i + steps)));
+      setIndex((i) => i + steps);
       offset.current = 0;
     };
 
@@ -123,14 +121,11 @@ export function TemplateCollection() {
     };
   }, [dragging]);
 
-  /** 밀림이 끝나면 가운데 벌로 조용히 되돌려 어느 쪽으로든 계속 넘길 수 있게 합니다. */
-  const onTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
-    if (e.target !== e.currentTarget || e.propertyName !== "transform") return;
-    if (index >= FIRST && index <= LAST) return;
-    setSnapping(true);
-    setIndex(index + (index < FIRST ? TEMPLATES.length : -TEMPLATES.length));
-    requestAnimationFrame(() => setSnapping(false));
-  };
+  /* 가운데 자리를 중심으로 좌우 REACH 장씩만 실제로 그립니다. */
+  const seats = Array.from(
+    { length: REACH * 2 + 1 },
+    (_, n) => index - REACH + n,
+  );
 
   return (
     /*
@@ -188,30 +183,26 @@ export function TemplateCollection() {
         onPointerDown={onPointerDown}
       >
         <div
-          className="flex h-full w-max items-center"
+          data-track
+          className="absolute inset-y-0 left-0"
           style={{
-            gap: `${CARD.gap}px`,
             transform: `translateX(${originFor(index) + dragX}px)`,
-            transition:
-              snapping || dragging
-                ? "none"
-                : "transform 600ms cubic-bezier(0.65, 0, 0.35, 1)",
+            transition: dragging
+              ? "none"
+              : "transform 600ms cubic-bezier(0.65, 0, 0.35, 1)",
           }}
-          onTransitionEnd={onTransitionEnd}
         >
-          {STRIP.map((template, i) => {
-            const centered = i === index;
-            return (
-              <TemplateCard
-                key={`${template.index}-${i}`}
-                template={template}
-                centered={centered}
-                onSelect={() => {
-                  if (!moved.current) setIndex(i);
-                }}
-              />
-            );
-          })}
+          {seats.map((seat) => (
+            <TemplateCard
+              key={seat}
+              template={at(seat)}
+              left={seat * PITCH}
+              centered={seat === index}
+              onSelect={() => {
+                if (!moved.current) setIndex(seat);
+              }}
+            />
+          ))}
         </div>
       </div>
 
@@ -248,16 +239,19 @@ export function TemplateCollection() {
 
 type CardProps = {
   template: (typeof TEMPLATES)[number];
+  /** 줄 안에서의 자리(px). 자리마다 값이 고정이라 좌우 끝에서 카드를 넣고 빼도 줄이 흔들리지 않습니다. */
+  left: number;
   centered: boolean;
   onSelect: () => void;
 };
 
-function TemplateCard({ template, centered, onSelect }: CardProps) {
+function TemplateCard({ template, left, centered, onSelect }: CardProps) {
   return (
     <article
       data-centered={centered}
-      className="rounded-ui group relative shrink-0 overflow-hidden bg-black transition-[height] duration-600 ease-[cubic-bezier(0.65,0,0.35,1)]"
+      className="rounded-ui group absolute top-1/2 -translate-y-1/2 overflow-hidden bg-black transition-[height] duration-600 ease-[cubic-bezier(0.65,0,0.35,1)]"
       style={{
+        left: `${left}px`,
         width: `${CARD.width}px`,
         height: `${centered ? CARD.active : CARD.inactive}px`,
       }}
