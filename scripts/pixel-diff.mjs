@@ -80,11 +80,17 @@ const TARGETS = [
     budget: 0.5,
     url: "/",
     ref: `06-${step + 1}-process.png`,
-    selector: "#process",
-    viewport: { width: 1440, height: 1100 },
+    /*
+     * 세 장이 이어 흐르는 띠가 됐으므로 화면이 아니라 장 하나를 찍습니다.
+     * 흐름을 멈추면(reduce) 세 장이 0 · 1320 · 2640 에 서므로, 셋 다 화면 안에
+     * 들어오도록 넓은 뷰포트에서 찍습니다.
+     */
+    selector: `#process [data-step="${step}"]`,
+    viewport: { width: 4000, height: 1100 },
     skipSplash: true,
-    /** 자동 순환 섹션이라 해당 상태가 활성화될 때까지 기다립니다. */
-    step,
+    reducedMotion: "reduce",
+    /** 장이 시안의 좌우 여백을 60 씩 덜어낸 폭이라 시안도 같은 창으로 잘라 봅니다. */
+    refCrop: { left: 60, top: 0, width: 1320, height: 1030 },
   })),
   ...[
     { name: "07-1-template", ref: "07-1-template.png", budget: 0.9 },
@@ -147,7 +153,7 @@ for (const target of targets) {
   const context = await browser.newContext({
     viewport: target.viewport,
     deviceScaleFactor: 1,
-    reducedMotion: "no-preference",
+    reducedMotion: target.reducedMotion ?? "no-preference",
   });
 
   if (target.skipSplash) {
@@ -178,13 +184,6 @@ for (const target of targets) {
     await page.waitForTimeout(700);
   }
 
-  if (target.step !== undefined) {
-    await page.waitForSelector(
-      `[data-step="${target.step}"][data-active="true"]`,
-      { timeout: 20000 },
-    );
-  }
-
   if (target.freezeAt !== undefined) {
     await page.evaluate((at) => {
       document.getAnimations().forEach((animation) => {
@@ -208,20 +207,25 @@ for (const target of targets) {
   await page.waitForTimeout(150);
 
   let shot = target.selector
-    ? await page.locator(target.selector).screenshot()
+    ? await page.locator(target.selector).first().screenshot()
     : await page.screenshot({ clip: target.clip });
   await context.close();
 
+  let refBuffer = fs.readFileSync(path.join(REF_DIR, target.ref));
+  if (target.refCrop) {
+    refBuffer = await sharp(refBuffer).extract(target.refCrop).png().toBuffer();
+  }
+
   if (target.scaleToRef) {
-    const ref = sharp(path.join(REF_DIR, target.ref));
-    const { width: rw } = await ref.metadata();
-    shot = await sharp(shot).resize({ width: rw, kernel: "lanczos3" }).png().toBuffer();
+    const { width: rw } = await sharp(refBuffer).metadata();
+    shot = await sharp(shot)
+      .resize({ width: rw, kernel: "lanczos3" })
+      .png()
+      .toBuffer();
   }
 
   const actual = await decode(shot);
-  const expected = await decode(
-    fs.readFileSync(path.join(REF_DIR, target.ref)),
-  );
+  const expected = await decode(refBuffer);
 
   const width = Math.min(actual.width, expected.width);
   const height = Math.min(actual.height, expected.height);
