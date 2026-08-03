@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Canvas } from "@/components/layout/Canvas";
 import { templateCollection } from "@/content/site";
@@ -41,18 +41,21 @@ const INDEX_RISE = 7;
 const CARD = { width: 800, active: 500, inactive: 426, gap: 31 };
 const PITCH = CARD.width + CARD.gap;
 const ROW_CENTER = 1174;
+/** 카드 폭의 몇 할을 끌어야 다음 장으로 넘어가는지 */
+const SNAP = 0.2;
 
-const NAME_TOP = 185;
-const BUTTON = { top: 257, width: 230, height: 56 };
+/** 카드 위끝을 기준으로 한 오버레이 좌표 */
+const NAME = { top: 183, size: 26.5, index: 13, rise: 8 };
+const BUTTON = { top: 258, width: 229, height: 56 };
 
 /*
  * 하단 문구 띠. 시안 서체가 Playfair Display 보다 낱글자가 좁아서, 06 과 같은
  * 기준으로 캡 높이(39px 상당)보다 낱말 폭이 맞는 35px 을 골랐습니다.
  * 그만큼 좁아진 어절 사이는 word-spacing 으로 되돌립니다.
  */
-const MARQUEE = { top: 1607, height: 56, size: 35, wordSpacing: 3.6, gap: 66 };
+const MARQUEE = { top: 1607, height: 56, size: 35.2, wordSpacing: 3.2, gap: 64 };
 /** 시안은 첫 문구의 P 가 화면 왼쪽으로 잘린 지점에서 멈춰 있습니다. */
-const MARQUEE_START = 22;
+const MARQUEE_START = 20;
 
 const TEMPLATES = templateCollection.templates;
 /**
@@ -77,34 +80,52 @@ export function TemplateCollection() {
   const [dragging, setDragging] = useState(false);
   const [snapping, setSnapping] = useState(false);
   const startX = useRef(0);
+  const offset = useRef(0);
   /** 드래그로 끝난 동작이 옆 카드 클릭까지 발동시키지 않도록 남겨 둡니다. */
   const moved = useRef(false);
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     startX.current = e.clientX;
+    offset.current = 0;
     moved.current = false;
     setDragging(true);
-    e.currentTarget.setPointerCapture(e.pointerId);
   };
 
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+  /*
+   * 포인터를 캡처하면 카드 안의 링크·버튼이 클릭을 못 받으므로, 대신 끄는 동안만
+   * 창 전체에서 듣습니다. 이러면 커서가 섹션 밖으로 나가도 계속 따라옵니다.
+   */
+  useEffect(() => {
     if (!dragging) return;
-    const dx = e.clientX - startX.current;
-    if (Math.abs(dx) > 3) moved.current = true;
-    setDragX(dx);
-  };
 
-  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragging) return;
-    e.currentTarget.releasePointerCapture(e.pointerId);
-    setDragging(false);
-    const next = Math.round(index - dragX / PITCH);
-    setIndex(Math.min(STRIP.length - 2, Math.max(1, next)));
-    setDragX(0);
-  };
+    const onMove = (e: PointerEvent) => {
+      offset.current = e.clientX - startX.current;
+      if (Math.abs(offset.current) > 3) moved.current = true;
+      setDragX(offset.current);
+    };
+    const onUp = () => {
+      setDragging(false);
+      setDragX(0);
+      /* 카드 한 장을 다 끌지 않아도 20% 만 넘기면 다음 장으로 넘어갑니다. */
+      const raw = -offset.current / PITCH;
+      const steps = Math.sign(raw) * Math.floor(Math.abs(raw) + 1 - SNAP);
+      setIndex((i) => Math.min(STRIP.length - 2, Math.max(1, i + steps)));
+      offset.current = 0;
+    };
+
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
+  }, [dragging]);
 
   /** 밀림이 끝나면 가운데 벌로 조용히 되돌려 어느 쪽으로든 계속 넘길 수 있게 합니다. */
-  const onTransitionEnd = () => {
+  const onTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget || e.propertyName !== "transform") return;
     if (index >= FIRST && index <= LAST) return;
     setSnapping(true);
     setIndex(index + (index < FIRST ? TEMPLATES.length : -TEMPLATES.length));
@@ -155,9 +176,6 @@ export function TemplateCollection() {
           height: `${CARD.active}px`,
         }}
         onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
       >
         <div
           className="flex h-full w-max items-center"
@@ -240,6 +258,7 @@ function TemplateCard({ template, centered, onSelect }: CardProps) {
         fill
         sizes={`${CARD.width}px`}
         data-cover
+        draggable={false}
         className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
       />
 
@@ -249,10 +268,13 @@ function TemplateCard({ template, centered, onSelect }: CardProps) {
 
           <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
             <p
-              className="absolute inset-x-0 text-center font-display text-[32px] font-normal leading-none text-porcelain"
-              style={{ top: `${NAME_TOP}px` }}
+              className="absolute inset-x-0 text-center font-display font-normal leading-none text-porcelain"
+              style={{ top: `${NAME.top}px`, fontSize: `${NAME.size}px` }}
             >
-              <span className="relative font-latin text-[15px] font-medium tracking-[0.5px] [font-variant-numeric:lining-nums]" style={{ top: "-7px" }}>
+              <span
+                className="relative font-latin font-medium tracking-[0.5px] [font-variant-numeric:lining-nums]"
+                style={{ fontSize: `${NAME.index}px`, top: `-${NAME.rise}px` }}
+              >
                 {template.index}{" "}
               </span>
               / {template.name}

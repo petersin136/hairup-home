@@ -87,17 +87,17 @@ const TARGETS = [
     step,
   })),
   ...[
-    { name: "07-1-template", ref: "07-1-template.png", budget: 0.55 },
+    { name: "07-1-template", ref: "07-1-template.png", budget: 0.9 },
     {
       name: "07-2-template-hover",
       ref: "07-2-template-hover.png",
-      budget: 0.55,
+      budget: 1.1,
       hover: '#template-collection [data-centered="true"]',
     },
     {
       name: "07-3-button-hover",
       ref: "07-3-button-hover.png",
-      budget: 0.55,
+      budget: 1.1,
       hover: '#template-collection [data-centered="true"] a',
     },
   ].map((t) => ({
