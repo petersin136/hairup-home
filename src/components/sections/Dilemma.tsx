@@ -1,4 +1,5 @@
 import { Canvas } from "@/components/layout/Canvas";
+import { RainInLines } from "@/components/motion/RainInLines";
 import { dilemma } from "@/content/site";
 
 /**
@@ -93,27 +94,17 @@ export function Dilemma() {
         ))}
       </h2>
 
-      <p
+      <RainInLines
+        lines={dilemma.body}
         className="text-kr absolute inset-x-0 text-center text-[22px] font-normal leading-[36px] tracking-[-0.01em] text-ash"
         style={{ top: `${BODY_TOP}px` }}
-      >
-        {dilemma.body.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
-      </p>
+      />
 
-      <p
+      <RainInLines
+        lines={dilemma.bodyAside}
         className="text-kr absolute inset-x-0 text-center text-[22px] font-normal leading-[36px] tracking-[-0.01em] text-ash"
         style={{ top: `${BODY_ASIDE_TOP}px` }}
-      >
-        {dilemma.bodyAside.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
-      </p>
+      />
 
       <p
         className="absolute whitespace-pre font-display font-normal leading-none text-whisper"

@@ -1,4 +1,5 @@
 import { Canvas } from "@/components/layout/Canvas";
+import { RainInLines } from "@/components/motion/RainInLines";
 import { experience } from "@/content/site";
 
 /**
@@ -65,16 +66,11 @@ export function Experience() {
         ))}
       </h2>
 
-      <p
+      <RainInLines
+        lines={experience.body}
         className="text-kr absolute text-[22px] font-normal leading-[36px] tracking-[-0.01em] text-body"
         style={{ left: `${BODY.left}px`, top: `${BODY.top}px` }}
-      >
-        {experience.body.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
-      </p>
+      />
     </Canvas>
   );
 }

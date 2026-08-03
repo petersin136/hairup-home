@@ -276,6 +276,19 @@ for (const target of targets) {
 
   if (target.css) await page.addStyleTag({ content: target.css });
 
+  /*
+   * 본문 rain-in 은 IntersectionObserver 로 켜집니다. 스크린샷 전에 끝까지
+   * 보낸 뒤 finish 하면 픽셀 대조가 중간 프레임을 찍지 않습니다.
+   */
+  await page.evaluate(() => {
+    document.querySelectorAll("[data-rain-line]").forEach((el) => {
+      el.classList.add("rain-line-in");
+    });
+    document.querySelectorAll("[data-rain]").forEach((el) => {
+      el.setAttribute("data-rain", "in");
+    });
+  });
+
   if (target.hover) {
     await page.locator(target.hover).hover();
     await page.waitForTimeout(700);

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 import { Canvas } from "@/components/layout/Canvas";
+import { RainInLines } from "@/components/motion/RainInLines";
 import { templateCollection } from "@/content/site";
 
 /**
@@ -29,7 +30,7 @@ import { templateCollection } from "@/content/site";
  *   카드 간격   31 (좌우 카드가 289 씩 보임)
  *   템플릿 이름 y 1109, 카드 중앙 정렬
  *   버튼        230 × 56, y 1181, 카드 중앙 정렬
- *   하단 마퀴   y 1623, 문구 사이 66
+ *   하단 마퀴   y 1623, 문구 사이 66 — 기본 우→좌, 스크롤로 가속·역방향
  */
 const HEIGHT = 1749;
 const EYEBROW_TOP = 295;
@@ -58,10 +59,20 @@ const BUTTON = { top: 258, width: 229, height: 56 };
  * 하단 문구 띠. 시안 서체가 Playfair Display 보다 낱글자가 좁아서, 06 과 같은
  * 기준으로 캡 높이(39px 상당)보다 낱말 폭이 맞는 35px 을 골랐습니다.
  * 그만큼 좁아진 어절 사이는 word-spacing 으로 되돌립니다.
+ *
+ * 기본은 오른쪽→왼쪽. 스크롤을 내리면 더 빠르게, 올리면 잠깐 반대로 흐릅니다.
  */
 const MARQUEE = { top: 1607, height: 56, size: 35.2, wordSpacing: 3.2, gap: 64 };
 /** 시안은 첫 문구의 P 가 화면 왼쪽으로 잘린 지점에서 멈춰 있습니다. */
 const MARQUEE_START = 20;
+/** 한 벌(=1/3)을 밀어내는 데 걸리는 시간. 예전 CSS 42s 와 같습니다. */
+const MARQUEE_CYCLE_MS = 42_000;
+/** 스크롤 중 목표 배속. 내리면 +2×, 올리면 −2×(역방향). */
+const MARQUEE_SCROLL_MULT = 2;
+/** 마지막 스크롤 뒤 이 시간(ms) 동안은 2배속을 유지합니다. */
+const MARQUEE_SCROLL_HOLD_MS = 180;
+/** hold 가 끝난 뒤 배속이 이 비율로 식어 1배로 돌아옵니다. (16ms 당) */
+const MARQUEE_BOOST_DECAY = 0.92;
 
 const TEMPLATES = templateCollection.templates;
 
@@ -215,16 +226,11 @@ export function TemplateCollection() {
         ))}
       </h2>
 
-      <p
+      <RainInLines
+        lines={templateCollection.body}
         className="text-kr absolute inset-x-0 text-center text-[22px] font-normal leading-[36px] tracking-[-0.01em] text-body"
         style={{ top: `${BODY_TOP}px` }}
-      >
-        {templateCollection.body.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
-      </p>
+      />
 
       <div
         className="absolute inset-x-0 cursor-grab touch-pan-y select-none active:cursor-grabbing"
@@ -259,34 +265,116 @@ export function TemplateCollection() {
         </div>
       </div>
 
-      <div
-        className="absolute left-1/2 w-screen -translate-x-1/2 overflow-hidden"
-        style={{ top: `${MARQUEE.top}px`, height: `${MARQUEE.height}px` }}
-        aria-hidden
-      >
-        <div style={{ transform: `translateX(-${MARQUEE_START}px)` }}>
-          <div
-            className="template-marquee flex w-max whitespace-pre font-display font-normal text-forest"
-            style={{
-              fontSize: `${MARQUEE.size}px`,
-              lineHeight: `${MARQUEE.height}px`,
-              wordSpacing: `${MARQUEE.wordSpacing}px`,
-            }}
-          >
-            {[0, 1, 2].map((copy) =>
-              templateCollection.marquee.map((phrase) => (
-                <span
-                  key={`${copy}-${phrase}`}
-                  style={{ marginRight: `${MARQUEE.gap}px` }}
-                >
-                  {phrase}
-                </span>
-              )),
-            )}
-          </div>
-        </div>
-      </div>
+      <TemplateMarquee />
     </Canvas>
+  );
+}
+
+/**
+ * 문구를 세 벌 이어 붙이고 한 벌만큼(=1/3) 밀어내면 이음매 없이 흐릅니다.
+ * 세 벌인 이유는 한 벌이 끝까지 밀려간 순간에도 남은 두 벌이 넓은 화면을
+ * 빈틈없이 덮게 하기 위해서입니다.
+ *
+ * 위치는 CSS animation 이 아니라 rAF 로 직접 밉니다. 속도는 기본(1×)에
+ * 스크롤 배속(내리면 +2×, 올리면 −2×)을 곱하고, 손을 떼면 1×로 식습니다.
+ */
+function TemplateMarquee() {
+  const track = useRef<HTMLDivElement>(null);
+  /** 지금까지 흘러온 거리(px). 양수일수록 왼쪽(우→좌). */
+  const flowed = useRef(MARQUEE_START);
+  /** 기본 속도에 곱하는 배속. 1 = 평소, 2 = 스크롤 다운, −2 = 스크롤 업 역방향. */
+  const drive = useRef(1);
+  const lastY = useRef(0);
+  /** 마지막으로 스크롤이 들어온 시각. hold 구간에는 감쇠하지 않습니다. */
+  const scrolledAt = useRef(0);
+
+  useEffect(() => {
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)");
+    lastY.current = window.scrollY;
+
+    const applyScroll = (dy: number) => {
+      if (dy === 0) return;
+      /*
+       * 트랙패드는 dy 가 1~수 px 이라 비율로 붙이면 거의 안 움직입니다.
+       * 방향만 보고 바로 2배(또는 −2배)에 고정하고, hold 동안 유지합니다.
+       */
+      drive.current = dy > 0 ? MARQUEE_SCROLL_MULT : -MARQUEE_SCROLL_MULT;
+      scrolledAt.current = performance.now();
+    };
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      applyScroll(y - lastY.current);
+      lastY.current = y;
+    };
+
+    /* 페이지 끝에서 scrollY 가 안 바뀌어도 휠은 오므로 같이 듣습니다. */
+    const onWheel = (e: WheelEvent) => applyScroll(e.deltaY);
+
+    let frame = 0;
+    let prev = performance.now();
+
+    const tick = (now: number) => {
+      const dt = now - prev;
+      prev = now;
+
+      if (!still.matches && track.current) {
+        const cycle = track.current.scrollWidth / 3;
+        if (cycle > 0) {
+          const base = cycle / MARQUEE_CYCLE_MS;
+
+          if (now - scrolledAt.current > MARQUEE_SCROLL_HOLD_MS) {
+            drive.current =
+              1 + (drive.current - 1) * Math.pow(MARQUEE_BOOST_DECAY, dt / 16);
+            if (Math.abs(drive.current - 1) < 0.01) drive.current = 1;
+          }
+
+          flowed.current += base * drive.current * dt;
+          const wrapped = ((flowed.current % cycle) + cycle) % cycle;
+          track.current.style.transform = `translate3d(${-wrapped}px, 0, 0)`;
+        }
+      }
+
+      frame = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("wheel", onWheel, { passive: true });
+    frame = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("wheel", onWheel);
+    };
+  }, []);
+
+  return (
+    <div
+      className="absolute left-1/2 w-screen -translate-x-1/2 overflow-hidden"
+      style={{ top: `${MARQUEE.top}px`, height: `${MARQUEE.height}px` }}
+      aria-hidden
+    >
+      <div
+        ref={track}
+        className="flex w-max whitespace-pre font-display font-normal text-forest will-change-transform"
+        style={{
+          fontSize: `${MARQUEE.size}px`,
+          lineHeight: `${MARQUEE.height}px`,
+          wordSpacing: `${MARQUEE.wordSpacing}px`,
+        }}
+      >
+        {[0, 1, 2].map((copy) =>
+          templateCollection.marquee.map((phrase) => (
+            <span
+              key={`${copy}-${phrase}`}
+              style={{ marginRight: `${MARQUEE.gap}px` }}
+            >
+              {phrase}
+            </span>
+          )),
+        )}
+      </div>
+    </div>
   );
 }
 

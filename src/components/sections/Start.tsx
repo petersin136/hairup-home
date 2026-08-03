@@ -1,4 +1,5 @@
 import { Canvas } from "@/components/layout/Canvas";
+import { RainInLines } from "@/components/motion/RainInLines";
 import { start } from "@/content/site";
 
 /**
@@ -44,16 +45,11 @@ export function Start() {
         ))}
       </h2>
 
-      <p
+      <RainInLines
+        lines={start.body}
         className="text-kr absolute text-[22px] font-normal leading-[36px] tracking-[-0.01em] text-[#686460]"
         style={{ left: `${BODY.left}px`, top: `${BODY.top}px` }}
-      >
-        {start.body.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
-      </p>
+      />
 
       <a
         href={start.cta.href}

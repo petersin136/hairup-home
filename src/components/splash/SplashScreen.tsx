@@ -5,6 +5,8 @@ import { Wordmark } from "@/components/brand/Wordmark";
 import { splash } from "@/content/site";
 
 export const SPLASH_SESSION_KEY = "hairup:splash-played";
+/** 커튼이 올라가기 시작하는 순간. 히어로 본문 rain-in 이 이때 맞춰 재생됩니다. */
+export const SPLASH_REVEAL_EVENT = "hairup:splash-reveal";
 
 /**
  * 01. SPLASH SCREEN — 아트보드 1440 × 900, 배경 #2c3a2e
@@ -20,6 +22,7 @@ const RISE_MS = 400;
 const HOLD_MS = 800;
 const CURTAIN_MS = 400;
 const TOTAL_MS = RISE_MS + HOLD_MS + CURTAIN_MS;
+const REVEAL_MS = RISE_MS + HOLD_MS;
 
 export function SplashScreen() {
   const [isDone, setIsDone] = useState(false);
@@ -35,15 +38,22 @@ export function SplashScreen() {
 
     // 이미 본 세션이면 layout 의 인라인 스크립트가 붙인 .splash-seen 이
     // 첫 페인트부터 감추고 있으므로 아무것도 하지 않습니다.
-    if (alreadyPlayed) return;
+    if (alreadyPlayed) {
+      window.dispatchEvent(new Event(SPLASH_REVEAL_EVENT));
+      return;
+    }
 
     document.body.style.overflow = "hidden";
+    const revealTimer = window.setTimeout(() => {
+      window.dispatchEvent(new Event(SPLASH_REVEAL_EVENT));
+    }, REVEAL_MS);
     const timer = window.setTimeout(() => {
       document.body.style.overflow = "";
       setIsDone(true);
     }, TOTAL_MS);
 
     return () => {
+      window.clearTimeout(revealTimer);
       window.clearTimeout(timer);
       document.body.style.overflow = "";
     };

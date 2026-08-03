@@ -1,5 +1,6 @@
 import { Wordmark } from "@/components/brand/Wordmark";
 import { Canvas } from "@/components/layout/Canvas";
+import { RainInLines } from "@/components/motion/RainInLines";
 import { faq } from "@/content/site";
 
 /**
@@ -68,16 +69,11 @@ export function Faq() {
         ))}
       </h2>
 
-      <p
+      <RainInLines
+        lines={faq.body}
         className="text-kr absolute text-[22px] font-normal leading-[36px] tracking-[-0.01em] text-body"
         style={{ left: `${LEFT}px`, top: `${BODY_TOP}px` }}
-      >
-        {faq.body.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
-      </p>
+      />
 
       <div
         className="absolute grid"

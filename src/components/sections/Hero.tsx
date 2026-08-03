@@ -1,5 +1,6 @@
 import { Canvas } from "@/components/layout/Canvas";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { RainInLines } from "@/components/motion/RainInLines";
 import { hero } from "@/content/site";
 
 /**
@@ -40,16 +41,11 @@ export function Hero() {
         ))}
       </h1>
 
-      <p
+      <RainInLines
+        lines={hero.body}
         className="text-kr absolute text-[22px] font-normal leading-[36px] tracking-[-0.01em] text-body"
         style={{ left: `${BODY.left}px`, top: `${BODY.top}px` }}
-      >
-        {hero.body.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
-      </p>
+      />
     </Canvas>
   );
 }

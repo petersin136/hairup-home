@@ -3,6 +3,7 @@
 import { useRef } from "react";
 
 import { Canvas } from "@/components/layout/Canvas";
+import { RainInLines } from "@/components/motion/RainInLines";
 import { keyBenefits } from "@/content/site";
 
 /**
@@ -88,17 +89,12 @@ export function KeyBenefits() {
         ))}
       </h2>
 
-      <p
+      <RainInLines
+        lines={keyBenefits.body}
         className="text-kr absolute inset-x-0 text-center text-[22px] font-normal leading-[36px] tracking-[-0.01em] text-body"
         /* 글자 폭이 시안과 미세하게 달라 중앙 정렬 결과가 0.5px 왼쪽으로 떨어집니다. */
         style={{ top: `${BODY_TOP}px`, transform: "translateX(1px)" }}
-      >
-        {keyBenefits.body.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
-      </p>
+      />
 
       <div
         ref={track}

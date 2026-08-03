@@ -70,29 +70,40 @@ body {
   word-spacing: -0.057em;
 }
 
-/*
- * 07_Template Collection 하단 문구 띠. 문구 목록을 세 벌 이어 붙이고 한 벌
- * 만큼(=1/3) 밀어내면 이음매 없이 오른쪽에서 왼쪽으로 계속 흐릅니다.
- * 세 벌인 이유는 한 벌이 끝까지 밀려간 순간에도 남은 두 벌이 넓은 화면을
- * 빈틈없이 덮게 하기 위해서입니다.
- */
-@keyframes template-marquee {
+/* 07_Template Collection 하단 문구 띠는 TemplateMarquee 가 rAF 로 직접 밉니다. */
+
+/* 본문 줄 — 스크롤 진입 시 위에서 아래로 뿌려지듯 떨어짐 */
+@keyframes rain-fall {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -48px, 0);
+  }
   to {
-    transform: translateX(-33.3333%);
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }
 
-.template-marquee {
-  animation: template-marquee 42s linear infinite;
+.rain-line {
+  opacity: 0;
+  transform: translate3d(0, -48px, 0);
+  will-change: transform, opacity;
+}
+
+.rain-line-in {
+  animation: rain-fall 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .template-marquee {
-    animation: none;
-  }
-
   .faq-card-inner {
     transition: none !important;
+  }
+
+  .rain-line,
+  .rain-line-in {
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 }
 
