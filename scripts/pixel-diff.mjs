@@ -58,6 +58,19 @@ const TARGETS = [
     ],
   },
   {
+    name: "02-dilemma",
+    budget: 2.3,
+    url: "/",
+    ref: "02-dilemma.png",
+    selector: "#dilemma > div",
+    viewport: { width: 1440, height: 1600 },
+    skipSplash: true,
+    /*
+     * 시안이 550px 결합본을 1440 으로 키운 것이라 글자 안티에일리어싱이 뭉개져
+     * 있습니다. 좌표 검증용으로만 보고, 허용치를 여유 있게 둡니다.
+     */
+  },
+  {
     name: "03-test",
     budget: 0.08,
     url: "/",

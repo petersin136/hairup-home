@@ -32,6 +32,29 @@ export const hero = {
   ],
 } as const;
 
+export const dilemma = {
+  eyebrow: { index: "01 /", label: "THE DILEMMA" },
+  headline: ["가위를 들었을 때,", "휴대폰이 울리면?"],
+  body: [
+    "약제 묻은 장갑을 벗고 답장할 수 없고,",
+    "체어 앞 고객을 두고 전화를 받을 수도 없는 순간들.",
+    "“얼마예요?”만 묻고 사라지는 단발성 문의와",
+    "어처구니 없는 노쇼까지.",
+  ],
+  bodyAside: [
+    "여러분의 소중한 작업시간이",
+    "온갖 응대 스트레스에 깎여나가고 있진 않나요?",
+  ],
+  /* 이미지 박스는 나중에 Supabase URL 로 채웁니다. 지금은 검정 면만. */
+  floats: {
+    brand: "hair up",
+    smart: "SMART AI",
+    realtime: "24/7 REAL-TIME",
+    zero: "ZERO STRESS",
+    solution: "SOLUTION",
+  },
+} as const;
+
 export const experience = {
   /* 앞머리 "02 /" 만 산세리프, 뒤는 세리프입니다. (03_Test 시안 확대 확인) */
   eyebrow: { index: "02 /", label: "THE EXPERIENCE" },

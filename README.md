@@ -48,7 +48,8 @@ PYTHONPATH=scripts python3 scripts/compare-ink.py 06-1   # 이름에 06-1 이 �
 | --- | --- | --- |
 | `00-splash` | 0.036% | 0.08% |
 | `01-hero` | 0.303% | 0.45% |
-| `03-test` | 0.024% | 0.08% |
+| `02-dilemma` | 2.272% | 2.30% |
+| `03-test` | 0.035% | 0.08% |
 | `04-banner` | 0.059% | 0.12% |
 | `05-key-benefits` | 0.128% | 0.70% |
 | `05-card-1` | 1.675% | 1.80% |
@@ -60,6 +61,10 @@ PYTHONPATH=scripts python3 scripts/compare-ink.py 06-1   # 이름에 06-1 이 �
 | `07-1-template` | 0.821% | 0.90% |
 | `07-2-template-hover` | 0.988% | 1.10% |
 | `07-3-button-hover` | 0.973% | 1.10% |
+
+`02` 는 550×1024 결합 시안(Dilemma+Experience)을 1440 으로 키워 대조합니다. 글자
+안티에일리어싱이 뭉개져 허용치가 높고, 잉크 좌표는 ±수 px 안입니다. 02·03 배경은
+시안 화이트(`#f9f8f4`, paper)이고, Experience 자체 구조는 네이티브 `03-test` 로 봅니다.
 
 `06` 은 세 장이 이어 흐르는 띠가 되어 화면 한 장이 곧 시안 한 장이 아니므로, 장 하나를
 찍어 시안을 같은 창(좌우 60 을 덜어낸 1320)으로 잘라 대조합니다.
@@ -98,12 +103,12 @@ node scripts/probe-header.mjs && PYTHONPATH=scripts python3 scripts/probe-header
 
 ## 아직 시안이 없거나 확정 전인 부분
 
-`02` 섹션은 시안 확정 전이라 `SectionPlaceholder`로 1440 × 800 검정 블록만 잡아 뒀습니다.
-`03_Test`의 600 × 768 검정 패널, `05`의 검정 카드 3장, `06`의 크림색 박스도 시안에
-내용이 없어 단색 면으로만 두었습니다.
+`02_Dilemma` · `03_Test` · `05` · `06` 의 검정/크림 이미지 박스는 시안에 내용이 없어
+단색 면으로만 두었습니다. Dilemma 세 장은 나중에 Supabase URL 로 채웁니다.
 
 `05`의 세 번째 카드 문구는 시안에서 화면 오른쪽으로 잘려 있어 읽히는 데까지만
 `src/content/site.ts`에 옮겼습니다. 전문을 받으면 그 항목만 채우면 됩니다.
+넷째 카드 문구는 시안 밖이라 임시값입니다.
 
 `07`은 확정 전인 항목이 셋 있고 모두 `src/content/site.ts`의 `templateCollection`에 있습니다.
 

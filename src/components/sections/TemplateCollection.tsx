@@ -13,6 +13,7 @@ import { templateCollection } from "@/content/site";
  * 본문만 한 줄(96) 아래로 내려옵니다.
  *
  * 카드 줄은 가운데 한 장만 크고 좌우 이웃이 화면 밖으로 잘려 나갑니다.
+ * 좌우 카드는 커서를 올리기만 해도 가운데로 미끄러져 옵니다.
  * 가운데 카드에 호버하면 대문 이미지가 살짝 확대되면서 어두워지고
  * 템플릿 이름과 VIEW DEMO 버튼이 떠오릅니다.
  *
@@ -44,6 +45,11 @@ const ROW_CENTER = 1174;
 /** 카드 폭의 몇 할을 끌어야 다음 장으로 넘어가는지 */
 const SNAP = 0.2;
 
+/** 줄이 미끄러지는 시간(ms). 아래 transition 값과 같아야 합니다. */
+const GLIDE = 600;
+/** 호버로 한 장 넘긴 뒤, 커서가 이만큼(px) 움직여야 다음 호버를 받습니다. */
+const HOVER_REARM = 24;
+
 /** 카드 위끝을 기준으로 한 오버레이 좌표 */
 const NAME = { top: 183, size: 26.5, index: 13, rise: 8 };
 const BUTTON = { top: 258, width: 229, height: 56 };
@@ -70,6 +76,26 @@ const at = (i: number) =>
 /** 가운데 자리 좌우로 몇 장까지 그려 둘지. 3 장이면 5300px 폭까지 빈자리가 없습니다. */
 const REACH = 3;
 
+/**
+ * 호버 빗장. 마지막으로 넘긴 시각과 그때 커서가 있던 자리를 들고 있습니다.
+ * 렌더 중에 시계를 읽으면 안 되므로 여닫는 일은 컴포넌트 밖에서 합니다.
+ */
+type HoverGate = { armed: boolean; x: number; y: number; at: number };
+
+function closeGate(gate: HoverGate, x: number, y: number) {
+  gate.armed = false;
+  gate.x = x;
+  gate.y = y;
+  gate.at = performance.now();
+}
+
+function tryOpenGate(gate: HoverGate, x: number, y: number) {
+  if (gate.armed) return;
+  /* 미끄러지는 중에는 어차피 자리가 확정되지 않았으니 세지 않습니다. */
+  if (performance.now() - gate.at < GLIDE) return;
+  if (Math.hypot(x - gate.x, y - gate.y) > HOVER_REARM) gate.armed = true;
+}
+
 /** i 번 자리를 화면 가운데(x 720)에 놓기 위한 줄 전체의 이동 거리 */
 const originFor = (i: number) => 720 - i * PITCH - CARD.width / 2;
 
@@ -81,6 +107,30 @@ export function TemplateCollection() {
   const offset = useRef(0);
   /** 드래그로 끝난 동작이 옆 카드 클릭까지 발동시키지 않도록 남겨 둡니다. */
   const moved = useRef(false);
+
+  /*
+   * 호버로 한 장 넘기면 방금 하던 카드가 가운데로 빠지고 그 자리에 다음 카드가
+   * 들어옵니다. 커서는 가만히 있어도 새 카드 위에 놓이게 되므로, 그걸 또 호버로
+   * 세면 줄이 저 혼자 끝없이 돌아갑니다. 그래서 한 번 받은 뒤에는 빗장을 걸고,
+   * 커서가 실제로 움직였을 때만 다시 엽니다.
+   */
+  const gate = useRef<HoverGate>({ armed: true, x: 0, y: 0, at: 0 });
+
+  useEffect(() => {
+    const onMove = (e: PointerEvent) =>
+      tryOpenGate(gate.current, e.clientX, e.clientY);
+
+    window.addEventListener("pointermove", onMove);
+    return () => window.removeEventListener("pointermove", onMove);
+  }, []);
+
+  const onCardHover = (seat: number) => (e: React.PointerEvent) => {
+    /* 손가락으로 짚는 것은 호버가 아니라 탭이므로 클릭 쪽에 맡깁니다. */
+    if (e.pointerType !== "mouse") return;
+    if (dragging || seat === index || !gate.current.armed) return;
+    closeGate(gate.current, e.clientX, e.clientY);
+    setIndex(seat);
+  };
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     startX.current = e.clientX;
@@ -101,7 +151,7 @@ export function TemplateCollection() {
       if (Math.abs(offset.current) > 3) moved.current = true;
       setDragX(offset.current);
     };
-    const onUp = () => {
+    const onUp = (e: PointerEvent) => {
       setDragging(false);
       setDragX(0);
       /* 카드 한 장을 다 끌지 않아도 20% 만 넘기면 다음 장으로 넘어갑니다. */
@@ -109,6 +159,8 @@ export function TemplateCollection() {
       const steps = Math.sign(raw) * Math.floor(Math.abs(raw) + 1 - SNAP);
       setIndex((i) => i + steps);
       offset.current = 0;
+      /* 손을 뗀 자리에 우연히 놓인 카드가 곧바로 또 넘어가지 않게 합니다. */
+      closeGate(gate.current, e.clientX, e.clientY);
     };
 
     window.addEventListener("pointermove", onMove);
@@ -198,6 +250,7 @@ export function TemplateCollection() {
               template={at(seat)}
               left={seat * PITCH}
               centered={seat === index}
+              onHover={onCardHover(seat)}
               onSelect={() => {
                 if (!moved.current) setIndex(seat);
               }}
@@ -242,13 +295,22 @@ type CardProps = {
   /** 줄 안에서의 자리(px). 자리마다 값이 고정이라 좌우 끝에서 카드를 넣고 빼도 줄이 흔들리지 않습니다. */
   left: number;
   centered: boolean;
+  /** 좌우 카드에 커서가 들어온 순간. 가운데 카드로 끌어옵니다. */
+  onHover: (e: React.PointerEvent) => void;
   onSelect: () => void;
 };
 
-function TemplateCard({ template, left, centered, onSelect }: CardProps) {
+function TemplateCard({
+  template,
+  left,
+  centered,
+  onHover,
+  onSelect,
+}: CardProps) {
   return (
     <article
       data-centered={centered}
+      onPointerEnter={onHover}
       className="rounded-ui group absolute top-1/2 -translate-y-1/2 overflow-hidden bg-black transition-[height] duration-600 ease-[cubic-bezier(0.65,0,0.35,1)]"
       style={{
         left: `${left}px`,

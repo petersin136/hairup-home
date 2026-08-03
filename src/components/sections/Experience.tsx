@@ -2,8 +2,9 @@ import { Canvas } from "@/components/layout/Canvas";
 import { experience } from "@/content/site";
 
 /**
- * 03_Test — 아트보드 1440 × 1216, 배경 #f6ecdf
+ * 03_Test — 아트보드 1440 × 1216, 배경 #f9f8f4
  *
+ * 02·03 은 시안 결합본 기준으로 크림이 아니라 차가운 화이트(paper)입니다.
  * 그리드는 히어로와 같습니다. 120 거터 + 600 패널 + 120 간격 + 480 텍스트 + 120 거터.
  *
  * 시안에서 잰 잉크(글자 실제 픽셀) 기준 좌표
@@ -25,7 +26,7 @@ const INDEX_RISE = 7;
 
 export function Experience() {
   return (
-    <Canvas id="experience" height={1216} background="bg-cream">
+    <Canvas id="experience" height={1216} background="bg-paper">
       <div
         className="absolute rounded-[6px] bg-ink"
         style={{
