@@ -1,14 +1,19 @@
 /** 사이트 카피/메뉴는 전부 여기서 관리합니다. */
 
+/*
+ * 헤더 메뉴와 CTA 는 영문을 기본으로 두고, 가리키면 한글로 굴러 바뀝니다.
+ * 영문 표기는 시안에 없어 한글 뜻에 맞춰 새로 정한 값입니다.
+ */
 export const nav = [
-  { label: "AI실장", href: "#ai-manager" },
-  { label: "템플릿", href: "#template" },
-  { label: "멤버십 요금", href: "#pricing" },
-  { label: "FAQ", href: "#faq" },
+  { en: "AI MANAGER", ko: "AI실장", href: "#ai-manager" },
+  { en: "TEMPLATE", ko: "템플릿", href: "#template" },
+  { en: "PRICING", ko: "멤버십 요금", href: "#pricing" },
+  { en: "FAQ", ko: "FAQ", href: "#faq" },
 ] as const;
 
 export const cta = {
-  label: "내 브랜드 만들기",
+  en: "CREATE MY BRAND",
+  ko: "내 브랜드 만들기",
   href: "#start",
 } as const;
 
@@ -75,6 +80,16 @@ export const keyBenefits = {
         "예약이 확정되는 순간, 관리자 화",
         "정리됩니다. 손으로 옮겨 적는 번",
         "이제 완전히 사라집니다.",
+      ],
+    },
+    {
+      /* 네 번째 카드는 시안 밖이라 문구가 없습니다. 아래는 자리를 잡아 두려고
+         앞 세 장의 흐름(상담 → 예약 → 정리)에 이어 임시로 적은 것입니다. */
+      title: ["넷째,", "놓치지 않는 재방문 관리"],
+      body: [
+        "다녀간 고객에게 다음 시기를 먼저 알립니다.",
+        "지난 시술 기록을 그대로 이어받아",
+        "다시 찾는 이유를 만들어 줍니다.",
       ],
     },
   ],

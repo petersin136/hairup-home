@@ -9,8 +9,10 @@ import { keyBenefits } from "@/content/site";
  * 05_Key Benefits — 아트보드 1440 × 1723, 배경 #f6ecdf
  *
  * 헤더는 전부 x=720 중앙 정렬이고, 타입 스케일은 03_Test 와 완전히 같습니다.
- * 카드 줄은 좌거터 120 에서 시작해 오른쪽 화면 밖으로 흘러넘칩니다.
- * 시안에서 세 번째 카드가 254px 만 보이는 상태가 스크롤 0 위치입니다.
+ * 카드 줄은 좌우 같은 거터로 가운데에 두고, 넘치는 장은 가로로 끌어 봅니다.
+ *
+ * 시안은 카드가 세 장이지만 원래 넷째까지 있는 구성이라 한 장을 더 답니다.
+ * 거터도 시안의 120 보다 좁혀서(80) 줄이 그만큼 넓어졌습니다.
  *
  * 시안에서 잰 잉크 좌표
  *   아이브로우  y 299
@@ -24,7 +26,9 @@ const EYEBROW_TOP = 295;
 const HEADLINE_TOP = 345;
 const BODY_TOP = 575;
 
-const TRACK = { left: 120, top: 827, width: 1320 };
+/** 시안 거터는 120 이지만 줄을 넓혀 달라는 요청으로 80 까지 좁혔습니다. */
+const GUTTER = 80;
+const TRACK = { top: 827, width: 1440 - GUTTER * 2 };
 const CARD = { width: 500, height: 360, gap: 33 };
 /** 카드 아래 텍스트는 카드 좌변보다 살짝 안쪽에서 시작합니다. */
 const CARD_TEXT_INSET = 7;
@@ -104,16 +108,17 @@ export function KeyBenefits() {
         onPointerCancel={endDrag}
         className="absolute flex cursor-grab overflow-x-auto overscroll-x-contain [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
         style={{
-          left: `${TRACK.left}px`,
+          left: `${GUTTER}px`,
           top: `${TRACK.top}px`,
           width: `${TRACK.width}px`,
           height: `${TRACK_HEIGHT}px`,
           gap: `${CARD.gap}px`,
         }}
       >
-        {keyBenefits.cards.map((card) => (
+        {keyBenefits.cards.map((card, i) => (
           <article
             key={card.title[0]}
+            data-card={i}
             className="relative shrink-0 select-none"
             style={{ width: `${CARD.width}px` }}
           >

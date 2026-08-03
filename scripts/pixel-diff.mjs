@@ -47,6 +47,15 @@ const TARGETS = [
     clip: { x: 0, y: 0, width: 1440, height: 836 },
     viewport: { width: 1440, height: 900 },
     skipSplash: true,
+    /*
+     * 헤더 메뉴와 CTA 라벨은 시안의 한글 대신 영문을 기본으로 두기로 해서 글자
+     * 자체가 다릅니다. 글자만 빼고 나머지(로고 · 버튼 상자 · 히어로)를 봅니다.
+     * 한글이 굴러 올라온 자리가 시안과 맞는지는 scripts/probe-header.py 로 잽니다.
+     */
+    mask: [
+      { left: 480, top: 44, width: 530, height: 36 },
+      { left: 1130, top: 44, width: 180, height: 36 },
+    ],
   },
   {
     name: "03-test",
@@ -74,7 +83,36 @@ const TARGETS = [
     selector: "#key-benefits > div",
     viewport: { width: 1440, height: 1800 },
     skipSplash: true,
+    /*
+     * 카드 줄은 넷째 장이 붙고 거터도 80 으로 좁아져 시안과 x 가 다릅니다.
+     * 여기서는 머리글만 보고, 카드 자체는 아래 05-card-N 으로 한 장씩 봅니다.
+     */
+    mask: [{ left: 0, top: 820, width: 1440, height: 610 }],
   },
+  /*
+   * 카드 한 장을 시안의 같은 자리에서 오려 낸 것과 맞춰 봅니다. 줄이 통째로
+   * 왼쪽으로 40 옮겨졌을 뿐 장 안쪽은 시안 그대로여야 합니다.
+   * 셋째 장은 시안에서 254px 만 보여 그만큼만, 넷째 장은 시안에 없어 뺍니다.
+   */
+  /*
+   * 허용치가 섹션 전체(0.7%)보다 큰 것은 창을 카드 한 장으로 좁혔기 때문입니다.
+   * 어긋나는 픽셀 수 자체는 세 장을 합쳐도 전과 같고, 전부 한글 글자 가장자리의
+   * 안티에일리어싱입니다. 잉크 좌표는 ±1px 안입니다.
+   */
+  ...[
+    { card: 0, left: 120, width: 500, budget: 1.8 },
+    { card: 1, left: 653, width: 500, budget: 1.2 },
+    { card: 2, left: 1186, width: 254, budget: 2.3 },
+  ].map(({ card, left, width, budget }) => ({
+    name: `05-card-${card + 1}`,
+    budget,
+    url: "/",
+    ref: "05-key-benefits.png",
+    selector: `#key-benefits [data-card="${card}"]`,
+    viewport: { width: 1440, height: 1800 },
+    skipSplash: true,
+    refCrop: { left, top: 827, width, height: 597 },
+  })),
   ...[0, 1, 2].map((step) => ({
     name: `06-${step + 1}-process`,
     budget: 0.5,
@@ -226,6 +264,18 @@ for (const target of targets) {
 
   const actual = await decode(shot);
   const expected = await decode(refBuffer);
+
+  /** 시안을 일부러 벗어난 자리는 양쪽 다 같은 색으로 덮어 비교에서 뺍니다. */
+  for (const rect of target.mask ?? []) {
+    for (const png of [actual, expected]) {
+      for (let y = rect.top; y < rect.top + rect.height; y += 1) {
+        for (let x = rect.left; x < rect.left + rect.width; x += 1) {
+          const at = (y * png.width + x) * 4;
+          png.data.fill(0, at, at + 4);
+        }
+      }
+    }
+  }
 
   const width = Math.min(actual.width, expected.width);
   const height = Math.min(actual.height, expected.height);
