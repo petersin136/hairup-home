@@ -26,3 +26,18 @@ export const hero = {
     "당신은 그저, 오늘 최고의 헤어 스타일링에만 집중하세요.",
   ],
 } as const;
+
+export const experience = {
+  /* 앞머리 "02 /" 만 산세리프, 뒤는 세리프입니다. (03_Test 시안 확대 확인) */
+  eyebrow: { index: "02 /", label: "THE EXPERIENCE" },
+  headline: ["주저하지 말고,", "지금 직접", "말을 건네보세요."],
+  body: [
+    "백 번의 설명보다 한 번의 대화가 더 명확하니까요.",
+    "실제 매장에 문의하듯 자유롭게 질문을 입력해 보세요.",
+    "다정하고 정교하게 응답합니다.",
+  ],
+} as const;
+
+export const banner = {
+  lines: ["24/7", "Intelligent AI", "Pre - Consultant"],
+} as const;

@@ -27,17 +27,31 @@ dev 서버가 떠 있어야 합니다.
 node scripts/pixel-diff.mjs            # 전체 섹션
 node scripts/pixel-diff.mjs 01-hero    # 특정 섹션만
 node scripts/tune.mjs                  # CSS 후보값 A/B 비교 (보정용)
+node scripts/measure-text.mjs          # 시안 잉크 폭으로 폰트 크기/굵기/자간 역산
 ```
 
 결과는 `design/diff/`에 `<name>-actual.png`, `<name>-diff.png`로 떨어집니다.
+`design/diff/*-actual.png`가 만들어진 뒤에는 요소별 잉크 좌표를 표로 대조할 수 있습니다.
+
+```bash
+PYTHONPATH=scripts python3 scripts/compare-ink.py
+```
 
 | 섹션 | 불일치 |
 | --- | --- |
 | `00-splash` | 0.036% |
 | `01-hero` | 0.387% |
+| `03-test` | 0.024% |
+| `04-banner` | 0.059% |
 
 남은 오차는 전부 Figma와 Chrome의 안티에일리어싱 차이입니다. 글자 크기·굵기·자간·
 위치는 잉크 바운딩 박스 기준 ±1px 안에서 일치합니다.
+
+## 아직 시안이 없는 섹션
+
+`02` 섹션은 시안 확정 전이라 `SectionPlaceholder`로 1440 × 800 검정 블록만 잡아 뒀습니다.
+`03_Test`의 600 × 768 검정 패널도 시안에 내용이 없어 단색 면으로만 두었습니다.
+둘 다 시안이 나오면 그대로 교체하면 됩니다.
 
 ## 디자인 토큰
 

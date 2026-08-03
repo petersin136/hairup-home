@@ -18,7 +18,11 @@ const ROOT = process.cwd();
 const REF_DIR = path.join(ROOT, "design", "refs");
 const OUT_DIR = path.join(ROOT, "design", "diff");
 
-/** 시안 한 장 = 타깃 하나. clip 은 페이지에서 잘라낼 영역. */
+/**
+ * 시안 한 장 = 타깃 하나.
+ * clip 은 뷰포트 좌표로 잘라내고, selector 는 해당 요소만 찍습니다.
+ * 첫 화면 밖에 있는 섹션은 selector 를 쓰세요.
+ */
 const TARGETS = [
   {
     name: "00-splash",
@@ -34,6 +38,22 @@ const TARGETS = [
     url: "/",
     ref: "01-hero.png",
     clip: { x: 0, y: 0, width: 1440, height: 836 },
+    viewport: { width: 1440, height: 900 },
+    skipSplash: true,
+  },
+  {
+    name: "03-test",
+    url: "/",
+    ref: "03-test.png",
+    selector: "#experience > div",
+    viewport: { width: 1440, height: 1300 },
+    skipSplash: true,
+  },
+  {
+    name: "04-banner",
+    url: "/",
+    ref: "04-banner.png",
+    selector: "#banner > div",
     viewport: { width: 1440, height: 900 },
     skipSplash: true,
   },
@@ -84,7 +104,9 @@ for (const target of targets) {
   }
   await page.waitForTimeout(150);
 
-  const shot = await page.screenshot({ clip: target.clip });
+  const shot = target.selector
+    ? await page.locator(target.selector).screenshot()
+    : await page.screenshot({ clip: target.clip });
   await context.close();
 
   const actual = PNG.sync.read(shot);
