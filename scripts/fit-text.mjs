@@ -13,42 +13,6 @@ const REF_DIR = path.join(process.cwd(), "design", "refs");
 /** 시안에서 잰 잉크 박스를 기준으로, 그 주변을 여유 있게 잘라 비교합니다. */
 const CASES = [
   {
-    tag: "06 THE",
-    ref: "06-1-process.png",
-    bg: "#b88667",
-    fg: "#955c3f",
-    text: "THE",
-    ink: { x: 120, y: 70, w: 126, h: 51 },
-    sizes: [64, 66, 68, 70, 72],
-  },
-  {
-    tag: "06 PROCESS",
-    ref: "06-1-process.png",
-    bg: "#b88667",
-    fg: "#955c3f",
-    text: "PROCESS",
-    ink: { x: 120, y: 149, w: 281, h: 53 },
-    sizes: [64, 66, 68, 70, 72],
-  },
-  {
-    tag: "06 DISCOVERY",
-    ref: "06-1-process.png",
-    bg: "#b88667",
-    fg: "#955c3f",
-    text: "DISCOVERY",
-    ink: { x: 212, y: 907, w: 364, h: 53 },
-    sizes: [64, 66, 68, 70, 72],
-  },
-  {
-    tag: "06 STEP 1",
-    ref: "06-1-process.png",
-    bg: "#b88667",
-    fg: "#955c3f",
-    text: "STEP 1",
-    ink: { x: 1129, y: 528, w: 191, h: 53 },
-    sizes: [64, 66, 68, 70, 72],
-  },
-  {
     tag: "05 카드제목",
     ref: "05-key-benefits.png",
     bg: "#f6ecdf",
@@ -58,6 +22,28 @@ const CASES = [
     ink: { x: 129, y: 1278, w: 339, h: 30 },
     sizes: [30, 31, 32, 33],
     weights: [500, 600, 700, 800],
+  },
+  {
+    tag: "05 카드제목2",
+    ref: "05-key-benefits.png",
+    bg: "#f6ecdf",
+    fg: "#2c3a2e",
+    font: "kr",
+    text: "대화를 통한 자동 예약",
+    ink: { x: 662, y: 1278, w: 280, h: 30 },
+    sizes: [30, 31, 32, 33],
+    weights: [500, 600, 700, 800],
+  },
+  {
+    tag: "06 좌측본문",
+    ref: "06-1-process.png",
+    bg: "#b88667",
+    fg: "#faf8f5",
+    font: "kr",
+    text: "당신의 작업물을 발견합니다",
+    ink: { x: 123, y: 603, w: 248, h: 21 },
+    sizes: [21, 22, 23],
+    weights: [300, 400, 500],
   },
   {
     tag: "05 카드본문",
@@ -94,7 +80,8 @@ const CASES = [
   },
 ];
 
-const PAD = 14;
+/* 위아래 줄이 크롭에 섞이면 비교가 망가지므로 여백을 좁게 잡습니다. */
+const PAD = 8;
 const browser = await chromium.launch();
 const page = await browser.newPage({
   viewport: { width: 900, height: 260 },
@@ -142,7 +129,9 @@ for (const c of CASES) {
                 el.style.cssText =
                   `position:absolute;white-space:pre;color:${c.fg};` +
                   `font-family:${stack};font-size:${size}px;font-weight:${weight};` +
-                  `letter-spacing:${ls}px;line-height:1;left:0;top:0;`;
+                  `letter-spacing:${ls}px;line-height:1;left:0;top:0;` +
+                  /* 시안은 Noto Sans CJK KR 기준이라 공백이 더 좁습니다(globals.css 와 동일 보정). */
+                  (c.font === "kr" ? "word-spacing:-0.057em;" : "");
                 host.appendChild(el);
                 document.body.appendChild(host);
                 /* 렌더된 잉크의 좌상단이 시안 잉크 좌상단과 맞도록 밀어 줍니다. */

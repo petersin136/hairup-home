@@ -21,6 +21,12 @@
   --color-porcelain: #faf8f5; /* 스플래시 로고·아이브로우 */
   --color-black: #000000; /* 04_Banner 배경. ink(#1c1a19) 가 아닌 순수 검정입니다. */
 
+  /* 06_The Process 의 배경 위에 낮은 명도차로 얹히는 텍스트.
+     세 값 사이에 일정한 비율 관계가 없어서 상태별로 각각 둡니다. */
+  --color-clay-dim: #955c3f;
+  --color-forest-dim: #151e16;
+  --color-espresso-dim: #1b130f;
+
   /* --- 폰트 ---------------------------------------------------------------
      실제 브랜드 폰트를 받으면 src/lib/fonts.ts 한 곳만 교체하면 됩니다. */
   --font-display: var(--font-playfair), "Playfair Display", serif;
@@ -59,6 +65,26 @@ body {
 .text-kr {
   font-family: var(--font-kr);
   word-spacing: -0.057em;
+}
+
+/* 06_The Process 의 상태 전환. 한 장이 통째로 오른쪽에서 왼쪽으로 밀려갑니다. */
+.process-slide {
+  transition: transform 700ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/*
+ * 화면 왼쪽으로 빠진 장은 다음 순번을 기다리러 오른쪽 밖으로 돌아가야 하는데,
+ * 그때 화면을 가로지르면 안 되므로 대기 중일 때만 전환을 끕니다.
+ * 덕분에 눈에 보이는 움직임은 언제나 오른쪽 → 왼쪽 한 방향뿐입니다.
+ */
+.process-slide[data-waiting="true"] {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-slide {
+    transition: none;
+  }
 }
 
 /* ============================================================================

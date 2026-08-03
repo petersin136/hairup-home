@@ -27,31 +27,55 @@ dev 서버가 떠 있어야 합니다.
 node scripts/pixel-diff.mjs            # 전체 섹션
 node scripts/pixel-diff.mjs 01-hero    # 특정 섹션만
 node scripts/tune.mjs                  # CSS 후보값 A/B 비교 (보정용)
+node scripts/tune.mjs 카드              # 이름에 '카드' 가 든 실험만
 node scripts/measure-text.mjs          # 시안 잉크 폭으로 폰트 크기/굵기/자간 역산
+node scripts/fit-text.mjs              # 아직 구현 전인 글자를 시안 크롭과 직접 대조
+PYTHONPATH=scripts python3 scripts/probe-section.py design/refs/05-key-benefits.png --blocks
 ```
 
 결과는 `design/diff/`에 `<name>-actual.png`, `<name>-diff.png`로 떨어집니다.
 `design/diff/*-actual.png`가 만들어진 뒤에는 요소별 잉크 좌표를 표로 대조할 수 있습니다.
 
 ```bash
-PYTHONPATH=scripts python3 scripts/compare-ink.py
+PYTHONPATH=scripts python3 scripts/compare-ink.py        # 전부
+PYTHONPATH=scripts python3 scripts/compare-ink.py 06-1   # 이름에 06-1 이 든 것만
 ```
 
-| 섹션 | 불일치 |
-| --- | --- |
-| `00-splash` | 0.036% |
-| `01-hero` | 0.387% |
-| `03-test` | 0.024% |
-| `04-banner` | 0.059% |
+| 섹션 | 불일치 | 허용치 |
+| --- | --- | --- |
+| `00-splash` | 0.036% | 0.08% |
+| `01-hero` | 0.387% | 0.45% |
+| `03-test` | 0.024% | 0.08% |
+| `04-banner` | 0.059% | 0.12% |
+| `05-key-benefits` | 0.618% | 0.70% |
+| `06-1-process` | 0.436% | 0.50% |
+| `06-2-process` | 0.083% | 0.50% |
+| `06-3-process` | 0.241% | 0.50% |
 
-남은 오차는 전부 Figma와 Chrome의 안티에일리어싱 차이입니다. 글자 크기·굵기·자간·
-위치는 잉크 바운딩 박스 기준 ±1px 안에서 일치합니다.
+글자 크기·굵기·자간·위치는 모든 섹션에서 잉크 바운딩 박스 기준 ±1px 안에 맞춰져 있고,
+남은 오차는 Figma와 Chrome의 안티에일리어싱 차이입니다. 작은 한글이 많거나 가운데
+정렬이라 글자가 소수점 좌표에 떨어지는 섹션일수록 이 값이 자연히 커져서, 허용치는
+전역 하나가 아니라 섹션마다 둡니다.
 
-## 아직 시안이 없는 섹션
+## 아직 시안이 없거나 확정 전인 부분
 
 `02` 섹션은 시안 확정 전이라 `SectionPlaceholder`로 1440 × 800 검정 블록만 잡아 뒀습니다.
-`03_Test`의 600 × 768 검정 패널도 시안에 내용이 없어 단색 면으로만 두었습니다.
-둘 다 시안이 나오면 그대로 교체하면 됩니다.
+`03_Test`의 600 × 768 검정 패널, `05`의 검정 카드 3장, `06`의 크림색 박스도 시안에
+내용이 없어 단색 면으로만 두었습니다.
+
+`05`의 세 번째 카드 문구는 시안에서 화면 오른쪽으로 잘려 있어 읽히는 데까지만
+`src/content/site.ts`에 옮겼습니다. 전문을 받으면 그 항목만 채우면 됩니다.
+
+## 모션
+
+시안에 모션 스펙이 없어 아래 두 가지는 동작 방식만 확정하고 수치는 최소한으로 잡았습니다.
+
+- `05_Key Benefits` 카드 줄 — 가로 드래그·스크롤. 좌거터 120에서 시작해 3장(500 + 간격 33)이
+  1440 밖으로 흘러넘치고, 스크롤 0 위치가 시안 그대로입니다.
+- `06_The Process` — 세 상태를 5초 주기로 무한 순환합니다. 한 장이 배경까지 통째로
+  오른쪽에서 들어와 왼쪽으로 빠지고(0.7초), 왼쪽으로 빠진 장은 화면 밖에서 전환 없이
+  오른쪽 대기 위치로 돌아가므로 눈에 보이는 방향은 항상 오른쪽 → 왼쪽 하나뿐입니다.
+  `prefers-reduced-motion` 이면 미끄러지지 않고 즉시 바뀝니다.
 
 ## 디자인 토큰
 
@@ -65,6 +89,16 @@ PYTHONPATH=scripts python3 scripts/compare-ink.py
 한글 글자 폭은 같지만 공백(U+0020)이 0.057em 더 넓어 어절 위치가 어긋납니다.
 `.text-kr` 유틸리티가 `word-spacing: -0.057em`으로 이 차이를 보정합니다.
 한글 텍스트에는 이 클래스를 함께 붙여 주세요.
+
+영문 세리프는 **Playfair Display로 대체**한 것입니다. 시안 원본 서체는 낱글자를
+캡하이트로 정규화해 비교하면 둥근 글자(`O` `D` `C`)는 Playfair와 거의 같은데
+세로획 글자가 더 좁습니다(`H` 43 대 49, `I` 15 대 19, `T` 36 대 41). 27px대에서는
+차이가 묻히지만 `06`의 66px에서는 드러나서, **단어 덩어리의 폭이 시안과 맞도록**
+크기를 잡았습니다. 그래서 글자 높이가 시안보다 4~5px 낮습니다.
+원본 서체 파일을 받으면 `src/lib/fonts.ts`만 바꾸고 각 섹션의 크기를 다시 재면 됩니다.
+
+`06`의 `STEP N` 은 Playfair 기본 숫자가 올드스타일(높이가 낮고 `3` 이 베이스라인
+아래로 내려감)이라 `font-variant-numeric: lining-nums` 를 함께 겁니다.
 
 ## Supabase
 
