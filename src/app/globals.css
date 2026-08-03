@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   hair up — 디자인 토큰
+   시안(1440px)에서 추출한 값만 여기에 모읍니다. 컴포넌트에서는 토큰만 쓰세요.
+   ========================================================================== */
+@theme {
+  /* --- 컬러 (시안 스펙 시트 기준) ------------------------------------------ */
+  --color-cream: #f6ecdf; /* 페이지 기본 배경 */
+  --color-sand: #f1ca90;
+  --color-clay: #b88667;
+  --color-taupe: #7b6e67; /* 본문 보조 텍스트 */
+  --color-espresso: #352923;
+  --color-forest: #2c3a2e; /* 브랜드 그린 · 스플래시 배경 · CTA 버튼 */
+  --color-ink: #1c1a19; /* 헤드라인 · 로고 */
+  --color-mist: #e3ddd3;
+  --color-stone: #8c847a; /* GNB 메뉴 텍스트 */
+
+  /* 팔레트 시트에는 없지만 시안 픽셀에서 확인된 값 */
+  --color-body: #6c6864; /* 히어로 본문 카피 */
+  --color-porcelain: #faf8f5; /* 스플래시 로고·아이브로우 */
+
+  /* --- 폰트 ---------------------------------------------------------------
+     실제 브랜드 폰트를 받으면 src/lib/fonts.ts 한 곳만 교체하면 됩니다. */
+  --font-display: var(--font-playfair), "Playfair Display", serif;
+  --font-latin: var(--font-inter), "Inter", sans-serif;
+  --font-kr: var(--font-noto-sans-kr), "Noto Sans KR", sans-serif;
+
+  /* --- Border radius (시안 공통 스펙) -------------------------------------- */
+  --radius-btn: 2px; /* 버튼 */
+  --radius-ui: 6px; /* Image Box / Square / Card */
+  --radius-full-bleed: 0px; /* 폭 전체를 채우는 요소 */
+
+  /* --- 레이아웃 ------------------------------------------------------------ */
+  --spacing-gutter: 120px; /* 1440 기준 좌우 여백 */
+  --container-shell: 1200px; /* 1440 - 120*2 */
+}
+
+/* 데스크톱 시안은 1440px 고정 폭 아트보드 기준.
+   화면이 넓어져도 요소는 확대하지 않고, 좌우 빈 여백만 늘어납니다. */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-kr);
+}
+
+/*
+ * 시안은 데스크톱용 Noto Sans CJK KR 로 작업됐는데, 웹폰트 Noto Sans KR 은
+ * 한글 자체 폭은 같지만 공백(U+0020) 폭이 0.057em 더 넓습니다.
+ * 어절 위치가 시안과 어긋나므로 한글 텍스트에는 이 보정을 함께 겁니다.
+ */
+.text-kr {
+  font-family: var(--font-kr);
+  word-spacing: -0.057em;
+}
+
+/* ============================================================================
+   SPLASH SCREEN 모션
+   0~0.4s 등장 / 0.4~1.2s 정지 / 1.2~1.6s 커튼업
+   ========================================================================== */
+
+/* 이미 본 세션이면 첫 페인트부터 아예 그리지 않습니다. */
+.splash-seen [data-splash] {
+  display: none !important;
+}
+
+@keyframes splash-curtain-up {
+  0%,
+  75% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes splash-rise-in {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.splash-root {
+  animation: splash-curtain-up 1600ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.splash-content {
+  animation: splash-rise-in 1600ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-content {
+    animation-name: none;
+  }
+}
