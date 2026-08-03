@@ -94,6 +94,23 @@ body {
   animation: rain-fall 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* 06 Process — 애플식 페이지 점 에너지 바 */
+@keyframes process-energy {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.process-energy {
+  transform-origin: left center;
+  animation-name: process-energy;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .faq-card-inner {
     transition: none !important;
@@ -104,6 +121,11 @@ body {
     opacity: 1;
     transform: none;
     animation: none;
+  }
+
+  .process-energy {
+    animation: none;
+    transform: scaleX(1);
   }
 }
 

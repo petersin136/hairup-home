@@ -1,50 +1,47 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { process } from "@/content/site";
 
 /**
- * 06_The Process — 아트보드 1440 × 1030, 상태 3개가 끊김 없이 이어 흐릅니다.
+ * 06_The Process — 애플 공홈 TV+ 선반 (가운데 카드 + 양옆 peek).
+ * 하단 에너지 바가 ~3초 차면 다음 장으로 넘어가며 무한 반복합니다.
  *
- * 세 시안의 구조가 완전히 같지만 배경까지 함께 움직여야 하므로 한 상태를 통째로
- * 한 장(panel)으로 만들고, 그 장들을 옆으로 이어 붙여 오른쪽 → 왼쪽으로 흘립니다.
- * 좌측 텍스트 블록은 본문이 3줄이든 4줄이든 y≈556 을 중심으로 세로 가운데
- * 정렬돼 있고, 이미지 박스 중심도 같은 높이입니다.
- *
- * 시안에서 잰 잉크 좌표
- *   THE / PROCESS  x 120, y 70 (행간 79)
- *   이미지 박스     x 538, y 322, 365 × 465
- *   좌측 라벨/본문  x 120, 블록 중심 y 556 (본문 행간 36)
- *   STEP N         우측 정렬 x 1320, y 528
- *   1/3            x 120, y 906
- *   DISCOVERY 등   x 210, y 907
+ * 카드만 잘라 쓰고, 글자 크기는 시안 그대로(축소·납작 scale 금지)입니다.
+ * 좌표만 카드 폭·높이에 맞춰 옮깁니다.
  */
-const HEIGHT = 1030;
+const SRC = { width: 1320, height: 1030 };
+const CARD = { width: 1120, height: 820, gap: 22, radius: 22 };
+const PITCH = CARD.width + CARD.gap;
+const SX = CARD.width / SRC.width;
+const SY = CARD.height / SRC.height;
+const x = (v: number) => v * SX;
+const y = (v: number) => v * SY;
+
+const SECTION = {
+  padTop: 64,
+  padBottom: 72,
+  dotsGap: 28,
+  dot: 8,
+  pillW: 40,
+};
+const HEIGHT =
+  SECTION.padTop + CARD.height + SECTION.dotsGap + SECTION.dot + SECTION.padBottom;
+
+/** 시안 잉크 좌표(1320 패널). 글자 크기와 행간은 아래 클래스에 고정. */
 const EYEBROW = { left: 118, top: 51 };
 const BOX = { left: 538, top: 322, width: 365, height: 465 };
 const TEXT = { left: 121, center: 556 };
 const STEP = { right: 120, top: 515 };
 const COUNTER = { left: 120, top: 903 };
 const CAPTION = { left: 209, top: 894 };
-
-/**
- * 시안 서체와 Playfair Display 는 낱글자 폭이 조금씩 달라서, 캡션은 시안에서 잰
- * 전체 폭에 맞도록 자간을 아주 조금 벌립니다.
- */
 const CAPTION_TRACKING = 0.7;
 
-/*
- * 한 장은 아트보드 1440 에서 좌우 여백을 CROP 만큼씩 덜어낸 폭입니다. 여백을
- * 줄인 만큼 화면 끝에 다음 장이 걸쳐 보이고, 장과 장은 붙어 있어 배경색이
- * 바뀌는 자리가 곧 경계입니다. 안쪽 좌표는 시안 그대로라 이 값만 바꾸면 됩니다.
- * (시안 여백은 좌 118 · 우 120 이고, CROP 60 이면 좌 58 · 우 60 이 남습니다.)
- */
-const CROP = 60;
-const PANEL = 1440 - CROP * 2;
-
-/** 한 장이 지나가는 데 걸리는 시간. 07 하단 문구 띠와 비슷한 속도입니다. */
-const PANEL_MS = 14000;
+const SNAP = 0.18;
+const GLIDE_MS = 550;
+/** 애플 선반 에너지 바가 차는 시간 */
+const AUTO_MS = 5000;
 
 const THEMES = [
   { background: "var(--color-clay)", dim: "var(--color-clay-dim)" },
@@ -53,101 +50,123 @@ const THEMES = [
 ] as const;
 
 const COUNT = process.steps.length;
-/** 세 장이 한 바퀴. 여기까지 흐르면 그 앞과 그림이 똑같아 소리 없이 되감깁니다. */
-const CYCLE = PANEL * COUNT;
-/*
- * 되감는 순간에도 화면이 비지 않으려면 줄이 한 바퀴 + 화면 폭보다 길어야 합니다.
- * 세 벌(11880px)이면 7920px 폭까지 덮습니다.
- */
-const SETS = 3;
-const SEATS = Array.from({ length: COUNT * SETS }, (_, i) => i);
+const REACH = 2;
+
+const wrap = (i: number) => ((i % COUNT) + COUNT) % COUNT;
 
 export function Process() {
-  const track = useRef<HTMLDivElement>(null);
-  /** 지금까지 흘러온 거리(px). 한 바퀴로 나눈 나머지만 화면에 씁니다. */
-  const flowed = useRef(0);
-  const dragFrom = useRef<number | null>(null);
+  const [index, setIndex] = useState(0);
+  const [dragX, setDragX] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const startX = useRef(0);
+  const offset = useRef(0);
+  const moved = useRef(false);
+  const [barKey, setBarKey] = useState(0);
 
   useEffect(() => {
-    const still = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let frame = 0;
-    let prev = performance.now();
-
-    const tick = (now: number) => {
-      const dt = now - prev;
-      prev = now;
-      if (dragFrom.current === null && !still.matches) {
-        flowed.current += (PANEL / PANEL_MS) * dt;
-      }
-      const wrapped = ((flowed.current % CYCLE) + CYCLE) % CYCLE;
-      if (track.current) {
-        track.current.style.transform = `translate3d(${-wrapped}px, 0, 0)`;
-      }
-      frame = requestAnimationFrame(tick);
-    };
-
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReducedMotion(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
   }, []);
 
-  /* 끄는 동안은 흐름을 멈추고 손이 움직인 만큼 그대로 따라갑니다. */
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    dragFrom.current = e.clientX + flowed.current;
+  const go = (next: number, restartBar = true) => {
+    setIndex(next);
+    if (restartBar) setBarKey((k) => k + 1);
   };
 
-  useEffect(() => {
-    const onMove = (e: PointerEvent) => {
-      if (dragFrom.current === null) return;
-      flowed.current = dragFrom.current - e.clientX;
-    };
-    const onUp = () => {
-      dragFrom.current = null;
-    };
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    startX.current = e.clientX;
+    offset.current = dragX;
+    moved.current = false;
+    setDragging(true);
+  };
 
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerup", onUp);
-    window.addEventListener("pointercancel", onUp);
-    return () => {
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerup", onUp);
-      window.removeEventListener("pointercancel", onUp);
-    };
-  }, []);
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragging) return;
+    const dx = e.clientX - startX.current;
+    if (Math.abs(dx) > 6) moved.current = true;
+    setDragX(offset.current + dx);
+  };
+
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragging) return;
+    setDragging(false);
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      /* already released */
+    }
+
+    const dx = dragX;
+    setDragX(0);
+    if (dx <= -CARD.width * SNAP) go(index + 1);
+    else if (dx >= CARD.width * SNAP) go(index - 1);
+    else setBarKey((k) => k + 1);
+  };
+
+  const seats = Array.from({ length: REACH * 2 + 1 }, (_, k) => index - REACH + k);
+  const trackShift = -index * PITCH + dragX;
+  const active = wrap(index);
 
   return (
     <section
       id="process"
-      className="relative w-full cursor-grab touch-pan-y select-none overflow-hidden active:cursor-grabbing"
+      className="relative w-full overflow-hidden bg-cream"
       style={{ height: `${HEIGHT}px` }}
-      onPointerDown={onPointerDown}
+      aria-roledescription="carousel"
+      aria-label="The Process"
     >
-      <div ref={track} className="absolute inset-y-0 left-0">
-        {SEATS.map((seat) => {
-          const i = seat % COUNT;
-          const step = process.steps[i];
+      <div
+        className="absolute inset-x-0 cursor-grab touch-pan-y select-none active:cursor-grabbing"
+        style={{ top: `${SECTION.padTop}px`, height: `${CARD.height}px` }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+      >
+        <div
+          className="absolute inset-y-0 will-change-transform"
+          style={{
+            left: `calc(50% - ${CARD.width / 2}px)`,
+            transform: `translate3d(${trackShift}px, 0, 0)`,
+            transition: dragging
+              ? "none"
+              : `transform ${GLIDE_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
+          }}
+        >
+          {seats.map((seat) => {
+            const i = wrap(seat);
+            const step = process.steps[i];
+            const centered = seat === index;
 
-          return (
-            <div
-              key={seat}
-              data-step={i}
-              /* 같은 내용을 여러 벌 깔았으므로 첫 벌만 읽히게 둡니다. */
-              aria-hidden={seat >= COUNT}
-              className="absolute inset-y-0 overflow-hidden"
-              style={{
-                left: `${seat * PANEL}px`,
-                width: `${PANEL}px`,
-                background: THEMES[i].background,
-              }}
-            >
-              <div
-                className="absolute inset-y-0 w-[1440px]"
-                style={{ left: `-${CROP}px` }}
+            return (
+              <article
+                key={seat}
+                data-step={i}
+                data-centered={centered ? "true" : undefined}
+                aria-hidden={!centered}
+                className="absolute top-0 overflow-hidden"
+                style={{
+                  left: `${seat * PITCH}px`,
+                  width: `${CARD.width}px`,
+                  height: `${CARD.height}px`,
+                  borderRadius: `${CARD.radius}px`,
+                  background: THEMES[i].background,
+                }}
+                onClick={() => {
+                  if (moved.current) return;
+                  if (seat !== index) go(seat);
+                }}
               >
                 <p
                   className="absolute whitespace-pre font-display text-[66px] font-normal leading-[79px]"
                   style={{
-                    left: `${EYEBROW.left}px`,
-                    top: `${EYEBROW.top}px`,
+                    left: `${x(EYEBROW.left)}px`,
+                    top: `${y(EYEBROW.top)}px`,
                     color: THEMES[i].dim,
                   }}
                 >
@@ -161,16 +180,16 @@ export function Process() {
                 <div
                   className="rounded-ui absolute bg-cream"
                   style={{
-                    left: `${BOX.left}px`,
-                    top: `${BOX.top}px`,
-                    width: `${BOX.width}px`,
-                    height: `${BOX.height}px`,
+                    left: `${x(BOX.left)}px`,
+                    top: `${y(BOX.top)}px`,
+                    width: `${x(BOX.width)}px`,
+                    height: `${y(BOX.height)}px`,
                   }}
                 />
 
                 <div
                   className="absolute -translate-y-1/2"
-                  style={{ left: `${TEXT.left}px`, top: `${TEXT.center}px` }}
+                  style={{ left: `${x(TEXT.left)}px`, top: `${y(TEXT.center)}px` }}
                 >
                   <p className="text-kr text-[28px] font-medium leading-none text-porcelain">
                     {step.label}
@@ -187,8 +206,8 @@ export function Process() {
                 <p
                   className="absolute whitespace-pre text-right font-display text-[66px] font-normal leading-none [font-variant-numeric:lining-nums]"
                   style={{
-                    right: `${STEP.right}px`,
-                    top: `${STEP.top}px`,
+                    right: `${x(STEP.right)}px`,
+                    top: `${y(STEP.top)}px`,
                     color: THEMES[i].dim,
                   }}
                 >
@@ -198,8 +217,8 @@ export function Process() {
                 <p
                   className="absolute font-latin text-[32px] font-normal leading-none tracking-[0.5px]"
                   style={{
-                    left: `${COUNTER.left}px`,
-                    top: `${COUNTER.top}px`,
+                    left: `${x(COUNTER.left)}px`,
+                    top: `${y(COUNTER.top)}px`,
                     color: THEMES[i].dim,
                   }}
                 >
@@ -209,16 +228,62 @@ export function Process() {
                 <p
                   className="absolute whitespace-pre font-display text-[66px] font-normal leading-none"
                   style={{
-                    left: `${CAPTION.left}px`,
-                    top: `${CAPTION.top}px`,
+                    left: `${x(CAPTION.left)}px`,
+                    top: `${y(CAPTION.top)}px`,
                     letterSpacing: `${CAPTION_TRACKING}px`,
                     color: THEMES[i].dim,
                   }}
                 >
                   {step.caption}
                 </p>
-              </div>
-            </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+
+      <div
+        className="absolute inset-x-0 flex items-center justify-center gap-[10px]"
+        style={{ top: `${SECTION.padTop + CARD.height + SECTION.dotsGap}px` }}
+        role="tablist"
+        aria-label="Process steps"
+      >
+        {process.steps.map((step, i) => {
+          const isActive = active === i;
+          return (
+            <button
+              key={step.step}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              aria-label={`${step.step}: ${step.caption}`}
+              className={`relative overflow-hidden rounded-full transition-[width] duration-300 ${
+                isActive ? "bg-ink/25" : "bg-ink/30 hover:bg-ink/45"
+              }`}
+              style={{
+                width: isActive ? `${SECTION.pillW}px` : `${SECTION.dot}px`,
+                height: `${SECTION.dot}px`,
+              }}
+              onClick={() => go(index - active + i)}
+            >
+              {isActive && !reducedMotion && (
+                <span
+                  key={`${barKey}-${index}`}
+                  data-process-energy
+                  className="process-energy absolute inset-y-0 left-0 w-full rounded-full bg-ink"
+                  style={{
+                    animationDuration: `${AUTO_MS}ms`,
+                    animationPlayState: dragging ? "paused" : "running",
+                  }}
+                  onAnimationEnd={() => {
+                    if (!dragging) go(index + 1, false);
+                  }}
+                />
+              )}
+              {isActive && reducedMotion && (
+                <span className="absolute inset-0 rounded-full bg-ink" />
+              )}
+            </button>
           );
         })}
       </div>

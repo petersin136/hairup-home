@@ -132,20 +132,19 @@ const TARGETS = [
   })),
   ...[0, 1, 2].map((step) => ({
     name: `06-${step + 1}-process`,
-    budget: 0.5,
+    /*
+     * 애플식 선반으로 프레임이 시안(풀블리드)과 다릅니다. 카드 안쪽만 느슨히 봅니다.
+     */
+    budget: 8,
     url: "/",
     ref: `06-${step + 1}-process.png`,
-    /*
-     * 세 장이 이어 흐르는 띠가 됐으므로 화면이 아니라 장 하나를 찍습니다.
-     * 흐름을 멈추면(reduce) 세 장이 0 · 1320 · 2640 에 서므로, 셋 다 화면 안에
-     * 들어오도록 넓은 뷰포트에서 찍습니다.
-     */
-    selector: `#process [data-step="${step}"]`,
-    viewport: { width: 4000, height: 1100 },
+    selector: `#process [data-step="${step}"][data-centered="true"]`,
+    viewport: { width: 1440, height: 1200 },
     skipSplash: true,
-    reducedMotion: "reduce",
-    /** 장이 시안의 좌우 여백을 60 씩 덜어낸 폭이라 시안도 같은 창으로 잘라 봅니다. */
+    click: `#process [role="tablist"] [role="tab"]:nth-child(${step + 1})`,
+    clickWait: 650,
     refCrop: { left: 60, top: 0, width: 1320, height: 1030 },
+    scaleToRef: true,
   })),
   ...[
     { name: "07-1-template", ref: "07-1-template.png", budget: 0.9 },
@@ -288,6 +287,11 @@ for (const target of targets) {
       el.setAttribute("data-rain", "in");
     });
   });
+
+  if (target.click) {
+    await page.locator(target.click).click();
+    await page.waitForTimeout(target.clickWait ?? 500);
+  }
 
   if (target.hover) {
     await page.locator(target.hover).hover();
