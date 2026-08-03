@@ -3,9 +3,11 @@
  *
  *   node scripts/capture-templates.mjs
  *
- * 카드가 800 × 500(=1.6)이고 데스크톱 뷰포트 1440 × 900 도 같은 비율이라
- * 잘라내지 않고 2배 해상도로 찍은 뒤 1600 × 1000 으로 줄여 저장합니다.
+ * 카드가 800 × 500(=1.6)이라 데스크톱 뷰포트 1440 × 900 을 2배 해상도로 찍습니다.
+ * 히어로가 화면보다 짧아 다음 섹션이 흰 띠처럼 걸치는 사이트는 heroHeight 로
+ * 히어로까지만 잘라내고, 모자란 비율은 좌우를 깎아 1600 × 1000 에 맞춥니다.
  */
+const VIEWPORT = { width: 1440, height: 900 };
 import { chromium } from "playwright";
 import sharp from "sharp";
 import fs from "node:fs";
@@ -20,6 +22,8 @@ const SITES = [
     /* 히어로가 배경 영상이라 모션을 억제하면 검은 화면만 찍힙니다. */
     motion: true,
     wait: 9000,
+    /* 히어로가 800px 에서 끝나고 그 아래는 흰 섹션이라, 경계를 살짝 안쪽에서 끊습니다. */
+    heroHeight: 795,
   },
   { slug: "editorial-portrait", url: "https://hair-up-template-2.vercel.app/" },
   { slug: "elevate-studio", url: "https://hairup-template3.vercel.app/" },
@@ -41,7 +45,7 @@ try {
 
 for (const site of SITES) {
   const context = await browser.newContext({
-    viewport: { width: 1440, height: 900 },
+    viewport: VIEWPORT,
     deviceScaleFactor: 2,
     /* 진입 애니메이션이 끝난 정지 화면을 원하므로 기본은 모션을 줄여 요청합니다. */
     reducedMotion: site.motion ? "no-preference" : "reduce",
@@ -59,12 +63,21 @@ for (const site of SITES) {
   await page.waitForTimeout(500);
 
   const shot = await page.screenshot({
-    clip: { x: 0, y: 0, width: 1440, height: 900 },
+    clip: { x: 0, y: 0, ...VIEWPORT },
   });
   await context.close();
 
   const file = path.join(OUT_DIR, `${site.slug}.webp`);
+  const { width, height } = await sharp(shot).metadata();
   await sharp(shot)
+    .extract({
+      left: 0,
+      top: 0,
+      width,
+      height: Math.round(
+        (height * (site.heroHeight ?? VIEWPORT.height)) / VIEWPORT.height,
+      ),
+    })
     .resize(1600, 1000, { fit: "cover" })
     .webp({ quality: 88 })
     .toFile(file);

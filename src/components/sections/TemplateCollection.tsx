@@ -133,7 +133,17 @@ export function TemplateCollection() {
   };
 
   return (
-    <Canvas id="template-collection" height={HEIGHT} background="bg-cream" clip>
+    /*
+     * 카드 줄과 하단 문구 띠는 시안에서 좌우가 잘려 나가는 요소입니다.
+     * 1440 캔버스가 아니라 섹션(=화면 폭)에서 잘라내야 화면이 1440 보다 넓을 때
+     * 여백 안쪽에서 뚝 끊기지 않고 화면 끝까지 이어집니다.
+     */
+    <Canvas
+      id="template-collection"
+      height={HEIGHT}
+      background="bg-cream"
+      className="overflow-hidden"
+    >
       <p
         className="absolute inset-x-0 whitespace-pre text-center font-display text-[27px] font-semibold leading-none tracking-[-1.2px] text-forest"
         style={{ top: `${EYEBROW_TOP}px` }}
@@ -206,7 +216,7 @@ export function TemplateCollection() {
       </div>
 
       <div
-        className="absolute inset-x-0 overflow-hidden"
+        className="absolute left-1/2 w-screen -translate-x-1/2 overflow-hidden"
         style={{ top: `${MARQUEE.top}px`, height: `${MARQUEE.height}px` }}
         aria-hidden
       >
@@ -219,7 +229,7 @@ export function TemplateCollection() {
               wordSpacing: `${MARQUEE.wordSpacing}px`,
             }}
           >
-            {[0, 1].map((copy) =>
+            {[0, 1, 2].map((copy) =>
               templateCollection.marquee.map((phrase) => (
                 <span
                   key={`${copy}-${phrase}`}
@@ -264,7 +274,9 @@ function TemplateCard({ template, centered, onSelect }: CardProps) {
 
       {centered ? (
         <>
-          <div className="absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+          {/* 시안은 카드 안이 통째로 검정이라, 대문 이미지 위 글자가 그만큼
+              또렷하게 읽히도록 충분히 어둡게 덮습니다. */}
+          <div className="absolute inset-0 bg-black/90 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
           <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
             <p
