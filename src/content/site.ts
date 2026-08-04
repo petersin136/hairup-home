@@ -45,7 +45,12 @@ export const dilemma = {
     "여러분의 소중한 작업시간이",
     "온갖 응대 스트레스에 깎여나가고 있진 않나요?",
   ],
-  /* 이미지 박스는 나중에 Supabase URL 로 채웁니다. 지금은 검정 면만. */
+  /* 위→아래(우상 · 좌중 · 우하) 순서 */
+  images: [
+    "https://mirofkondedzmbddatnt.supabase.co/storage/v1/object/public/images/A_close-up_of_a_Korean_hairstylists_hands_cutting-1785809255648.jpg",
+    "https://mirofkondedzmbddatnt.supabase.co/storage/v1/object/public/images/A_tight_close-up_shot_focusing_on_a_hairstylists_-1785810335027.jpg",
+    "https://mirofkondedzmbddatnt.supabase.co/storage/v1/object/public/images/A_quiet_minimal_hair_salon_scene_an_empty_styling-1785809431372.jpg",
+  ],
   floats: {
     brand: "hair up",
     smart: "SMART AI",

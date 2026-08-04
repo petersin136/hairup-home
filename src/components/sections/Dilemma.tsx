@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { Canvas } from "@/components/layout/Canvas";
 import { RainInLines } from "@/components/motion/RainInLines";
 import { dilemma } from "@/content/site";
@@ -57,17 +59,26 @@ const FLOATS = {
 export function Dilemma() {
   return (
     <Canvas id="dilemma" height={HEIGHT} background="bg-paper">
-      {BOXES.map((box) => (
+      {BOXES.map((box, i) => (
         <div
           key={`${box.left}-${box.top}`}
-          className="rounded-ui absolute bg-ink"
+          className="rounded-ui absolute overflow-hidden bg-ink"
           style={{
             left: `${box.left}px`,
             top: `${box.top}px`,
             width: `${box.width}px`,
             height: `${box.height}px`,
           }}
-        />
+        >
+          <Image
+            src={dilemma.images[i]}
+            alt=""
+            fill
+            sizes={`${box.width}px`}
+            className="object-cover"
+            priority={i === 0}
+          />
+        </div>
       ))}
 
       <p
