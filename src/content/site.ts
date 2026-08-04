@@ -6,13 +6,13 @@
  */
 export const nav = [
   { en: "AI MANAGER", ko: "AI실장", href: "#ai-manager" },
-  { en: "TEMPLATE", ko: "템플릿", href: "#template" },
-  { en: "PRICING", ko: "멤버십 요금", href: "#pricing" },
+  { en: "TEMPLATES", ko: "템플릿", href: "#template" },
+  { en: "MEMBERSHIP", ko: "멤버십 요금", href: "#pricing" },
   { en: "FAQ", ko: "FAQ", href: "#faq" },
 ] as const;
 
 export const cta = {
-  en: "CREATE MY BRAND",
+  en: "CREATE BRAND",
   ko: "내 브랜드 만들기",
   href: "#start",
 } as const;
@@ -22,8 +22,7 @@ export const splash = {
 } as const;
 
 export const hero = {
-  /* 시안의 넓은 어절 간격을 유지하려고 공백을 두 칸 씁니다. (white-space: pre) */
-  eyebrow: "HAIR UP  FOR  PROFESSIONALS",
+  eyebrow: "HAIR UP FOR PROFESSIONALS",
   headline: ["가위를 든 순간에도,", "오롯이 작업에만."],
   body: [
     "고객과의 대화부터 예약, 장부 정리까지.",
@@ -52,10 +51,9 @@ export const dilemma = {
     "https://mirofkondedzmbddatnt.supabase.co/storage/v1/object/public/images/A_quiet_minimal_hair_salon_scene_an_empty_styling-1785809431372.jpg",
   ],
   floats: {
-    brand: "hair up",
-    smart: "SMART AI",
-    realtime: "24/7 REAL-TIME",
-    zero: "ZERO STRESS",
+    smart: { sub: "hair up", label: "SMART AI" },
+    realtime: { sub: "24/7", label: "REAL TIME" },
+    zero: { sub: "°", label: "ZERO STRESS" },
     solution: "SOLUTION",
   },
 } as const;
@@ -72,7 +70,7 @@ export const experience = {
 } as const;
 
 export const banner = {
-  lines: ["24/7", "Intelligent AI", "Pre - Consultant"],
+  lines: ["24/7", "INTELLIGENT AI", "PRE - CONSULTANT"],
 } as const;
 
 export const keyBenefits = {
@@ -101,23 +99,19 @@ export const keyBenefits = {
       ],
     },
     {
-      /* 세 번째 카드는 시안에서 오른쪽이 잘려 있어 읽히는 데까지만 옮겼습니다.
-         전문을 받으면 이 항목만 채우면 됩니다. */
-      title: ["셋째,", "알아서 정리되는 장"],
+      title: ["셋째,", "알아서 정리되는 장부"],
       body: [
-        "예약이 확정되는 순간, 관리자 화",
-        "정리됩니다. 손으로 옮겨 적는 번",
-        "이제 완전히 사라집니다.",
+        "예약이 확정되는 순간, 관리자 화면에",
+        "차곡차곡 정리됩니다. 손으로 옮겨 적는",
+        "번거로운 과정은 이제 완전히 사라집니다.",
       ],
     },
     {
-      /* 네 번째 카드는 시안 밖이라 문구가 없습니다. 아래는 자리를 잡아 두려고
-         앞 세 장의 흐름(상담 → 예약 → 정리)에 이어 임시로 적은 것입니다. */
-      title: ["넷째,", "놓치지 않는 재방문 관리"],
+      title: ["넷째,", "노쇼 방지 안심 예약금"],
       body: [
-        "다녀간 고객에게 다음 시기를 먼저 알립니다.",
-        "지난 시술 기록을 그대로 이어받아",
-        "다시 찾는 이유를 만들어 줍니다.",
+        "진짜 방문할 고객만 예약금을 걸고 확정됩니다.",
+        "오지 않을 문의로 낭비하던 시간과 감정을",
+        "되찾으세요.",
       ],
     },
   ],
@@ -131,11 +125,13 @@ export const templateCollection = {
     "당신의 작업, 당신의 색, 당신의 이야기를 담은",
     "독점 페이지로 고객에게 깊은 인상을 남기세요.",
   ],
-  cta: "VIEW DEMO",
+  ctas: {
+    pc: "VIEW ON PC",
+    mobile: "VIEW ON MOBILE",
+  },
   /*
    * 대문 이미지는 scripts/capture-templates.mjs 로 각 데모 사이트의 첫 화면을
    * 1600 × 1000 으로 찍어 둔 것입니다. 사이트가 바뀌면 다시 돌리면 됩니다.
-   * 01 만 시안에 이름이 적혀 있고, 02·03 이름은 확정 전 임시값입니다.
    */
   templates: [
     {
@@ -146,23 +142,24 @@ export const templateCollection = {
     },
     {
       index: "02",
-      name: "Editorial Portrait",
+      name: "Studio Lookbook",
       href: "https://hair-up-template-2.vercel.app/",
       image: "/templates/editorial-portrait.webp",
     },
     {
       index: "03",
-      name: "Elevate Studio",
+      name: "Studio Neutral",
       href: "https://hairup-template3.vercel.app/",
       image: "/templates/elevate-studio.webp",
     },
   ],
-  /* 시안에서 양끝 문구가 잘려 있어 첫 단어와 마지막 문구는 추정입니다. */
+  /* 시안 14-D 마퀴 전체 문구 */
   marquee: [
     "PURE DESIGN FOCUS",
     "UNINTERRUPTED CRAFT",
     "AI SALON SUPPORT",
-    "EFFORTLESS BOOKING",
+    "EFFORTLESS FLOW",
+    "YOUR HANDS FREE",
   ],
 } as const;
 
@@ -298,13 +295,18 @@ export const faq = {
   ],
 } as const;
 
-/** 11_CTA — 헤더 CREATE MY BRAND 가 가리키는 #start */
+/** 11_CTA — 헤더 CREATE BRAND 가 가리키는 #start · 시안 10-D · 11-D */
 export const start = {
   floats: [
-    { text: "BESPOKE", left: 120, top: 150 },
-    { text: "1:1 SETUP", left: 419, top: 413 },
-    { text: "SMART ASSISTANT", left: 719, top: 507 },
-    { text: "HAIR UP AI", left: 1202, top: 722 },
+    { text: "BESPOKE", align: "left" as const, left: 120, top: 150 },
+    { text: "1:1 SETUP", align: "center" as const, left: 422, top: 418 },
+    {
+      text: "SMART ASSISTANT",
+      align: "center" as const,
+      left: 721,
+      top: 512,
+    },
+    { text: "HAIR UP AI", align: "right" as const, right: 120, top: 726 },
   ],
   headline: ["감각은 온전히,", "비즈니스는 유용하게."],
   body: [

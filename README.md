@@ -129,8 +129,8 @@ node scripts/probe-header.mjs && PYTHONPATH=scripts python3 scripts/probe-header
   두 언어를 같은 격자 칸에 겹쳐 두어 칸 폭이 둘 중 넓은 쪽으로 잡히므로 글자가 바뀌어도
   메뉴 간격이 흔들리지 않습니다. 한글이 올라온 자리는 시안 그대로이고(메뉴 잉크 y 54..70,
   CTA 라벨 y 56..72), 영문은 그 한글과 잉크 가운데가 같은 높이에 오도록 맞췄습니다.
-  영문 표기(`AI MANAGER` · `TEMPLATE` · `PRICING` · `FAQ` · `CREATE MY BRAND`)는 시안에
-  없어 한글 뜻에 맞춰 새로 정한 값이라 언제든 바꿀 수 있습니다.
+  영문 표기(`AI MANAGER` · `TEMPLATES` · `MEMBERSHIP` · `FAQ` · `CREATE BRAND`)는 시안에
+  맞춰 두었고, 호버 시 한글로 굴러 바뀝니다.
 - 본문(작은 글씨) rain-in — 히어로·딜레마·경험·혜택·프로세스·템플릿·FAQ·CTA 등
   모든 섹션의 본문 줄에 동일합니다. 큰 헤드라인은 그대로 두고, 화면에 들어올 때
   위에서 아래로 줄마다 시차를 두고 떨어집니다. 히어로는 스플래시 커튼이 올라가기
@@ -166,7 +166,7 @@ node scripts/probe-header.mjs && PYTHONPATH=scripts python3 scripts/probe-header
   시안 라벨은 `07 / FAQ` 그대로입니다(페이지 순서는 10번). 시안 PNG가 633px 이라
   픽셀 diff는 `scaleToRef`로 맞춥니다.
 - `11_CTA` (`#start`) — 검정 바탕에 세리프 플로팅 라벨 네 개와 하단 좌측 헤드라인·본문·
-  아웃라인 CTA. 버튼 호버 시 흰 채움·검정 글자로 바뀝니다. 헤더 `CREATE MY BRAND` 가
+  아웃라인 CTA. 버튼 호버 시 흰 채움·검정 글자로 바뀝니다. 헤더 `CREATE BRAND` 가
   여기로 스크롤됩니다.
 
 ## 디자인 토큰

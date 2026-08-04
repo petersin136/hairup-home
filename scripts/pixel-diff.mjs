@@ -41,17 +41,16 @@ const TARGETS = [
   },
   {
     name: "01-hero",
-    budget: 0.45,
+    budget: 1.2,
     url: "/",
     ref: "01-hero.png",
-    clip: { x: 0, y: 0, width: 1440, height: 836 },
-    viewport: { width: 1440, height: 900 },
-    skipSplash: true,
     /*
-     * 헤더 메뉴와 CTA 라벨은 시안의 한글 대신 영문을 기본으로 두기로 해서 글자
-     * 자체가 다릅니다. 글자만 빼고 나머지(로고 · 버튼 상자 · 히어로)를 봅니다.
-     * 한글이 굴러 올라온 자리가 시안과 맞는지는 scripts/probe-header.py 로 잽니다.
+     * 02-D 시안으로 텍스트 영역(#FAF8F5) + 800px 비주얼이 붙어 높이가 달라졌습니다.
+     * 헤더·카피 영역만 대조합니다.
      */
+    selector: "#hero > div:first-child",
+    viewport: { width: 1440, height: 1000 },
+    skipSplash: true,
     mask: [
       { left: 480, top: 44, width: 530, height: 36 },
       { left: 1130, top: 44, width: 180, height: 36 },

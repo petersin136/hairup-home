@@ -1,51 +1,90 @@
-import { Canvas } from "@/components/layout/Canvas";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { RainInLines } from "@/components/motion/RainInLines";
 import { hero } from "@/content/site";
 
 /**
- * 01_Hero — 아트보드 1440 × 836, 배경 #f6ecdf
+ * 01_Hero — 시안 02-D 지시사항
  *
- * 시안에서 잰 잉크(글자 실제 픽셀) 기준 좌표
- *   아이브로우  x 119, y 390 → 410
- *   H1          x 119, 1행 y 455 / 2행 y 551 (베이스라인 간격 96px)
- *   본문        x 120, 1행 y 676 (행간 36px)
- *
- * left/top 은 위 잉크 좌표가 정확히 나오도록 스크린샷 대조로 맞춘 박스 좌표입니다.
- * 시안 폰트(Noto Sans CJK KR)와 웹폰트의 사이드베어링 차이만큼 120px 에서 어긋납니다.
+ * 텍스트 영역 배경 #FAF8F5
+ *   .SUB-TITLE  Playfair 26/500 · #2C3A2E · uppercase · top 300
+ *   .MAIN-TITLE Noto 70/700 · #1C1A19 · line-height 1.37 · gap 45
+ *   .DESC       Noto 22/400 · #6C6864 · line-height 1.64 · gap 65
+ * 비주얼 영역   width 100% · max-width 1440 · height 800 · gap 65
  */
-const EYEBROW = { left: 118, top: 386 };
-const HEADLINE = { left: 117, top: 436 };
-const BODY = { left: 119, top: 666 };
+const GUTTER = 120;
+
+const SUB = { top: 300, size: 26 };
+const MAIN = {
+  top: SUB.top + SUB.size + 45,
+  size: 70,
+  leading: 1.37,
+  lines: 2,
+};
+const DESC = {
+  top: MAIN.top + MAIN.size * MAIN.leading * MAIN.lines + 65,
+  size: 22,
+  leading: 1.64,
+  lines: 3,
+};
+const VISUAL = {
+  top: DESC.top + DESC.size * DESC.leading * DESC.lines + 65,
+  height: 800,
+};
+
+const TEXT_HEIGHT = VISUAL.top;
 
 export function Hero() {
   return (
-    <Canvas id="hero" height={836} background="bg-cream">
-      <SiteHeader />
-
-      <p
-        className="absolute whitespace-pre font-display text-[27px] font-medium leading-none tracking-[-0.75px] text-forest"
-        style={{ left: `${EYEBROW.left}px`, top: `${EYEBROW.top}px` }}
+    <section id="hero" className="relative w-full bg-porcelain">
+      <div
+        className="relative mx-auto w-[1440px]"
+        style={{ height: `${TEXT_HEIGHT}px` }}
       >
-        {hero.eyebrow}
-      </p>
+        <SiteHeader />
 
-      <h1
-        className="text-kr absolute text-[70px] font-bold leading-[96px] tracking-[-0.01em] text-ink"
-        style={{ left: `${HEADLINE.left}px`, top: `${HEADLINE.top}px` }}
-      >
-        {hero.headline.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
-      </h1>
+        {/* .SUB-TITLE */}
+        <p
+          className="absolute font-display text-[26px] font-medium uppercase leading-none text-forest"
+          style={{ left: `${GUTTER}px`, top: `${SUB.top}px` }}
+        >
+          {hero.eyebrow}
+        </p>
 
-      <RainInLines
-        lines={hero.body}
-        className="text-kr absolute text-[22px] font-normal leading-[36px] tracking-[-0.01em] text-body"
-        style={{ left: `${BODY.left}px`, top: `${BODY.top}px` }}
+        {/* .MAIN-TITLE */}
+        <h1
+          className="text-kr absolute text-[70px] font-bold tracking-[-0.01em] text-ink"
+          style={{
+            left: `${GUTTER}px`,
+            top: `${MAIN.top}px`,
+            lineHeight: MAIN.leading,
+          }}
+        >
+          {hero.headline.map((line) => (
+            <span key={line} className="block">
+              {line}
+            </span>
+          ))}
+        </h1>
+
+        {/* .DESC */}
+        <RainInLines
+          lines={hero.body}
+          className="text-kr absolute text-[22px] font-normal tracking-[-0.01em] text-body"
+          style={{
+            left: `${GUTTER}px`,
+            top: `${DESC.top}px`,
+            lineHeight: DESC.leading,
+          }}
+        />
+      </div>
+
+      {/* 4. 비주얼 이미지 영역 .VISUAL-IMG */}
+      <div
+        className="relative mx-auto w-full max-w-[1440px] bg-black"
+        style={{ height: `${VISUAL.height}px` }}
+        data-hero-visual
+        aria-label="비주얼 이미지 영역"
       />
-    </Canvas>
+    </section>
   );
 }

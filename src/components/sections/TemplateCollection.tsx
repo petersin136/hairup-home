@@ -8,41 +8,52 @@ import { RainInLines } from "@/components/motion/RainInLines";
 import { templateCollection } from "@/content/site";
 
 /**
- * 07_Template Collection — 아트보드 1440 × 1749, 배경 #f6ecdf
+ * 07_Template Collection — 시안 12-D 지시사항
  *
- * 헤더 타입 스케일은 05_Key Benefits 와 완전히 같고, 헤드라인이 3줄이라
- * 본문만 한 줄(96) 아래로 내려옵니다.
+ * .TITLE-TEMPLATE-COLLECTION Playfair 25/500 · #2C3A2E · uppercase · flex center
+ *   .SUB.04/                 Inter 14/500 · margin-right 6
+ * .SECTION-TITLE             Noto 70/700 · #1C1A19 · lh 1.37 · center · gap 45
+ * .SECTION-DESC              Noto 22/400 · #6C6864 · lh 1.64 · center · gap 65
+ *
+ * .TEMPLATE-CARD-CENTER  840 × 500 · radius 6
+ * .TEMPLATE-CARD-LEFT/RIGHT  688 × 410 · radius 6 · 대기상태 overlay black/50%
+ * 카드 간격 33 · 본문 아래 150 · 카드 아래 200 · 하단 여백 300
  *
  * 카드 줄은 가운데 한 장만 크고 좌우 이웃이 화면 밖으로 잘려 나갑니다.
  * 좌우 카드는 커서를 올리기만 해도 가운데로 미끄러져 옵니다.
- * 가운데 카드에 호버하면 대문 이미지가 살짝 확대되면서 어두워지고
- * 템플릿 이름과 VIEW DEMO 버튼이 떠오릅니다.
- *
- * 시안이 843px 로 축소 저장돼 있어(배율 0.585) 아래 좌표는 축소 경계의
- * 면적을 적분해 역산한 값입니다. ±1px 오차가 남아 있습니다.
- *
- * 시안에서 잰 잉크 좌표
- *   아이브로우  y 299
- *   H2          1행 y 362 (행간 96)
- *   본문        1행 y 680 (행간 36)
- *   가운데 카드 800 × 500, x 320, y 924
- *   좌우 카드   800 × 426, 세로 중심은 가운데와 같은 y 1174
- *   카드 간격   31 (좌우 카드가 289 씩 보임)
- *   템플릿 이름 y 1109, 카드 중앙 정렬
- *   버튼        230 × 56, y 1181, 카드 중앙 정렬
- *   하단 마퀴   y 1623, 문구 사이 66 — 기본 우→좌, 스크롤로 가속·역방향
  */
-const HEIGHT = 1749;
-const EYEBROW_TOP = 295;
-const HEADLINE_TOP = 345;
-const BODY_TOP = 671;
+const TITLE = { top: 344, size: 25 };
+const SECTION_TITLE = {
+  top: TITLE.top + TITLE.size + 45,
+  size: 70,
+  leading: 1.37,
+  lines: 3,
+};
+const SECTION_DESC = {
+  top:
+    SECTION_TITLE.top +
+    SECTION_TITLE.size * SECTION_TITLE.leading * SECTION_TITLE.lines +
+    65,
+  size: 22,
+  leading: 1.64,
+  lines: templateCollection.body.length,
+};
 
-/** 작은 "04 /" 는 큰 글자보다 베이스라인이 7px 위에 있습니다. (03·05 와 동일) */
-const INDEX_RISE = 7;
+const DESC_BOTTOM =
+  SECTION_DESC.top +
+  SECTION_DESC.size * SECTION_DESC.leading * SECTION_DESC.lines;
 
-const CARD = { width: 800, active: 500, inactive: 426, gap: 31 };
-const PITCH = CARD.width + CARD.gap;
-const ROW_CENTER = 1174;
+const CARD = {
+  activeW: 840,
+  activeH: 500,
+  inactiveW: 688,
+  inactiveH: 410,
+  gap: 33,
+};
+/** 자리 간격은 활성 카드 폭 + 거터. 비활성은 슬롯 안에서 가운데 쪽으로 붙입니다. */
+const PITCH = CARD.activeW + CARD.gap;
+const CARD_TOP = DESC_BOTTOM + 150;
+const ROW_CENTER = CARD_TOP + CARD.activeH / 2;
 /** 카드 폭의 몇 할을 끌어야 다음 장으로 넘어가는지 */
 const SNAP = 0.2;
 
@@ -51,18 +62,20 @@ const GLIDE = 600;
 /** 호버로 한 장 넘긴 뒤, 커서가 이만큼(px) 움직여야 다음 호버를 받습니다. */
 const HOVER_REARM = 24;
 
-/** 카드 위끝을 기준으로 한 오버레이 좌표 */
-const NAME = { top: 183, size: 26.5, index: 13, rise: 8 };
-const BUTTON = { top: 258, width: 229, height: 56 };
+/** 카드 호버 오버레이 · 시안 13-D */
+const VIEW_BTN = { width: 225, height: 45, gap: 13 };
 
 /*
- * 하단 문구 띠. 시안 서체가 Playfair Display 보다 낱글자가 좁아서, 06 과 같은
- * 기준으로 캡 높이(39px 상당)보다 낱말 폭이 맞는 35px 을 골랐습니다.
- * 그만큼 좁아진 어절 사이는 word-spacing 으로 되돌립니다.
- *
- * 기본은 오른쪽→왼쪽. 스크롤을 내리면 더 빠르게, 올리면 잠깐 반대로 흐릅니다.
+ * 하단 마퀴 · 시안 14-D
+ * .MARQUEE-TRACK SPAN  Playfair 33/400 · #2C3A2E · uppercase · flex-shrink 0
+ * 문구 간격 65 · 기본 우→좌, 스크롤로 가속·역방향
  */
-const MARQUEE = { top: 1607, height: 56, size: 35.2, wordSpacing: 3.2, gap: 64 };
+const MARQUEE = {
+  top: CARD_TOP + CARD.activeH + 200,
+  height: 43,
+  gap: 65,
+};
+const HEIGHT = Math.ceil(MARQUEE.top + MARQUEE.height + 300);
 /** 시안은 첫 문구의 P 가 화면 왼쪽으로 잘린 지점에서 멈춰 있습니다. */
 const MARQUEE_START = 20;
 /** 한 벌(=1/3)을 밀어내는 데 걸리는 시간. 예전 CSS 42s 와 같습니다. */
@@ -108,7 +121,7 @@ function tryOpenGate(gate: HoverGate, x: number, y: number) {
 }
 
 /** i 번 자리를 화면 가운데(x 720)에 놓기 위한 줄 전체의 이동 거리 */
-const originFor = (i: number) => 720 - i * PITCH - CARD.width / 2;
+const originFor = (i: number) => 720 - i * PITCH - CARD.activeW / 2;
 
 export function TemplateCollection() {
   const [index, setIndex] = useState(0);
@@ -202,22 +215,25 @@ export function TemplateCollection() {
       background="bg-cream"
       className="overflow-hidden"
     >
+      {/* .TITLE-TEMPLATE-COLLECTION */}
       <p
-        className="absolute inset-x-0 whitespace-pre text-center font-display text-[27px] font-semibold leading-none tracking-[-1.2px] text-forest"
-        style={{ top: `${EYEBROW_TOP}px` }}
+        className="absolute inset-x-0 flex items-start justify-center font-display text-[25px] font-medium uppercase leading-none text-forest"
+        style={{ top: `${TITLE.top}px` }}
       >
-        <span
-          className="relative font-latin text-[16px] font-semibold tracking-[0.65px]"
-          style={{ top: `-${INDEX_RISE}px` }}
-        >
-          {templateCollection.eyebrow.index}{" "}
+        {/* .TITLE-TEMPLATE-COLLECTION .SUB.04/ */}
+        <span className="mr-[6px] font-latin text-[14px] font-medium tracking-normal">
+          {templateCollection.eyebrow.index}
         </span>
         {templateCollection.eyebrow.label}
       </p>
 
+      {/* .SECTION-TITLE */}
       <h2
-        className="text-kr absolute inset-x-0 text-center text-[70px] font-bold leading-[96px] tracking-[-0.01em] text-ink"
-        style={{ top: `${HEADLINE_TOP}px` }}
+        className="text-kr absolute inset-x-0 text-center text-[70px] font-bold tracking-[-0.01em] text-ink"
+        style={{
+          top: `${SECTION_TITLE.top}px`,
+          lineHeight: SECTION_TITLE.leading,
+        }}
       >
         {templateCollection.headline.map((line) => (
           <span key={line} className="block">
@@ -226,17 +242,21 @@ export function TemplateCollection() {
         ))}
       </h2>
 
+      {/* .SECTION-DESC */}
       <RainInLines
         lines={templateCollection.body}
-        className="text-kr absolute inset-x-0 text-center text-[22px] font-normal leading-[36px] tracking-[-0.01em] text-body"
-        style={{ top: `${BODY_TOP}px` }}
+        className="text-kr absolute inset-x-0 text-center text-[22px] font-normal tracking-[-0.01em] text-body"
+        style={{
+          top: `${SECTION_DESC.top}px`,
+          lineHeight: SECTION_DESC.leading,
+        }}
       />
 
       <div
         className="absolute inset-x-0 cursor-grab touch-pan-y select-none active:cursor-grabbing"
         style={{
-          top: `${ROW_CENTER - CARD.active / 2}px`,
-          height: `${CARD.active}px`,
+          top: `${ROW_CENTER - CARD.activeH / 2}px`,
+          height: `${CARD.activeH}px`,
         }}
         onPointerDown={onPointerDown}
       >
@@ -255,6 +275,8 @@ export function TemplateCollection() {
               key={seat}
               template={at(seat)}
               left={seat * PITCH}
+              seat={seat}
+              activeIndex={index}
               centered={seat === index}
               onHover={onCardHover(seat)}
               onSelect={() => {
@@ -356,17 +378,16 @@ function TemplateMarquee() {
     >
       <div
         ref={track}
-        className="flex w-max whitespace-pre font-display font-normal text-forest will-change-transform"
+        className="flex w-max shrink-0 whitespace-pre font-display text-[33px] font-normal uppercase leading-none text-forest will-change-transform"
         style={{
-          fontSize: `${MARQUEE.size}px`,
           lineHeight: `${MARQUEE.height}px`,
-          wordSpacing: `${MARQUEE.wordSpacing}px`,
         }}
       >
         {[0, 1, 2].map((copy) =>
           templateCollection.marquee.map((phrase) => (
             <span
               key={`${copy}-${phrase}`}
+              className="shrink-0"
               style={{ marginRight: `${MARQUEE.gap}px` }}
             >
               {phrase}
@@ -382,6 +403,8 @@ type CardProps = {
   template: (typeof TEMPLATES)[number];
   /** 줄 안에서의 자리(px). 자리마다 값이 고정이라 좌우 끝에서 카드를 넣고 빼도 줄이 흔들리지 않습니다. */
   left: number;
+  seat: number;
+  activeIndex: number;
   centered: boolean;
   /** 좌우 카드에 커서가 들어온 순간. 가운데 카드로 끌어옵니다. */
   onHover: (e: React.PointerEvent) => void;
@@ -391,26 +414,34 @@ type CardProps = {
 function TemplateCard({
   template,
   left,
+  seat,
+  activeIndex,
   centered,
   onHover,
   onSelect,
 }: CardProps) {
+  const width = centered ? CARD.activeW : CARD.inactiveW;
+  const height = centered ? CARD.activeH : CARD.inactiveH;
+  /* 비활성(왼쪽)은 슬롯 안에서 오른쪽으로 붙여 가운데와의 간격 33 을 맞춥니다. */
+  const inset =
+    !centered && seat < activeIndex ? CARD.activeW - CARD.inactiveW : 0;
+
   return (
     <article
       data-centered={centered}
       onPointerEnter={onHover}
-      className="rounded-ui group absolute top-1/2 -translate-y-1/2 overflow-hidden bg-black transition-[height] duration-600 ease-[cubic-bezier(0.65,0,0.35,1)]"
+      className="rounded-ui group absolute top-1/2 -translate-y-1/2 overflow-hidden bg-black transition-[left,width,height] duration-600 ease-[cubic-bezier(0.65,0,0.35,1)]"
       style={{
-        left: `${left}px`,
-        width: `${CARD.width}px`,
-        height: `${centered ? CARD.active : CARD.inactive}px`,
+        left: `${left + inset}px`,
+        width: `${width}px`,
+        height: `${height}px`,
       }}
     >
       <Image
         src={template.image}
         alt={`${template.name} 템플릿 미리보기`}
         fill
-        sizes={`${CARD.width}px`}
+        sizes={`${CARD.activeW}px`}
         data-cover
         draggable={false}
         className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
@@ -418,46 +449,65 @@ function TemplateCard({
 
       {centered ? (
         <>
-          {/* 시안은 카드 안이 통째로 검정이라, 대문 이미지 위 글자가 그만큼
-              또렷하게 읽히도록 충분히 어둡게 덮습니다. */}
-          <div className="absolute inset-0 bg-black/90 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+          {/* .TEMPLATE-CARD-CENTER-HOVER — black/50% · blur 7px */}
+          <div className="absolute inset-0 bg-black/50 opacity-0 backdrop-blur-[7px] transition-opacity duration-500 group-hover:opacity-100" />
 
-          <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-            <p
-              className="absolute inset-x-0 text-center font-display font-normal leading-none text-porcelain"
-              style={{ top: `${NAME.top}px`, fontSize: `${NAME.size}px` }}
-            >
-              <span
-                className="relative font-latin font-medium tracking-[0.5px] [font-variant-numeric:lining-nums]"
-                style={{ fontSize: `${NAME.index}px`, top: `-${NAME.rise}px` }}
-              >
-                {template.index}{" "}
+          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            {/* .TITLE-STUDIO-SIGNATURE */}
+            <p className="flex items-start justify-center font-display text-[25px] font-medium uppercase leading-none text-porcelain">
+              {/* .TITLE-STUDIO-SIGNATURE .SUB.01/ */}
+              <span className="mr-[6px] font-latin text-[14px] font-medium tracking-normal">
+                {template.index} /
               </span>
-              / {template.name}
+              {template.name}
             </p>
 
-            <a
-              href={template.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-btn pointer-events-auto absolute left-1/2 flex -translate-x-1/2 items-center justify-center border border-porcelain font-latin text-[16px] font-medium tracking-[1.4px] text-porcelain transition-colors duration-200 hover:bg-porcelain hover:text-ink"
+            {/* .BTN-VIEW · gap 45 / 13 */}
+            <div
+              className="pointer-events-auto flex"
               style={{
-                top: `${BUTTON.top}px`,
-                width: `${BUTTON.width}px`,
-                height: `${BUTTON.height}px`,
+                marginTop: "45px",
+                gap: `${VIEW_BTN.gap}px`,
               }}
             >
-              {templateCollection.cta}
-            </a>
+              <a
+                href={template.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-btn inline-flex items-center justify-center border border-porcelain bg-transparent font-latin text-[16px] font-normal uppercase text-porcelain no-underline transition-all duration-200 ease-in-out hover:border-porcelain hover:bg-porcelain hover:text-ink"
+                style={{
+                  width: `${VIEW_BTN.width}px`,
+                  height: `${VIEW_BTN.height}px`,
+                }}
+              >
+                {templateCollection.ctas.pc}
+              </a>
+              <a
+                href={template.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-btn inline-flex items-center justify-center border border-porcelain bg-transparent font-latin text-[16px] font-normal uppercase text-porcelain no-underline transition-all duration-200 ease-in-out hover:border-porcelain hover:bg-porcelain hover:text-ink"
+                style={{
+                  width: `${VIEW_BTN.width}px`,
+                  height: `${VIEW_BTN.height}px`,
+                }}
+              >
+                {templateCollection.ctas.mobile}
+              </a>
+            </div>
           </div>
         </>
       ) : (
-        <button
-          type="button"
-          onClick={onSelect}
-          className="absolute inset-0 cursor-pointer"
-          aria-label={`${template.name} 템플릿 보기`}
-        />
+        <>
+          {/* 대기상태 — black / opacity 50% */}
+          <div className="pointer-events-none absolute inset-0 bg-black/50" />
+          <button
+            type="button"
+            onClick={onSelect}
+            className="absolute inset-0 cursor-pointer"
+            aria-label={`${template.name} 템플릿 보기`}
+          />
+        </>
       )}
     </article>
   );

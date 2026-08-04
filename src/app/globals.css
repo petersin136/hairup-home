@@ -13,6 +13,7 @@
   --color-taupe: #7b6e67; /* 본문 보조 텍스트 */
   --color-espresso: #352923;
   --color-forest: #2c3a2e; /* 브랜드 그린 · 스플래시 배경 · CTA 버튼 */
+  --color-forest-deep: #1e2921; /* CTA 버튼 호버 (헤더 시안) */
   --color-ink: #1c1a19; /* 헤드라인 · 로고 */
   --color-mist: #e3ddd3;
   --color-stone: #8c847a; /* GNB 메뉴 텍스트 */
@@ -70,7 +71,81 @@ body {
   word-spacing: -0.057em;
 }
 
-/* 07_Template Collection 하단 문구 띠는 TemplateMarquee 가 rAF 로 직접 밉니다. */
+/* 데모 채팅 — 카카오톡 느낌의 말풍선·타이핑 */
+.demo-chat-list {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.demo-chat-bubble {
+  border-radius: 16px;
+}
+
+.demo-chat-bubble-kai {
+  background: #ffffff;
+  box-shadow: 0 1px 0 rgba(28, 26, 25, 0.04);
+}
+
+.demo-chat-bubble-mine {
+  background: #fee500;
+}
+
+/* 프로필 쪽 말풍선 꼬리 */
+.demo-chat-bubble-kai.demo-chat-bubble-tail {
+  border-top-left-radius: 4px;
+}
+
+.demo-chat-bubble-kai.demo-chat-bubble-tail::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 10px;
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
+  transform: rotate(45deg);
+  border-radius: 1px;
+}
+
+.demo-chat-bubble-mine.demo-chat-bubble-tail {
+  border-top-right-radius: 4px;
+}
+
+.demo-chat-bubble-mine.demo-chat-bubble-tail::before {
+  content: "";
+  position: absolute;
+  right: -5px;
+  top: 10px;
+  width: 10px;
+  height: 10px;
+  background: #fee500;
+  transform: rotate(45deg);
+  border-radius: 1px;
+}
+
+@keyframes demo-chat-dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.28;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+.demo-chat-dot {
+  animation: demo-chat-dot 1s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-chat-dot {
+    animation: none;
+    opacity: 0.55;
+  }
+}
 
 /* 본문 줄 — 스크롤 진입 시 위에서 아래로 뿌려지듯 떨어짐 */
 @keyframes rain-fall {
