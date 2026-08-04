@@ -59,7 +59,6 @@ export function Experience() {
   const deskDelayRef = useRef<number | null>(null);
   /** 예약 확정 전에는 대시보드를 아예 숨김 */
   const [deskOpen, setDeskOpen] = useState(false);
-  const [deskAnimateIn, setDeskAnimateIn] = useState(false);
   const [bookings, setBookings] = useState<DemoBooking[]>([]);
 
   const handleBooking = useCallback((payload: BookingPayload) => {
@@ -77,10 +76,9 @@ export function Experience() {
     /* 이미 열려 있으면 리스트만 갱신 */
     if (deskOpenRef.current || deskDelayRef.current !== null) return;
 
-    /* 확정 멘트 후 1.5초 뒤에 섹션 등장 */
+    /* 확정 멘트 후 1.5초 뒤 검정 필터 등장 */
     deskDelayRef.current = window.setTimeout(() => {
       deskOpenRef.current = true;
-      setDeskAnimateIn(true);
       setDeskOpen(true);
       deskDelayRef.current = null;
     }, 1500);
@@ -98,8 +96,50 @@ export function Experience() {
     );
   }, []);
 
+  const closeDesk = useCallback(() => {
+    deskOpenRef.current = false;
+    setDeskOpen(false);
+  }, []);
+
+  /** 개발용 — 채팅 없이 검정 필터·예약 현황 바로 확인 */
+  const previewDesk = useCallback(() => {
+    if (deskDelayRef.current) {
+      window.clearTimeout(deskDelayRef.current);
+      deskDelayRef.current = null;
+    }
+    deskOpenRef.current = false;
+    setDeskOpen(false);
+
+    const demo = toDemoBooking(
+      {
+        date: new Date().toISOString().slice(0, 10),
+        time: "15:00",
+        designer: "카이",
+        services: "남성 컷",
+        name: "테스트",
+        gender: "M",
+        phone: "01012345678",
+        request: "개발용 미리보기",
+        total: 27000,
+      },
+      { isNew: true },
+    );
+    setBookings([
+      demo,
+      ...createSampleBookings().map((b) => ({ ...b, isNew: false })),
+    ]);
+
+    deskDelayRef.current = window.setTimeout(() => {
+      deskOpenRef.current = true;
+      setDeskOpen(true);
+      deskDelayRef.current = null;
+    }, 400);
+  }, []);
+
+  const isDev = process.env.NODE_ENV === "development";
+
   return (
-    <section id="experience" className="relative w-full bg-porcelain">
+    <section id="experience" className="relative w-full overflow-hidden bg-porcelain">
       <div
         className="relative mx-auto w-[1440px]"
         style={{ height: `${TOP_HEIGHT}px` }}
@@ -172,14 +212,23 @@ export function Experience() {
               </li>
             ))}
           </ul>
+          {isDev ? (
+            <button
+              type="button"
+              onClick={previewDesk}
+              className="mt-4 self-start rounded-[2px] border border-dashed border-ink/25 px-3 py-2 font-latin text-[11px] tracking-[0.08em] text-ink/55 uppercase transition-colors hover:border-gold hover:text-gold"
+            >
+              [Dev] Preview booking overlay
+            </button>
+          ) : null}
         </div>
       </div>
 
       {deskOpen ? (
         <DemoAdminDashboard
           bookings={bookings}
-          animateIn={deskAnimateIn}
           onBookingOpened={clearNewFlag}
+          onClose={closeDesk}
         />
       ) : null}
     </section>

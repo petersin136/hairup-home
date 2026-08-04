@@ -267,15 +267,13 @@ body {
   }
 }
 
-/* Experience — Salon Desk: 단순 위에서 아래로 페이드인 */
-@keyframes desk-reveal-in {
+/* Experience — 섹션 위 반투명 검정 오버레이 (통째로 왼쪽→오른쪽 슬라이드) */
+@keyframes desk-veil-slide {
   from {
-    opacity: 0;
-    transform: translateY(-28px);
+    transform: translateX(-100%);
   }
   to {
-    opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
 }
 
@@ -297,13 +295,31 @@ body {
   }
 }
 
-.desk-reveal {
-  opacity: 0;
-  transform: translateY(-28px);
+.desk-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.9);
+  transform: translateX(-100%);
+  pointer-events: none;
+  will-change: transform;
 }
 
-.desk-reveal.is-visible {
-  animation: desk-reveal-in 0.7s ease-out both;
+.desk-veil.is-open {
+  pointer-events: auto;
+  cursor: pointer;
+  animation: desk-veil-slide 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.desk-veil.is-open button,
+.desk-veil.is-open .booking-card {
+  cursor: pointer;
+}
+
+.desk-veil-content {
+  min-height: 100%;
+  box-sizing: border-box;
 }
 
 .booking-modal-backdrop {
@@ -315,13 +331,18 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .desk-reveal,
-  .desk-reveal.is-visible,
+  .desk-veil {
+    transform: none;
+  }
+
+  .desk-veil.is-open,
   .booking-modal,
   .booking-modal-backdrop {
     animation: none;
-    opacity: 1;
-    transform: none;
+  }
+
+  .desk-veil.is-open {
+    pointer-events: auto;
   }
 }
 

@@ -10,19 +10,18 @@ import {
 
 type Props = {
   bookings: DemoBooking[];
-  /** 첫 등장 시에만 위에서 아래로 페이드인 */
-  animateIn?: boolean;
   onBookingOpened: (id: string) => void;
+  onClose?: () => void;
 };
 
 export function DemoAdminDashboard({
   bookings,
-  animateIn = false,
   onBookingOpened,
+  onClose,
 }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [hintId, setHintId] = useState<string | null>(null);
-  const [visible, setVisible] = useState(!animateIn);
+  const [veilOpen, setVeilOpen] = useState(false);
 
   const selected = useMemo(
     () => bookings.find((b) => b.id === selectedId) ?? null,
@@ -35,25 +34,32 @@ export function DemoAdminDashboard({
   }, [bookings]);
 
   useEffect(() => {
-    if (!animateIn) {
-      setVisible(true);
-      return;
-    }
-
-    setVisible(false);
-    const showT = window.setTimeout(() => setVisible(true), 30);
+    const start = window.setTimeout(() => setVeilOpen(true), 20);
     const scrollT = window.setTimeout(() => {
-      document.getElementById("salon-desk")?.scrollIntoView({
+      document.getElementById("experience")?.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
-    }, 80);
-
+    }, 120);
     return () => {
-      window.clearTimeout(showT);
+      window.clearTimeout(start);
       window.clearTimeout(scrollT);
     };
-  }, [animateIn]);
+  }, []);
+
+  /* 오버레이가 휠을 가로채지 않도록 — 페이지 스크롤로 전달 */
+  useEffect(() => {
+    if (!veilOpen) return;
+    const el = document.getElementById("salon-desk");
+    if (!el) return;
+
+    const onWheel = (e: WheelEvent) => {
+      window.scrollBy({ top: e.deltaY, left: 0 });
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: true });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [veilOpen]);
 
   const pendingCount = bookings.length;
   const pendingRevenue = bookings.reduce((sum, b) => sum + b.total, 0);
@@ -66,27 +72,38 @@ export function DemoAdminDashboard({
   };
 
   return (
-    <section
+    <div
       id="salon-desk"
-      className={[
-        "desk-reveal w-full bg-mist",
-        visible ? "is-visible" : "",
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      className={["desk-veil", veilOpen ? "is-open" : ""].join(" ")}
+      role="region"
+      aria-label="예약 현황 미리보기"
     >
-      <div className="mx-auto w-full max-w-[1440px] px-[120px] py-20">
-        <p className="font-display text-[13px] font-medium tracking-[0.12em] text-gold uppercase">
-          Live Admin Preview
-        </p>
-        <h3 className="mt-3 font-display text-[32px] font-medium tracking-[-0.02em] text-ink">
-          Salon Desk
-        </h3>
-        <p className="text-kr mt-3 max-w-[520px] text-[16px] leading-relaxed text-body">
-          방금 확정된 예약이 관리자 화면에 실시간으로 반영됐어요.
-        </p>
+      <div className="desk-veil-content mx-auto flex min-h-full w-full max-w-[1440px] flex-col justify-center px-[120px] py-16">
+        <div className="flex items-start justify-between gap-8">
+          <div className="max-w-[620px]">
+            <p className="font-display text-[13px] font-medium tracking-[0.14em] text-gold uppercase">
+              Admin Preview
+            </p>
+            <h3 className="text-kr mt-3 text-[34px] font-bold tracking-[-0.02em] text-white drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)]">
+              예약이 이렇게 반영됩니다
+            </h3>
+            <p className="text-kr mt-3 text-[16px] leading-[1.7] text-white/80 drop-shadow-[0_1px_8px_rgba(0,0,0,0.4)]">
+              이렇게 예약을 확정하시면, 고객님의 관리자 페이지에 예약 현황이
+              실시간으로 업데이트됩니다.
+            </p>
+          </div>
+          {onClose ? (
+            <button
+              type="button"
+              onClick={onClose}
+              className="shrink-0 cursor-pointer rounded-[2px] border border-white/25 px-3 py-2 font-display text-[11px] tracking-[0.1em] text-white/70 uppercase transition-colors hover:border-white/50 hover:text-white"
+            >
+              Close ×
+            </button>
+          ) : null}
+        </div>
 
-        <div className="mt-12 grid grid-cols-3 gap-6">
+        <div className="mt-10 grid grid-cols-3 gap-4">
           <Metric
             label="Pending bookings"
             value={`${pendingCount}`}
@@ -106,13 +123,13 @@ export function DemoAdminDashboard({
           />
         </div>
 
-        <div className="mt-16">
+        <div className="mt-10">
           <div className="flex items-end justify-between gap-6">
             <div>
               <p className="font-display text-[12px] font-medium tracking-[0.1em] text-gold uppercase">
                 Pending confirmation
               </p>
-              <h4 className="text-kr mt-2 text-[22px] font-bold text-ink">
+              <h4 className="text-kr mt-2 text-[20px] font-bold text-white drop-shadow-[0_1px_10px_rgba(0,0,0,0.4)]">
                 확정 대기
               </h4>
             </div>
@@ -123,15 +140,15 @@ export function DemoAdminDashboard({
             ) : null}
           </div>
 
-          <ul className="mt-8 flex flex-col gap-3">
+          <ul className="mt-6 flex flex-col gap-2.5">
             {bookings.map((booking) => (
               <li key={booking.id}>
                 <button
                   type="button"
                   onClick={() => openCard(booking.id)}
                   className={[
-                    "text-kr group flex w-full items-center gap-6 rounded-[6px] border border-ink/[0.08] bg-porcelain px-6 py-5 text-left transition-colors hover:border-gold/40",
-                    booking.isNew ? "ring-1 ring-gold/50" : "",
+                    "booking-card text-kr group flex w-full cursor-pointer items-center gap-6 rounded-[6px] border border-white/35 bg-white/75 px-5 py-4 text-left backdrop-blur-[6px] transition-[transform,background-color,border-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-gold/55 hover:bg-white/95 hover:shadow-[0_10px_28px_rgba(0,0,0,0.28)]",
+                    booking.isNew ? "border-gold/55 ring-1 ring-gold/45" : "",
                   ].join(" ")}
                 >
                   <span className="w-[120px] shrink-0 font-latin text-[14px] tracking-wide text-ink">
@@ -149,7 +166,7 @@ export function DemoAdminDashboard({
                   <span className="min-w-0 flex-1 truncate text-body">
                     {booking.services}
                   </span>
-                  <span className="shrink-0 font-latin text-[13px] text-gold opacity-0 transition-opacity group-hover:opacity-100">
+                  <span className="shrink-0 font-latin text-[13px] text-gold opacity-60 transition-opacity group-hover:opacity-100">
                     View →
                   </span>
                 </button>
@@ -165,7 +182,7 @@ export function DemoAdminDashboard({
           onClose={() => setSelectedId(null)}
         />
       ) : null}
-    </section>
+    </div>
   );
 }
 
@@ -179,14 +196,14 @@ function Metric({
   suffix?: string;
 }) {
   return (
-    <div className="rounded-[6px] border border-ink/[0.08] bg-porcelain px-7 py-6">
+    <div className="rounded-[6px] border border-white/40 bg-white/75 px-6 py-5 shadow-[0_12px_40px_rgba(0,0,0,0.22)] backdrop-blur-[6px]">
       <p className="font-display text-[11px] font-medium tracking-[0.12em] text-stone uppercase">
         {label}
       </p>
-      <p className="text-kr mt-3 text-[28px] font-bold tracking-[-0.02em] text-ink">
+      <p className="text-kr mt-2.5 text-[24px] font-bold tracking-[-0.02em] text-ink">
         {value}
         {suffix ? (
-          <span className="ml-1 text-[16px] font-medium text-body">{suffix}</span>
+          <span className="ml-1 text-[14px] font-medium text-body">{suffix}</span>
         ) : null}
       </p>
     </div>
@@ -223,12 +240,12 @@ function BookingDetailModal({
 
   return (
     <div
-      className="booking-modal-backdrop fixed inset-0 z-[80] flex items-center justify-center bg-ink/35 px-6"
+      className="booking-modal-backdrop fixed inset-0 z-[80] flex items-center justify-center bg-black/50 px-6"
       onClick={onClose}
       role="presentation"
     >
       <div
-        className="booking-modal relative w-full max-w-[480px] rounded-[6px] bg-porcelain p-10 shadow-[0_24px_80px_rgba(28,26,25,0.25)]"
+        className="booking-modal relative w-full max-w-[480px] rounded-[6px] bg-porcelain p-10 shadow-[0_24px_80px_rgba(0,0,0,0.45)]"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal

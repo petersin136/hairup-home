@@ -82,6 +82,10 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
   }, [onBooking]);
 
   useEffect(() => {
+    if (process.env.NODE_ENV === "development") setLimited(false);
+  }, []);
+
+  useEffect(() => {
     const timer = window.setTimeout(() => {
       setMessages((prev) =>
         prev.map((msg) =>
@@ -129,7 +133,10 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
         limited?: boolean;
       };
 
-      if (res.status === 429 || data.limited) {
+      if (
+        process.env.NODE_ENV !== "development" &&
+        (res.status === 429 || data.limited)
+      ) {
         setLimited(true);
       }
 

@@ -39,13 +39,23 @@ export const DEMO_CHAT_LIMIT = LIMIT;
 export const DEMO_CHAT_LIMIT_MESSAGE =
   "오늘 체험 횟수를 다 쓰셨어요. 실제 상담은 카카오채널로 문의해주세요";
 
+/** 개발 중이거나 DEMO_CHAT_UNLIMITED=true 이면 제한 없음 */
+export function isDemoChatUnlimited() {
+  return (
+    process.env.NODE_ENV === "development" ||
+    process.env.DEMO_CHAT_UNLIMITED === "true"
+  );
+}
+
 /** 아직 여유 있으면 true. IP 또는 세션 중 하나라도 한도에 닿으면 false. */
 export function canUseDemoChat(ip: string, sessionId: string): boolean {
+  if (isDemoChatUnlimited()) return true;
   return read(byIp, ip) < LIMIT && read(bySession, sessionId) < LIMIT;
 }
 
 /** 성공 호출 직후 카운트를 올립니다. */
 export function recordDemoChatUse(ip: string, sessionId: string) {
+  if (isDemoChatUnlimited()) return;
   bump(byIp, ip);
   bump(bySession, sessionId);
 }
