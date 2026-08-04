@@ -39,7 +39,7 @@ const FALLBACK =
   "잠시 연결이 불안정해요. 조금 뒤에 다시 말씀해 주세요.";
 
 /** Experience 배치용 — 버튼 돌출 포함 외곽 */
-export const IPHONE_MOCKUP = { width: 330, height: 678 } as const;
+export const IPHONE_MOCKUP = { width: 380, height: 780 } as const;
 
 function uid() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -191,32 +191,32 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
       aria-label="헤어업 상담 데모"
     >
       <span
-        className="iphone-btn iphone-btn-action absolute top-[108px] -left-[2px] h-[26px] w-[3px] rounded-l-[2px]"
+        className="iphone-btn iphone-btn-action absolute top-[124px] -left-[2px] h-[30px] w-[3px] rounded-l-[2px]"
         aria-hidden
       />
       <span
-        className="iphone-btn absolute top-[162px] -left-[2px] h-[46px] w-[3px] rounded-l-[2px]"
+        className="iphone-btn absolute top-[186px] -left-[2px] h-[52px] w-[3px] rounded-l-[2px]"
         aria-hidden
       />
       <span
-        className="iphone-btn absolute top-[220px] -left-[2px] h-[46px] w-[3px] rounded-l-[2px]"
+        className="iphone-btn absolute top-[252px] -left-[2px] h-[52px] w-[3px] rounded-l-[2px]"
         aria-hidden
       />
       <span
-        className="iphone-btn absolute top-[178px] -right-[2px] h-[76px] w-[3px] rounded-r-[2px]"
+        className="iphone-btn absolute top-[204px] -right-[2px] h-[88px] w-[3px] rounded-r-[2px]"
         aria-hidden
       />
 
-      <div className="iphone-frame absolute inset-0 rounded-[52px] p-[6px] shadow-[0_40px_80px_rgba(28,26,25,0.2),0_12px_28px_rgba(28,26,25,0.1)]">
-        <div className="h-full w-full rounded-[46px] bg-[#0b0b0c] p-[7px]">
-          <div className="demo-chat relative flex h-full min-h-0 flex-col overflow-hidden rounded-[39px] bg-[#b2c7d9]">
+      <div className="iphone-frame absolute inset-0 rounded-[58px] p-[7px] shadow-[0_40px_80px_rgba(28,26,25,0.2),0_12px_28px_rgba(28,26,25,0.1)]">
+        <div className="h-full w-full rounded-[51px] bg-[#0b0b0c] p-[8px]">
+          <div className="demo-chat relative flex h-full min-h-0 flex-col overflow-hidden rounded-[43px] bg-[#b2c7d9]">
             <div
-              className="pointer-events-none absolute top-[11px] left-1/2 z-30 h-[28px] w-[98px] -translate-x-1/2 rounded-full bg-black shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]"
+              className="pointer-events-none absolute top-[12px] left-1/2 z-30 h-[30px] w-[112px] -translate-x-1/2 rounded-full bg-black shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]"
               aria-hidden
             />
 
-            <div className="relative z-20 h-[50px] shrink-0">
-              <span className="absolute top-[19px] left-6 text-[13px] font-semibold leading-none tracking-tight text-ink tabular-nums">
+            <div className="relative z-20 h-[54px] shrink-0">
+              <span className="absolute top-[20px] left-7 text-[14px] font-semibold leading-none tracking-tight text-ink tabular-nums">
                 9:41
               </span>
               <div
