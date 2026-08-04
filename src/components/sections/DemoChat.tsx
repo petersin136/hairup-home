@@ -9,6 +9,8 @@ import {
   useState,
 } from "react";
 
+import { Wordmark } from "@/components/brand/Wordmark";
+
 type Role = "assistant" | "user";
 
 type ChatMessage = {
@@ -206,8 +208,8 @@ export const DemoChat = forwardRef<DemoChatHandle>(function DemoChat(_, ref) {
               >
                 ‹
               </button>
-              <p className="text-kr absolute inset-x-10 truncate text-center text-[16px] font-semibold text-ink">
-                헤어업
+              <p className="absolute inset-x-10 flex items-center justify-center text-ink">
+                <Wordmark width={78} />
               </p>
             </header>
 
@@ -310,15 +312,8 @@ function BubbleRow({
       ].join(" ")}
     >
       {!mine ? (
-        <div className="mr-1.5 w-8 shrink-0 self-start">
-          {showAvatar ? (
-            <span
-              className="flex size-8 items-center justify-center rounded-full bg-ink font-display text-[11px] font-medium text-porcelain"
-              aria-hidden
-            >
-              H
-            </span>
-          ) : null}
+        <div className="mr-1.5 w-9 shrink-0 self-start">
+          {showAvatar ? <HairUpAvatar /> : null}
         </div>
       ) : null}
 
@@ -347,19 +342,25 @@ function BubbleRow({
   );
 }
 
+function HairUpAvatar() {
+  return (
+    <span
+      className="flex size-9 items-center justify-center overflow-hidden rounded-full bg-ink px-1.5 text-porcelain"
+      aria-hidden
+    >
+      <Wordmark width={28} />
+    </span>
+  );
+}
+
 function TypingIndicator() {
   return (
     <div
       className="mt-2 flex items-end justify-start"
       aria-label="헤어업이 입력 중"
     >
-      <div className="mr-1.5 w-8 shrink-0 self-start">
-        <span
-          className="flex size-8 items-center justify-center rounded-full bg-ink font-display text-[11px] font-medium text-porcelain"
-          aria-hidden
-        >
-          H
-        </span>
+      <div className="mr-1.5 w-9 shrink-0 self-start">
+        <HairUpAvatar />
       </div>
       <div className="demo-chat-bubble demo-chat-bubble-kai demo-chat-bubble-tail flex items-center gap-[4px] px-3 py-2.5">
         <span className="demo-chat-dot size-[5px] rounded-full bg-ink/45" />
