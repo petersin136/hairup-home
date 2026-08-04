@@ -4,13 +4,10 @@ import { DemoChat } from "@/components/sections/DemoChat";
 import { experience } from "@/content/site";
 
 /**
- * 03_The Experience — 시안 05-D 지시사항
+ * 03_The Experience — 시안 05-D 텍스트 좌표 유지
  *
- * .CARD-BOX         600 × 768 · radius 6 · left 120 — 데모 채팅 UI
- * .TITLE-EXPERIENCE Playfair 25/500 · #2C3A2E · uppercase · inline-flex
- *   .SUB.02/        Inter 14/500 · margin-right 6
- * .SECTION-TITLE    Noto 70/700 · #1C1A19 · line-height 1.37 · left · gap 45
- * .SECTION-DESC     Noto 22/400 · #6C6864 · line-height 1.64 · left · gap 65
+ * .TITLE-EXPERIENCE / .SECTION-TITLE / .SECTION-DESC 는 기존 위치 고정
+ * 왼쪽 600 폭 슬롯 안에 아이폰 목업을 세로·가로 가운데 배치
  *
  * 그리드: 120 거터 + 600 패널 + 120 간격 + 텍스트 + 120 거터
  * 상·하단 여백 동일 → 높이 148+768+148 = 1064
@@ -18,6 +15,9 @@ import { experience } from "@/content/site";
 const GUTTER = 120;
 const PANEL = { left: GUTTER, top: 148, width: 600, height: 768 };
 const HEIGHT = PANEL.top + PANEL.height + PANEL.top;
+
+/** 아이폰 목업 외곽 (베젤 포함) — DemoChat 과 동일 */
+const PHONE = { width: 302, height: 620 };
 
 /** 텍스트 열 시작: 패널 오른쪽 + 120 간격 */
 const TEXT_LEFT = PANEL.left + PANEL.width + GUTTER;
@@ -38,17 +38,19 @@ const SECTION_DESC = {
   leading: 1.64,
 };
 
+/** 왼쪽 패널 슬롯 한가운데 */
+const PHONE_LEFT = PANEL.left + (PANEL.width - PHONE.width) / 2;
+const PHONE_TOP = PANEL.top + (PANEL.height - PHONE.height) / 2;
+
 export function Experience() {
   return (
     <Canvas id="experience" height={HEIGHT} background="bg-paper">
-      {/* .CARD-BOX — 카카오톡 느낌의 데모 채팅 */}
+      {/* 아이폰 목업 — 왼쪽 600 슬롯 중앙 */}
       <div
-        className="rounded-ui absolute overflow-hidden bg-ink"
+        className="absolute"
         style={{
-          left: `${PANEL.left}px`,
-          top: `${PANEL.top}px`,
-          width: `${PANEL.width}px`,
-          height: `${PANEL.height}px`,
+          left: `${PHONE_LEFT}px`,
+          top: `${PHONE_TOP}px`,
         }}
       >
         <DemoChat />
@@ -59,7 +61,6 @@ export function Experience() {
         className="absolute inline-flex items-start font-display text-[25px] font-medium uppercase leading-none text-forest"
         style={{ left: `${TEXT_LEFT}px`, top: `${TITLE.top}px` }}
       >
-        {/* .TITLE-EXPERIENCE .SUB.02/ */}
         <span className="mr-[6px] font-latin text-[14px] font-medium tracking-normal">
           {experience.eyebrow.index}
         </span>

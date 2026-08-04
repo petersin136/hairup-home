@@ -71,14 +71,14 @@ body {
   word-spacing: -0.057em;
 }
 
-/* 데모 채팅 — 카카오톡 느낌의 말풍선·타이핑 */
+/* 데모 채팅 — 카카오톡 말풍선·타이핑 (아이폰 목업 안) */
 .demo-chat-list {
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
 
 .demo-chat-bubble {
-  border-radius: 16px;
+  border-radius: 14px;
 }
 
 .demo-chat-bubble-kai {
@@ -98,10 +98,10 @@ body {
 .demo-chat-bubble-kai.demo-chat-bubble-tail::before {
   content: "";
   position: absolute;
-  left: -5px;
-  top: 10px;
-  width: 10px;
-  height: 10px;
+  left: -4px;
+  top: 8px;
+  width: 9px;
+  height: 9px;
   background: #ffffff;
   transform: rotate(45deg);
   border-radius: 1px;
@@ -114,10 +114,10 @@ body {
 .demo-chat-bubble-mine.demo-chat-bubble-tail::before {
   content: "";
   position: absolute;
-  right: -5px;
-  top: 10px;
-  width: 10px;
-  height: 10px;
+  right: -4px;
+  top: 8px;
+  width: 9px;
+  height: 9px;
   background: #fee500;
   transform: rotate(45deg);
   border-radius: 1px;
