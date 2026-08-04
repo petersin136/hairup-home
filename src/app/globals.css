@@ -72,6 +72,116 @@ body {
   word-spacing: -0.057em;
 }
 
+/* 아이폰 목업 — Cosmic Orange 티타늄 · 사이드 버튼 */
+.iphone-frame {
+  background:
+    linear-gradient(
+      145deg,
+      #f6b489 0%,
+      #e8874a 16%,
+      #c85a28 38%,
+      #ef9a5c 54%,
+      #a8441c 76%,
+      #f0c09a 100%
+    );
+  box-shadow:
+    inset 0 1px 1px rgba(255, 230, 210, 0.55),
+    inset 0 -1px 1px rgba(80, 30, 10, 0.28),
+    inset 1px 0 1px rgba(255, 220, 190, 0.3),
+    inset -1px 0 1px rgba(90, 35, 12, 0.2);
+}
+
+.iphone-btn {
+  background:
+    linear-gradient(
+      180deg,
+      #f0a878 0%,
+      #d46a35 35%,
+      #a84820 70%,
+      #e89258 100%
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 230, 200, 0.45),
+    inset 0 -1px 0 rgba(80, 30, 10, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.18);
+}
+
+.iphone-btn-action {
+  height: 28px;
+}
+
+/* 입력창 — 유휴 시 깜빡이는 커서 · 노란 하이라이트 */
+.demo-chat-input-shell {
+  position: relative;
+  min-width: 0;
+  flex: 1;
+}
+
+.demo-chat-input-shell.is-idle {
+  animation: demo-input-glow 2.2s ease-in-out infinite;
+}
+
+.demo-chat-input-shell.is-idle .demo-chat-input-field {
+  box-shadow:
+    inset 0 0 0 1px rgba(254, 229, 0, 0.85),
+    0 0 0 3px rgba(254, 229, 0, 0.28);
+}
+
+.demo-chat-caret {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  width: 1.5px;
+  height: 15px;
+  translate: 0 -50%;
+  background: #1c1a19;
+  animation: demo-caret-blink 1s steps(1, end) infinite;
+  pointer-events: none;
+}
+
+.demo-chat-input-hint {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  translate: 0 -50%;
+  pointer-events: none;
+  font-size: 14px;
+  line-height: 1;
+  color: rgba(28, 26, 25, 0.38);
+}
+
+@keyframes demo-caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes demo-input-glow {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.03);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-chat-caret,
+  .demo-chat-input-shell.is-idle {
+    animation: none;
+  }
+
+  .demo-chat-caret {
+    opacity: 0.7;
+  }
+}
+
 /* 데모 채팅 — 카카오톡 말풍선·타이핑 (아이폰 목업 안) */
 .demo-chat-list {
   overscroll-behavior: contain;
