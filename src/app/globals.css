@@ -23,6 +23,7 @@
   --color-ash: #888480; /* 02_Dilemma 본문. 시안 잉크 코어 기준. */
   --color-whisper: #d0cfca; /* 02_Dilemma 장식 문구(SMART AI 등) */
   --color-porcelain: #faf8f5; /* 기본 화이트 · 히어로·로고 */
+  --color-gold: #b08d57; /* Experience 데모 대시보드 포인트 */
   --color-black: #000000; /* 04_Banner 배경. ink(#1c1a19) 가 아닌 순수 검정입니다. */
 
   /* 06_The Process 의 배경 위에 낮은 명도차로 얹히는 텍스트.
@@ -186,6 +187,14 @@ body {
 .demo-chat-list {
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.demo-chat-list::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .demo-chat-bubble {
@@ -257,6 +266,65 @@ body {
     opacity: 0.55;
   }
 }
+
+/* Experience — Salon Desk: 단순 위에서 아래로 페이드인 */
+@keyframes desk-reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(-28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes booking-modal-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes booking-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.desk-reveal {
+  opacity: 0;
+  transform: translateY(-28px);
+}
+
+.desk-reveal.is-visible {
+  animation: desk-reveal-in 0.7s ease-out both;
+}
+
+.booking-modal-backdrop {
+  animation: booking-backdrop-in 0.2s ease-out both;
+}
+
+.booking-modal {
+  animation: booking-modal-in 0.2s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desk-reveal,
+  .desk-reveal.is-visible,
+  .booking-modal,
+  .booking-modal-backdrop {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 
 /* 본문 줄 — 스크롤 진입 시 위에서 아래로 뿌려지듯 떨어짐 */
 @keyframes rain-fall {

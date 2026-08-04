@@ -1,23 +1,29 @@
 "use client";
 
-import { useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import { Canvas } from "@/components/layout/Canvas";
 import { RainInLines } from "@/components/motion/RainInLines";
+import { DemoAdminDashboard } from "@/components/sections/DemoAdminDashboard";
 import {
   DemoChat,
   type DemoChatHandle,
   IPHONE_MOCKUP,
 } from "@/components/sections/DemoChat";
 import { experience } from "@/content/site";
+import {
+  type BookingPayload,
+  type DemoBooking,
+  createSampleBookings,
+  toDemoBooking,
+} from "@/lib/demo-chat/booking";
 
 /**
- * 03_The Experience — 시안 05-D 텍스트 좌표 유지
- * 아이폰은 좌측 거터 · 세로 중앙보다 약간 아래
+ * 03_The Experience — 채팅 데모 + 실시간 관리자 대시보드
+ * 텍스트 좌표는 시안 05-D 유지. 예약 상태는 이 부모에서만 보관(새로고침 시 초기화).
  */
 const GUTTER = 120;
 const PANEL = { left: GUTTER, top: 148, width: 600, height: 768 };
-const HEIGHT = PANEL.top + PANEL.height + PANEL.top;
+const TOP_HEIGHT = PANEL.top + PANEL.height + PANEL.top;
 
 const TEXT_LEFT = PANEL.left + PANEL.width + GUTTER;
 
@@ -45,84 +51,137 @@ const DESC_BOTTOM =
 const EXAMPLES_TOP = DESC_BOTTOM + 48;
 
 const PHONE_LEFT = GUTTER;
-/** 패널 중앙보다 36px 아래 */
 const PHONE_TOP = PANEL.top + (PANEL.height - IPHONE_MOCKUP.height) / 2 + 36;
 
 export function Experience() {
   const chatRef = useRef<DemoChatHandle>(null);
+  const deskOpenRef = useRef(false);
+  const deskDelayRef = useRef<number | null>(null);
+  /** 예약 확정 전에는 대시보드를 아예 숨김 */
+  const [deskOpen, setDeskOpen] = useState(false);
+  const [deskAnimateIn, setDeskAnimateIn] = useState(false);
+  const [bookings, setBookings] = useState<DemoBooking[]>([]);
+
+  const handleBooking = useCallback((payload: BookingPayload) => {
+    const next = toDemoBooking(payload, { isNew: true });
+    setBookings((prev) => {
+      if (prev.length === 0) {
+        return [
+          next,
+          ...createSampleBookings().map((b) => ({ ...b, isNew: false })),
+        ];
+      }
+      return [next, ...prev.map((b) => ({ ...b, isNew: false }))];
+    });
+
+    /* 이미 열려 있으면 리스트만 갱신 */
+    if (deskOpenRef.current || deskDelayRef.current !== null) return;
+
+    /* 확정 멘트 후 1.5초 뒤에 섹션 등장 */
+    deskDelayRef.current = window.setTimeout(() => {
+      deskOpenRef.current = true;
+      setDeskAnimateIn(true);
+      setDeskOpen(true);
+      deskDelayRef.current = null;
+    }, 1500);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (deskDelayRef.current) window.clearTimeout(deskDelayRef.current);
+    };
+  }, []);
+
+  const clearNewFlag = useCallback((id: string) => {
+    setBookings((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, isNew: false } : b)),
+    );
+  }, []);
 
   return (
-    <Canvas id="experience" height={HEIGHT} background="bg-porcelain">
+    <section id="experience" className="relative w-full bg-porcelain">
       <div
-        className="absolute"
-        style={{
-          left: `${PHONE_LEFT}px`,
-          top: `${PHONE_TOP}px`,
-        }}
+        className="relative mx-auto w-[1440px]"
+        style={{ height: `${TOP_HEIGHT}px` }}
       >
-        <DemoChat ref={chatRef} />
-      </div>
+        <div
+          className="absolute"
+          style={{
+            left: `${PHONE_LEFT}px`,
+            top: `${PHONE_TOP}px`,
+          }}
+        >
+          <DemoChat ref={chatRef} onBooking={handleBooking} />
+        </div>
 
-      <p
-        className="absolute inline-flex items-start font-display text-[25px] font-medium uppercase leading-none text-forest"
-        style={{ left: `${TEXT_LEFT}px`, top: `${TITLE.top}px` }}
-      >
-        <span className="mr-[6px] font-latin text-[14px] font-medium tracking-normal">
-          {experience.eyebrow.index}
-        </span>
-        {experience.eyebrow.label}
-      </p>
-
-      <h2
-        className="text-kr absolute text-left text-[70px] font-bold tracking-[-0.01em] text-ink"
-        style={{
-          left: `${TEXT_LEFT}px`,
-          top: `${SECTION_TITLE.top}px`,
-          lineHeight: SECTION_TITLE.leading,
-        }}
-      >
-        {experience.headline.map((line) => (
-          <span key={line} className="block">
-            {line}
+        <p
+          className="absolute inline-flex items-start font-display text-[25px] font-medium uppercase leading-none text-forest"
+          style={{ left: `${TEXT_LEFT}px`, top: `${TITLE.top}px` }}
+        >
+          <span className="mr-[6px] font-latin text-[14px] font-medium tracking-normal">
+            {experience.eyebrow.index}
           </span>
-        ))}
-      </h2>
-
-      <RainInLines
-        lines={experience.body}
-        className="text-kr absolute text-left text-[22px] font-normal tracking-[-0.01em] text-body"
-        style={{
-          left: `${TEXT_LEFT}px`,
-          top: `${SECTION_DESC.top}px`,
-          lineHeight: SECTION_DESC.leading,
-        }}
-      />
-
-      {/* 예시 질문 — 본문 아래, 클릭 시 채팅으로 전송 */}
-      <div
-        className="absolute flex w-[440px] flex-col gap-3"
-        style={{ left: `${TEXT_LEFT}px`, top: `${EXAMPLES_TOP}px` }}
-      >
-        <p className="font-display text-[13px] font-medium tracking-[0.08em] text-forest uppercase">
-          Try asking
+          {experience.eyebrow.label}
         </p>
-        <ul className="flex flex-col gap-2.5">
-          {experience.examples.map((q) => (
-            <li key={q}>
-              <button
-                type="button"
-                onClick={() => chatRef.current?.ask(q)}
-                className="text-kr group text-left text-[16px] font-normal tracking-[-0.01em] text-body transition-colors hover:text-ink"
-              >
-                <span className="mr-2 text-forest/50">—</span>
-                <span className="border-b border-transparent transition-[border-color] group-hover:border-ink/25">
-                  {q}
-                </span>
-              </button>
-            </li>
+
+        <h2
+          className="text-kr absolute text-left text-[70px] font-bold tracking-[-0.01em] text-ink"
+          style={{
+            left: `${TEXT_LEFT}px`,
+            top: `${SECTION_TITLE.top}px`,
+            lineHeight: SECTION_TITLE.leading,
+          }}
+        >
+          {experience.headline.map((line) => (
+            <span key={line} className="block">
+              {line}
+            </span>
           ))}
-        </ul>
+        </h2>
+
+        <RainInLines
+          lines={experience.body}
+          className="text-kr absolute text-left text-[22px] font-normal tracking-[-0.01em] text-body"
+          style={{
+            left: `${TEXT_LEFT}px`,
+            top: `${SECTION_DESC.top}px`,
+            lineHeight: SECTION_DESC.leading,
+          }}
+        />
+
+        <div
+          className="absolute flex w-[440px] flex-col gap-3"
+          style={{ left: `${TEXT_LEFT}px`, top: `${EXAMPLES_TOP}px` }}
+        >
+          <p className="font-display text-[13px] font-medium tracking-[0.08em] text-forest uppercase">
+            Try asking
+          </p>
+          <ul className="flex flex-col gap-2.5">
+            {experience.examples.map((q) => (
+              <li key={q}>
+                <button
+                  type="button"
+                  onClick={() => chatRef.current?.ask(q)}
+                  className="text-kr group text-left text-[16px] font-normal tracking-[-0.01em] text-body transition-colors hover:text-ink"
+                >
+                  <span className="mr-2 text-forest/50">—</span>
+                  <span className="border-b border-transparent transition-[border-color] group-hover:border-ink/25">
+                    {q}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </Canvas>
+
+      {deskOpen ? (
+        <DemoAdminDashboard
+          bookings={bookings}
+          animateIn={deskAnimateIn}
+          onBookingOpened={clearNewFlag}
+        />
+      ) : null}
+    </section>
   );
 }

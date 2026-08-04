@@ -10,6 +10,10 @@ import {
 } from "react";
 
 import { Wordmark } from "@/components/brand/Wordmark";
+import {
+  type BookingPayload,
+  parseBookingReply,
+} from "@/lib/demo-chat/booking";
 
 type Role = "assistant" | "user";
 
@@ -22,6 +26,10 @@ type ChatMessage = {
 
 export type DemoChatHandle = {
   ask: (text: string) => void;
+};
+
+type DemoChatProps = {
+  onBooking?: (payload: BookingPayload) => void;
 };
 
 const GREETING =
@@ -47,7 +55,8 @@ function formatTime(at: number) {
   return `${period} ${h12}:${String(m).padStart(2, "0")}`;
 }
 
-export const DemoChat = forwardRef<DemoChatHandle>(function DemoChat(_, ref) {
+export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
+  function DemoChat({ onBooking }, ref) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     { id: "greeting", role: "assistant", content: GREETING, at: 0 },
   ]);
@@ -60,12 +69,17 @@ export const DemoChat = forwardRef<DemoChatHandle>(function DemoChat(_, ref) {
   const messagesRef = useRef(messages);
   const pendingRef = useRef(pending);
   const limitedRef = useRef(limited);
+  const onBookingRef = useRef(onBooking);
 
   useEffect(() => {
     messagesRef.current = messages;
     pendingRef.current = pending;
     limitedRef.current = limited;
   }, [messages, pending, limited]);
+
+  useEffect(() => {
+    onBookingRef.current = onBooking;
+  }, [onBooking]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -123,10 +137,19 @@ export const DemoChat = forwardRef<DemoChatHandle>(function DemoChat(_, ref) {
         data.reply?.trim() ||
         (res.ok ? FALLBACK : data.error?.trim() || FALLBACK);
 
+      const { text: visible, booking } = parseBookingReply(reply);
+
       setMessages((prev) => [
         ...prev,
-        { id: uid(), role: "assistant", content: reply, at: Date.now() },
+        {
+          id: uid(),
+          role: "assistant",
+          content: visible || FALLBACK,
+          at: Date.now(),
+        },
       ]);
+
+      if (booking) onBookingRef.current?.(booking);
     } catch {
       setMessages((prev) => [
         ...prev,
@@ -177,9 +200,9 @@ export const DemoChat = forwardRef<DemoChatHandle>(function DemoChat(_, ref) {
         aria-hidden
       />
 
-      <div className="iphone-frame absolute inset-0 rounded-[50px] p-[3px] shadow-[0_40px_80px_rgba(28,26,25,0.2),0_12px_28px_rgba(28,26,25,0.1)]">
-        <div className="h-full w-full rounded-[47px] bg-[#0b0b0c] p-[4px]">
-          <div className="demo-chat relative flex h-full min-h-0 flex-col overflow-hidden rounded-[43px] bg-[#b2c7d9]">
+      <div className="iphone-frame absolute inset-0 rounded-[52px] p-[6px] shadow-[0_40px_80px_rgba(28,26,25,0.2),0_12px_28px_rgba(28,26,25,0.1)]">
+        <div className="h-full w-full rounded-[46px] bg-[#0b0b0c] p-[7px]">
+          <div className="demo-chat relative flex h-full min-h-0 flex-col overflow-hidden rounded-[39px] bg-[#b2c7d9]">
             <div
               className="pointer-events-none absolute top-[11px] left-1/2 z-30 h-[28px] w-[98px] -translate-x-1/2 rounded-full bg-black shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]"
               aria-hidden
