@@ -6,8 +6,8 @@
    ========================================================================== */
 @theme {
   /* --- 컬러 (시안 스펙 시트 기준) ------------------------------------------ */
-  --color-cream: #f6ecdf; /* 페이지 기본 배경(히어로·05·07) */
-  --color-paper: #f9f8f4; /* 02·03 섹션 배경. 크림보다 차가운 화이트. */
+  --color-cream: #faf8f5; /* 기본 화이트와 동일. 시안 크림이 필요하면 재지정 */
+  --color-paper: #faf8f5; /* 기본·미지정 섹션 배경 (= porcelain) */
   --color-sand: #f1ca90;
   --color-clay: #b88667;
   --color-taupe: #7b6e67; /* 본문 보조 텍스트 */
@@ -22,7 +22,7 @@
   --color-body: #6c6864; /* 히어로 본문 카피 */
   --color-ash: #888480; /* 02_Dilemma 본문. 시안 잉크 코어 기준. */
   --color-whisper: #d0cfca; /* 02_Dilemma 장식 문구(SMART AI 등) */
-  --color-porcelain: #faf8f5; /* 스플래시 로고·아이브로우 */
+  --color-porcelain: #faf8f5; /* 기본 화이트 · 히어로·로고 */
   --color-black: #000000; /* 04_Banner 배경. ink(#1c1a19) 가 아닌 순수 검정입니다. */
 
   /* 06_The Process 의 배경 위에 낮은 명도차로 얹히는 텍스트.
@@ -53,10 +53,11 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  background-color: #faf8f5;
 }
 
 body {
-  background-color: var(--color-cream);
+  background-color: #faf8f5;
   color: var(--color-ink);
   font-family: var(--font-kr);
 }

@@ -44,7 +44,7 @@ const PHONE_TOP = PANEL.top + (PANEL.height - PHONE.height) / 2;
 
 export function Experience() {
   return (
-    <Canvas id="experience" height={HEIGHT} background="bg-paper">
+    <Canvas id="experience" height={HEIGHT} background="bg-porcelain">
       {/* 아이폰 목업 — 왼쪽 600 슬롯 중앙 */}
       <div
         className="absolute"

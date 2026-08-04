@@ -88,7 +88,7 @@ export function KeyBenefits() {
   };
 
   return (
-    <Canvas id="key-benefits" height={HEIGHT} background="bg-cream">
+    <Canvas id="key-benefits" height={HEIGHT} background="bg-porcelain">
       {/* .TITLE-KEY-BENEFITS */}
       <p
         className="absolute inset-x-0 flex items-start justify-center font-display text-[25px] font-medium uppercase leading-none text-forest"

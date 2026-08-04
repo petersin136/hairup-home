@@ -115,7 +115,7 @@ export function Process() {
   return (
     <section
       id="process"
-      className="relative w-full overflow-hidden bg-cream"
+      className="relative w-full overflow-hidden bg-porcelain"
       style={{ height: `${HEIGHT}px` }}
       aria-roledescription="carousel"
       aria-label="The Process"

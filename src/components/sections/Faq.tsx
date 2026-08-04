@@ -44,7 +44,7 @@ const TONE: Record<(typeof faq.items)[number]["tone"], string> = {
 
 export function Faq() {
   return (
-    <Canvas id="faq" height={HEIGHT} background="bg-cream">
+    <Canvas id="faq" height={HEIGHT} background="bg-porcelain">
       <p
         className="absolute whitespace-pre font-display text-[27px] font-semibold leading-none tracking-[-1.2px] text-forest"
         style={{ left: `${LEFT}px`, top: `${EYEBROW_TOP}px` }}

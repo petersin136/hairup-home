@@ -212,7 +212,7 @@ export function TemplateCollection() {
     <Canvas
       id="template-collection"
       height={HEIGHT}
-      background="bg-cream"
+      background="bg-porcelain"
       className="overflow-hidden"
     >
       {/* .TITLE-TEMPLATE-COLLECTION */}

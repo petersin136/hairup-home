@@ -93,7 +93,7 @@ const HEIGHT = Math.max(
 
 export function Dilemma() {
   return (
-    <Canvas id="dilemma" height={HEIGHT} background="bg-paper">
+    <Canvas id="dilemma" height={HEIGHT} background="bg-porcelain">
       {BOXES.map((box, i) => (
         <div
           key={`${box.left}-${box.top}`}
