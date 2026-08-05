@@ -27,15 +27,15 @@ const ROLL = "duration-500 ease-[cubic-bezier(0.65,0,0.35,1)]";
 
 export function SiteHeader() {
   return (
-    <header className="absolute left-[120px] top-[36px] h-[56px] w-[1200px]">
+    <header className="absolute top-[36px] left-[120px] flex h-[56px] w-[1200px] items-center">
       {/* .HEADER-LOGO .LOGO-IMG — width 144 · height auto · display block */}
-      <Link href="/" className="absolute left-0 top-0 block text-ink">
+      <Link href="/" className="block shrink-0 text-ink">
         <Wordmark width={144} />
       </Link>
 
-      {/* .GNB-MENU-LIST — flex · align-items center · gap 65 */}
+      {/* 로고 ↔ CREATE BRAND 사이 정중앙 */}
       <nav
-        className="absolute left-[373px] top-0 flex h-full items-center gap-x-[65px]"
+        className="flex h-full flex-1 items-center justify-center gap-x-[65px]"
         style={{ transform: `translateY(-${NAV_RISE}px)` }}
       >
         {nav.map((item) => (
@@ -60,7 +60,7 @@ export function SiteHeader() {
       {/* .BTN-CREATE-BRAND — 200×56 · #2C3A2E · radius 2 · hover #1E2921 */}
       <Link
         href={cta.href}
-        className="rounded-btn group absolute right-0 top-0 inline-flex h-[56px] w-[200px] items-center justify-center overflow-hidden bg-forest text-porcelain no-underline transition-colors duration-300 hover:bg-forest-deep focus-visible:bg-forest-deep"
+        className="rounded-btn group inline-flex h-[56px] w-[200px] shrink-0 items-center justify-center overflow-hidden bg-forest text-porcelain no-underline transition-colors duration-300 hover:bg-forest-deep focus-visible:bg-forest-deep"
       >
         <span className="grid overflow-hidden" style={{ height: `${ROW}px` }}>
           <Roll
