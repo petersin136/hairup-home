@@ -1,68 +1,23 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { process } from "@/content/site";
 
 /**
- * 06_The Process — 애플 공홈 TV+ 선반 (가운데 카드 + 양옆 peek).
- * 하단 에너지 바가 ~3초 차면 다음 장으로 넘어가며 무한 반복합니다.
- *
- * 카드만 잘라 쓰고, 글자 크기는 시안 그대로(축소·납작 scale 금지)입니다.
- * 좌표만 카드 폭·높이에 맞춰 옮깁니다.
+ * 06_The Process — 프로그레스 탭 캐러셀 (시안 20–24-D)
+ * 활성 스텝: 타이틀+설명이 한 덩어리로 바 위에서 위로 튀어 오름.
  */
-const SRC = { width: 1320, height: 1030 };
-const CARD = { width: 1120, height: 820, gap: 22, radius: 22 };
-const PITCH = CARD.width + CARD.gap;
-const SX = CARD.width / SRC.width;
-const SY = CARD.height / SRC.height;
-const x = (v: number) => v * SX;
-const y = (v: number) => v * SY;
-
-const SECTION = {
-  padTop: 64,
-  padBottom: 72,
-  dotsGap: 28,
-  dot: 8,
-  pillW: 40,
-};
-const HEIGHT =
-  SECTION.padTop + CARD.height + SECTION.dotsGap + SECTION.dot + SECTION.padBottom;
-
-/** 시안 잉크 좌표(1320 패널). 글자 크기와 행간은 아래 클래스에 고정. */
-const EYEBROW = { left: 118, top: 51 };
-const BOX = { left: 538, top: 322, width: 365, height: 465 };
-const TEXT = { left: 121, center: 556 };
-const STEP = { right: 120, top: 515 };
-const COUNTER = { left: 120, top: 903 };
-const CAPTION = { left: 209, top: 894 };
-const CAPTION_TRACKING = 0.7;
-
-const SNAP = 0.18;
-const GLIDE_MS = 550;
-/** 애플 선반 에너지 바가 차는 시간 */
 const AUTO_MS = 5000;
-
-const THEMES = [
-  { background: "var(--color-clay)", dim: "var(--color-clay-dim)" },
-  { background: "var(--color-forest)", dim: "var(--color-forest-dim)" },
-  { background: "var(--color-espresso)", dim: "var(--color-espresso-dim)" },
-] as const;
-
 const COUNT = process.steps.length;
-const REACH = 2;
-
-const wrap = (i: number) => ((i % COUNT) + COUNT) % COUNT;
+/** 활성 시 타이틀+설명이 올라갈 공간 */
+const LIFT_AREA = 220;
 
 export function Process() {
-  const [index, setIndex] = useState(0);
-  const [dragX, setDragX] = useState(0);
-  const [dragging, setDragging] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const startX = useRef(0);
-  const offset = useRef(0);
-  const moved = useRef(false);
+  const [active, setActive] = useState(0);
   const [barKey, setBarKey] = useState(0);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -72,220 +27,130 @@ export function Process() {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  const go = (next: number, restartBar = true) => {
-    setIndex(next);
-    if (restartBar) setBarKey((k) => k + 1);
+  const go = (next: number) => {
+    setActive(((next % COUNT) + COUNT) % COUNT);
+    setBarKey((k) => k + 1);
   };
-
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    e.currentTarget.setPointerCapture(e.pointerId);
-    startX.current = e.clientX;
-    offset.current = dragX;
-    moved.current = false;
-    setDragging(true);
-  };
-
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragging) return;
-    const dx = e.clientX - startX.current;
-    if (Math.abs(dx) > 6) moved.current = true;
-    setDragX(offset.current + dx);
-  };
-
-  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragging) return;
-    setDragging(false);
-    try {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    } catch {
-      /* already released */
-    }
-
-    const dx = dragX;
-    setDragX(0);
-    if (dx <= -CARD.width * SNAP) go(index + 1);
-    else if (dx >= CARD.width * SNAP) go(index - 1);
-    else setBarKey((k) => k + 1);
-  };
-
-  const seats = Array.from({ length: REACH * 2 + 1 }, (_, k) => index - REACH + k);
-  const trackShift = -index * PITCH + dragX;
-  const active = wrap(index);
 
   return (
     <section
       id="process"
-      className="relative w-full overflow-hidden bg-porcelain"
-      style={{ height: `${HEIGHT}px` }}
+      className="relative w-full bg-black"
       aria-roledescription="carousel"
       aria-label="The Process"
     >
-      <div
-        className="absolute inset-x-0 cursor-grab touch-pan-y select-none active:cursor-grabbing"
-        style={{ top: `${SECTION.padTop}px`, height: `${CARD.height}px` }}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
-      >
+      <div className="relative mx-auto flex min-h-[800px] w-full max-w-[1440px] flex-col px-[120px] pt-[70px] pb-[70px]">
+        <h2 className="font-display text-[44px] font-medium uppercase leading-none text-porcelain">
+          {process.title}
+        </h2>
+
         <div
-          className="absolute inset-y-0 will-change-transform"
-          style={{
-            left: `calc(50% - ${CARD.width / 2}px)`,
-            transform: `translate3d(${trackShift}px, 0, 0)`,
-            transition: dragging
-              ? "none"
-              : `transform ${GLIDE_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
-          }}
+          className="mt-auto grid grid-cols-3 gap-6 pt-[120px]"
+          role="tablist"
+          aria-label="Process steps"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
         >
-          {seats.map((seat) => {
-            const i = wrap(seat);
-            const step = process.steps[i];
-            const centered = seat === index;
+          {process.steps.map((step, i) => {
+            const isActive = active === i;
 
             return (
-              <article
-                key={seat}
-                data-step={i}
-                data-centered={centered ? "true" : undefined}
-                aria-hidden={!centered}
-                className="absolute top-0 overflow-hidden"
-                style={{
-                  left: `${seat * PITCH}px`,
-                  width: `${CARD.width}px`,
-                  height: `${CARD.height}px`,
-                  borderRadius: `${CARD.radius}px`,
-                  background: THEMES[i].background,
-                }}
-                onClick={() => {
-                  if (moved.current) return;
-                  if (seat !== index) go(seat);
-                }}
+              <button
+                key={step.caption}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                aria-controls={`process-panel-${i}`}
+                id={`process-tab-${i}`}
+                className="group flex cursor-pointer flex-col text-left"
+                onClick={() => go(i)}
               >
-                <p
-                  className="absolute whitespace-pre font-display text-[66px] font-normal leading-[79px]"
-                  style={{
-                    left: `${x(EYEBROW.left)}px`,
-                    top: `${y(EYEBROW.top)}px`,
-                    color: THEMES[i].dim,
-                  }}
-                >
-                  {process.eyebrow.map((line) => (
-                    <span key={line} className="block">
-                      {line}
-                    </span>
-                  ))}
-                </p>
-
+                {/* 타이틀+설명 유닛 — 하단 정렬, 활성 시 설명이 붙으며 통째로 위로 */}
                 <div
-                  className="rounded-ui absolute bg-cream"
-                  style={{
-                    left: `${x(BOX.left)}px`,
-                    top: `${y(BOX.top)}px`,
-                    width: `${x(BOX.width)}px`,
-                    height: `${y(BOX.height)}px`,
-                  }}
-                />
-
-                <div
-                  className="absolute -translate-y-1/2"
-                  style={{ left: `${x(TEXT.left)}px`, top: `${y(TEXT.center)}px` }}
+                  className="relative w-full"
+                  style={{ height: `${LIFT_AREA}px` }}
                 >
-                  <p className="text-kr text-[28px] font-medium leading-none text-porcelain">
-                    {step.label}
-                  </p>
-                  <p className="text-kr mt-[12px] text-[23px] font-normal leading-[36px] tracking-[-1px] text-porcelain">
-                    {step.body.map((line) => (
-                      <span key={line} className="block whitespace-pre">
-                        {line}
+                  <div
+                    id={`process-panel-${i}`}
+                    role="tabpanel"
+                    aria-labelledby={`process-tab-${i}`}
+                    className={[
+                      "process-step-unit absolute inset-x-0 bottom-0 flex flex-col",
+                      isActive ? "is-active" : "",
+                      reducedMotion ? "motion-reduce" : "",
+                    ].join(" ")}
+                  >
+                    <p className="flex items-start">
+                      <span
+                        className={[
+                          "mr-[10px] shrink-0 font-latin font-normal transition-[color,font-size] duration-500",
+                          isActive
+                            ? "text-[18px] text-stone"
+                            : "text-[16px] text-stone/50",
+                        ].join(" ")}
+                      >
+                        {step.index}
                       </span>
-                    ))}
-                  </p>
+                      <span
+                        className={[
+                          "font-display font-medium uppercase transition-[color,font-size] duration-500",
+                          isActive
+                            ? "text-[32px] leading-none text-porcelain"
+                            : "text-[28px] leading-[1.281] text-porcelain/50",
+                        ].join(" ")}
+                      >
+                        {step.caption}
+                      </span>
+                    </p>
+
+                    <div
+                      className={[
+                        "grid transition-[grid-template-rows,opacity,margin] duration-500 ease-out",
+                        isActive
+                          ? "mt-10 grid-rows-[1fr] opacity-100"
+                          : "mt-0 grid-rows-[0fr] opacity-0",
+                      ].join(" ")}
+                    >
+                      <div className="overflow-hidden">
+                        {/* 3줄 높이로 고정해 스텝마다 같은 만큼 위로 올라가게 */}
+                        <p className="text-kr min-h-[calc(19px*1.63*3)] text-[19px] font-normal leading-[1.63] text-porcelain/80">
+                          {step.body.map((line) => (
+                            <span key={line} className="block">
+                              {line}
+                            </span>
+                          ))}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <p
-                  className="absolute whitespace-pre text-right font-display text-[66px] font-normal leading-none [font-variant-numeric:lining-nums]"
-                  style={{
-                    right: `${x(STEP.right)}px`,
-                    top: `${y(STEP.top)}px`,
-                    color: THEMES[i].dim,
-                  }}
+                <div
+                  className="relative mt-[30px] h-[3px] w-full max-w-[384px] overflow-hidden"
+                  style={{ backgroundColor: "rgb(90, 90, 90)" }}
                 >
-                  {step.step}
-                </p>
-
-                <p
-                  className="absolute font-latin text-[32px] font-normal leading-none tracking-[0.5px]"
-                  style={{
-                    left: `${x(COUNTER.left)}px`,
-                    top: `${y(COUNTER.top)}px`,
-                    color: THEMES[i].dim,
-                  }}
-                >
-                  {step.counter}
-                </p>
-
-                <p
-                  className="absolute whitespace-pre font-display text-[66px] font-normal leading-none"
-                  style={{
-                    left: `${x(CAPTION.left)}px`,
-                    top: `${y(CAPTION.top)}px`,
-                    letterSpacing: `${CAPTION_TRACKING}px`,
-                    color: THEMES[i].dim,
-                  }}
-                >
-                  {step.caption}
-                </p>
-              </article>
+                  {isActive ? (
+                    reducedMotion ? (
+                      <span className="absolute inset-y-0 left-0 w-full bg-porcelain" />
+                    ) : (
+                      <span
+                        key={`${barKey}-${i}`}
+                        className="process-bar-fill absolute inset-y-0 left-0 w-full bg-porcelain"
+                        style={{
+                          animationDuration: `${AUTO_MS}ms`,
+                          animationPlayState: paused ? "paused" : "running",
+                        }}
+                        onAnimationEnd={() => {
+                          if (!paused) go(i + 1);
+                        }}
+                      />
+                    )
+                  ) : null}
+                </div>
+              </button>
             );
           })}
         </div>
-      </div>
-
-      <div
-        className="absolute inset-x-0 flex items-center justify-center gap-[10px]"
-        style={{ top: `${SECTION.padTop + CARD.height + SECTION.dotsGap}px` }}
-        role="tablist"
-        aria-label="Process steps"
-      >
-        {process.steps.map((step, i) => {
-          const isActive = active === i;
-          return (
-            <button
-              key={step.step}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              aria-label={`${step.step}: ${step.caption}`}
-              className={`relative overflow-hidden rounded-full transition-[width] duration-300 ${
-                isActive ? "bg-ink/25" : "bg-ink/30 hover:bg-ink/45"
-              }`}
-              style={{
-                width: isActive ? `${SECTION.pillW}px` : `${SECTION.dot}px`,
-                height: `${SECTION.dot}px`,
-              }}
-              onClick={() => go(index - active + i)}
-            >
-              {isActive && !reducedMotion && (
-                <span
-                  key={`${barKey}-${index}`}
-                  data-process-energy
-                  className="process-energy absolute inset-y-0 left-0 w-full rounded-full bg-ink"
-                  style={{
-                    animationDuration: `${AUTO_MS}ms`,
-                    animationPlayState: dragging ? "paused" : "running",
-                  }}
-                  onAnimationEnd={() => {
-                    if (!dragging) go(index + 1, false);
-                  }}
-                />
-              )}
-              {isActive && reducedMotion && (
-                <span className="absolute inset-0 rounded-full bg-ink" />
-              )}
-            </button>
-          );
-        })}
       </div>
     </section>
   );

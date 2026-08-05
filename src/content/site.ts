@@ -170,13 +170,11 @@ export const templateCollection = {
 } as const;
 
 export const process = {
-  eyebrow: ["THE", "PROCESS"],
+  title: "THE PROCESS",
   steps: [
     {
-      step: "STEP 1",
-      counter: "1/3",
+      index: "STEP 1 /",
       caption: "DISCOVERY",
-      label: "발견",
       body: [
         "피드 속에서 마음에 드는",
         "헤어 스타일을 찾다가",
@@ -184,26 +182,20 @@ export const process = {
       ],
     },
     {
-      step: "STEP 2",
-      counter: "2/3",
+      index: "STEP 2 /",
       caption: "INQUIRY",
-      label: "상담",
       body: [
-        "프로필의 24시간 예약·상담",
-        "링크를 누르면 카카오톡으로",
-        "연결되어 AI와 대화가 시작됩니다.",
+        "프로필의 24시간 예약 · 상담 링크를",
+        "누르면 카카오톡으로 연결되어",
+        "AI와 대화가 시작됩니다.",
       ],
     },
     {
-      step: "STEP 3",
-      counter: "3/3",
+      index: "STEP 3 /",
       caption: "BOOKING",
-      label: "확정",
       body: [
-        "상담부터 예약금 입금까지",
-        "한꺼번에 완료.",
-        "당신은 확정된 손님만 반갑게",
-        "맞이하면 됩니다.",
+        "상담부터 예약금 입금까지 한꺼번에 완료!",
+        "당신은 확정된 손님만 반갑게 맞이하면 됩니다.",
       ],
     },
   ],
@@ -323,4 +315,51 @@ export const start = {
     label: "1:1 맞춤 세팅 상담하기",
     href: "#",
   },
+} as const;
+
+/** 15_Footer — 시안 15-D · 1440 × 739 · #EFEAE3 */
+export const footer = {
+  newsletter: {
+    title: "NEED MORE DETAILS?",
+    body: [
+      "더 궁금한 사항이 있으신가요?",
+      "이메일을 남겨주시면 상세 가이드북을 보내드립니다.",
+    ],
+    placeholder: "E-mail",
+    submit: "Send me PDF",
+    notice:
+      "* 이메일 입력 시 가이드북 발송 및 브랜드의 새로운 소식·혜택 수신에 동의하게 됩니다.",
+  },
+  columns: [
+    {
+      title: "INDEX",
+      links: [
+        { label: "AI MANAGER", href: "#ai-manager" },
+        { label: "TEMPLATES", href: "#template" },
+        { label: "MEMBERSHIP", href: "#pricing" },
+        { label: "FAQ", href: "#faq" },
+      ],
+    },
+    {
+      title: "CONTACT",
+      links: [
+        { label: "info@hairup.co.kr", href: "mailto:info@hairup.co.kr" },
+        { label: "+000 000 0000", href: "tel:+0000000000" },
+      ],
+    },
+    {
+      title: "JOIN US",
+      links: [
+        { label: "Instagram", href: "#" },
+        { label: "KakaoTalk", href: "#" },
+      ],
+    },
+  ],
+  company:
+    "회사명 MARANATHA STUDIO  |  사업자등록번호 000-00-00000  |  통신판매업신고 2026-경기포천-00000",
+  copyright: "COPYRIGHT © 2026 MARANATHASTUDIO",
+  legal: [
+    { label: "PRIVACY POLICY", href: "#" },
+    { label: "TERMS OF SERVICE", href: "#" },
+  ],
 } as const;

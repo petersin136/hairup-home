@@ -17,6 +17,7 @@
   --color-ink: #1c1a19; /* 헤드라인 · 로고 */
   --color-mist: #e3ddd3;
   --color-stone: #8c847a; /* GNB 메뉴 텍스트 */
+  --color-linen: #efeae3; /* 15_Footer 배경 */
 
   /* 팔레트 시트에는 없지만 시안 픽셀에서 확인된 값 */
   --color-body: #6c6864; /* 히어로 본문 카피 */
@@ -369,8 +370,8 @@ body {
   animation: rain-fall 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* 06 Process — 애플식 페이지 점 에너지 바 */
-@keyframes process-energy {
+/* 06 Process — 프로그레스 탭 바 채움 · 스텝 유닛 팝업 */
+@keyframes process-bar-fill {
   from {
     transform: scaleX(0);
   }
@@ -379,11 +380,21 @@ body {
   }
 }
 
-.process-energy {
+.process-bar-fill {
   transform-origin: left center;
-  animation-name: process-energy;
+  animation-name: process-bar-fill;
   animation-timing-function: linear;
   animation-fill-mode: forwards;
+}
+
+.process-step-unit {
+  transform: translateY(0);
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 활성 시 타이틀+설명이 붙은 채로 살짝 더 위로 튀어 오르는 느낌 */
+.process-step-unit.is-active:not(.motion-reduce) {
+  transform: translateY(-8px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -398,9 +409,14 @@ body {
     animation: none;
   }
 
-  .process-energy {
+  .process-bar-fill {
     animation: none;
     transform: scaleX(1);
+  }
+
+  .process-step-unit {
+    transition: none;
+    transform: none;
   }
 }
 
