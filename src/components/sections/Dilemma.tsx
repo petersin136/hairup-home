@@ -76,7 +76,8 @@ const FLOATS = {
   smart: { left: 120, top: 1033 },
   realtime: { left: 279, top: 1320 },
   zero: { left: 362, top: 1370 },
-  solution: { right: 120, top: 1468 },
+  /* 시안 잉크 박스 x≈612–719 · 대각선 캐스케이드 끝 (우측 끝 아님) */
+  solution: { left: 612, top: 1468 },
 } as const;
 
 const FLOAT_COLOR = {
@@ -203,10 +204,11 @@ export function Dilemma() {
         {dilemma.floats.zero.label}
       </p>
 
+      {/* .TITLE-SOLUTION — Playfair 21/400 · text-align right · 캐스케이드 left 612 */}
       <p
         className="absolute font-display text-[21px] font-normal uppercase leading-none"
         style={{
-          right: `${FLOATS.solution.right}px`,
+          left: `${FLOATS.solution.left}px`,
           top: `${FLOATS.solution.top}px`,
           color: FLOAT_COLOR.solution,
           textAlign: "right",

@@ -32,6 +32,13 @@ const NEWSLETTER =
 
 const COLS_TOP = 100 + NEWSLETTER + 165;
 
+/**
+ * INDEX / CONTACT / JOIN US — 시안 16-D 실측.
+ * justify-between 으로 658을 채우지 않고, 폼 왼쪽 기준 고정 시작점.
+ * (레퍼런스 start-start ≈ 224 · 249)
+ */
+const COL_LEFTS = [0, 224, 473] as const;
+
 /** 카피·약관 하단 = 높이 − 30 (로고와 동일) */
 const COPYRIGHT_TOP = HEIGHT - EDGE - 12;
 const COMPANY_TOP = COPYRIGHT_TOP - 19 - 12;
@@ -64,15 +71,20 @@ export function Footer() {
       </div>
 
       <div
-        className="absolute flex justify-between"
+        className="absolute"
         style={{
           left: `${FORM_LEFT}px`,
           top: `${COLS_TOP}px`,
           width: `${FORM_WIDTH}px`,
+          height: `${12 + 14 + 14 * 1.93 * 4}px`,
         }}
       >
-        {footer.columns.map((column) => (
-          <div key={column.title} className="min-w-0">
+        {footer.columns.map((column, index) => (
+          <div
+            key={column.title}
+            className="absolute top-0 min-w-0"
+            style={{ left: `${COL_LEFTS[index]}px` }}
+          >
             <p className="font-latin text-[12px] font-normal uppercase leading-none tracking-[0.06em] text-ink/90">
               {column.title}
             </p>

@@ -53,7 +53,7 @@ export const dilemma = {
   floats: {
     smart: { sub: "hair up", label: "SMART AI" },
     realtime: { sub: "24/7", label: "REAL TIME" },
-    zero: { sub: "°", label: "ZERO STRESS" },
+    zero: { sub: "0", label: "ZERO STRESS" },
     solution: "SOLUTION",
   },
 } as const;
