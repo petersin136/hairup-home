@@ -32,10 +32,6 @@ const NEWSLETTER =
 
 const COLS_TOP = 100 + NEWSLETTER + 165;
 
-const COL_HEADER = 12;
-const COL_HEADER_GAP = 14;
-const COL_LIST = 14 * 1.93 * 4;
-
 /** 카피·약관 하단 = 높이 − 30 (로고와 동일) */
 const COPYRIGHT_TOP = HEIGHT - EDGE - 12;
 const COMPANY_TOP = COPYRIGHT_TOP - 19 - 12;
