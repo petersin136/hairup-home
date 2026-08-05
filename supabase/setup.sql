@@ -5,7 +5,7 @@
 -- 여러 번 실행해도 안전합니다(멱등).
 --
 -- 들어 있는 것
---   1) 스토리지 버킷 5개 (brand / images / videos / posters / uploads)
+--   1) 스토리지 버킷 6개 (brand / images / videos / posters / uploads / docs)
 --   2) 스토리지 RLS 정책
 --   3) 자산 레지스트리 테이블 public.site_assets
 --   4) 공통 설정 테이블 public.app_settings
@@ -23,12 +23,14 @@
 --   videos  : 배경 영상·데모 영상 원본 (mp4 / webm / mov)
 --   posters : 영상 첫 프레임(poster) 이미지. videos 와 1:1 로 짝을 이룸
 --   uploads : 비공개. 문의 첨부 등 방문자가 올리는 파일
+--   docs    : 비공개. Send me PDF 가이드북 등 (메일 API만 읽음)
 --
 -- 폴더 규칙 (버킷 안에서)
 --   images/<섹션>/<이름>@<폭>.<확장자>   예) images/03-test/card-01@1440.webp
 --   videos/<섹션>/<이름>.<확장자>        예) videos/04-banner/loop.mp4
 --   posters/<섹션>/<이름>.<확장자>       예) posters/04-banner/loop.jpg
 --   brand/logo/<이름>.<확장자>           예) brand/logo/wordmark.svg
+--   docs/<이름>.pdf                      예) docs/guidebook.pdf
 -- ############################################################################
 
 insert into storage.buckets
@@ -43,7 +45,9 @@ values
   ('posters', 'posters', true,   10 * 1024 * 1024,
    array['image/png','image/webp','image/jpeg','image/avif']),
   ('uploads', 'uploads', false,  50 * 1024 * 1024,
-   null)
+   null),
+  ('docs',    'docs',    false,  50 * 1024 * 1024,
+   array['application/pdf'])
 on conflict (id) do update
   set public             = excluded.public,
       file_size_limit    = excluded.file_size_limit,
@@ -59,6 +63,7 @@ drop policy if exists "authenticated can upload to public buckets" on storage.ob
 drop policy if exists "authenticated can update public buckets"    on storage.objects;
 drop policy if exists "authenticated can delete public buckets"    on storage.objects;
 drop policy if exists "uploads are private to their owner"         on storage.objects;
+drop policy if exists "docs are manageable by authenticated"       on storage.objects;
 
 create policy "public buckets are readable by anyone"
   on storage.objects for select
@@ -87,6 +92,13 @@ create policy "uploads are private to their owner"
   to authenticated
   using (bucket_id = 'uploads' and owner = auth.uid())
   with check (bucket_id = 'uploads' and owner = auth.uid());
+
+-- 가이드북 PDF: 로그인 사용자만 관리, 방문자는 불가 (메일 API는 service role)
+create policy "docs are manageable by authenticated"
+  on storage.objects for all
+  to authenticated
+  using (bucket_id = 'docs')
+  with check (bucket_id = 'docs');
 
 
 -- ############################################################################

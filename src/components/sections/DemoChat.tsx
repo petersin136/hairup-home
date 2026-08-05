@@ -38,8 +38,21 @@ const GREETING =
 const FALLBACK =
   "잠시 연결이 불안정해요. 조금 뒤에 다시 말씀해 주세요.";
 
-/** Experience 배치용 — 버튼 돌출 포함 외곽 */
-export const IPHONE_MOCKUP = { width: 380, height: 780 } as const;
+/** 시안형 아이폰 목업 · 얇은 메탈 테두리 + 슬림 블랙 베젤 */
+export const IPHONE_MOCKUP = { width: 380, height: 750 } as const;
+
+const FRAME = {
+  /** 바깥 메탈 림 */
+  metal: 3.5,
+  /** 안쪽 블랙 베젤 */
+  bezel: 9,
+  radius: 54,
+} as const;
+
+const METAL =
+  "linear-gradient(145deg, #c4c4c4 0%, #a8a8a8 25%, #9e9e9e 50%, #b0b0b0 75%, #989898 100%)";
+const METAL_BTN =
+  "linear-gradient(180deg, #b8b8b8 0%, #9a9a9a 50%, #888888 100%)";
 
 function uid() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -180,6 +193,7 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
   };
 
   const idle = !focused && !input && !pending && !limited;
+  const screenRadius = FRAME.radius - FRAME.metal - FRAME.bezel;
 
   return (
     <div
@@ -187,40 +201,68 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
       style={{
         width: `${IPHONE_MOCKUP.width}px`,
         height: `${IPHONE_MOCKUP.height}px`,
+        filter:
+          "drop-shadow(0 28px 56px rgba(28,26,25,0.18)) drop-shadow(0 8px 20px rgba(28,26,25,0.1))",
       }}
       aria-label="헤어업 상담 데모"
     >
+      {/* 측면 버튼 — 메탈 */}
       <span
-        className="iphone-btn iphone-btn-action absolute top-[124px] -left-[2px] h-[30px] w-[3px] rounded-l-[2px]"
+        className="pointer-events-none absolute top-[148px] -left-[2.5px] h-[26px] w-[3px] rounded-l-[1px]"
+        style={{ background: METAL_BTN }}
         aria-hidden
       />
       <span
-        className="iphone-btn absolute top-[186px] -left-[2px] h-[52px] w-[3px] rounded-l-[2px]"
+        className="pointer-events-none absolute top-[198px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
+        style={{ background: METAL_BTN }}
         aria-hidden
       />
       <span
-        className="iphone-btn absolute top-[252px] -left-[2px] h-[52px] w-[3px] rounded-l-[2px]"
+        className="pointer-events-none absolute top-[256px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
+        style={{ background: METAL_BTN }}
         aria-hidden
       />
       <span
-        className="iphone-btn absolute top-[204px] -right-[2px] h-[88px] w-[3px] rounded-r-[2px]"
+        className="pointer-events-none absolute top-[220px] -right-[2.5px] h-[84px] w-[3px] rounded-r-[1px]"
+        style={{ background: METAL_BTN }}
         aria-hidden
       />
 
-      <div className="iphone-frame absolute inset-0 rounded-[58px] p-[7px] shadow-[0_40px_80px_rgba(28,26,25,0.2),0_12px_28px_rgba(28,26,25,0.1)]">
-        <div className="h-full w-full rounded-[51px] bg-[#0b0b0c] p-[8px]">
-          <div className="demo-chat relative flex h-full min-h-0 flex-col overflow-hidden rounded-[43px] bg-[#b2c7d9]">
+      {/* 바깥 메탈 테두리 */}
+      <div
+        className="absolute inset-0"
+        style={{
+          borderRadius: `${FRAME.radius}px`,
+          padding: `${FRAME.metal}px`,
+          background: METAL,
+          boxShadow:
+            "inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -1px 0 rgba(0,0,0,0.2)",
+        }}
+      >
+        {/* 안쪽 슬림 블랙 베젤 */}
+        <div
+          className="h-full w-full bg-[#111]"
+          style={{
+            borderRadius: `${FRAME.radius - FRAME.metal}px`,
+            padding: `${FRAME.bezel}px`,
+          }}
+        >
+          <div
+            className="demo-chat relative flex h-full min-h-0 w-full flex-col overflow-hidden bg-[#c5d4e2]"
+            style={{ borderRadius: `${screenRadius}px` }}
+          >
+            {/* Dynamic Island */}
             <div
-              className="pointer-events-none absolute top-[12px] left-1/2 z-30 h-[30px] w-[112px] -translate-x-1/2 rounded-full bg-black shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]"
+              className="pointer-events-none absolute top-[11px] left-1/2 z-30 h-[33px] w-[114px] -translate-x-1/2 rounded-full bg-black"
               aria-hidden
             />
 
             <div className="relative z-20 h-[54px] shrink-0">
-              <span className="absolute top-[20px] left-7 text-[14px] font-semibold leading-none tracking-tight text-ink tabular-nums">
+              <span className="absolute top-[18px] left-5 text-[14px] font-semibold leading-none tracking-tight text-ink tabular-nums">
                 9:41
               </span>
               <div
-                className="absolute top-[21px] right-6 flex items-center gap-[5px] text-ink"
+                className="absolute top-[19px] right-5 flex items-center gap-[5px] text-ink"
                 aria-hidden
               >
                 <SignalIcon />
@@ -229,7 +271,7 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
               </div>
             </div>
 
-            <header className="relative z-10 flex h-[44px] shrink-0 items-center border-b border-black/[0.06] bg-[#a8bfd4]/85 px-2 backdrop-blur-[2px]">
+            <header className="relative z-10 flex h-[44px] shrink-0 items-center border-b border-black/[0.06] bg-[#b7c9d9]/90 px-2 backdrop-blur-[2px]">
               <button
                 type="button"
                 tabIndex={-1}
@@ -268,7 +310,7 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
 
             <form
               onSubmit={onSubmit}
-              className="flex shrink-0 items-center gap-2 bg-[#f5f5f5] px-2.5 py-2.5"
+              className="relative flex shrink-0 items-center gap-2 bg-[#f7f7f7] px-2.5 pt-2.5 pb-3"
             >
               <span
                 className="flex size-8 shrink-0 items-center justify-center text-[22px] leading-none text-ink/40"
@@ -313,6 +355,10 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
               >
                 <SendArrow />
               </button>
+              <span
+                className="pointer-events-none absolute bottom-[5px] left-1/2 h-[4px] w-[108px] -translate-x-1/2 rounded-full bg-ink/20"
+                aria-hidden
+              />
             </form>
           </div>
         </div>
