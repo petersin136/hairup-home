@@ -297,7 +297,13 @@ export const faq = {
 export const start = {
   floats: [
     { text: "BESPOKE", align: "left" as const, left: 120, top: 150 },
-    { text: "1:1 SETUP", align: "center" as const, left: 422, top: 418 },
+    {
+      text: "1:1 setup",
+      align: "center" as const,
+      left: 422,
+      top: 418,
+      lowercase: true,
+    },
     {
       text: "SMART ASSISTANT",
       align: "center" as const,
@@ -355,8 +361,11 @@ export const footer = {
       ],
     },
   ],
-  company:
-    "회사명 MARANATHA STUDIO  |  사업자등록번호 000-00-00000  |  통신판매업신고 2026-경기포천-00000",
+  company: [
+    "회사명 MARANATHA STUDIO",
+    "사업자등록번호 000-00-00000",
+    "통신판매업신고 2026-경기포천-00000",
+  ],
   copyright: "COPYRIGHT © 2026 MARANATHASTUDIO",
   legal: [
     { label: "PRIVACY POLICY", href: "#" },

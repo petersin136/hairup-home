@@ -9,7 +9,7 @@ import { start } from "@/content/site";
  *
  * .BANNER-TEXT-ITEM  Playfair 22/400 · #FAF8F5 · uppercase · lh 1.3 · tracking 0.01em
  *   BESPOKE          좌측정렬 · left 120 · top 150
- *   1:1 SETUP        가운데정렬
+ *   1:1 setup        가운데정렬 · 소문자 (uppercase 제외)
  *   SMART ASSISTANT  가운데정렬
  *   HAIR UP AI       우측정렬 · right 120
  *
@@ -59,7 +59,7 @@ export function Start() {
         return (
           <p
             key={item.text}
-            className="absolute whitespace-pre font-display text-[22px] font-normal uppercase text-porcelain"
+            className={`absolute whitespace-pre font-display text-[22px] font-normal text-porcelain${"lowercase" in item && item.lowercase ? "" : " uppercase"}`}
             style={{
               top: `${item.top}px`,
               left: isRight ? undefined : `${item.left}px`,

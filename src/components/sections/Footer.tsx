@@ -108,17 +108,20 @@ export function Footer() {
         ))}
       </div>
 
-      {/* 사업자 정보 — 카피라이트 위 19, 카피·약관은 하단에서 30 */}
+      {/* 사업자 정보 — 카피라이트 위 19 · 우측 끝 = TERMS OF SERVICE */}
       <p
-        className="text-kr absolute text-[12px] font-normal leading-none text-ink/65"
+        className="text-kr absolute flex justify-between text-[12px] font-normal leading-none text-ink/65"
         style={{
           left: `${FORM_LEFT}px`,
           top: `${COMPANY_TOP}px`,
           width: `${FORM_WIDTH}px`,
-          letterSpacing: "0.055em",
         }}
       >
-        {footer.company}
+        {footer.company.map((part) => (
+          <span key={part} className="shrink-0">
+            {part}
+          </span>
+        ))}
       </p>
 
       <p
