@@ -57,7 +57,7 @@ export function Canvas({
       >
         {children}
       </div>
-      {bleed}
+      {bleed ? <div className="pointer-events-none absolute inset-0 z-[2]">{bleed}</div> : null}
     </section>
   );
 }
