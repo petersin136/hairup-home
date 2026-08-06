@@ -24,6 +24,18 @@ export const topBanner = {
   offer: "40% OFF",
 } as const;
 
+/** 런치 오퍼 팝업 — 시안 POPUP · 440 × 600 */
+export const launchPopup = {
+  image: "/images/popup-top.jpg",
+  desc: [
+    "단독 웹 쇼룸과 통합 예약 시스템, 헤어업 브랜딩 플랜.",
+    "신규 오픈 기간 한정, 초기 세팅비 혜택으로 시작하세요.",
+  ],
+  discount: { num: "35", percent: "%", off: "Off" },
+  price: { from: "200만원", to: "130만원" },
+  cta: { label: "브랜딩 플랜 혜택받고 시작하기", href: "#start" },
+} as const;
+
 export const splash = {
   eyebrow: "AUTOMATED SALON AI",
 } as const;

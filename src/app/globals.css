@@ -36,6 +36,7 @@
   /* --- 폰트 ---------------------------------------------------------------
      실제 브랜드 폰트를 받으면 src/lib/fonts.ts 한 곳만 교체하면 됩니다. */
   --font-display: var(--font-playfair), "Playfair Display", serif;
+  --font-bodoni: var(--font-bodoni-moda), "Bodoni Moda", serif;
   --font-latin: var(--font-inter), "Inter", sans-serif;
   --font-kr: var(--font-noto-sans-kr), "Noto Sans KR", sans-serif;
 

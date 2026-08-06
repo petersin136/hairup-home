@@ -47,6 +47,8 @@ export function Canvas({
           alt=""
           fill
           sizes="100vw"
+          quality={95}
+          unoptimized
           className="pointer-events-none object-cover object-center"
           priority={id === "start"}
         />

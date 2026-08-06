@@ -1,4 +1,4 @@
-import { Inter, Noto_Sans_KR, Playfair_Display } from "next/font/google";
+import { Bodoni_Moda, Inter, Noto_Sans_KR, Playfair_Display } from "next/font/google";
 
 /**
  * 프로젝트에서 쓰는 폰트는 전부 여기서만 정의합니다.
@@ -10,7 +10,17 @@ import { Inter, Noto_Sans_KR, Playfair_Display } from "next/font/google";
 export const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
   variable: "--font-playfair",
+  display: "swap",
+});
+
+/** 팝업 할인 숫자 — 시안 Didot/Bodoni 계열 (고대비 볼 터미널) */
+export const bodoniModa = Bodoni_Moda({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-bodoni-moda",
   display: "swap",
 });
 
@@ -36,6 +46,7 @@ export const notoSansKr = Noto_Sans_KR({
 
 export const fontVariables = [
   playfairDisplay.variable,
+  bodoniModa.variable,
   inter.variable,
   notoSansKr.variable,
 ].join(" ");

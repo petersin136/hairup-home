@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { RainInLines } from "@/components/motion/RainInLines";
+import { HeroVisualVideo } from "@/components/sections/HeroVisualVideo";
 import { hero } from "@/content/site";
 
 /**
@@ -78,13 +79,24 @@ export function Hero() {
         />
       </div>
 
-      {/* 4. 비주얼 이미지 영역 .VISUAL-IMG */}
+      {/* 4. 비주얼 영역 .VISUAL-IMG — 로컬 영상 테스트 */}
       <div
-        className="relative mx-auto w-full max-w-[1440px] bg-black"
+        className="relative mx-auto w-full max-w-[1440px] overflow-hidden bg-black"
         style={{ height: `${VISUAL.height}px` }}
         data-hero-visual
-        aria-label="비주얼 이미지 영역"
-      />
+        aria-label="비주얼 영상 영역"
+      >
+        <HeroVisualVideo src="/videos/hero-visual.mp4" rate={0.5} />
+        {/* 고급 톤 — 살짝 따뜻한 다크 오버레이 + 가장자리 비네트 */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(20,18,16,0.28) 0%, rgba(20,18,16,0.18) 45%, rgba(20,18,16,0.42) 100%), radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.45) 100%)",
+          }}
+          aria-hidden
+        />
+      </div>
     </section>
   );
 }

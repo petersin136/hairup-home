@@ -1,4 +1,5 @@
 import { TopBanner } from "@/components/layout/TopBanner";
+import { LaunchOfferPopup } from "@/components/LaunchOfferPopup";
 import { Banner } from "@/components/sections/Banner";
 import { Dilemma } from "@/components/sections/Dilemma";
 import { Experience } from "@/components/sections/Experience";
@@ -16,6 +17,7 @@ export default function Home() {
   return (
     <>
       <SplashScreen />
+      <LaunchOfferPopup />
       <main>
         <TopBanner />
         <Hero />
