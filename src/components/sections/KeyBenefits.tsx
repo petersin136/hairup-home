@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 import { Canvas } from "@/components/layout/Canvas";
 import { RainInLines } from "@/components/motion/RainInLines";
@@ -9,7 +9,7 @@ import { keyBenefits } from "@/content/site";
 /**
  * 05_Key Benefits — 시안 07-D · 08-D · 09-D
  * 카드는 시안(500×360)보다 약간 키우고, 트랙은 뷰포트 기준 가운데 정렬.
- * 가로 드래그 · 휠로 스크롤.
+ * 가로 이동은 드래그만 (휠은 페이지 세로 스크롤 유지).
  */
 const TITLE = { top: 300, size: 25 };
 const SECTION_TITLE = {
@@ -62,25 +62,6 @@ export function KeyBenefits() {
   const track = useRef<HTMLDivElement>(null);
   const drag = useRef<{ x: number; left: number } | null>(null);
 
-  useEffect(() => {
-    const el = track.current;
-    if (!el) return;
-
-    const onWheel = (e: WheelEvent) => {
-      const max = el.scrollWidth - el.clientWidth;
-      if (max <= 0) return;
-      const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-      if (dx === 0) return;
-      const next = Math.min(max, Math.max(0, el.scrollLeft + dx));
-      if (next === el.scrollLeft) return;
-      e.preventDefault();
-      el.scrollLeft = next;
-    };
-
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, []);
-
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = track.current;
     if (!el || e.button !== 0) return;
@@ -113,13 +94,14 @@ export function KeyBenefits() {
           onPointerMove={onPointerMove}
           onPointerUp={endDrag}
           onPointerCancel={endDrag}
-          className="pointer-events-auto absolute inset-x-0 flex cursor-grab touch-pan-x overflow-x-auto overscroll-x-contain [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
+          className="pointer-events-auto absolute inset-x-0 flex cursor-grab overflow-x-auto overscroll-x-contain [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
           style={{
             top: `${TRACK_TOP}px`,
             height: `${TRACK_HEIGHT}px`,
             gap: `${CARD.gap}px`,
             paddingLeft: SIDE_PAD,
             paddingRight: SIDE_PAD,
+            touchAction: "pan-y",
           }}
         >
           {keyBenefits.cards.map((card, i) => (
