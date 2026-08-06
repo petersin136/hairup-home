@@ -17,6 +17,13 @@ export const cta = {
   href: "#start",
 } as const;
 
+/** 헤더 위 띠배너 — 시안 5-D · 영문/숫자는 Inter 600, 한글은 Noto 400 */
+export const topBanner = {
+  en: "LAUNCH OFFER",
+  kr: "헤어업 오픈 한정, 초기 세팅비 최대 ",
+  offer: "40% OFF",
+} as const;
+
 export const splash = {
   eyebrow: "AUTOMATED SALON AI",
 } as const;
@@ -293,24 +300,120 @@ export const faq = {
   ],
 } as const;
 
+/** 05_Pricing Plan — 시안 2-D · 3-D · 4-D · GNB MEMBERSHIP → #pricing */
+export const pricing = {
+  eyebrow: { index: "05 /", label: "PRICING PLAN" },
+  headline: ["매출이 아무리 늘어도,", "비용은 변함없이."],
+  body: [
+    "월 1,000만 원을 시술할 때 플랫폼 수수료는 매달 수십만 원에 달합니다.",
+    "헤어업은 매출이 얼마든 월 5만 원입니다.",
+  ],
+  compare: {
+    left: {
+      subtitle: "매출에 비례해서 빠져나가는",
+      title: "플랫폼 수수료",
+      /** 롤링 후 시안 표기 그대로 */
+      display: "00000+α",
+      /** 카운트업 연출용 목표(표시는 display 로 착지) */
+      spinTo: 99999,
+    },
+    right: {
+      subtitle: "언제나 월 정액인",
+      title: "헤어업 구독료",
+      amount: 50_000,
+    },
+  },
+  starter: {
+    name: "STARTER",
+    tagline: ["24시간 쉼 없이,", "손님을 맞이하는 전담 예약 실장."],
+    prices: [
+      { label: "초기 세팅비(1회)", num: "50", unit: "만원" },
+      { label: "월 구독료", num: "5", unit: "만원" },
+    ],
+    features: [
+      {
+        title: "자율형 AI 카카오 상담",
+        desc: ["문맥을 스스로 이해하고 예약을 확정하는 지능형 AI"],
+      },
+      {
+        title: "실시간 자동 연동 CRM",
+        desc: ["상담 내역, 예약 일정, 손님 정보를 수기 없이 자동 정리"],
+      },
+      {
+        title: "스마트 고객 케어",
+        desc: ["예약 확정 및 방문 전 유의사항 안내 메시지 자동 발송"],
+      },
+    ],
+    cta: { label: "1:1 맞춤 세팅 상담하기", href: "#start" },
+  },
+  branding: {
+    name: "BRANDING",
+    badge: "/ RECOMMEND",
+    tagline: [
+      "매장의 브랜드 가치를 완성하는",
+      "단독 웹 쇼룸과 통합 예약 시스템.",
+    ],
+    prices: [
+      { label: "초기 세팅비(1회)", num: "200", unit: "만원" },
+      { label: "월 구독료", num: "5", unit: "만원" },
+    ],
+    features: [
+      {
+        title: "스타터 플랜 전 기능 포함",
+        desc: ["24시간 AI 자동 상담 및 실시간 CRM 자동 수집 기본 탑재"],
+      },
+      {
+        title: "단독 브랜드 랜딩페이지",
+        desc: ["시술 철학과 포트폴리오를 감각적으로 담아내는 전용 웹 쇼룸"],
+      },
+      {
+        title: "검색엔진 최적화 (SEO)",
+        desc: ["네이버 · 구글 포털 검색 시 매장 브랜드를 상단에 안정적 노출"],
+      },
+      {
+        title: "웹 인앱 AI 상담 위젯",
+        desc: [
+          "사이트를 둘러보던 손님의 이탈 없이 그 자리에서 즉시",
+          "AI 상담 · 예약",
+        ],
+      },
+    ],
+    cta: { label: "내 브랜드 만들기", href: "#start" },
+  },
+} as const;
+
 /** 11_CTA — 헤더 CREATE BRAND 가 가리키는 #start · 시안 10-D · 11-D */
 export const start = {
   floats: [
-    { text: "BESPOKE", align: "left" as const, left: 120, top: 150 },
+    {
+      text: "BESPOKE",
+      align: "left" as const,
+      left: 120,
+      top: 150,
+      opacity: 0.5,
+    },
     {
       text: "1:1 setup",
       align: "center" as const,
       left: 422,
       top: 418,
       lowercase: true,
+      opacity: 0.8,
     },
     {
       text: "SMART ASSISTANT",
       align: "center" as const,
       left: 721,
       top: 512,
+      opacity: 0.6,
     },
-    { text: "HAIR UP AI", align: "right" as const, right: 120, top: 726 },
+    {
+      text: "HAIR UP AI",
+      align: "right" as const,
+      right: 120,
+      top: 726,
+      opacity: 1,
+    },
   ],
   headline: ["감각은 온전히,", "비즈니스는 유용하게."],
   body: [

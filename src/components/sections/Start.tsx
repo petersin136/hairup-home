@@ -3,57 +3,63 @@ import { RainInLines } from "@/components/motion/RainInLines";
 import { start } from "@/content/site";
 
 /**
- * 11_CTA — 시안 10-D · 11-D 지시사항
+ * 11_CTA — 시안 10-D · 11-D · 1-D(CTA_BG_IMG)
  *
- * 패딩 상·하 150 · 좌·우 120
+ * .SECTION-BG    1440 × 1297 · 배경 이미지 cover
+ * 패딩 상 150 · 하 ≈ CTA 아래 여백
  *
- * .BANNER-TEXT-ITEM  Playfair 22/400 · #FAF8F5 · uppercase · lh 1.3 · tracking 0.01em
- *   BESPOKE          좌측정렬 · left 120 · top 150
- *   1:1 setup        가운데정렬 · 소문자 (uppercase 제외)
- *   SMART ASSISTANT  가운데정렬
- *   HAIR UP AI       우측정렬 · right 120
+ * .BANNER-TEXT-ITEM  Playfair 22/400 · #FAF8F5 · lh 1.3 · tracking 0.01em
+ *   BESPOKE          left 120 · top 150 · opacity 50%
+ *   1:1 setup        left 422 · top 418 · opacity 80%
+ *   SMART ASSISTANT  left 721 · top 512 · opacity 60%
+ *   HAIR UP AI       right 120 · top 726 · opacity 100%
  *
- * .SECTION-TITLE Noto 70/700 · #FAF8F5 · lh 1.37 · left · gap 65
- * .SECTION-DESC  Noto 22/400 · #6C6864 · lh 1.64 · left · gap 70
- * .BTN-CONSULT   230 × 55 · Noto 17/500 · border #FAF8F5 · radius 2
- *                하단 여백 150
+ * .SECTION-TITLE Noto 70/700 · #FAF8F5 · lh 1.37 · left 120 · top 726
+ * .SECTION-DESC  Noto 22/400 · rgba(250,248,245,0.7) · lh 1.64 · gap 65
+ * .BTN-CONSULT   230 × 55 · Noto 17/500 · border #FAF8F5 · radius 2 · gap 70
  */
 const HEIGHT = 1297;
 const GUTTER = 120;
-const PAD_Y = 150;
 
-const CTA = {
+const BG = "/images/cta-bg.jpg";
+
+const SECTION_TITLE = {
   left: GUTTER,
-  top: HEIGHT - PAD_Y - 55,
-  width: 230,
-  height: 55,
+  top: 726,
+  size: 70,
+  leading: 1.37,
+  lines: 2,
 };
 
 const SECTION_DESC = {
   left: GUTTER,
+  top:
+    SECTION_TITLE.top +
+    SECTION_TITLE.size * SECTION_TITLE.leading * SECTION_TITLE.lines +
+    65,
   size: 22,
   leading: 1.64,
   lines: start.body.length,
-  top:
-    CTA.top -
-    70 -
-    22 * 1.64 * start.body.length,
 };
 
-const SECTION_TITLE = {
+const CTA = {
   left: GUTTER,
-  size: 70,
-  leading: 1.37,
-  lines: 2,
   top:
-    SECTION_DESC.top -
-    65 -
-    70 * 1.37 * 2,
+    SECTION_DESC.top +
+    SECTION_DESC.size * SECTION_DESC.leading * SECTION_DESC.lines +
+    70,
+  width: 230,
+  height: 55,
 };
 
 export function Start() {
   return (
-    <Canvas id="start" height={HEIGHT} background="bg-black">
+    <Canvas
+      id="start"
+      height={HEIGHT}
+      background="bg-black"
+      backgroundImage={BG}
+    >
       {start.floats.map((item) => {
         const isRight = item.align === "right";
         return (
@@ -67,6 +73,7 @@ export function Start() {
               textAlign: item.align,
               lineHeight: 1.3,
               letterSpacing: "0.01em",
+              opacity: item.opacity,
             }}
           >
             {item.text}
@@ -90,14 +97,15 @@ export function Start() {
         ))}
       </h2>
 
-      {/* .SECTION-DESC */}
+      {/* .SECTION-DESC — rgba(250,248,245,0.7) */}
       <RainInLines
         lines={start.body}
-        className="text-kr absolute text-left text-[22px] font-normal tracking-[-0.01em] text-body"
+        className="text-kr absolute text-left text-[22px] font-normal tracking-[-0.01em]"
         style={{
           left: `${SECTION_DESC.left}px`,
           top: `${SECTION_DESC.top}px`,
           lineHeight: SECTION_DESC.leading,
+          color: "rgba(250, 248, 245, 0.7)",
         }}
       />
 

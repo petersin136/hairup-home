@@ -74,6 +74,44 @@ body {
   word-spacing: -0.057em;
 }
 
+/* Pricing · STARTER / BRANDING 체크 아이콘 */
+.pricing-check {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 6px;
+  border: 2px solid var(--color-forest);
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.pricing-check::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--color-forest);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.pricing-check-light {
+  border-width: 1px;
+  border-color: var(--color-porcelain);
+}
+
+.pricing-check-light::after {
+  top: 2px;
+  left: 5px;
+  width: 4px;
+  height: 7px;
+  border-color: var(--color-porcelain);
+}
+
 /* 입력창 — 유휴 시 깜빡이는 커서 · 노란 하이라이트 */
 .demo-chat-input-shell {
   position: relative;

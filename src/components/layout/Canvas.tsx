@@ -1,10 +1,13 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 
 type CanvasProps = {
   /** 시안 아트보드 높이(px, 1440 기준) */
   height: number;
   /** 화면 폭 100% 를 채우는 섹션 배경색 클래스 */
   background: string;
+  /** 화면 폭 100% 배경 이미지 (object-cover) */
+  backgroundImage?: string;
   children: ReactNode;
   /**
    * 1440 아트보드를 넘어 화면 끝까지 쓰는 요소. 섹션 직속으로 놓이므로
@@ -26,6 +29,7 @@ type CanvasProps = {
 export function Canvas({
   height,
   background,
+  backgroundImage,
   children,
   bleed,
   className,
@@ -35,9 +39,20 @@ export function Canvas({
     <section
       id={id}
       className={`relative w-full ${background} ${className ?? ""}`}
+      style={backgroundImage ? { minHeight: `${height}px` } : undefined}
     >
+      {backgroundImage ? (
+        <Image
+          src={backgroundImage}
+          alt=""
+          fill
+          sizes="100vw"
+          className="pointer-events-none object-cover object-center"
+          priority={id === "start"}
+        />
+      ) : null}
       <div
-        className="relative mx-auto w-[1440px]"
+        className="relative z-[1] mx-auto w-[1440px]"
         style={{ height: `${height}px` }}
       >
         {children}
