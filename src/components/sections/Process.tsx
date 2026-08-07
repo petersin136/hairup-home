@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { process } from "@/content/site";
 
@@ -17,7 +17,12 @@ export function Process() {
   const [active, setActive] = useState(0);
   const [barKey, setBarKey] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [paused, setPaused] = useState(false);
+  /** 클릭으로 특정 스텝을 고르면 자동 전환을 멈춤 (호버로는 멈추지 않음) */
+  const [manual, setManual] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const manualRef = useRef(manual);
+  manualRef.current = manual;
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -27,13 +32,55 @@ export function Process() {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  const go = (next: number) => {
+  const resume = () => {
+    if (!manualRef.current) return;
+    setManual(false);
+    setBarKey((k) => k + 1);
+  };
+
+  /* 탭 밖을 클릭하면 자동 재생 재개 */
+  useEffect(() => {
+    if (!manual) return;
+
+    const onPointerDown = (e: PointerEvent) => {
+      const tabs = tabsRef.current;
+      if (!tabs) return;
+      const target = e.target as Node | null;
+      if (target && tabs.contains(target)) return;
+      resume();
+    };
+
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [manual]);
+
+  /* 섹션을 스크롤로 벗어나면 자동 재생 재개 */
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return;
+        /* 화면에서 거의 안 보이면 재개 — 다시 들어와도 계속 진행 */
+        if (entry.intersectionRatio < 0.35) resume();
+      },
+      { threshold: [0, 0.35, 0.7] },
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const go = (next: number, fromClick = false) => {
     setActive(((next % COUNT) + COUNT) % COUNT);
     setBarKey((k) => k + 1);
+    if (fromClick) setManual(true);
   };
 
   return (
     <section
+      ref={sectionRef}
       id="process"
       className="relative w-full bg-black"
       aria-roledescription="carousel"
@@ -45,11 +92,10 @@ export function Process() {
         </h2>
 
         <div
+          ref={tabsRef}
           className="mt-auto grid grid-cols-3 gap-6 pt-[120px]"
           role="tablist"
           aria-label="Process steps"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
         >
           {process.steps.map((step, i) => {
             const isActive = active === i;
@@ -63,7 +109,7 @@ export function Process() {
                 aria-controls={`process-panel-${i}`}
                 id={`process-tab-${i}`}
                 className="group flex cursor-pointer flex-col text-left"
-                onClick={() => go(i)}
+                onClick={() => go(i, true)}
               >
                 {/* 타이틀+설명 유닛 — 하단 정렬, 활성 시 설명이 붙으며 통째로 위로 */}
                 <div
@@ -130,7 +176,7 @@ export function Process() {
                   style={{ backgroundColor: "rgb(90, 90, 90)" }}
                 >
                   {isActive ? (
-                    reducedMotion ? (
+                    reducedMotion || manual ? (
                       <span className="absolute inset-y-0 left-0 w-full bg-porcelain" />
                     ) : (
                       <span
@@ -138,11 +184,8 @@ export function Process() {
                         className="process-bar-fill absolute inset-y-0 left-0 w-full bg-porcelain"
                         style={{
                           animationDuration: `${AUTO_MS}ms`,
-                          animationPlayState: paused ? "paused" : "running",
                         }}
-                        onAnimationEnd={() => {
-                          if (!paused) go(i + 1);
-                        }}
+                        onAnimationEnd={() => go(i + 1)}
                       />
                     )
                   ) : null}
