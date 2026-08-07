@@ -139,7 +139,7 @@ export function Experience() {
   const isDev = process.env.NODE_ENV === "development";
 
   return (
-    <section id="experience" className="relative w-full overflow-hidden bg-porcelain">
+    <section id="ai-manager" className="relative w-full overflow-x-clip bg-porcelain">
       <div
         className="relative mx-auto w-[1440px]"
         style={{ height: `${TOP_HEIGHT}px` }}

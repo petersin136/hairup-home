@@ -1,9 +1,12 @@
+"use client";
+
 import Link from "next/link";
 
 import { Wordmark } from "@/components/brand/Wordmark";
 import { Canvas } from "@/components/layout/Canvas";
 import { FooterNewsletter } from "@/components/sections/FooterNewsletter";
 import { footer } from "@/content/site";
+import { onHashClick } from "@/lib/scroll-to-hash";
 
 /**
  * 15_Footer — 시안 수치.
@@ -97,6 +100,7 @@ export function Footer() {
                 >
                   <Link
                     href={item.href}
+                    onClick={(e) => onHashClick(e, item.href)}
                     className="transition-colors duration-200 hover:text-ink hover:underline hover:underline-offset-[3px]"
                   >
                     {item.label}

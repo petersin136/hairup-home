@@ -1,3 +1,4 @@
+import { MobileScaleShell } from "@/components/layout/MobileScaleShell";
 import { TopBanner } from "@/components/layout/TopBanner";
 import { LaunchOfferPopup } from "@/components/LaunchOfferPopup";
 import { Banner } from "@/components/sections/Banner";
@@ -18,20 +19,22 @@ export default function Home() {
     <>
       <SplashScreen />
       <LaunchOfferPopup />
-      <main>
-        <TopBanner />
-        <Hero />
-        <Dilemma />
-        <Experience />
-        <Banner />
-        <KeyBenefits />
-        <Process />
-        <TemplateCollection />
-        <Pricing />
-        <Faq />
-        <Start />
-        <Footer />
-      </main>
+      <MobileScaleShell>
+        <main>
+          <TopBanner />
+          <Hero />
+          <Dilemma />
+          <Experience />
+          <Banner />
+          <KeyBenefits />
+          <Process />
+          <TemplateCollection />
+          <Pricing />
+          <Faq />
+          <Start />
+          <Footer />
+        </main>
+      </MobileScaleShell>
     </>
   );
 }

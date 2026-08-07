@@ -57,12 +57,22 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   background-color: #faf8f5;
+  scroll-behavior: smooth;
 }
 
 body {
   background-color: #faf8f5;
   color: var(--color-ink);
   font-family: var(--font-kr);
+  overflow-x: clip;
+}
+
+/* 모바일만 — 팝업이 좁은 화면에서 잘리지 않게 축소 (데스크톱 440×600 유지) */
+@media (max-width: 479px) {
+  .launch-popup-card {
+    transform: scale(calc((100vw - 32px) / 440));
+    transform-origin: center center;
+  }
 }
 
 /*

@@ -65,10 +65,10 @@ const CARD_H =
   61 +
   CARD_PAD_Y;
 
-const HEIGHT = Math.ceil(CARD_TOP + CARD_H + 120);
+const HEIGHT = Math.ceil(CARD_TOP + CARD_H);
 
-function pad5(n: number) {
-  return String(Math.min(99999, Math.max(0, n))).padStart(5, "0");
+function formatFee(n: number) {
+  return Math.max(0, Math.floor(n)).toLocaleString("en-US");
 }
 
 type PlanTone = "starter" | "branding";
@@ -295,7 +295,7 @@ export function Pricing() {
         style={{ top: `${COMPARE_TOP}px` }}
       >
         <div className="flex items-center justify-center gap-[80px]">
-          <div className="flex flex-col items-center text-center">
+          <div className="flex w-[320px] flex-col items-center text-center">
             <p className="text-kr text-[24px] font-normal leading-none text-stone">
               {pricing.compare.left.subtitle}
             </p>
@@ -307,18 +307,20 @@ export function Pricing() {
             </p>
             <CountUp
               to={pricing.compare.left.spinTo}
-              finalDisplay={pricing.compare.left.display}
-              format={pad5}
-              className="font-latin text-[60px] font-bold leading-none text-stone tabular-nums"
+              continuous
+              perSecond={110000}
+              suffix="+α"
+              format={formatFee}
+              className="inline-block w-[12ch] text-center font-latin text-[60px] font-bold leading-none text-stone tabular-nums"
               style={{ marginTop: 36 }}
             />
           </div>
 
-          <p className="font-latin text-[60px] font-bold leading-none text-mist">
+          <p className="font-latin shrink-0 text-[60px] font-bold leading-none text-mist">
             VS
           </p>
 
-          <div className="flex flex-col items-center text-center">
+          <div className="flex w-[320px] flex-col items-center text-center">
             <p className="text-kr text-[24px] font-normal leading-none text-stone">
               {pricing.compare.right.subtitle}
             </p>
@@ -330,7 +332,8 @@ export function Pricing() {
             </p>
             <CountUp
               to={pricing.compare.right.amount}
-              className="font-latin text-[60px] font-bold leading-none text-ink tabular-nums"
+              durationMs={550}
+              className="inline-block w-[12ch] text-center font-latin text-[60px] font-bold leading-none text-ink tabular-nums"
               style={{ marginTop: 36 }}
             />
           </div>

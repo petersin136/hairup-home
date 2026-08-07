@@ -17,7 +17,8 @@ import { templateCollection } from "@/content/site";
  *
  * .TEMPLATE-CARD-CENTER  840 × 500 · radius 6
  * .TEMPLATE-CARD-LEFT/RIGHT  688 × 410 · radius 6 · 대기상태 overlay black/50%
- * 카드 간격 33 · 본문 아래 150 · 카드 아래 200 · 하단 여백 300
+ * 카드 간격 33 · 본문 아래 150 · 카드 아래 200
+ * 마퀴→Pricing 여백 300 은 Pricing HEADER.top 이 담당
  *
  * 카드 줄은 가운데 한 장만 크고 좌우 이웃이 화면 밖으로 잘려 나갑니다.
  * 좌우 카드는 커서를 올리기만 해도 가운데로 미끄러져 옵니다.
@@ -75,7 +76,7 @@ const MARQUEE = {
   height: 43,
   gap: 65,
 };
-const HEIGHT = Math.ceil(MARQUEE.top + MARQUEE.height + 300);
+const HEIGHT = Math.ceil(MARQUEE.top + MARQUEE.height);
 /** 시안은 첫 문구의 P 가 화면 왼쪽으로 잘린 지점에서 멈춰 있습니다. */
 const MARQUEE_START = 20;
 /** 한 벌(=1/3)을 밀어내는 데 걸리는 시간. 예전 CSS 42s 와 같습니다. */
@@ -210,7 +211,7 @@ export function TemplateCollection() {
      * 여백 안쪽에서 뚝 끊기지 않고 화면 끝까지 이어집니다.
      */
     <Canvas
-      id="template-collection"
+      id="template"
       height={HEIGHT}
       background="bg-porcelain"
       className="overflow-hidden"

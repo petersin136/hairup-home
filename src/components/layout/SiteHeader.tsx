@@ -1,8 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { Wordmark } from "@/components/brand/Wordmark";
 import { cta, nav } from "@/content/site";
+import { onHashClick } from "@/lib/scroll-to-hash";
 
 /**
  * 헤더 시안(01-D) 지시사항
@@ -37,11 +40,13 @@ export function SiteHeader() {
       <nav
         className="flex h-full flex-1 items-center justify-center gap-x-[65px]"
         style={{ transform: `translateY(-${NAV_RISE}px)` }}
+        aria-label="주요 메뉴"
       >
         {nav.map((item) => (
           <Link
             key={item.href}
             href={item.href}
+            onClick={(e) => onHashClick(e, item.href)}
             className="group grid overflow-hidden text-center text-stone transition-colors duration-300 hover:text-ink focus-visible:text-ink"
             style={{ height: `${ROW}px` }}
           >
@@ -60,6 +65,7 @@ export function SiteHeader() {
       {/* .BTN-CREATE-BRAND — 200×56 · #2C3A2E · radius 2 · hover #1E2921 */}
       <Link
         href={cta.href}
+        onClick={(e) => onHashClick(e, cta.href)}
         className="rounded-btn group inline-flex h-[56px] w-[200px] shrink-0 items-center justify-center overflow-hidden bg-forest text-porcelain no-underline transition-colors duration-300 hover:bg-forest-deep focus-visible:bg-forest-deep"
       >
         <span className="grid overflow-hidden" style={{ height: `${ROW}px` }}>

@@ -221,11 +221,11 @@ export const process = {
 } as const;
 
 /*
- * 10_FAQ — 시안 표기는 07 / FAQ. 호버하면 해당 칸이 답변 면으로 뒤집어집니다.
+ * 10_FAQ — 시안 표기는 06 / FAQ. 호버하면 해당 칸이 답변 면으로 뒤집어집니다.
  * 답변 면 배경은 Q1·Q5 forest / Q2·Q6 clay / Q3·Q4 espresso.
  */
 export const faq = {
-  eyebrow: { index: "07 /", label: "FAQ" },
+  eyebrow: { index: "06 /", label: "FAQ" },
   headline: ["시작은 쉽고,", "변화는 빠르고 선명하게."],
   body: [
     "처음이어도 망설일 필요 없습니다.",
@@ -326,8 +326,8 @@ export const pricing = {
       title: "플랫폼 수수료",
       /** 롤링 후 시안 표기 그대로 */
       display: "00000+α",
-      /** 카운트업 연출용 목표(표시는 display 로 착지) */
-      spinTo: 99999,
+      /** 카운트업 상한(표시는 pad + α) */
+      spinTo: 1_000_000,
     },
     right: {
       subtitle: "언제나 월 정액인",
@@ -434,7 +434,7 @@ export const start = {
   ],
   cta: {
     label: "1:1 맞춤 세팅 상담하기",
-    href: "#",
+    href: "mailto:mars.official.kr@gmail.com",
   },
 } as const;
 

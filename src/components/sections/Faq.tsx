@@ -4,7 +4,9 @@ import { RainInLines } from "@/components/motion/RainInLines";
 import { faq } from "@/content/site";
 
 /**
- * 07 / FAQ — 시안 6-D
+ * 06 / FAQ — 시안 6-D
+ *
+ * Pricing 카드 하단 → FAQ 아이브로우 여백 300 (HEADER.top)
  *
  * .FAQ_CARD   384 × 600 · pad 50 · #EFEAE3 · radius 6 · flex column
  * .FAQ_NUM    Inter 34/400 · #8C847A
