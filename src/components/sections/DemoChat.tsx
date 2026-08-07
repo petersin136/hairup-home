@@ -43,6 +43,14 @@ const FALLBACK =
 /** 시안형 아이폰 목업 · 얇은 메탈 테두리 + 슬림 블랙 베젤 */
 export const IPHONE_MOCKUP = { width: 380, height: 750 } as const;
 
+/** 모바일: 가로는 동일, 세로는 짧게 + 하단은 추가 크롭으로 짤린 느낌 */
+export const IPHONE_MOCKUP_COMPACT = {
+  width: IPHONE_MOCKUP.width,
+  height: Math.round(IPHONE_MOCKUP.height * 0.58),
+  /** 하단 여유 구간을 더 잘라 완성된 폰처럼 안 보이게 */
+  cropBottom: 20,
+} as const;
+
 const FRAME = {
   /** 바깥 메탈 림 */
   metal: 3.5,
@@ -196,10 +204,19 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
 
   const idle = !focused && !input && !pending && !limited;
   const mockupHeight = compact
-    ? Math.round(IPHONE_MOCKUP.height * 0.5)
+    ? IPHONE_MOCKUP_COMPACT.height
     : IPHONE_MOCKUP.height;
-  const frameRadius = compact ? 42 : FRAME.radius;
-  const screenRadius = frameRadius - FRAME.metal - FRAME.bezel;
+  /** compact: 위만 폰 라운드, 아래는 직선 컷 */
+  const frameRadius = FRAME.radius;
+  const outerRadius = compact
+    ? `${frameRadius}px ${frameRadius}px 0 0`
+    : `${frameRadius}px`;
+  const bezelRadius = compact
+    ? `${frameRadius - FRAME.metal}px ${frameRadius - FRAME.metal}px 0 0`
+    : `${frameRadius - FRAME.metal}px`;
+  const screenRadius = compact
+    ? `${frameRadius - FRAME.metal - FRAME.bezel}px ${frameRadius - FRAME.metal - FRAME.bezel}px 0 0`
+    : `${frameRadius - FRAME.metal - FRAME.bezel}px`;
 
   return (
     <div
@@ -207,82 +224,63 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
       style={{
         width: `${IPHONE_MOCKUP.width}px`,
         height: `${mockupHeight}px`,
-        filter:
-          "drop-shadow(0 28px 56px rgba(28,26,25,0.18)) drop-shadow(0 8px 20px rgba(28,26,25,0.1))",
+        filter: compact
+          ? "drop-shadow(0 16px 32px rgba(28,26,25,0.14))"
+          : "drop-shadow(0 28px 56px rgba(28,26,25,0.18)) drop-shadow(0 8px 20px rgba(28,26,25,0.1))",
       }}
       aria-label="헤어업 상담 데모"
     >
       {/* 측면 버튼 — 메탈 */}
+      <span
+        className="pointer-events-none absolute top-[148px] -left-[2.5px] h-[26px] w-[3px] rounded-l-[1px]"
+        style={{ background: METAL_BTN }}
+        aria-hidden
+      />
+      <span
+        className="pointer-events-none absolute top-[198px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
+        style={{ background: METAL_BTN }}
+        aria-hidden
+      />
       {!compact ? (
-        <>
-          <span
-            className="pointer-events-none absolute top-[148px] -left-[2.5px] h-[26px] w-[3px] rounded-l-[1px]"
-            style={{ background: METAL_BTN }}
-            aria-hidden
-          />
-          <span
-            className="pointer-events-none absolute top-[198px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
-            style={{ background: METAL_BTN }}
-            aria-hidden
-          />
-          <span
-            className="pointer-events-none absolute top-[256px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
-            style={{ background: METAL_BTN }}
-            aria-hidden
-          />
-          <span
-            className="pointer-events-none absolute top-[220px] -right-[2.5px] h-[84px] w-[3px] rounded-r-[1px]"
-            style={{ background: METAL_BTN }}
-            aria-hidden
-          />
-        </>
-      ) : (
-        <>
-          <span
-            className="pointer-events-none absolute top-[88px] -left-[2.5px] h-[22px] w-[3px] rounded-l-[1px]"
-            style={{ background: METAL_BTN }}
-            aria-hidden
-          />
-          <span
-            className="pointer-events-none absolute top-[118px] -left-[2.5px] h-[40px] w-[3px] rounded-l-[1px]"
-            style={{ background: METAL_BTN }}
-            aria-hidden
-          />
-          <span
-            className="pointer-events-none absolute top-[166px] -left-[2.5px] h-[40px] w-[3px] rounded-l-[1px]"
-            style={{ background: METAL_BTN }}
-            aria-hidden
-          />
-          <span
-            className="pointer-events-none absolute top-[130px] -right-[2.5px] h-[64px] w-[3px] rounded-r-[1px]"
-            style={{ background: METAL_BTN }}
-            aria-hidden
-          />
-        </>
-      )}
+        <span
+          className="pointer-events-none absolute top-[256px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
+          style={{ background: METAL_BTN }}
+          aria-hidden
+        />
+      ) : null}
+      <span
+        className="pointer-events-none absolute top-[220px] -right-[2.5px] h-[84px] w-[3px] rounded-r-[1px]"
+        style={{ background: METAL_BTN }}
+        aria-hidden
+      />
 
       {/* 바깥 메탈 테두리 */}
       <div
         className="absolute inset-0"
         style={{
-          borderRadius: `${frameRadius}px`,
-          padding: `${FRAME.metal}px`,
+          borderRadius: outerRadius,
+          padding: compact
+            ? `${FRAME.metal}px ${FRAME.metal}px 0`
+            : `${FRAME.metal}px`,
           background: METAL,
-          boxShadow:
-            "inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -1px 0 rgba(0,0,0,0.2)",
+          boxShadow: compact
+            ? "inset 0 1px 0 rgba(255,255,255,0.28)"
+            : "inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -1px 0 rgba(0,0,0,0.2)",
         }}
       >
         {/* 안쪽 슬림 블랙 베젤 */}
         <div
           className="h-full w-full bg-[#111]"
           style={{
-            borderRadius: `${frameRadius - FRAME.metal}px`,
-            padding: `${FRAME.bezel}px`,
+            borderRadius: bezelRadius,
+            padding: compact
+              ? `${FRAME.bezel}px ${FRAME.bezel}px 0`
+              : `${FRAME.bezel}px`,
           }}
         >
           <div
             className="demo-chat relative flex h-full min-h-0 w-full flex-col overflow-hidden bg-[#c5d4e2]"
-            style={{ borderRadius: `${screenRadius}px` }}
+            style={{ borderRadius: screenRadius }}
           >
             {/* Dynamic Island */}
             <div
@@ -388,11 +386,20 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
               >
                 <SendArrow />
               </button>
-              <span
-                className="pointer-events-none absolute bottom-[5px] left-1/2 h-[4px] w-[108px] -translate-x-1/2 rounded-full bg-ink/20"
+              {!compact ? (
+                <span
+                  className="pointer-events-none absolute bottom-[5px] left-1/2 h-[4px] w-[108px] -translate-x-1/2 rounded-full bg-ink/20"
+                  aria-hidden
+                />
+              ) : null}
+            </form>
+            {/* compact: 하단을 더 잘라내기 위한 여유 — 입력창은 잘리지 않음 */}
+            {compact ? (
+              <div
+                className="h-[20px] shrink-0 bg-[#f7f7f7]"
                 aria-hidden
               />
-            </form>
+            ) : null}
           </div>
         </div>
       </div>

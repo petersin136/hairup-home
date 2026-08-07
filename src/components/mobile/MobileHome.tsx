@@ -10,6 +10,7 @@ import {
   DemoChat,
   type DemoChatHandle,
   IPHONE_MOCKUP,
+  IPHONE_MOCKUP_COMPACT,
 } from "@/components/sections/DemoChat";
 import {
   banner,
@@ -234,6 +235,8 @@ export function MobileHome() {
             ))}
           </p>
 
+          <MobileDemoPhone chatRef={chatRef} />
+
           <div className="mt-6">
             <p className="font-display text-[12px] font-medium tracking-[0.08em] text-forest uppercase">
               Try asking
@@ -253,8 +256,6 @@ export function MobileHome() {
               ))}
             </ul>
           </div>
-
-          <MobileDemoPhone chatRef={chatRef} />
         </section>
 
         {/* Banner strip */}
@@ -650,7 +651,8 @@ function MobileDemoPhone({
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
-  const mockupHeight = Math.round(IPHONE_MOCKUP.height * 0.5);
+  const frameHeight = IPHONE_MOCKUP_COMPACT.height;
+  const visibleHeight = frameHeight - IPHONE_MOCKUP_COMPACT.cropBottom;
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -668,13 +670,13 @@ function MobileDemoPhone({
   return (
     <div
       ref={wrapRef}
-      className="mx-auto mt-8 w-full"
-      style={{ height: mockupHeight * scale }}
+      className="mx-auto mt-8 w-full overflow-hidden"
+      style={{ height: visibleHeight * scale }}
     >
       <div
         style={{
           width: IPHONE_MOCKUP.width,
-          height: mockupHeight,
+          height: frameHeight,
           transform: `scale(${scale})`,
           transformOrigin: "top left",
         }}
