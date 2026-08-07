@@ -67,14 +67,6 @@ body {
   overflow-x: clip;
 }
 
-/* 모바일만 — 팝업이 좁은 화면에서 잘리지 않게 축소 (데스크톱 440×600 유지) */
-@media (max-width: 479px) {
-  .launch-popup-card {
-    transform: scale(calc((100vw - 32px) / 440));
-    transform-origin: center center;
-  }
-}
-
 /*
  * 시안은 데스크톱용 Noto Sans CJK KR 로 작업됐는데, 웹폰트 Noto Sans KR 은
  * 한글 자체 폭은 같지만 공백(U+0020) 폭이 0.057em 더 넓습니다.

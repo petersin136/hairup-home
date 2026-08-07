@@ -1,0 +1,662 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+
+import { Wordmark } from "@/components/brand/Wordmark";
+import { CountUp } from "@/components/motion/CountUp";
+import {
+  DemoChat,
+  type DemoChatHandle,
+  IPHONE_MOCKUP,
+} from "@/components/sections/DemoChat";
+import {
+  banner,
+  cta,
+  dilemma,
+  experience,
+  faq,
+  footer,
+  hero,
+  keyBenefits,
+  nav,
+  pricing,
+  process,
+  start,
+  topBanner,
+} from "@/content/site";
+import { onHashClick } from "@/lib/scroll-to-hash";
+
+/**
+ * 모바일 전용 홈. 데스크톱 아트보드 컴포넌트는 렌더하지 않습니다.
+ * min-[1440px] 미만에서만 노출됩니다.
+ */
+export function MobileHome() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const chatRef = useRef<DemoChatHandle>(null);
+
+  return (
+    <div className="min-[1440px]:hidden">
+      {/* 띠배너 */}
+      <div className="bg-forest px-4 py-2.5 text-center text-[12px] leading-snug text-porcelain">
+        <span className="font-latin font-semibold">{topBanner.en}</span>
+        <span className="mx-1.5 opacity-60">|</span>
+        <span className="text-kr">
+          {topBanner.kr}
+          <span className="font-latin font-semibold">{topBanner.offer}</span>
+        </span>
+      </div>
+
+      {/* 헤더 */}
+      <header className="sticky top-0 z-50 flex items-center justify-between border-b border-mist/60 bg-porcelain/95 px-4 py-3 backdrop-blur">
+        <Link href="/" className="text-ink" aria-label="hair up">
+          <Wordmark width={110} />
+        </Link>
+        <button
+          type="button"
+          aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+          className="flex size-10 items-center justify-center rounded-btn text-ink"
+        >
+          <span className="sr-only">메뉴</span>
+          <span className="flex w-5 flex-col gap-1.5" aria-hidden>
+            <span
+              className={`block h-0.5 w-full bg-ink transition ${menuOpen ? "translate-y-[7px] rotate-45" : ""}`}
+            />
+            <span
+              className={`block h-0.5 w-full bg-ink transition ${menuOpen ? "opacity-0" : ""}`}
+            />
+            <span
+              className={`block h-0.5 w-full bg-ink transition ${menuOpen ? "-translate-y-[7px] -rotate-45" : ""}`}
+            />
+          </span>
+        </button>
+      </header>
+
+      {menuOpen ? (
+        <nav className="border-b border-mist bg-porcelain px-4 py-3">
+          <ul className="flex flex-col gap-1">
+            {nav.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  onClick={(e) => {
+                    onHashClick(e, item.href);
+                    setMenuOpen(false);
+                  }}
+                  className="text-kr block rounded-btn px-2 py-3 text-[16px] text-ink"
+                >
+                  {item.ko}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link
+                href={cta.href}
+                onClick={(e) => {
+                  onHashClick(e, cta.href);
+                  setMenuOpen(false);
+                }}
+                className="rounded-btn mt-2 flex h-12 items-center justify-center bg-forest text-[15px] text-porcelain"
+              >
+                {cta.ko}
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      ) : null}
+
+      <main>
+        {/* Hero */}
+        <section id="hero" className="bg-porcelain px-5 pb-10 pt-10">
+          <p className="font-display text-[13px] font-medium uppercase tracking-[0.04em] text-forest">
+            {hero.eyebrow}
+          </p>
+          <h1 className="text-kr mt-5 text-[34px] font-bold leading-[1.25] tracking-[-0.02em] text-ink">
+            {hero.headline.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </h1>
+          <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
+            {hero.body.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </p>
+          <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-[6px] bg-black">
+            <video
+              className="absolute inset-0 h-full w-full object-cover"
+              src="/videos/hero-visual.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              style={{
+                filter: "saturate(0.55) brightness(0.72) contrast(1.08)",
+              }}
+            />
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(20,18,16,0.28) 0%, rgba(20,18,16,0.18) 45%, rgba(20,18,16,0.42) 100%)",
+              }}
+              aria-hidden
+            />
+          </div>
+        </section>
+
+        {/* Dilemma */}
+        <section id="dilemma" className="bg-porcelain px-5 py-14">
+          <p className="font-display text-[13px] font-medium uppercase text-forest">
+            <span className="font-latin mr-1.5 text-[12px]">
+              {dilemma.eyebrow.index}
+            </span>
+            {dilemma.eyebrow.label}
+          </p>
+          <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
+            {dilemma.headline.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </h2>
+          <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
+            {dilemma.body.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </p>
+          <div className="mt-8 flex flex-col gap-3">
+            {dilemma.images.slice(0, 2).map((src) => (
+              <div
+                key={src}
+                className="relative aspect-[5/3] overflow-hidden rounded-[6px]"
+              >
+                <Image
+                  src={src}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                />
+              </div>
+            ))}
+          </div>
+          <p className="text-kr mt-6 text-[15px] leading-[1.65] text-body">
+            {dilemma.bodyAside.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </p>
+          <div className="mt-6">
+            <div className="relative aspect-[5/3] overflow-hidden rounded-[6px]">
+              <Image
+                src={dilemma.images[2]}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="100vw"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Experience — iPhone 데모 */}
+        <section id="ai-manager" className="bg-porcelain px-5 py-14">
+          <p className="font-display text-[13px] font-medium uppercase text-forest">
+            <span className="font-latin mr-1.5 text-[12px]">
+              {experience.eyebrow.index}
+            </span>
+            {experience.eyebrow.label}
+          </p>
+          <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
+            {experience.headline.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </h2>
+          <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
+            {experience.body.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </p>
+
+          <div className="mt-6">
+            <p className="font-display text-[12px] font-medium tracking-[0.08em] text-forest uppercase">
+              Try asking
+            </p>
+            <ul className="mt-3 flex flex-col gap-2">
+              {experience.examples.map((q) => (
+                <li key={q}>
+                  <button
+                    type="button"
+                    onClick={() => chatRef.current?.ask(q)}
+                    className="text-kr text-left text-[15px] text-body"
+                  >
+                    <span className="mr-2 text-forest/50">—</span>
+                    {q}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <MobileDemoPhone chatRef={chatRef} />
+        </section>
+
+        {/* Banner strip */}
+        <section className="bg-black px-5 py-16 text-porcelain">
+          <div className="flex flex-col gap-8">
+            {banner.lines.map((line) => (
+              <p
+                key={line}
+                className="font-display text-[22px] font-normal uppercase leading-none"
+              >
+                {line}
+              </p>
+            ))}
+          </div>
+          <div className="mt-12 text-porcelain">
+            <Wordmark width={200} />
+          </div>
+        </section>
+
+        {/* Key benefits */}
+        <section className="bg-porcelain px-5 py-14">
+          <p className="font-display text-[13px] font-medium uppercase text-forest">
+            <span className="font-latin mr-1.5 text-[12px]">
+              {keyBenefits.eyebrow.index}
+            </span>
+            {keyBenefits.eyebrow.label}
+          </p>
+          <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
+            {keyBenefits.headline.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </h2>
+          <div className="mt-8 flex flex-col gap-4">
+            {keyBenefits.cards.map((card, i) => (
+              <MobileBenefitCard key={card.title.join(" ")} card={card} index={i} />
+            ))}
+          </div>
+        </section>
+
+        {/* Process */}
+        <section className="bg-forest px-5 py-14 text-porcelain">
+          <h2 className="font-display text-[28px] font-medium uppercase leading-none">
+            {process.title}
+          </h2>
+          <div className="mt-10 flex flex-col gap-8">
+            {process.steps.map((step) => (
+              <article key={step.index}>
+                <p className="font-latin text-[13px] tracking-wide opacity-70">
+                  {step.index} {step.caption}
+                </p>
+                <p className="text-kr mt-3 text-[15px] leading-[1.65] text-porcelain/80">
+                  {step.body.join(" ")}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* Pricing */}
+        <section id="pricing" className="bg-porcelain px-5 py-14">
+          <p className="font-display text-[13px] font-medium uppercase text-forest">
+            <span className="font-latin mr-1.5 text-[12px]">
+              {pricing.eyebrow.index}
+            </span>
+            {pricing.eyebrow.label}
+          </p>
+          <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
+            {pricing.headline.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </h2>
+          <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
+            {pricing.body.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </p>
+
+          <div className="mt-10 grid grid-cols-1 gap-8">
+            <div className="text-center">
+              <p className="text-kr text-[14px] text-stone">
+                {pricing.compare.left.subtitle}
+              </p>
+              <p className="text-kr mt-2 text-[28px] font-bold text-stone">
+                {pricing.compare.left.title}
+              </p>
+              <CountUp
+                to={pricing.compare.left.spinTo}
+                continuous
+                perSecond={110000}
+                suffix="+α"
+                format={(n) => Math.floor(n).toLocaleString("en-US")}
+                className="mt-3 inline-block min-w-[10ch] font-latin text-[36px] font-bold text-stone tabular-nums"
+              />
+            </div>
+            <p className="text-center font-latin text-[28px] font-bold text-mist">
+              VS
+            </p>
+            <div className="text-center">
+              <p className="text-kr text-[14px] text-stone">
+                {pricing.compare.right.subtitle}
+              </p>
+              <p className="text-kr mt-2 text-[28px] font-bold text-ink">
+                {pricing.compare.right.title}
+              </p>
+              <CountUp
+                to={pricing.compare.right.amount}
+                durationMs={550}
+                className="mt-3 inline-block min-w-[10ch] font-latin text-[36px] font-bold text-ink tabular-nums"
+              />
+            </div>
+          </div>
+
+          <div className="mt-12 flex flex-col gap-5">
+            <MobilePlanCard tone="starter" plan={pricing.starter} />
+            <MobilePlanCard tone="branding" plan={pricing.branding} />
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section id="faq" className="bg-porcelain px-5 py-14">
+          <p className="font-display text-[13px] font-medium uppercase text-forest">
+            <span className="font-latin mr-1.5 text-[12px]">
+              {faq.eyebrow.index}
+            </span>
+            {faq.eyebrow.label}
+          </p>
+          <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
+            {faq.headline.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </h2>
+          <div className="mt-8 flex flex-col gap-3">
+            {faq.items.map((item) => (
+              <details
+                key={item.q}
+                className="group rounded-[6px] bg-linen px-4 py-4"
+              >
+                <summary className="text-kr cursor-pointer list-none text-[17px] font-bold text-ink">
+                  <span className="font-latin mr-2 font-normal text-stone">
+                    {item.q}
+                  </span>
+                  {item.question.join(" ")}
+                </summary>
+                <div className="text-kr mt-3 border-t border-mist/70 pt-3 text-[14px] leading-[1.65] text-body">
+                  <p className="font-bold text-ink">{item.answerTitle}</p>
+                  <p className="mt-2">{item.answer.join(" ")}</p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Start CTA */}
+        <section
+          id="start"
+          className="relative overflow-hidden px-5 py-16 text-porcelain"
+        >
+          <Image
+            src="/images/cta-bg.jpg"
+            alt=""
+            fill
+            className="object-cover"
+            sizes="100vw"
+            quality={90}
+          />
+          <div className="absolute inset-0 bg-black/45" aria-hidden />
+          <div className="relative">
+            <h2 className="text-kr text-[32px] font-bold leading-[1.25]">
+              {start.headline.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </h2>
+            <p className="text-kr mt-5 text-[15px] leading-[1.65] text-porcelain/90">
+              {start.body.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </p>
+            <a
+              href={start.cta.href}
+              className="rounded-btn mt-8 inline-flex h-12 items-center justify-center border border-porcelain px-5 text-[15px] text-porcelain"
+            >
+              {start.cta.label}
+            </a>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="bg-linen px-5 py-12">
+          <Wordmark width={160} />
+          <p className="text-kr mt-6 text-[13px] leading-[1.6] text-ink/70">
+            {footer.company.join(" · ")}
+          </p>
+          <p className="font-latin mt-3 text-[12px] text-ink/55">
+            {footer.copyright}
+          </p>
+          <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2">
+            {footer.legal.map((p) => (
+              <a
+                key={p.label}
+                href={p.href}
+                className="font-latin text-[12px] uppercase text-ink/70 underline underline-offset-2"
+              >
+                {p.label}
+              </a>
+            ))}
+          </div>
+        </footer>
+      </main>
+    </div>
+  );
+}
+
+type BenefitCard = (typeof keyBenefits.cards)[number];
+
+function MobileBenefitCard({
+  card,
+  index,
+}: {
+  card: BenefitCard;
+  index: number;
+}) {
+  const [flipped, setFlipped] = useState(false);
+
+  return (
+    <button
+      type="button"
+      aria-pressed={flipped}
+      aria-label={
+        flipped
+          ? `${card.title.join(" ")} 내용 닫기`
+          : `${card.title.join(" ")} 내용 보기`
+      }
+      onClick={() => setFlipped((v) => !v)}
+      className="relative h-[220px] w-full cursor-pointer text-left [perspective:1200px]"
+    >
+      <div
+        className="relative h-full w-full transition-transform duration-[600ms] ease-[cubic-bezier(0.65,0,0.35,1)] [transform-style:preserve-3d]"
+        style={{
+          transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
+        }}
+      >
+        {/* 앞면 — 제목 */}
+        <div className="absolute inset-0 flex flex-col justify-between rounded-[6px] border border-mist/80 bg-linen px-5 py-5 [backface-visibility:hidden]">
+          <p className="font-latin text-[13px] tracking-wide text-stone">
+            {String(index + 1).padStart(2, "0")}
+          </p>
+          <h3 className="text-kr text-[22px] font-semibold leading-[1.35] text-forest">
+            {card.title.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </h3>
+          <p className="text-kr text-[12px] text-stone/70">눌러서 자세히 보기</p>
+        </div>
+
+        {/* 뒷면 — 본문 */}
+        <div className="absolute inset-0 flex flex-col rounded-[6px] bg-forest px-5 py-5 text-porcelain [backface-visibility:hidden] [transform:rotateY(180deg)]">
+          <p className="font-latin text-[13px] tracking-wide text-porcelain/50">
+            {String(index + 1).padStart(2, "0")}
+          </p>
+          <p className="text-kr mt-4 flex-1 text-[15px] leading-[1.65] text-porcelain/90">
+            {card.body.join(" ")}
+          </p>
+          <p className="text-kr mt-auto pt-2 text-[12px] text-porcelain/45">
+            다시 누르면 닫혀요
+          </p>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function MobileDemoPhone({
+  chatRef,
+}: {
+  chatRef: React.RefObject<DemoChatHandle | null>;
+}) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.5);
+
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const sync = () => {
+      // 모바일에서는 원본(380)의 약 절반 크기로 자연스럽게 맞춤
+      setScale(Math.min(0.52, el.clientWidth / IPHONE_MOCKUP.width));
+    };
+    sync();
+    const ro = new ResizeObserver(sync);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={wrapRef}
+      className="mx-auto mt-8 w-[52%] max-w-[200px]"
+      style={{ height: IPHONE_MOCKUP.height * scale }}
+    >
+      <div
+        style={{
+          width: IPHONE_MOCKUP.width,
+          height: IPHONE_MOCKUP.height,
+          transform: `scale(${scale})`,
+          transformOrigin: "top left",
+        }}
+      >
+        <DemoChat ref={chatRef} />
+      </div>
+    </div>
+  );
+}
+
+function MobilePlanCard({
+  tone,
+  plan,
+}: {
+  tone: "starter" | "branding";
+  plan: typeof pricing.starter | typeof pricing.branding;
+}) {
+  const dark = tone === "branding";
+  return (
+    <article
+      className={`rounded-[6px] px-5 py-7 ${dark ? "bg-forest text-porcelain" : "bg-linen text-ink"}`}
+    >
+      <p
+        className={`font-display text-[28px] font-normal ${dark ? "text-porcelain" : "text-forest"}`}
+      >
+        {plan.name}
+      </p>
+      {"badge" in plan && plan.badge ? (
+        <p className="font-latin mt-1 text-[13px] text-porcelain/80">
+          {plan.badge}
+        </p>
+      ) : null}
+      <p
+        className={`text-kr mt-3 text-[15px] leading-[1.5] ${dark ? "text-porcelain/85" : "text-stone"}`}
+      >
+        {plan.tagline.join(" ")}
+      </p>
+      <div className="mt-6 flex flex-col gap-3">
+        {plan.prices.map((p) => (
+          <div key={p.label}>
+            <p
+              className={`text-kr text-[13px] ${dark ? "text-porcelain/70" : "text-stone"}`}
+            >
+              {p.label}
+            </p>
+            <p className="mt-1 flex items-baseline gap-1">
+              <span
+                className={`font-latin text-[40px] font-bold tabular-nums ${dark ? "text-porcelain" : "text-forest"}`}
+              >
+                {p.num}
+              </span>
+              <span
+                className={`text-kr text-[16px] ${dark ? "text-porcelain/80" : "text-stone"}`}
+              >
+                {p.unit}
+              </span>
+            </p>
+          </div>
+        ))}
+      </div>
+      <ul className="mt-6 flex flex-col gap-4">
+        {plan.features.map((f) => (
+          <li key={f.title}>
+            <p
+              className={`text-kr text-[16px] font-medium ${dark ? "text-porcelain" : "text-forest"}`}
+            >
+              {f.title}
+            </p>
+            <p
+              className={`text-kr mt-1 text-[14px] leading-[1.5] ${dark ? "text-porcelain/75" : "text-stone"}`}
+            >
+              {f.desc.join(" ")}
+            </p>
+          </li>
+        ))}
+      </ul>
+      <a
+        href={plan.cta.href}
+        onClick={(e) => onHashClick(e, plan.cta.href)}
+        className={`rounded-btn mt-8 flex h-12 items-center justify-center text-[15px] no-underline ${
+          dark
+            ? "bg-porcelain text-forest"
+            : "bg-forest text-porcelain"
+        }`}
+      >
+        {plan.cta.label}
+      </a>
+    </article>
+  );
+}

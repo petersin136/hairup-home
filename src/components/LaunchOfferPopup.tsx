@@ -6,18 +6,9 @@ import { useEffect, useId, useState } from "react";
 import { launchPopup } from "@/content/site";
 
 /**
- * 런치 오퍼 팝업 — 시안 POPUP 실측
- *
- * 카드 440 × 600
- * 이미지 0–390
- * DESC      top 414
- * DISCOUNT  top 464
- * CTA       top 522 · 390×53 · 하단 여백 25
- *
- * .DISCOUNT-RATE
- *   35·%  Playfair Display upright 40/28 · weight 400
- *   Off   Playfair italic 28
- * .PRICE-DETAIL   Noto 12/500 · 할인가 600 · #8C847A
+ * 런치 오퍼 팝업
+ * - 데스크톱(≥480): 시안 440×600 절대 배치 유지
+ * - 모바일(<480): 스크롤 가능한 플로우 카드 + 큰 닫기
  */
 export function LaunchOfferPopup() {
   const titleId = useId();
@@ -55,31 +46,84 @@ export function LaunchOfferPopup() {
       role="presentation"
       onClick={dismiss}
     >
-      {/* 모바일 전용 닫기 — 카드 transform 밖에 두어 탭이 먹히게 */}
-      <button
-        type="button"
-        aria-label="닫기"
-        onClick={dismiss}
-        className="absolute top-[max(12px,env(safe-area-inset-top))] right-3 z-[1001] hidden size-11 cursor-pointer items-center justify-center rounded-full bg-[rgba(28,26,25,0.72)] text-porcelain max-[479px]:flex"
+      {/* —— 모바일 카드 —— */}
+      <div
+        role="dialog"
+        aria-modal
+        aria-labelledby={`${titleId}-m`}
+        className="relative flex max-h-[min(640px,90dvh)] w-full max-w-[400px] flex-col overflow-hidden rounded-[6px] bg-porcelain shadow-[0_24px_80px_rgba(0,0,0,0.35)] min-[480px]:hidden"
+        onClick={(e) => e.stopPropagation()}
       >
-        <svg width="14" height="14" viewBox="0 0 12 12" aria-hidden>
-          <path
-            d="M1 1l10 10M11 1L1 11"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
+        <div className="relative aspect-[440/320] w-full shrink-0">
+          <Image
+            src={launchPopup.image}
+            alt=""
+            fill
+            sizes="400px"
+            className="object-cover"
+            priority
           />
-        </svg>
-      </button>
+          <button
+            type="button"
+            aria-label="닫기"
+            onClick={dismiss}
+            className="absolute top-3 right-3 z-10 flex size-11 cursor-pointer items-center justify-center rounded-full bg-[rgba(28,26,25,0.65)] text-porcelain"
+          >
+            <svg width="14" height="14" viewBox="0 0 12 12" aria-hidden>
+              <path
+                d="M1 1l10 10M11 1L1 11"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+        <div className="flex flex-1 flex-col items-center overflow-y-auto px-5 py-5">
+          <p
+            id={`${titleId}-m`}
+            className="text-kr text-center text-[13px] font-normal leading-[1.64] text-ink"
+          >
+            {launchPopup.desc.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </p>
+          <div className="mt-4 flex flex-wrap items-baseline justify-center gap-x-2 gap-y-1">
+            <p className="flex items-baseline text-ink leading-none">
+              <span className="font-display text-[36px] font-normal">
+                {launchPopup.discount.num}
+              </span>
+              <span className="font-display text-[24px] font-normal">
+                {launchPopup.discount.percent}
+              </span>
+              <span className="font-display ml-1 text-[24px] italic">
+                {launchPopup.discount.off}
+              </span>
+            </p>
+            <p className="text-kr text-[12px] font-medium text-stone">
+              ({launchPopup.price.from} → {launchPopup.price.to})
+            </p>
+          </div>
+          <a
+            href={launchPopup.cta.href}
+            onClick={dismiss}
+            className="rounded-btn text-kr mt-5 flex h-12 w-full items-center justify-center bg-forest text-[14px] font-normal text-porcelain no-underline"
+          >
+            {launchPopup.cta.label}
+          </a>
+        </div>
+      </div>
 
+      {/* —— 데스크톱 카드 (시안 그대로) —— */}
       <div
         role="dialog"
         aria-modal
         aria-labelledby={titleId}
-        className="launch-popup-card relative box-border h-[600px] w-[440px] overflow-hidden rounded-[6px] bg-porcelain shadow-[0_24px_80px_rgba(0,0,0,0.35)]"
+        className="relative box-border hidden h-[600px] w-[440px] overflow-hidden rounded-[6px] bg-porcelain shadow-[0_24px_80px_rgba(0,0,0,0.35)] min-[480px]:block"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* .POPUP-TOP-IMAGE */}
         <div className="absolute top-0 left-0 h-[390px] w-[440px]">
           <Image
             src={launchPopup.image}
@@ -89,12 +133,11 @@ export function LaunchOfferPopup() {
             className="object-cover"
             priority
           />
-          {/* 데스크톱 닫기 — 모바일에서는 위 고정 버튼 사용 */}
           <button
             type="button"
             aria-label="닫기"
             onClick={dismiss}
-            className="absolute top-[25px] right-[25px] z-10 flex size-[32px] cursor-pointer items-center justify-center rounded-full bg-[rgba(28,26,25,0.35)] text-porcelain transition-colors hover:bg-[rgba(28,26,25,0.55)] max-[479px]:hidden"
+            className="absolute top-[25px] right-[25px] z-10 flex size-[32px] cursor-pointer items-center justify-center rounded-full bg-[rgba(28,26,25,0.35)] text-porcelain transition-colors hover:bg-[rgba(28,26,25,0.55)]"
           >
             <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden>
               <path
@@ -107,7 +150,6 @@ export function LaunchOfferPopup() {
           </button>
         </div>
 
-        {/* .POPUP-DESC · top 414 */}
         <p
           id={titleId}
           className="text-kr absolute inset-x-[25px] text-center text-[14px] font-normal text-ink"
@@ -120,8 +162,6 @@ export function LaunchOfferPopup() {
           ))}
         </p>
 
-        {/* .DISCOUNT-RATE + .PRICE-DETAIL
-            35·% Playfair upright · Off Playfair italic · 가격 500 */}
         <div
           className="absolute inset-x-0 flex items-baseline justify-center gap-[8px]"
           style={{ top: 464 }}
@@ -146,7 +186,6 @@ export function LaunchOfferPopup() {
           </p>
         </div>
 
-        {/* .POPUP-CTA-BTN · top 522 · 390×53 · 좌우 25 */}
         <a
           href={launchPopup.cta.href}
           onClick={dismiss}

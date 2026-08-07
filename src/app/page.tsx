@@ -1,4 +1,4 @@
-import { MobileScaleShell } from "@/components/layout/MobileScaleShell";
+import { MobileHome } from "@/components/mobile/MobileHome";
 import { TopBanner } from "@/components/layout/TopBanner";
 import { LaunchOfferPopup } from "@/components/LaunchOfferPopup";
 import { Banner } from "@/components/sections/Banner";
@@ -14,12 +14,18 @@ import { Start } from "@/components/sections/Start";
 import { TemplateCollection } from "@/components/sections/TemplateCollection";
 import { SplashScreen } from "@/components/splash/SplashScreen";
 
+/**
+ * 데스크톱(≥1440): 기존 아트보드 그대로.
+ * 모바일(<1440): MobileHome 스택 레이아웃. 데스크톱 컴포넌트는 마운트하지 않음.
+ */
 export default function Home() {
   return (
     <>
       <SplashScreen />
       <LaunchOfferPopup />
-      <MobileScaleShell>
+
+      {/* 데스크톱 — 기존 픽셀 시안 (절대 수정 대상 아님) */}
+      <div className="hidden min-[1440px]:block">
         <main>
           <TopBanner />
           <Hero />
@@ -34,7 +40,10 @@ export default function Home() {
           <Start />
           <Footer />
         </main>
-      </MobileScaleShell>
+      </div>
+
+      {/* 모바일 전용 */}
+      <MobileHome />
     </>
   );
 }
