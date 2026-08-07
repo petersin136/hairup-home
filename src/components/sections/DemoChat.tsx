@@ -30,6 +30,8 @@ export type DemoChatHandle = {
 
 type DemoChatProps = {
   onBooking?: (payload: BookingPayload) => void;
+  /** 가로는 유지하고 세로만 약 절반 — 입력창은 화면 안에 유지 */
+  compact?: boolean;
 };
 
 const GREETING =
@@ -69,7 +71,7 @@ function formatTime(at: number) {
 }
 
 export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
-  function DemoChat({ onBooking }, ref) {
+  function DemoChat({ onBooking, compact = false }, ref) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     { id: "greeting", role: "assistant", content: GREETING, at: 0 },
   ]);
@@ -193,46 +195,77 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
   };
 
   const idle = !focused && !input && !pending && !limited;
-  const screenRadius = FRAME.radius - FRAME.metal - FRAME.bezel;
+  const mockupHeight = compact
+    ? Math.round(IPHONE_MOCKUP.height * 0.5)
+    : IPHONE_MOCKUP.height;
+  const frameRadius = compact ? 42 : FRAME.radius;
+  const screenRadius = frameRadius - FRAME.metal - FRAME.bezel;
 
   return (
     <div
       className="iphone-mockup relative shrink-0"
       style={{
         width: `${IPHONE_MOCKUP.width}px`,
-        height: `${IPHONE_MOCKUP.height}px`,
+        height: `${mockupHeight}px`,
         filter:
           "drop-shadow(0 28px 56px rgba(28,26,25,0.18)) drop-shadow(0 8px 20px rgba(28,26,25,0.1))",
       }}
       aria-label="헤어업 상담 데모"
     >
       {/* 측면 버튼 — 메탈 */}
-      <span
-        className="pointer-events-none absolute top-[148px] -left-[2.5px] h-[26px] w-[3px] rounded-l-[1px]"
-        style={{ background: METAL_BTN }}
-        aria-hidden
-      />
-      <span
-        className="pointer-events-none absolute top-[198px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
-        style={{ background: METAL_BTN }}
-        aria-hidden
-      />
-      <span
-        className="pointer-events-none absolute top-[256px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
-        style={{ background: METAL_BTN }}
-        aria-hidden
-      />
-      <span
-        className="pointer-events-none absolute top-[220px] -right-[2.5px] h-[84px] w-[3px] rounded-r-[1px]"
-        style={{ background: METAL_BTN }}
-        aria-hidden
-      />
+      {!compact ? (
+        <>
+          <span
+            className="pointer-events-none absolute top-[148px] -left-[2.5px] h-[26px] w-[3px] rounded-l-[1px]"
+            style={{ background: METAL_BTN }}
+            aria-hidden
+          />
+          <span
+            className="pointer-events-none absolute top-[198px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
+            style={{ background: METAL_BTN }}
+            aria-hidden
+          />
+          <span
+            className="pointer-events-none absolute top-[256px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
+            style={{ background: METAL_BTN }}
+            aria-hidden
+          />
+          <span
+            className="pointer-events-none absolute top-[220px] -right-[2.5px] h-[84px] w-[3px] rounded-r-[1px]"
+            style={{ background: METAL_BTN }}
+            aria-hidden
+          />
+        </>
+      ) : (
+        <>
+          <span
+            className="pointer-events-none absolute top-[88px] -left-[2.5px] h-[22px] w-[3px] rounded-l-[1px]"
+            style={{ background: METAL_BTN }}
+            aria-hidden
+          />
+          <span
+            className="pointer-events-none absolute top-[118px] -left-[2.5px] h-[40px] w-[3px] rounded-l-[1px]"
+            style={{ background: METAL_BTN }}
+            aria-hidden
+          />
+          <span
+            className="pointer-events-none absolute top-[166px] -left-[2.5px] h-[40px] w-[3px] rounded-l-[1px]"
+            style={{ background: METAL_BTN }}
+            aria-hidden
+          />
+          <span
+            className="pointer-events-none absolute top-[130px] -right-[2.5px] h-[64px] w-[3px] rounded-r-[1px]"
+            style={{ background: METAL_BTN }}
+            aria-hidden
+          />
+        </>
+      )}
 
       {/* 바깥 메탈 테두리 */}
       <div
         className="absolute inset-0"
         style={{
-          borderRadius: `${FRAME.radius}px`,
+          borderRadius: `${frameRadius}px`,
           padding: `${FRAME.metal}px`,
           background: METAL,
           boxShadow:
@@ -243,7 +276,7 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
         <div
           className="h-full w-full bg-[#111]"
           style={{
-            borderRadius: `${FRAME.radius - FRAME.metal}px`,
+            borderRadius: `${frameRadius - FRAME.metal}px`,
             padding: `${FRAME.bezel}px`,
           }}
         >

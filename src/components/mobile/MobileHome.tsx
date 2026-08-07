@@ -24,6 +24,7 @@ import {
   pricing,
   process,
   start,
+  templateCollection,
   topBanner,
 } from "@/content/site";
 import { onHashClick } from "@/lib/scroll-to-hash";
@@ -347,6 +348,93 @@ export function MobileHome() {
           </div>
         </section>
 
+        {/* Template collection */}
+        <section id="template" className="bg-porcelain py-14">
+          <div className="px-5">
+            <p className="font-display text-[13px] font-medium uppercase text-forest">
+              <span className="font-latin mr-1.5 text-[12px]">
+                {templateCollection.eyebrow.index}
+              </span>
+              {templateCollection.eyebrow.label}
+            </p>
+            <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
+              {templateCollection.headline.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </h2>
+            <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
+              {templateCollection.body.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </p>
+          </div>
+
+          <div
+            className="mt-8 overflow-x-auto overscroll-x-contain pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            style={{ touchAction: "pan-x" }}
+          >
+            <div className="flex w-max gap-4 px-5">
+              {templateCollection.templates.map((template) => (
+                <article
+                  key={template.index}
+                  className="relative h-[360px] w-[min(280px,78vw)] shrink-0 overflow-hidden rounded-[6px] bg-black"
+                >
+                  <Image
+                    src={template.image}
+                    alt={`${template.name} 템플릿 미리보기`}
+                    fill
+                    sizes="280px"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/45" aria-hidden />
+                  <div className="absolute inset-0 flex flex-col items-center justify-end px-4 pb-5">
+                    <p className="flex items-start justify-center font-display text-[18px] font-medium uppercase leading-none text-porcelain">
+                      <span className="mr-1.5 font-latin text-[12px] font-medium tracking-normal">
+                        {template.index} /
+                      </span>
+                      {template.name}
+                    </p>
+                    <div className="mt-5 flex w-full flex-col gap-2">
+                      <a
+                        href={template.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-btn flex h-10 items-center justify-center border border-porcelain font-latin text-[13px] uppercase text-porcelain no-underline"
+                      >
+                        {templateCollection.ctas.pc}
+                      </a>
+                      <a
+                        href={template.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-btn flex h-10 items-center justify-center border border-porcelain font-latin text-[13px] uppercase text-porcelain no-underline"
+                      >
+                        {templateCollection.ctas.mobile}
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-8 overflow-hidden" aria-hidden>
+            <p className="mobile-marquee-track font-display flex w-max whitespace-nowrap text-[14px] font-medium tracking-[0.12em] text-forest uppercase">
+              {Array.from({ length: 2 }, (_, loop) =>
+                templateCollection.marquee.map((phrase) => (
+                  <span key={`${loop}-${phrase}`} className="mx-4 shrink-0">
+                    {phrase}
+                  </span>
+                )),
+              )}
+            </p>
+          </div>
+        </section>
+
         {/* Pricing */}
         <section id="pricing" className="bg-porcelain px-5 py-14">
           <p className="font-display text-[13px] font-medium uppercase text-forest">
@@ -561,14 +649,15 @@ function MobileDemoPhone({
   chatRef: React.RefObject<DemoChatHandle | null>;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(0.5);
+  const [scale, setScale] = useState(1);
+  const mockupHeight = Math.round(IPHONE_MOCKUP.height * 0.5);
 
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
     const sync = () => {
-      // 모바일에서는 원본(380)의 약 절반 크기로 자연스럽게 맞춤
-      setScale(Math.min(0.52, el.clientWidth / IPHONE_MOCKUP.width));
+      // 가로는 컨테이너 폭에 맞춰 크게 유지
+      setScale(el.clientWidth / IPHONE_MOCKUP.width);
     };
     sync();
     const ro = new ResizeObserver(sync);
@@ -579,18 +668,18 @@ function MobileDemoPhone({
   return (
     <div
       ref={wrapRef}
-      className="mx-auto mt-8 w-[52%] max-w-[200px]"
-      style={{ height: IPHONE_MOCKUP.height * scale }}
+      className="mx-auto mt-8 w-full"
+      style={{ height: mockupHeight * scale }}
     >
       <div
         style={{
           width: IPHONE_MOCKUP.width,
-          height: IPHONE_MOCKUP.height,
+          height: mockupHeight,
           transform: `scale(${scale})`,
           transformOrigin: "top left",
         }}
       >
-        <DemoChat ref={chatRef} />
+        <DemoChat ref={chatRef} compact />
       </div>
     </div>
   );
