@@ -301,7 +301,7 @@ export function MobileHome() {
           </div>
           <div
             className="mt-8 overflow-x-auto overscroll-x-contain pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            style={{ touchAction: "pan-x" }}
+            style={{ touchAction: "pan-x pan-y" }}
           >
             <div className="flex w-max gap-4 px-5">
               {keyBenefits.cards.map((card) => (
@@ -376,7 +376,7 @@ export function MobileHome() {
 
           <div
             className="mt-8 overflow-x-auto overscroll-x-contain pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            style={{ touchAction: "pan-x" }}
+            style={{ touchAction: "pan-x pan-y" }}
           >
             <div className="flex w-max gap-4 px-5">
               {templateCollection.templates.map((template) => (
