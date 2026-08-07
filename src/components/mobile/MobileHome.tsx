@@ -273,24 +273,55 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* Key benefits */}
-        <section className="bg-porcelain px-5 py-14">
-          <p className="font-display text-[13px] font-medium uppercase text-forest">
-            <span className="font-latin mr-1.5 text-[12px]">
-              {keyBenefits.eyebrow.index}
-            </span>
-            {keyBenefits.eyebrow.label}
-          </p>
-          <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
-            {keyBenefits.headline.map((line) => (
-              <span key={line} className="block">
-                {line}
+        {/* Key benefits — 가로 슬라이드 */}
+        <section className="bg-porcelain py-14">
+          <div className="px-5">
+            <p className="font-display text-[13px] font-medium uppercase text-forest">
+              <span className="font-latin mr-1.5 text-[12px]">
+                {keyBenefits.eyebrow.index}
               </span>
-            ))}
-          </h2>
-          <div className="mt-8 flex flex-col gap-4">
-            {keyBenefits.cards.map((card, i) => (
-              <MobileBenefitCard key={card.title.join(" ")} card={card} index={i} />
+              {keyBenefits.eyebrow.label}
+            </p>
+            <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
+              {keyBenefits.headline.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </h2>
+            <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
+              {keyBenefits.body.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </p>
+          </div>
+          <div
+            className="mt-8 flex gap-4 overflow-x-auto overscroll-x-contain px-5 pb-2 [scrollbar-width:none] snap-x snap-mandatory [&::-webkit-scrollbar]:hidden"
+            style={{ touchAction: "pan-x" }}
+          >
+            {keyBenefits.cards.map((card) => (
+              <article
+                key={card.title.join("-")}
+                className="w-[78%] max-w-[300px] shrink-0 snap-start"
+              >
+                <div className="h-[200px] rounded-[6px] bg-black" />
+                <h3 className="text-kr mt-5 text-[22px] font-semibold leading-[1.35] text-forest">
+                  {card.title.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </h3>
+                <p className="text-kr mt-3 text-[15px] leading-[1.6] text-body">
+                  {card.body.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </p>
+              </article>
             ))}
           </div>
         </section>
@@ -393,23 +424,9 @@ export function MobileHome() {
               </span>
             ))}
           </h2>
-          <div className="mt-8 flex flex-col gap-3">
+          <div className="mt-8 flex flex-col gap-4">
             {faq.items.map((item) => (
-              <details
-                key={item.q}
-                className="group rounded-[6px] bg-linen px-4 py-4"
-              >
-                <summary className="text-kr cursor-pointer list-none text-[17px] font-bold text-ink">
-                  <span className="font-latin mr-2 font-normal text-stone">
-                    {item.q}
-                  </span>
-                  {item.question.join(" ")}
-                </summary>
-                <div className="text-kr mt-3 border-t border-mist/70 pt-3 text-[14px] leading-[1.65] text-body">
-                  <p className="font-bold text-ink">{item.answerTitle}</p>
-                  <p className="mt-2">{item.answer.join(" ")}</p>
-                </div>
-              </details>
+              <MobileFaqCard key={item.q} item={item} />
             ))}
           </div>
         </section>
@@ -478,15 +495,15 @@ export function MobileHome() {
   );
 }
 
-type BenefitCard = (typeof keyBenefits.cards)[number];
+type FaqItem = (typeof faq.items)[number];
 
-function MobileBenefitCard({
-  card,
-  index,
-}: {
-  card: BenefitCard;
-  index: number;
-}) {
+const FAQ_TONE: Record<FaqItem["tone"], string> = {
+  forest: "bg-forest",
+  clay: "bg-clay",
+  espresso: "bg-espresso",
+};
+
+function MobileFaqCard({ item }: { item: FaqItem }) {
   const [flipped, setFlipped] = useState(false);
 
   return (
@@ -495,11 +512,11 @@ function MobileBenefitCard({
       aria-pressed={flipped}
       aria-label={
         flipped
-          ? `${card.title.join(" ")} 내용 닫기`
-          : `${card.title.join(" ")} 내용 보기`
+          ? `${item.question.join(" ")} 답변 닫기`
+          : `${item.question.join(" ")} 답변 보기`
       }
       onClick={() => setFlipped((v) => !v)}
-      className="relative h-[220px] w-full cursor-pointer text-left [perspective:1200px]"
+      className="relative h-[240px] w-full cursor-pointer text-left [perspective:1200px]"
     >
       <div
         className="relative h-full w-full transition-transform duration-[600ms] ease-[cubic-bezier(0.65,0,0.35,1)] [transform-style:preserve-3d]"
@@ -507,28 +524,28 @@ function MobileBenefitCard({
           transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
       >
-        {/* 앞면 — 제목 */}
-        <div className="absolute inset-0 flex flex-col justify-between rounded-[6px] border border-mist/80 bg-linen px-5 py-5 [backface-visibility:hidden]">
-          <p className="font-latin text-[13px] tracking-wide text-stone">
-            {String(index + 1).padStart(2, "0")}
+        {/* 앞면 — 질문 */}
+        <div className="absolute inset-0 flex flex-col rounded-[6px] bg-linen px-5 py-5 [backface-visibility:hidden]">
+          <p className="font-latin text-[20px] font-normal leading-none text-stone">
+            {item.q}
           </p>
-          <h3 className="text-kr text-[22px] font-semibold leading-[1.35] text-forest">
-            {card.title.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
-          </h3>
-          <p className="text-kr text-[12px] text-stone/70">눌러서 자세히 보기</p>
+          <p className="text-kr mt-4 text-[20px] font-bold leading-[1.4] text-ink">
+            {item.question.join(" ")}
+          </p>
+          <div className="mt-auto text-stone/40">
+            <Wordmark width={72} />
+          </div>
         </div>
 
-        {/* 뒷면 — 본문 */}
-        <div className="absolute inset-0 flex flex-col rounded-[6px] bg-forest px-5 py-5 text-porcelain [backface-visibility:hidden] [transform:rotateY(180deg)]">
-          <p className="font-latin text-[13px] tracking-wide text-porcelain/50">
-            {String(index + 1).padStart(2, "0")}
+        {/* 뒷면 — 답변 */}
+        <div
+          className={`absolute inset-0 flex flex-col rounded-[6px] px-5 py-5 text-porcelain [backface-visibility:hidden] [transform:rotateY(180deg)] ${FAQ_TONE[item.tone]}`}
+        >
+          <p className="text-kr text-[22px] font-bold leading-none tracking-[-0.01em]">
+            {item.answerTitle}
           </p>
-          <p className="text-kr mt-4 flex-1 text-[15px] leading-[1.65] text-porcelain/90">
-            {card.body.join(" ")}
+          <p className="text-kr mt-4 flex-1 text-[14px] leading-[1.7] text-porcelain/90">
+            {item.answer.join(" ")}
           </p>
           <p className="text-kr mt-auto pt-2 text-[12px] text-porcelain/45">
             다시 누르면 닫혀요
