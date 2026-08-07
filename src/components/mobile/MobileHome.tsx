@@ -50,65 +50,75 @@ export function MobileHome() {
         </span>
       </div>
 
-      {/* 헤더 */}
-      <header className="sticky top-0 z-50 flex items-center justify-between border-b border-mist/60 bg-porcelain/95 px-4 py-3 backdrop-blur">
-        <Link href="/" className="text-ink" aria-label="hair up">
-          <Wordmark width={110} />
-        </Link>
-        <button
-          type="button"
-          aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((v) => !v)}
-          className="flex size-10 items-center justify-center rounded-btn text-ink"
-        >
-          <span className="sr-only">메뉴</span>
-          <span className="flex w-5 flex-col gap-1.5" aria-hidden>
-            <span
-              className={`block h-0.5 w-full bg-ink transition ${menuOpen ? "translate-y-[7px] rotate-45" : ""}`}
-            />
-            <span
-              className={`block h-0.5 w-full bg-ink transition ${menuOpen ? "opacity-0" : ""}`}
-            />
-            <span
-              className={`block h-0.5 w-full bg-ink transition ${menuOpen ? "-translate-y-[7px] -rotate-45" : ""}`}
-            />
-          </span>
-        </button>
-      </header>
+      {/* 헤더 + 메뉴 (sticky 안에서 열리도록) */}
+      <header className="relative sticky top-0 z-50 border-b border-mist/60 bg-porcelain/95 backdrop-blur">
+        <div className="flex items-center justify-between px-4 py-3">
+          <Link href="/" className="text-ink" aria-label="hair up">
+            <Wordmark width={110} />
+          </Link>
+          <button
+            type="button"
+            aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+            className="flex size-10 items-center justify-center rounded-btn text-ink"
+          >
+            <span className="sr-only">메뉴</span>
+            <span className="flex w-5 flex-col gap-1.5" aria-hidden>
+              <span
+                className={`block h-0.5 w-full bg-ink transition ${menuOpen ? "translate-y-[7px] rotate-45" : ""}`}
+              />
+              <span
+                className={`block h-0.5 w-full bg-ink transition ${menuOpen ? "opacity-0" : ""}`}
+              />
+              <span
+                className={`block h-0.5 w-full bg-ink transition ${menuOpen ? "-translate-y-[7px] -rotate-45" : ""}`}
+              />
+            </span>
+          </button>
+        </div>
 
-      {menuOpen ? (
-        <nav className="border-b border-mist bg-porcelain px-4 py-3">
-          <ul className="flex flex-col gap-1">
-            {nav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={(e) => {
-                    onHashClick(e, item.href);
-                    setMenuOpen(false);
-                  }}
-                  className="text-kr block rounded-btn px-2 py-3 text-[16px] text-ink"
-                >
-                  {item.ko}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Link
-                href={cta.href}
-                onClick={(e) => {
-                  onHashClick(e, cta.href);
-                  setMenuOpen(false);
-                }}
-                className="rounded-btn mt-2 flex h-12 items-center justify-center bg-forest text-[15px] text-porcelain"
-              >
-                {cta.ko}
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      ) : null}
+        {menuOpen ? (
+          <>
+            <button
+              type="button"
+              aria-label="메뉴 닫기"
+              className="fixed inset-0 z-40 cursor-default bg-ink/25"
+              onClick={() => setMenuOpen(false)}
+            />
+            <nav className="absolute inset-x-0 top-full z-50 border-b border-mist bg-porcelain px-4 py-3 shadow-[0_12px_24px_rgba(28,26,25,0.08)]">
+              <ul className="flex flex-col gap-1">
+                {nav.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={(e) => {
+                        onHashClick(e, item.href);
+                        setMenuOpen(false);
+                      }}
+                      className="text-kr block rounded-btn px-2 py-3 text-[16px] text-ink"
+                    >
+                      {item.ko}
+                    </Link>
+                  </li>
+                ))}
+                <li>
+                  <Link
+                    href={cta.href}
+                    onClick={(e) => {
+                      onHashClick(e, cta.href);
+                      setMenuOpen(false);
+                    }}
+                    className="rounded-btn mt-2 flex h-12 items-center justify-center bg-forest text-[15px] text-porcelain"
+                  >
+                    {cta.ko}
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </>
+        ) : null}
+      </header>
 
       <main>
         {/* Hero */}
@@ -241,16 +251,30 @@ export function MobileHome() {
             <p className="font-display text-[12px] font-medium tracking-[0.08em] text-forest uppercase">
               Try asking
             </p>
-            <ul className="mt-3 flex flex-col gap-2">
+            <p className="text-kr mt-1.5 text-[13px] text-stone">
+              눌러서 바로 질문해 보세요
+            </p>
+            <ul className="mt-3 flex flex-col gap-2.5">
               {experience.examples.map((q) => (
                 <li key={q}>
                   <button
                     type="button"
                     onClick={() => chatRef.current?.ask(q)}
-                    className="text-kr text-left text-[15px] text-body"
+                    className="text-kr flex w-full items-center gap-3 rounded-[6px] border border-mist/90 bg-linen px-4 py-3.5 text-left text-[15px] font-medium text-ink shadow-[0_1px_0_rgba(28,26,25,0.04)] active:bg-mist/40"
                   >
-                    <span className="mr-2 text-forest/50">—</span>
-                    {q}
+                    <span
+                      className="flex size-7 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-latin font-semibold text-porcelain"
+                      aria-hidden
+                    >
+                      ?
+                    </span>
+                    <span className="min-w-0 flex-1 leading-[1.4]">{q}</span>
+                    <span
+                      className="shrink-0 text-[18px] leading-none text-forest/55"
+                      aria-hidden
+                    >
+                      ›
+                    </span>
                   </button>
                 </li>
               ))}
@@ -670,7 +694,7 @@ function MobileDemoPhone({
   return (
     <div
       ref={wrapRef}
-      className="mx-auto mt-8 w-full overflow-hidden"
+      className="mobile-demo-chat mx-auto mt-8 w-full overflow-hidden"
       style={{ height: visibleHeight * scale }}
     >
       <div

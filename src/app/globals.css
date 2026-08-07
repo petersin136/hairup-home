@@ -477,6 +477,38 @@ body {
   }
 }
 
+/* 모바일 Experience 목업만 — 입력창 강조 (데스크톱 DemoChat 미변경) */
+.mobile-demo-chat .demo-chat-input-shell.is-idle {
+  animation: demo-input-glow 2s ease-in-out infinite;
+}
+
+.mobile-demo-chat .demo-chat-input-shell.is-idle .demo-chat-input-field {
+  box-shadow:
+    inset 0 0 0 2px rgba(254, 229, 0, 0.95),
+    0 0 0 4px rgba(254, 229, 0, 0.35),
+    0 2px 10px rgba(254, 229, 0, 0.28);
+}
+
+.mobile-demo-chat .demo-chat-input-field {
+  padding-block: 0.75rem;
+  padding-inline: 1rem;
+  font-size: 15.5px;
+  font-weight: 500;
+}
+
+.mobile-demo-chat .demo-chat-input-hint {
+  left: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(28, 26, 25, 0.55);
+}
+
+.mobile-demo-chat .demo-chat-caret {
+  left: 16px;
+  width: 2px;
+  height: 18px;
+}
+
 .splash-root {
   animation: splash-curtain-up 1600ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
