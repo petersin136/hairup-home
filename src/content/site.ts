@@ -78,18 +78,25 @@ export const dilemma = {
 } as const;
 
 export const experience = {
-  /* 앞머리 "02 /" 만 산세리프, 뒤는 세리프입니다. (03_Test 시안 확대 확인) */
+  /* 앞머리 "02 /" 만 산세리프, 뒤는 세리프입니다. */
   eyebrow: { index: "02 /", label: "THE EXPERIENCE" },
   headline: ["주저하지 말고,", "지금 직접", "말을 건네보세요."],
   body: [
-    "백 번의 설명보다 한 번의 대화가 더 명확하니까요.",
     "실제 매장에 문의하듯 자유롭게 질문을 입력해 보세요.",
     "다정하고 정교하게 응답합니다.",
   ],
+  tryAsking: {
+    title: "TRY ASKING.",
+    body: [
+      "어떤 질문부터 시작할지 막막하다면,",
+      "고객들이 가장 많이 거치는 대화 흐름대로 경험해 보세요.",
+    ],
+  },
+  accents: ["24/7 REAL TIME", "° ZERO STRESS", "SOLUTION"],
   examples: [
     "여성 컷은 얼마인가요?",
     "내일 예약 가능할까요?",
-    "단발에 어울리는 펌 추천해 주세요",
+    "단발에 어울리는 펌 추천해 주세요.",
     "첫 방문 할인이 있나요?",
   ],
 } as const;

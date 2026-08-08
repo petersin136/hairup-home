@@ -115,44 +115,47 @@ body {
   border-color: var(--color-porcelain);
 }
 
-/* 입력창 — 유휴 시 깜빡이는 커서 · 노란 하이라이트 */
+/* 입력창 — 시안 다크 바 · 유휴 시 노란 포인트 */
 .demo-chat-input-shell {
   position: relative;
   min-width: 0;
-  flex: 1;
 }
 
 .demo-chat-input-shell.is-idle {
   animation: demo-input-glow 2.2s ease-in-out infinite;
-}
-
-.demo-chat-input-shell.is-idle .demo-chat-input-field {
   box-shadow:
-    inset 0 0 0 1px rgba(254, 229, 0, 0.85),
-    0 0 0 3px rgba(254, 229, 0, 0.28);
+    0 0 0 1.5px rgba(254, 229, 0, 0.75),
+    0 0 0 4px rgba(254, 229, 0, 0.22);
 }
 
 .demo-chat-caret {
   position: absolute;
   top: 50%;
-  left: 14px;
-  width: 1.5px;
-  height: 15px;
+  left: 0;
+  width: 2px;
+  height: 18px;
   translate: 0 -50%;
-  background: #1c1a19;
+  background: #007aff;
   animation: demo-caret-blink 1s steps(1, end) infinite;
   pointer-events: none;
+  z-index: 1;
+}
+
+.demo-chat-caret-light {
+  background: #007aff;
 }
 
 .demo-chat-input-hint {
   position: absolute;
   top: 50%;
-  left: 20px;
+  left: 8px;
   translate: 0 -50%;
   pointer-events: none;
-  font-size: 14px;
+  z-index: 1;
+  font-size: 18px;
+  font-weight: 400;
   line-height: 1;
-  color: rgba(28, 26, 25, 0.38);
+  color: rgba(235, 235, 235, 0.25);
 }
 
 @keyframes demo-caret-blink {
@@ -172,7 +175,7 @@ body {
     filter: brightness(1);
   }
   50% {
-    filter: brightness(1.03);
+    filter: brightness(1.06);
   }
 }
 
@@ -187,7 +190,7 @@ body {
   }
 }
 
-/* 데모 채팅 — 카카오톡 말풍선·타이핑 (아이폰 목업 안) */
+/* 데모 채팅 — HU_TEST DETAIL_01 말풍선 */
 .demo-chat-list {
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
@@ -206,15 +209,15 @@ body {
 }
 
 .demo-chat-bubble-kai {
-  background: #ffffff;
-  box-shadow: 0 1px 0 rgba(28, 26, 25, 0.04);
+  background: #1c1a19;
+  box-shadow: none;
 }
 
 .demo-chat-bubble-mine {
   background: #fee500;
 }
 
-/* 프로필 쪽 말풍선 꼬리 */
+/* DETAIL_01 · CHAT-BUBBLE::BEFORE — 12×12 · top 0 · left -5 */
 .demo-chat-bubble-kai.demo-chat-bubble-tail {
   border-top-left-radius: 4px;
 }
@@ -222,13 +225,12 @@ body {
 .demo-chat-bubble-kai.demo-chat-bubble-tail::before {
   content: "";
   position: absolute;
-  left: -4px;
-  top: 8px;
-  width: 9px;
-  height: 9px;
-  background: #ffffff;
-  transform: rotate(45deg);
-  border-radius: 1px;
+  left: -5px;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  background: #1c1a19;
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
 }
 
 .demo-chat-bubble-mine.demo-chat-bubble-tail {
@@ -238,13 +240,29 @@ body {
 .demo-chat-bubble-mine.demo-chat-bubble-tail::before {
   content: "";
   position: absolute;
-  right: -4px;
-  top: 8px;
-  width: 9px;
-  height: 9px;
+  right: -5px;
+  top: 0;
+  width: 12px;
+  height: 12px;
   background: #fee500;
-  transform: rotate(45deg);
-  border-radius: 1px;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+/* DETAIL_03 · QUESTION-ICON — 좌향 쉐브론 `<` (줄기 없는 꺾쇠) */
+.question-chevron {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  box-sizing: border-box;
+  border-top: 2px solid #6c6864;
+  border-left: 2px solid #6c6864;
+  transform: rotate(-45deg);
+  transition: border-color 0.15s ease;
+}
+
+.group:hover .question-chevron,
+.group:active .question-chevron {
+  border-color: #2c3a2e;
 }
 
 @keyframes demo-chat-dot {
@@ -477,36 +495,22 @@ body {
   }
 }
 
-/* 모바일 Experience 목업만 — 입력창 강조 (데스크톱 DemoChat 미변경) */
+/* 모바일 Experience 목업 — 시안 다크 입력 바 강조 */
 .mobile-demo-chat .demo-chat-input-shell.is-idle {
   animation: demo-input-glow 2s ease-in-out infinite;
-}
-
-.mobile-demo-chat .demo-chat-input-shell.is-idle .demo-chat-input-field {
   box-shadow:
-    inset 0 0 0 2px rgba(254, 229, 0, 0.95),
-    0 0 0 4px rgba(254, 229, 0, 0.35),
-    0 2px 10px rgba(254, 229, 0, 0.28);
-}
-
-.mobile-demo-chat .demo-chat-input-field {
-  padding-block: 0.75rem;
-  padding-inline: 1rem;
-  font-size: 15.5px;
-  font-weight: 500;
+    0 0 0 2px rgba(254, 229, 0, 0.9),
+    0 0 0 5px rgba(254, 229, 0, 0.28);
 }
 
 .mobile-demo-chat .demo-chat-input-hint {
-  left: 24px;
-  font-size: 15px;
-  font-weight: 600;
-  color: rgba(28, 26, 25, 0.55);
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-.mobile-demo-chat .demo-chat-caret {
-  left: 16px;
-  width: 2px;
-  height: 18px;
+.mobile-demo-chat .demo-chat-caret-light {
+  height: 16px;
 }
 
 .splash-root {

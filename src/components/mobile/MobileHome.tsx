@@ -222,7 +222,7 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* Experience — iPhone 데모 */}
+        {/* Experience — iPhone 데모 (시안 HU_TEST) */}
         <section id="ai-manager" className="bg-porcelain px-5 py-14">
           <p className="font-display text-[13px] font-medium uppercase text-forest">
             <span className="font-latin mr-1.5 text-[12px]">
@@ -247,35 +247,43 @@ export function MobileHome() {
 
           <MobileDemoPhone chatRef={chatRef} />
 
-          <div className="mt-6">
-            <p className="font-display text-[12px] font-medium tracking-[0.08em] text-forest uppercase">
-              Try asking
+          <div className="mt-8 w-full min-w-0">
+            <p className="font-display text-[28px] font-medium leading-none text-forest uppercase">
+              {experience.tryAsking.title}
             </p>
-            <p className="text-kr mt-1.5 text-[13px] text-stone">
-              눌러서 바로 질문해 보세요
+            <p className="text-kr mt-4 text-[15px] font-normal leading-[1.64] text-body">
+              {experience.tryAsking.body.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
             </p>
-            <ul className="mt-3 flex flex-col gap-2.5">
-              {experience.examples.map((q) => (
-                <li key={q}>
+            <ul className="mt-5 w-full">
+              {experience.examples.map((q, i) => (
+                <li key={q} className="w-full">
+                  {i === 0 ? (
+                    <div
+                      className="h-px w-full"
+                      style={{ background: "rgba(108, 104, 100, 0.7)" }}
+                      aria-hidden
+                    />
+                  ) : null}
                   <button
                     type="button"
                     onClick={() => chatRef.current?.ask(q)}
-                    className="text-kr flex w-full items-center gap-3 rounded-[6px] border border-mist/90 bg-linen px-4 py-3.5 text-left text-[15px] font-medium text-ink shadow-[0_1px_0_rgba(28,26,25,0.04)] active:bg-mist/40"
+                    className="text-kr group flex w-full items-center gap-2.5 py-[18px] text-left text-[15px] font-normal leading-none text-[rgba(102,102,102,0.7)] active:text-forest"
                   >
                     <span
-                      className="flex size-7 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-latin font-semibold text-porcelain"
                       aria-hidden
-                    >
-                      ?
-                    </span>
-                    <span className="min-w-0 flex-1 leading-[1.4]">{q}</span>
-                    <span
-                      className="shrink-0 text-[18px] leading-none text-forest/55"
-                      aria-hidden
-                    >
-                      ›
-                    </span>
+                      className="question-chevron shrink-0"
+                    />
+                    <span className="min-w-0 flex-1">{q}</span>
                   </button>
+                  <div
+                    className="h-px w-full"
+                    style={{ background: "rgba(108, 104, 100, 0.7)" }}
+                    aria-hidden
+                  />
                 </li>
               ))}
             </ul>

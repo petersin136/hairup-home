@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { RainInLines } from "@/components/motion/RainInLines";
 import { DemoAdminDashboard } from "@/components/sections/DemoAdminDashboard";
 import {
   DemoChat,
@@ -18,46 +17,27 @@ import {
 } from "@/lib/demo-chat/booking";
 
 /**
- * 03_The Experience — 채팅 데모 + 실시간 관리자 대시보드
- * 텍스트 좌표는 시안 05-D 유지. 예약 상태는 이 부모에서만 보관(새로고침 시 초기화).
+ * THE EXPERIENCE — HU_TEST DETAIL 시안
+ *
+ * 아트보드 1440
+ * - L 183 · 폰 475×980 · R 160
+ * - 리스트 구분선 500 (텍스트 컬럼은 더 넓게 — 22px 본문 한 줄 유지)
+ * - 세로: 45 / 65 / 100 / 45 / 45
  */
-const GUTTER = 120;
-const PANEL = { left: GUTTER, top: 148, width: 600, height: 768 };
-const TOP_HEIGHT = PANEL.top + PANEL.height + PANEL.top;
-
-const TEXT_LEFT = PANEL.left + PANEL.width + GUTTER;
-
-const TITLE = { top: 159, size: 25 };
-const SECTION_TITLE = {
-  top: TITLE.top + TITLE.size + 45,
-  size: 70,
-  leading: 1.37,
-  lines: 3,
-};
-const SECTION_DESC = {
-  top:
-    SECTION_TITLE.top +
-    SECTION_TITLE.size * SECTION_TITLE.leading * SECTION_TITLE.lines +
-    65,
-  size: 22,
-  leading: 1.64,
-  lines: experience.body.length,
-};
-
-const DESC_BOTTOM =
-  SECTION_DESC.top +
-  SECTION_DESC.size * SECTION_DESC.leading * SECTION_DESC.lines;
-
-const EXAMPLES_TOP = DESC_BOTTOM + 48;
-
-const PHONE_LEFT = GUTTER;
-const PHONE_TOP = PANEL.top + (PANEL.height - IPHONE_MOCKUP.height) / 2 + 36;
+const SIDE_L = 183;
+const SIDE_R = 160;
+const PHONE_W = IPHONE_MOCKUP.width;
+const PHONE_H = IPHONE_MOCKUP.height;
+/** 본문 최장줄(~505) + 여유 — 1440−183−475−160−520 = 102 */
+const COL_GAP = 102;
+const TEXT_COL_W = 520;
+const LIST_W = 500;
+const SECTION_TOP = 110;
 
 export function Experience() {
   const chatRef = useRef<DemoChatHandle>(null);
   const deskOpenRef = useRef(false);
   const deskDelayRef = useRef<number | null>(null);
-  /** 예약 확정 전에는 대시보드를 아예 숨김 */
   const [deskOpen, setDeskOpen] = useState(false);
   const [bookings, setBookings] = useState<DemoBooking[]>([]);
 
@@ -73,10 +53,8 @@ export function Experience() {
       return [next, ...prev.map((b) => ({ ...b, isNew: false }))];
     });
 
-    /* 이미 열려 있으면 리스트만 갱신 */
     if (deskOpenRef.current || deskDelayRef.current !== null) return;
 
-    /* 확정 멘트 후 1.5초 뒤 검정 필터 등장 */
     deskDelayRef.current = window.setTimeout(() => {
       deskOpenRef.current = true;
       setDeskOpen(true);
@@ -101,7 +79,6 @@ export function Experience() {
     setDeskOpen(false);
   }, []);
 
-  /** 개발용 — 채팅 없이 검정 필터·예약 현황 바로 확인 */
   const previewDesk = useCallback(() => {
     if (deskDelayRef.current) {
       window.clearTimeout(deskDelayRef.current);
@@ -139,90 +116,127 @@ export function Experience() {
   const isDev = process.env.NODE_ENV === "development";
 
   return (
-    <section id="ai-manager" className="relative w-full overflow-x-clip bg-porcelain">
+    <section
+      id="ai-manager"
+      className="relative w-full overflow-x-clip bg-porcelain"
+    >
       <div
-        className="relative mx-auto w-[1440px]"
-        style={{ height: `${TOP_HEIGHT}px` }}
+        className="pointer-events-none absolute inset-x-0 top-9 z-0 flex flex-col items-center gap-1 font-display text-[13px] font-medium tracking-[0.14em] text-ink/[0.12] uppercase"
+        aria-hidden
       >
-        <div
-          className="absolute"
-          style={{
-            left: `${PHONE_LEFT}px`,
-            top: `${PHONE_TOP}px`,
-          }}
-        >
+        {experience.accents.map((line) => (
+          <span key={line}>{line}</span>
+        ))}
+      </div>
+
+      <div
+        className="relative z-10 mx-auto flex w-[1440px] items-start"
+        style={{
+          paddingLeft: SIDE_L,
+          paddingRight: SIDE_R,
+          paddingTop: SECTION_TOP,
+          paddingBottom: SECTION_TOP,
+          gap: COL_GAP,
+        }}
+      >
+        <div className="relative shrink-0" style={{ width: PHONE_W, height: PHONE_H }}>
           <DemoChat ref={chatRef} onBooking={handleBooking} />
         </div>
 
-        <p
-          className="absolute inline-flex items-start font-display text-[25px] font-medium uppercase leading-none text-forest"
-          style={{ left: `${TEXT_LEFT}px`, top: `${TITLE.top}px` }}
-        >
-          <span className="mr-[6px] font-latin text-[14px] font-medium tracking-normal">
-            {experience.eyebrow.index}
-          </span>
-          {experience.eyebrow.label}
-        </p>
-
-        <h2
-          className="text-kr absolute text-left text-[70px] font-bold tracking-[-0.01em] text-ink"
-          style={{
-            left: `${TEXT_LEFT}px`,
-            top: `${SECTION_TITLE.top}px`,
-            lineHeight: SECTION_TITLE.leading,
-          }}
-        >
-          {experience.headline.map((line) => (
-            <span key={line} className="block">
-              {line}
+        <div className="min-w-0 shrink-0" style={{ width: TEXT_COL_W }}>
+          {/* 02 / THE EXPERIENCE — Inter 14 + Playfair 25 · #2C3A2E */}
+          <p className="flex items-center leading-none text-forest">
+            <span className="font-latin mr-[6px] text-[14px] font-medium tracking-normal uppercase">
+              {experience.eyebrow.index}
             </span>
-          ))}
-        </h2>
-
-        <RainInLines
-          lines={experience.body}
-          className="text-kr absolute text-left text-[22px] font-normal tracking-[-0.01em] text-body"
-          style={{
-            left: `${TEXT_LEFT}px`,
-            top: `${SECTION_DESC.top}px`,
-            lineHeight: SECTION_DESC.leading,
-          }}
-        />
-
-        <div
-          className="absolute flex w-[440px] flex-col gap-3"
-          style={{ left: `${TEXT_LEFT}px`, top: `${EXAMPLES_TOP}px` }}
-        >
-          <p className="font-display text-[13px] font-medium tracking-[0.08em] text-forest uppercase">
-            Try asking
+            <span className="font-display text-[25px] font-medium uppercase">
+              {experience.eyebrow.label}
+            </span>
           </p>
-          <ul className="flex flex-col gap-2.5">
-            {experience.examples.map((q) => (
-              <li key={q}>
+
+          {/* 타이틀 — Noto 70/700 · 행간 96(1.37) · ls -0.02em · mt 45 */}
+          <h2 className="text-kr mt-[45px] text-[70px] font-bold leading-[96px] tracking-[-0.02em] text-ink">
+            {experience.headline.map((line) => (
+              <span key={line} className="block whitespace-nowrap">
+                {line}
+              </span>
+            ))}
+          </h2>
+
+          {/* 본문 — Noto 22/400 · #6C6864 · lh 1.64 · mt 65 · 시안 줄바꿈 고정 */}
+          <p className="text-kr mt-[65px] text-[22px] font-normal leading-[1.64] text-body">
+            {experience.body.map((line) => (
+              <span key={line} className="block whitespace-nowrap">
+                {line}
+              </span>
+            ))}
+          </p>
+
+          {/* TRY ASKING. — Playfair 44/500 · #2C3A2E · mt 100 */}
+          <p className="font-display mt-[100px] text-[44px] font-medium leading-none text-forest uppercase">
+            {experience.tryAsking.title}
+          </p>
+
+          {/* 설명 — Noto 22/400 · lh 1.64 · mt 45 · 막막하다면, 뒤 줄바꿈 */}
+          <p className="text-kr mt-[45px] text-[22px] font-normal leading-[1.64] text-body">
+            {experience.tryAsking.body.map((line) => (
+              <span key={line} className="block whitespace-nowrap">
+                {line}
+              </span>
+            ))}
+          </p>
+
+          {/*
+            질문 리스트 — DETAIL_03
+            구분선 500 · 1px rgba(108,104,100,0.7)
+            글 22/400 rgba(102,102,102,0.7) · 호버 #2C3A2E
+          */}
+          <ul className="mt-[45px]" style={{ width: LIST_W }}>
+            {experience.examples.map((q, i) => (
+              <li key={q} style={{ width: LIST_W }}>
+                {i === 0 ? (
+                  <div
+                    className="h-px w-full"
+                    style={{ background: "rgba(108, 104, 100, 0.7)" }}
+                    aria-hidden
+                  />
+                ) : null}
                 <button
                   type="button"
                   onClick={() => chatRef.current?.ask(q)}
-                  className="text-kr group text-left text-[16px] font-normal tracking-[-0.01em] text-body transition-colors hover:text-ink"
+                  className="text-kr group flex w-full items-center gap-3 py-[22px] text-left text-[22px] font-normal leading-none tracking-[-0.01em] text-[rgba(102,102,102,0.7)] transition-colors hover:text-forest"
                 >
-                  <span className="mr-2 text-forest/50">—</span>
-                  <span className="border-b border-transparent transition-[border-color] group-hover:border-ink/25">
-                    {q}
-                  </span>
+                  <span aria-hidden className="question-chevron shrink-0" />
+                  <span className="min-w-0 flex-1 whitespace-nowrap">{q}</span>
                 </button>
+                <div
+                  className="h-px w-full"
+                  style={{ background: "rgba(108, 104, 100, 0.7)" }}
+                  aria-hidden
+                />
               </li>
             ))}
           </ul>
-          {isDev ? (
-            <button
-              type="button"
-              onClick={previewDesk}
-              className="mt-4 self-start rounded-[2px] border border-dashed border-ink/25 px-3 py-2 font-latin text-[11px] tracking-[0.08em] text-ink/55 uppercase transition-colors hover:border-gold hover:text-gold"
-            >
-              [Dev] Preview booking overlay
-            </button>
-          ) : null}
         </div>
       </div>
+
+      {isDev ? (
+        <div
+          className="relative z-10 mx-auto w-[1440px]"
+          style={{
+            paddingLeft: SIDE_L + PHONE_W + COL_GAP,
+            paddingRight: SIDE_R,
+          }}
+        >
+          <button
+            type="button"
+            onClick={previewDesk}
+            className="mt-4 rounded-[2px] border border-dashed border-ink/25 px-3 py-2 font-latin text-[11px] tracking-[0.08em] text-ink/55 uppercase transition-colors hover:border-gold hover:text-gold"
+          >
+            [Dev] Preview booking overlay
+          </button>
+        </div>
+      ) : null}
 
       {deskOpen ? (
         <DemoAdminDashboard
