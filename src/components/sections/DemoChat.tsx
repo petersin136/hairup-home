@@ -40,34 +40,34 @@ const FALLBACK =
   "잠시 연결이 불안정해요. 조금 뒤에 다시 말씀해 주세요.";
 
 /**
- * HU_TEST DETAIL_04 — PHONE MOCKUP SIZE 475 × 980
- * DETAIL_01 — PHONE-SCREEN-BG 435 × 946 · radius 62 · #C6D4DF
- * 베젤 (475−435)/2 = 20
+ * HU_TEST — 디자이너 phon_mockup.png (519×1024) 기준
+ * 디스플레이 폭 475 · 화면 구멍 실측 inset
  */
-export const IPHONE_MOCKUP = { width: 475, height: 980 } as const;
+const MOCKUP_SRC = { w: 519, h: 1024 } as const;
+/** 화면 구멍 (PNG px) */
+const SCREEN_HOLE = { left: 31, top: 31, right: 30, bottom: 35 } as const;
 
-/** 모바일: 가로는 동일, 세로는 짧게 + 하단은 추가 크롭으로 짤린 느낌 */
+export const IPHONE_MOCKUP = {
+  width: 475,
+  /** HU_TEST 시안 475×980 — 프레임 PNG는 약간 세로 스트레치 */
+  height: 980,
+} as const;
+
+/** 모바일: 가로는 동일, 세로는 짧게 + 하단 크롭 */
 export const IPHONE_MOCKUP_COMPACT = {
   width: IPHONE_MOCKUP.width,
   height: Math.round(IPHONE_MOCKUP.height * 0.58),
-  /** 하단 여유 구간을 더 잘라 완성된 폰처럼 안 보이게 */
   cropBottom: 24,
 } as const;
 
-const FRAME = {
-  metal: 4,
-  bezel: 16,
-  /** 화면 radius 62 → 외곽 62+20 */
-  radius: 82,
-  screenRadius: 62,
-} as const;
-
-const METAL =
-  "linear-gradient(145deg, #c4c4c4 0%, #a8a8a8 25%, #9e9e9e 50%, #b0b0b0 75%, #989898 100%)";
-const METAL_BTN =
-  "linear-gradient(180deg, #b8b8b8 0%, #9a9a9a 50%, #888888 100%)";
-
 const DATE_PILL = "2026년 8월 7일 금요일";
+
+const ASSETS = {
+  frame: "/experience/phon_mockup_frame.png",
+  thumb: "/experience/thumb.png",
+  plus: "/experience/icon_plus.png",
+  send: "/experience/upload_btn.png",
+} as const;
 
 function uid() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -213,17 +213,23 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
     const mockupHeight = compact
       ? IPHONE_MOCKUP_COMPACT.height
       : IPHONE_MOCKUP.height;
-    const frameRadius = FRAME.radius;
-    const screenR = FRAME.screenRadius;
-    const outerRadius = compact
-      ? `${frameRadius}px ${frameRadius}px 0 0`
-      : `${frameRadius}px`;
-    const bezelRadius = compact
-      ? `${frameRadius - FRAME.metal}px ${frameRadius - FRAME.metal}px 0 0`
-      : `${frameRadius - FRAME.metal}px`;
-    const screenRadius = compact
-      ? `${screenR}px ${screenR}px 0 0`
-      : `${screenR}px`;
+    const scaleX = IPHONE_MOCKUP.width / MOCKUP_SRC.w;
+    const scaleY = mockupHeight / MOCKUP_SRC.h;
+    const screenStyle = compact
+      ? {
+          left: SCREEN_HOLE.left * scaleX,
+          top: SCREEN_HOLE.top * scaleY,
+          right: SCREEN_HOLE.right * scaleX,
+          bottom: 0,
+          borderRadius: `${48 * scaleX}px ${48 * scaleX}px 0 0`,
+        }
+      : {
+          left: SCREEN_HOLE.left * scaleX,
+          top: SCREEN_HOLE.top * scaleY,
+          right: SCREEN_HOLE.right * scaleX,
+          bottom: SCREEN_HOLE.bottom * scaleY,
+          borderRadius: `${48 * scaleX}px`,
+        };
 
     return (
       <div
@@ -237,221 +243,184 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
         }}
         aria-label="헤어업 상담 데모"
       >
-        <span
-          className="pointer-events-none absolute top-[148px] -left-[2.5px] h-[26px] w-[3px] rounded-l-[1px]"
-          style={{ background: METAL_BTN }}
-          aria-hidden
-        />
-        <span
-          className="pointer-events-none absolute top-[198px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
-          style={{ background: METAL_BTN }}
-          aria-hidden
-        />
-        {!compact ? (
-          <span
-            className="pointer-events-none absolute top-[256px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
-            style={{ background: METAL_BTN }}
-            aria-hidden
-          />
-        ) : null}
-        <span
-          className="pointer-events-none absolute top-[220px] -right-[2.5px] h-[84px] w-[3px] rounded-r-[1px]"
-          style={{ background: METAL_BTN }}
-          aria-hidden
-        />
-
         <div
-          className="absolute inset-0"
-          style={{
-            borderRadius: outerRadius,
-            padding: compact
-              ? `${FRAME.metal}px ${FRAME.metal}px 0`
-              : `${FRAME.metal}px`,
-            background: METAL,
-            boxShadow: compact
-              ? "inset 0 1px 0 rgba(255,255,255,0.28)"
-              : "inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -1px 0 rgba(0,0,0,0.2)",
-          }}
+          className="demo-chat absolute z-0 flex min-h-0 flex-col overflow-hidden bg-[#C6D4DF]"
+          style={screenStyle}
         >
           <div
-            className="h-full w-full bg-[#111]"
-            style={{
-              borderRadius: bezelRadius,
-              padding: compact
-                ? `${FRAME.bezel}px ${FRAME.bezel}px 0`
-                : `${FRAME.bezel}px`,
-            }}
-          >
+            className="pointer-events-none absolute top-[10px] left-1/2 z-30 h-[32px] w-[112px] -translate-x-1/2 rounded-full bg-black"
+            aria-hidden
+          />
+
+          <div className="relative z-20 h-[52px] shrink-0">
+            <span className="absolute top-[16px] left-5 text-[14px] font-semibold leading-none tracking-tight text-ink tabular-nums">
+              5:30
+            </span>
             <div
-              className="demo-chat relative flex h-full min-h-0 w-full flex-col overflow-hidden bg-[#C6D4DF]"
-              style={{ borderRadius: screenRadius }}
+              className="absolute top-[15px] right-4 flex items-center gap-[5px] text-ink"
+              aria-hidden
             >
-              {/* Dynamic Island */}
-              <div
-                className="pointer-events-none absolute top-[12px] left-1/2 z-30 h-[34px] w-[120px] -translate-x-1/2 rounded-full bg-black"
-                aria-hidden
-              />
-
-              {/* Status bar — 시안 5:30 · 5G · 100 */}
-              <div className="relative z-20 h-[56px] shrink-0">
-                <span className="absolute top-[18px] left-6 text-[15px] font-semibold leading-none tracking-tight text-ink tabular-nums">
-                  5:30
-                </span>
-                <div
-                  className="absolute top-[17px] right-5 flex items-center gap-[5px] text-ink"
-                  aria-hidden
-                >
-                  <SignalIcon />
-                  <span className="font-latin text-[11px] font-semibold leading-none tracking-tight">
-                    5G
-                  </span>
-                  <BatteryIcon />
-                  <span className="font-latin text-[11px] font-semibold leading-none tabular-nums">
-                    100
-                  </span>
-                </div>
-              </div>
-
-              {/* 카카오 채널 헤더 */}
-              <header className="relative z-10 flex h-[56px] shrink-0 items-center gap-1 border-b border-black/[0.06] bg-[#b7c9d9]/92 px-2 backdrop-blur-[2px]">
-                <span
-                  className="flex size-10 items-center justify-center text-[28px] leading-none text-ink/80"
-                  aria-hidden
-                >
-                  ‹
-                </span>
-                <span
-                  className="font-latin mr-0.5 text-[14px] font-medium text-ink/70"
-                  aria-hidden
-                >
-                  1
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-[16px] font-bold leading-tight text-ink">
-                    <span className="font-display font-medium">hair up</span>
-                    <span className="text-kr ml-1 font-bold">헤어업</span>
-                  </p>
-                  <p className="text-kr truncate text-[12px] leading-tight text-ink/55">
-                    @hairup 카카오톡 채널
-                  </p>
-                </div>
-                <span
-                  className="flex size-10 items-center justify-center text-ink/70"
-                  aria-hidden
-                >
-                  <SearchIcon />
-                </span>
-                <span
-                  className="flex size-10 items-center justify-center text-ink/70"
-                  aria-hidden
-                >
-                  <MenuIcon />
-                </span>
-              </header>
-
-              <div
-                ref={listRef}
-                className="demo-chat-list min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-3"
-              >
-                {/* DETAIL_01 · CHAT-DATE-BADGE */}
-                <div className="mb-4 flex justify-center">
-                  <span
-                    className="text-kr inline-block rounded-[19px] px-[18px] py-2 text-[16px] leading-none"
-                    style={{
-                      backgroundColor: "rgba(28, 26, 25, 0.07)",
-                      color: "#3D3D3D",
-                    }}
-                  >
-                    {DATE_PILL}
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  {messages.map((message, index) => {
-                    const prev = messages[index - 1];
-                    const lead = !prev || prev.role !== message.role;
-                    const showAvatar = message.role === "assistant" && lead;
-
-                    return (
-                      <BubbleRow
-                        key={message.id}
-                        message={message}
-                        lead={lead}
-                        showAvatar={showAvatar}
-                      />
-                    );
-                  })}
-                  {pending ? <TypingIndicator /> : null}
-                </div>
-              </div>
-
-              {/*
-                DETAIL_01 · INPUT 402×68 · #3F4042 · r34
-                DETAIL_04 · 좌우 17 · 하단 52
-              */}
-              <form
-                onSubmit={onSubmit}
-                className="relative flex shrink-0 items-center justify-center gap-2 bg-[#C6D4DF] px-[17px] pt-2"
-                style={{ paddingBottom: compact ? 12 : 52 }}
-              >
-                <div
-                  className={[
-                    "demo-chat-input-shell flex h-[68px] w-full max-w-[402px] items-center gap-3 rounded-[34px] bg-[#3F4042] px-4",
-                    idle ? "is-idle" : "",
-                  ].join(" ")}
-                >
-                  <span
-                    className="flex size-8 shrink-0 items-center justify-center rounded-full border border-white/35 text-[20px] leading-none text-white/80"
-                    aria-hidden
-                  >
-                    +
-                  </span>
-                  <div className="relative min-w-0 flex-1">
-                    {idle ? (
-                      <>
-                        <span className="demo-chat-caret demo-chat-caret-light" aria-hidden />
-                        <span className="demo-chat-input-hint text-kr">
-                          메세지 입력
-                        </span>
-                      </>
-                    ) : null}
-                    <input
-                      ref={field}
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      onFocus={() => setFocused(true)}
-                      onBlur={() => setFocused(false)}
-                      disabled={pending || limited}
-                      maxLength={500}
-                      placeholder={limited ? "오늘 체험이 끝났어요" : ""}
-                      aria-label="메세지 입력"
-                      className="demo-chat-input-field text-kr w-full border-0 bg-transparent py-2 pr-1 text-[18px] font-normal leading-snug text-[#EBEBEB] caret-[#007AFF] outline-none placeholder:text-[rgba(235,235,235,0.25)] disabled:opacity-60"
-                      autoComplete="off"
-                    />
-                  </div>
-                  {showSend ? (
-                    <button
-                      type="submit"
-                      disabled={pending || limited || !hasDraft}
-                      className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#fee500] text-ink transition-opacity disabled:opacity-35"
-                      aria-label="전송"
-                    >
-                      <SendArrow />
-                    </button>
-                  ) : null}
-                </div>
-                {!compact ? (
-                  <span
-                    className="pointer-events-none absolute bottom-[14px] left-1/2 h-[5px] w-[126px] -translate-x-1/2 rounded-full bg-ink/20"
-                    aria-hidden
-                  />
-                ) : null}
-              </form>
-              {compact ? (
-                <div className="h-[20px] shrink-0 bg-[#C6D4DF]" aria-hidden />
-              ) : null}
+              <SignalIcon />
+              <span className="font-latin text-[11px] font-semibold leading-none tracking-tight">
+                5G
+              </span>
+              <BatteryIcon />
+              <span className="font-latin text-[11px] font-semibold leading-none tabular-nums">
+                100
+              </span>
             </div>
           </div>
+
+          <header className="relative z-10 flex h-[52px] shrink-0 items-center gap-1.5 border-b border-black/[0.06] bg-[#b7c9d9]/92 px-1.5 backdrop-blur-[2px]">
+            <span
+              className="flex size-8 shrink-0 items-center justify-center text-[28px] leading-none text-ink/75"
+              aria-hidden
+            >
+              ‹
+            </span>
+            <span
+              className="font-latin w-3 shrink-0 text-center text-[22px] font-light leading-none text-ink/45"
+              aria-hidden
+            >
+              1
+            </span>
+            <div className="min-w-0 flex-1 -translate-y-px">
+              <p className="truncate text-[15px] leading-[1.15] text-[#3D3D3D]">
+                <span className="font-latin font-normal tracking-tight">
+                  hair up
+                </span>
+                <span className="text-kr ml-1 font-medium">헤어업</span>
+              </p>
+              <p className="text-kr mt-0.5 truncate text-[11px] leading-[1.1] text-ink/45">
+                @hairup 카카오톡 채널
+              </p>
+            </div>
+            <span
+              className="flex size-8 shrink-0 items-center justify-center text-ink/70"
+              aria-hidden
+            >
+              <SearchIcon />
+            </span>
+            <span
+              className="flex size-8 shrink-0 items-center justify-center text-ink/70"
+              aria-hidden
+            >
+              <MenuIcon />
+            </span>
+          </header>
+
+          <div
+            ref={listRef}
+            className="demo-chat-list min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-3"
+          >
+            <div className="mb-4 flex justify-center">
+              <span
+                className="text-kr inline-block rounded-[19px] px-[18px] py-2 text-[16px] leading-none"
+                style={{
+                  backgroundColor: "rgba(28, 26, 25, 0.07)",
+                  color: "#3D3D3D",
+                }}
+              >
+                {DATE_PILL}
+              </span>
+            </div>
+            <div className="flex flex-col">
+              {messages.map((message, index) => {
+                const prev = messages[index - 1];
+                const lead = !prev || prev.role !== message.role;
+                const showAvatar = message.role === "assistant" && lead;
+
+                return (
+                  <BubbleRow
+                    key={message.id}
+                    message={message}
+                    lead={lead}
+                    showAvatar={showAvatar}
+                  />
+                );
+              })}
+              {pending ? <TypingIndicator /> : null}
+            </div>
+          </div>
+
+          <form
+            onSubmit={onSubmit}
+            className="relative flex shrink-0 items-center justify-center gap-2 bg-[#C6D4DF] px-[17px] pt-2"
+            style={{ paddingBottom: compact ? 12 : 52 }}
+          >
+            <div
+              className={[
+                "demo-chat-input-shell flex h-[68px] w-full max-w-[402px] items-center gap-3 rounded-[34px] bg-[#3F4042] px-3",
+                idle ? "is-idle" : "",
+              ].join(" ")}
+            >
+              <img
+                src={ASSETS.plus}
+                alt=""
+                width={36}
+                height={36}
+                className="size-9 shrink-0"
+                draggable={false}
+              />
+              <div className="relative min-w-0 flex-1">
+                {idle ? (
+                  <>
+                    <span className="demo-chat-caret demo-chat-caret-light" aria-hidden />
+                    <span className="demo-chat-input-hint text-kr">
+                      메세지 입력
+                    </span>
+                  </>
+                ) : null}
+                <input
+                  ref={field}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onFocus={() => setFocused(true)}
+                  onBlur={() => setFocused(false)}
+                  disabled={pending || limited}
+                  maxLength={500}
+                  placeholder={limited ? "오늘 체험이 끝났어요" : ""}
+                  aria-label="메세지 입력"
+                  className="demo-chat-input-field text-kr w-full border-0 bg-transparent py-2 pr-1 text-[18px] font-normal leading-snug text-[#EBEBEB] caret-[#007AFF] outline-none placeholder:text-[rgba(235,235,235,0.25)] disabled:opacity-60"
+                  autoComplete="off"
+                />
+              </div>
+              {showSend ? (
+                <button
+                  type="submit"
+                  disabled={pending || limited || !hasDraft}
+                  className="shrink-0 transition-opacity disabled:opacity-35"
+                  aria-label="전송"
+                >
+                  <img
+                    src={ASSETS.send}
+                    alt=""
+                    width={36}
+                    height={36}
+                    className="size-9"
+                    draggable={false}
+                  />
+                </button>
+              ) : null}
+            </div>
+            {!compact ? (
+              <span
+                className="pointer-events-none absolute bottom-[14px] left-1/2 h-[5px] w-[126px] -translate-x-1/2 rounded-full bg-ink/20"
+                aria-hidden
+              />
+            ) : null}
+          </form>
+          {compact ? (
+            <div className="h-[20px] shrink-0 bg-[#C6D4DF]" aria-hidden />
+          ) : null}
         </div>
+
+        <img
+          src={ASSETS.frame}
+          alt=""
+          className="pointer-events-none absolute inset-0 z-20 h-full w-full select-none object-fill"
+          draggable={false}
+        />
       </div>
     );
   },
@@ -532,14 +501,15 @@ function BubbleRow({
 
 function HairUpAvatar() {
   return (
-    <span
-      className="flex size-10 items-center justify-center overflow-hidden rounded-full bg-ink px-1 text-center font-display text-[9px] leading-tight font-medium tracking-tight text-porcelain lowercase"
+    <img
+      src={ASSETS.thumb}
+      alt=""
+      width={40}
+      height={40}
+      className="size-10 rounded-full object-cover"
+      draggable={false}
       aria-hidden
-    >
-      hair
-      <br />
-      up
-    </span>
+    />
   );
 }
 
@@ -622,20 +592,6 @@ function MenuIcon() {
       <rect x="0" y="0" width="18" height="1.6" rx="0.8" />
       <rect x="0" y="6" width="18" height="1.6" rx="0.8" />
       <rect x="0" y="12" width="18" height="1.6" rx="0.8" />
-    </svg>
-  );
-}
-
-function SendArrow() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-      <path
-        d="M7 11.5V2.5M7 2.5 3.5 6M7 2.5 10.5 6"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
     </svg>
   );
 }
