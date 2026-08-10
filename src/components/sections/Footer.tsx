@@ -44,7 +44,9 @@ const COL_LEFTS = [0, 224, 473] as const;
 
 /** 카피·약관 하단 = 높이 − 30 (로고와 동일) */
 const COPYRIGHT_TOP = HEIGHT - EDGE - 12;
-const COMPANY_TOP = COPYRIGHT_TOP - 19 - 12;
+/** 사업자 정보 2줄 · 줄간격 1.55 · 카피 위 19 */
+const COMPANY_LINE = 12 * 1.55;
+const COMPANY_TOP = COPYRIGHT_TOP - 19 - COMPANY_LINE * 2;
 
 export function Footer() {
   return (
@@ -95,7 +97,10 @@ export function Footer() {
               {column.links.map((item) => (
                 <li
                   key={item.label}
-                  className="font-latin text-[14px] font-normal uppercase text-ink/90"
+                  className={[
+                    "font-latin text-[14px] font-normal text-ink/90",
+                    column.title === "CONTACT" ? "normal-case" : "uppercase",
+                  ].join(" ")}
                   style={{ lineHeight: 1.93 }}
                 >
                   <Link
@@ -112,21 +117,33 @@ export function Footer() {
         ))}
       </div>
 
-      {/* 사업자 정보 — 카피라이트 위 19 · 우측 끝 = TERMS OF SERVICE */}
-      <p
-        className="text-kr absolute flex justify-between text-[12px] font-normal leading-none text-ink/65"
+      {/* 사업자 정보 — 카피라이트 위 19 · 항목 justify-between */}
+      <div
+        className="text-kr absolute text-[12px] font-normal text-ink/65"
         style={{
           left: `${FORM_LEFT}px`,
           top: `${COMPANY_TOP}px`,
           width: `${FORM_WIDTH}px`,
+          lineHeight: 1.55,
         }}
       >
-        {footer.company.map((part) => (
-          <span key={part} className="shrink-0">
-            {part}
-          </span>
+        {footer.company.map((row) => (
+          <p
+            key={row.map((p) => p.label).join("-")}
+            className="flex justify-between gap-4"
+          >
+            {row.map((part) => (
+              <span key={part.label} className="shrink-0 whitespace-nowrap">
+                {part.label}
+                <span className="mx-[0.35em] text-ink/35" aria-hidden>
+                  |
+                </span>
+                {part.value}
+              </span>
+            ))}
+          </p>
         ))}
-      </p>
+      </div>
 
       <p
         className="absolute font-latin text-[12px] font-normal uppercase leading-none text-ink/65"

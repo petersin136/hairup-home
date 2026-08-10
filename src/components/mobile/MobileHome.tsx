@@ -273,10 +273,22 @@ export function MobileHome() {
                     onClick={() => chatRef.current?.ask(q)}
                     className="text-kr group flex w-full items-center gap-2.5 py-[18px] text-left text-[15px] font-normal leading-none text-[rgba(102,102,102,0.7)] active:text-forest"
                   >
-                    <span
+                    <svg
                       aria-hidden
-                      className="question-chevron shrink-0"
-                    />
+                      className="question-arrow shrink-0"
+                      width="14"
+                      height="12"
+                      viewBox="0 0 14 12"
+                      fill="none"
+                    >
+                      <path
+                        d="M12.5 6H2.2M2.2 6l3.8-3.5M2.2 6l3.8 3.5"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
                     <span className="min-w-0 flex-1">{q}</span>
                   </button>
                   <div
@@ -595,9 +607,24 @@ export function MobileHome() {
         {/* Footer */}
         <footer className="bg-linen px-5 py-12">
           <Wordmark width={160} />
-          <p className="text-kr mt-6 text-[13px] leading-[1.6] text-ink/70">
-            {footer.company.join(" · ")}
-          </p>
+          <div className="text-kr mt-6 space-y-2 text-[12px] leading-[1.55] text-ink/70">
+            {footer.company.map((row) => (
+              <p
+                key={row.map((p) => p.label).join("-")}
+                className="flex flex-wrap gap-x-5 gap-y-1"
+              >
+                {row.map((part) => (
+                  <span key={part.label} className="whitespace-nowrap">
+                    {part.label}
+                    <span className="mx-[0.35em] text-ink/35" aria-hidden>
+                      |
+                    </span>
+                    {part.value}
+                  </span>
+                ))}
+              </p>
+            ))}
+          </div>
           <p className="font-latin mt-3 text-[12px] text-ink/55">
             {footer.copyright}
           </p>

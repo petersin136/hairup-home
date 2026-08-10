@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { fontVariables } from "@/lib/fonts";
 import { SPLASH_SESSION_KEY } from "@/components/splash/SplashScreen";
 import "./globals.css";
@@ -20,12 +19,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={`${fontVariables} h-full`}>
-      <body className="min-h-full">
-        <Script id="splash-guard" strategy="beforeInteractive">
-          {splashGuard}
-        </Script>
-        {children}
-      </body>
+      <head>
+        {/* next/script children 은 React 19에서 <script> 중첩 경고·오류를 냄 */}
+        <script
+          id="splash-guard"
+          dangerouslySetInnerHTML={{ __html: splashGuard }}
+        />
+      </head>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }

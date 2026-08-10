@@ -40,18 +40,11 @@ const FALLBACK =
   "잠시 연결이 불안정해요. 조금 뒤에 다시 말씀해 주세요.";
 
 /**
- * HU_TEST — 디자이너 phon_mockup.png (519×1024) 기준
- * 디스플레이 폭 475 · 화면 구멍 실측 inset
+ * HU_TEST DETAIL_04 — PHONE MOCKUP SIZE 475 × 980
+ * DETAIL_01 — PHONE-SCREEN-BG 435 × 946 · radius 62 · #C6D4DF
+ * 프레임은 CSS(벡터) — PNG 확대·filter drop-shadow 뭉개짐 방지
  */
-const MOCKUP_SRC = { w: 519, h: 1024 } as const;
-/** 화면 구멍 (PNG px) */
-const SCREEN_HOLE = { left: 31, top: 31, right: 30, bottom: 35 } as const;
-
-export const IPHONE_MOCKUP = {
-  width: 475,
-  /** HU_TEST 시안 475×980 — 프레임 PNG는 약간 세로 스트레치 */
-  height: 980,
-} as const;
+export const IPHONE_MOCKUP = { width: 475, height: 980 } as const;
 
 /** 모바일: 가로는 동일, 세로는 짧게 + 하단 크롭 */
 export const IPHONE_MOCKUP_COMPACT = {
@@ -60,17 +53,46 @@ export const IPHONE_MOCKUP_COMPACT = {
   cropBottom: 24,
 } as const;
 
-const DATE_PILL = "2026년 8월 7일 금요일";
-
-const ASSETS = {
-  frame: "/experience/phon_mockup_frame.png",
-  thumb: "/experience/thumb.png",
-  plus: "/experience/icon_plus.png",
-  send: "/experience/upload_btn.png",
+const FRAME = {
+  metal: 3,
+  bezel: 10,
+  radius: 72,
+  screenRadius: 59,
 } as const;
+
+/** 찐한 회색 메탈 프레임 */
+const METAL =
+  "linear-gradient(145deg, #8a8a8a 0%, #6e6e6e 25%, #5a5a5a 50%, #747474 75%, #4e4e4e 100%)";
+const METAL_BTN =
+  "linear-gradient(180deg, #7a7a7a 0%, #5c5c5c 50%, #484848 100%)";
+
+const WEEKDAYS = [
+  "일요일",
+  "월요일",
+  "화요일",
+  "수요일",
+  "목요일",
+  "금요일",
+  "토요일",
+] as const;
+
+/** 채널 프로필 — 원형 아님, 카카오 스쿼클 + 제공 thumb */
+const THUMB_SRC = "/experience/thumb.png";
+/** 전송 버튼 — 노란 원 + 검정 ↑ */
+const SEND_SRC = "/experience/upload_btn.png";
 
 function uid() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function formatDatePill(d: Date) {
+  return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 ${WEEKDAYS[d.getDay()]}`;
+}
+
+function formatStatusTime(d: Date) {
+  const h = d.getHours() % 12 || 12;
+  const m = d.getMinutes();
+  return `${h}:${String(m).padStart(2, "0")}`;
 }
 
 function formatTime(at: number) {
@@ -92,6 +114,7 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
     const [pending, setPending] = useState(false);
     const [limited, setLimited] = useState(false);
     const [focused, setFocused] = useState(false);
+    const [now, setNow] = useState<Date | null>(null);
     const listRef = useRef<HTMLDivElement>(null);
     const field = useRef<HTMLInputElement>(null);
     const messagesRef = useRef(messages);
@@ -111,6 +134,12 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
 
     useEffect(() => {
       if (process.env.NODE_ENV === "development") setLimited(false);
+    }, []);
+
+    useEffect(() => {
+      setNow(new Date());
+      const tick = window.setInterval(() => setNow(new Date()), 30_000);
+      return () => window.clearInterval(tick);
     }, []);
 
     useEffect(() => {
@@ -213,23 +242,17 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
     const mockupHeight = compact
       ? IPHONE_MOCKUP_COMPACT.height
       : IPHONE_MOCKUP.height;
-    const scaleX = IPHONE_MOCKUP.width / MOCKUP_SRC.w;
-    const scaleY = mockupHeight / MOCKUP_SRC.h;
-    const screenStyle = compact
-      ? {
-          left: SCREEN_HOLE.left * scaleX,
-          top: SCREEN_HOLE.top * scaleY,
-          right: SCREEN_HOLE.right * scaleX,
-          bottom: 0,
-          borderRadius: `${48 * scaleX}px ${48 * scaleX}px 0 0`,
-        }
-      : {
-          left: SCREEN_HOLE.left * scaleX,
-          top: SCREEN_HOLE.top * scaleY,
-          right: SCREEN_HOLE.right * scaleX,
-          bottom: SCREEN_HOLE.bottom * scaleY,
-          borderRadius: `${48 * scaleX}px`,
-        };
+    const frameRadius = FRAME.radius;
+    const screenR = FRAME.screenRadius;
+    const outerRadius = compact
+      ? `${frameRadius}px ${frameRadius}px 0 0`
+      : `${frameRadius}px`;
+    const bezelRadius = compact
+      ? `${frameRadius - FRAME.metal}px ${frameRadius - FRAME.metal}px 0 0`
+      : `${frameRadius - FRAME.metal}px`;
+    const screenRadius = compact
+      ? `${screenR}px ${screenR}px 0 0`
+      : `${screenR}px`;
 
     return (
       <div
@@ -237,190 +260,225 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
         style={{
           width: `${IPHONE_MOCKUP.width}px`,
           height: `${mockupHeight}px`,
-          filter: compact
-            ? "drop-shadow(0 16px 32px rgba(28,26,25,0.14))"
-            : "drop-shadow(0 28px 56px rgba(28,26,25,0.18)) drop-shadow(0 8px 20px rgba(28,26,25,0.1))",
+          /* filter drop-shadow 금지 — 레이어 래스터화로 텍스트·아이콘이 뭉개짐 */
+          boxShadow: compact
+            ? "0 16px 32px rgba(28,26,25,0.14)"
+            : "0 28px 56px rgba(28,26,25,0.18), 0 8px 20px rgba(28,26,25,0.1)",
+          borderRadius: outerRadius,
         }}
         aria-label="헤어업 상담 데모"
       >
-        <div
-          className="demo-chat absolute z-0 flex min-h-0 flex-col overflow-hidden bg-[#C6D4DF]"
-          style={screenStyle}
-        >
-          <div
-            className="pointer-events-none absolute top-[10px] left-1/2 z-30 h-[32px] w-[112px] -translate-x-1/2 rounded-full bg-black"
+        <span
+          className="pointer-events-none absolute top-[148px] -left-[2.5px] h-[26px] w-[3px] rounded-l-[1px]"
+          style={{ background: METAL_BTN }}
+          aria-hidden
+        />
+        <span
+          className="pointer-events-none absolute top-[198px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
+          style={{ background: METAL_BTN }}
+          aria-hidden
+        />
+        {!compact ? (
+          <span
+            className="pointer-events-none absolute top-[256px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
+            style={{ background: METAL_BTN }}
             aria-hidden
           />
+        ) : null}
+        <span
+          className="pointer-events-none absolute top-[220px] -right-[2.5px] h-[84px] w-[3px] rounded-r-[1px]"
+          style={{ background: METAL_BTN }}
+          aria-hidden
+        />
 
-          <div className="relative z-20 h-[52px] shrink-0">
-            <span className="absolute top-[16px] left-5 text-[14px] font-semibold leading-none tracking-tight text-ink tabular-nums">
-              5:30
-            </span>
-            <div
-              className="absolute top-[15px] right-4 flex items-center gap-[5px] text-ink"
-              aria-hidden
-            >
-              <SignalIcon />
-              <span className="font-latin text-[11px] font-semibold leading-none tracking-tight">
-                5G
-              </span>
-              <BatteryIcon />
-              <span className="font-latin text-[11px] font-semibold leading-none tabular-nums">
-                100
-              </span>
-            </div>
-          </div>
-
-          <header className="relative z-10 flex h-[52px] shrink-0 items-center gap-1.5 border-b border-black/[0.06] bg-[#b7c9d9]/92 px-1.5 backdrop-blur-[2px]">
-            <span
-              className="flex size-8 shrink-0 items-center justify-center text-[28px] leading-none text-ink/75"
-              aria-hidden
-            >
-              ‹
-            </span>
-            <span
-              className="font-latin w-3 shrink-0 text-center text-[22px] font-light leading-none text-ink/45"
-              aria-hidden
-            >
-              1
-            </span>
-            <div className="min-w-0 flex-1 -translate-y-px">
-              <p className="truncate text-[15px] leading-[1.15] text-[#3D3D3D]">
-                <span className="font-latin font-normal tracking-tight">
-                  hair up
-                </span>
-                <span className="text-kr ml-1 font-medium">헤어업</span>
-              </p>
-              <p className="text-kr mt-0.5 truncate text-[11px] leading-[1.1] text-ink/45">
-                @hairup 카카오톡 채널
-              </p>
-            </div>
-            <span
-              className="flex size-8 shrink-0 items-center justify-center text-ink/70"
-              aria-hidden
-            >
-              <SearchIcon />
-            </span>
-            <span
-              className="flex size-8 shrink-0 items-center justify-center text-ink/70"
-              aria-hidden
-            >
-              <MenuIcon />
-            </span>
-          </header>
-
+        <div
+          className="absolute inset-0"
+          style={{
+            borderRadius: outerRadius,
+            padding: compact
+              ? `${FRAME.metal}px ${FRAME.metal}px 0`
+              : `${FRAME.metal}px`,
+            background: METAL,
+            boxShadow: compact
+              ? "inset 0 1px 0 rgba(255,255,255,0.35)"
+              : "inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.18)",
+          }}
+        >
           <div
-            ref={listRef}
-            className="demo-chat-list min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-3"
-          >
-            <div className="mb-4 flex justify-center">
-              <span
-                className="text-kr inline-block rounded-[19px] px-[18px] py-2 text-[16px] leading-none"
-                style={{
-                  backgroundColor: "rgba(28, 26, 25, 0.07)",
-                  color: "#3D3D3D",
-                }}
-              >
-                {DATE_PILL}
-              </span>
-            </div>
-            <div className="flex flex-col">
-              {messages.map((message, index) => {
-                const prev = messages[index - 1];
-                const lead = !prev || prev.role !== message.role;
-                const showAvatar = message.role === "assistant" && lead;
-
-                return (
-                  <BubbleRow
-                    key={message.id}
-                    message={message}
-                    lead={lead}
-                    showAvatar={showAvatar}
-                  />
-                );
-              })}
-              {pending ? <TypingIndicator /> : null}
-            </div>
-          </div>
-
-          <form
-            onSubmit={onSubmit}
-            className="relative flex shrink-0 items-center justify-center gap-2 bg-[#C6D4DF] px-[17px] pt-2"
-            style={{ paddingBottom: compact ? 12 : 52 }}
+            className="h-full w-full bg-[#0a0a0a]"
+            style={{
+              borderRadius: bezelRadius,
+              padding: compact
+                ? `${FRAME.bezel}px ${FRAME.bezel}px 0`
+                : `${FRAME.bezel}px`,
+            }}
           >
             <div
-              className={[
-                "demo-chat-input-shell flex h-[68px] w-full max-w-[402px] items-center gap-3 rounded-[34px] bg-[#3F4042] px-3",
-                idle ? "is-idle" : "",
-              ].join(" ")}
+              className="demo-chat relative flex h-full min-h-0 w-full flex-col overflow-hidden bg-[#C6D4DF]"
+              style={{ borderRadius: screenRadius }}
             >
-              <img
-                src={ASSETS.plus}
-                alt=""
-                width={36}
-                height={36}
-                className="size-9 shrink-0"
-                draggable={false}
-              />
-              <div className="relative min-w-0 flex-1">
-                {idle ? (
-                  <>
-                    <span className="demo-chat-caret demo-chat-caret-light" aria-hidden />
-                    <span className="demo-chat-input-hint text-kr">
-                      메세지 입력
-                    </span>
-                  </>
-                ) : null}
-                <input
-                  ref={field}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onFocus={() => setFocused(true)}
-                  onBlur={() => setFocused(false)}
-                  disabled={pending || limited}
-                  maxLength={500}
-                  placeholder={limited ? "오늘 체험이 끝났어요" : ""}
-                  aria-label="메세지 입력"
-                  className="demo-chat-input-field text-kr w-full border-0 bg-transparent py-2 pr-1 text-[18px] font-normal leading-snug text-[#EBEBEB] caret-[#007AFF] outline-none placeholder:text-[rgba(235,235,235,0.25)] disabled:opacity-60"
-                  autoComplete="off"
-                />
-              </div>
-              {showSend ? (
-                <button
-                  type="submit"
-                  disabled={pending || limited || !hasDraft}
-                  className="shrink-0 transition-opacity disabled:opacity-35"
-                  aria-label="전송"
+              {/* Status + Dynamic Island — 시간·안테나·배터리 레퍼런스 스케일 */}
+              <div className="relative z-20 h-[54px] shrink-0">
+                <div
+                  className="pointer-events-none absolute top-[12px] left-1/2 z-30 flex h-[36px] w-[128px] -translate-x-1/2 items-center rounded-full bg-black pl-[15px]"
+                  aria-hidden
                 >
-                  <img
-                    src={ASSETS.send}
-                    alt=""
-                    width={36}
-                    height={36}
-                    className="size-9"
-                    draggable={false}
+                  <span className="size-[11px] rounded-full bg-[#1a1a1a] ring-1 ring-[#2a2a2a]" />
+                </div>
+                <span
+                  className="absolute top-[27px] left-[42px] text-[21px] font-semibold leading-none tracking-[-0.03em] text-ink tabular-nums"
+                  suppressHydrationWarning
+                >
+                  {now ? formatStatusTime(now) : ""}
+                </span>
+                <div
+                  className="absolute top-[25px] right-[42px] flex items-center gap-[6px] text-ink"
+                  aria-hidden
+                >
+                  <SignalIcon />
+                  <span className="font-latin text-[14px] font-semibold leading-none tracking-tight">
+                    5G
+                  </span>
+                  <BatteryIcon />
+                </div>
+              </div>
+
+              {/* 채널 헤더 — 타이틀 중앙 · 구분선 없음 */}
+              <header className="relative z-10 flex h-[54px] shrink-0 items-center bg-[#C6D4DF] px-0.5">
+                <div className="relative z-10 flex shrink-0 items-center">
+                  <span
+                    className="flex size-10 items-center justify-center text-ink"
+                    aria-hidden
+                  >
+                    <BackChevron />
+                  </span>
+                  <span
+                    className="font-latin text-[17px] font-medium leading-none text-ink"
+                    aria-hidden
+                  >
+                    1
+                  </span>
+                </div>
+
+                <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                  <p className="text-[20px] font-semibold leading-[1.15] tracking-[-0.01em] text-ink">
+                    <span className="font-latin">hair up</span>
+                    <span className="text-kr ml-[3px]">헤어업</span>
+                  </p>
+                  <p className="text-kr mt-[3px] text-[14px] leading-none text-[#6B6B6B]">
+                    @hairup 카카오톡 채널
+                  </p>
+                </div>
+
+                <div className="relative z-10 ml-auto flex shrink-0 items-center pr-0.5">
+                  <span
+                    className="flex size-12 items-center justify-center text-ink"
+                    aria-hidden
+                  >
+                    <SearchIcon />
+                  </span>
+                  <span
+                    className="flex size-11 items-center justify-center text-ink"
+                    aria-hidden
+                  >
+                    <MenuIcon />
+                  </span>
+                </div>
+              </header>
+
+              <div
+                ref={listRef}
+                className="demo-chat-list min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-3"
+              >
+                <div className="mb-4 flex justify-center">
+                  <span
+                    className="text-kr inline-block rounded-[19px] px-[18px] py-2 text-[16px] leading-none"
+                    style={{
+                      backgroundColor: "rgba(28, 26, 25, 0.07)",
+                      color: "#3D3D3D",
+                    }}
+                  >
+                    {now ? formatDatePill(now) : "\u00a0"}
+                  </span>
+                </div>
+                <div className="flex flex-col">
+                  {messages.map((message, index) => {
+                    const prev = messages[index - 1];
+                    const lead = !prev || prev.role !== message.role;
+                    const showAvatar = message.role === "assistant" && lead;
+
+                    return (
+                      <BubbleRow
+                        key={message.id}
+                        message={message}
+                        lead={lead}
+                        showAvatar={showAvatar}
+                      />
+                    );
+                  })}
+                  {pending ? <TypingIndicator /> : null}
+                </div>
+              </div>
+
+              <form
+                onSubmit={onSubmit}
+                className="relative flex shrink-0 items-center justify-center gap-2 bg-[#C6D4DF] px-[17px] pt-2"
+                style={{ paddingBottom: compact ? 12 : 52 }}
+              >
+                <div
+                  className={[
+                    "demo-chat-input-shell flex h-[68px] w-full max-w-[402px] items-center gap-3 rounded-[34px] bg-[#3F4042] px-3",
+                    idle ? "is-idle" : "",
+                  ].join(" ")}
+                >
+                  <PlusButton />
+                  <div className="relative min-w-0 flex-1">
+                    {idle ? (
+                      <>
+                        <span className="demo-chat-caret demo-chat-caret-light" aria-hidden />
+                        <span className="demo-chat-input-hint text-kr">
+                          메세지 입력
+                        </span>
+                      </>
+                    ) : null}
+                    <input
+                      ref={field}
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onFocus={() => setFocused(true)}
+                      onBlur={() => setFocused(false)}
+                      disabled={pending || limited}
+                      maxLength={500}
+                      placeholder={limited ? "오늘 체험이 끝났어요" : ""}
+                      aria-label="메세지 입력"
+                      className="demo-chat-input-field text-kr w-full border-0 bg-transparent py-2 pr-1 text-[18px] font-normal leading-snug text-[#EBEBEB] caret-[#007AFF] outline-none placeholder:text-[rgba(235,235,235,0.25)] disabled:opacity-60"
+                      autoComplete="off"
+                    />
+                  </div>
+                  {showSend ? (
+                    <button
+                      type="submit"
+                      disabled={pending || limited || !hasDraft}
+                      className="shrink-0 transition-opacity disabled:opacity-35"
+                      aria-label="전송"
+                    >
+                      <SendButton />
+                    </button>
+                  ) : null}
+                </div>
+                {!compact ? (
+                  <span
+                    className="pointer-events-none absolute bottom-[14px] left-1/2 h-[5px] w-[126px] -translate-x-1/2 rounded-full bg-ink/20"
+                    aria-hidden
                   />
-                </button>
+                ) : null}
+              </form>
+              {compact ? (
+                <div className="h-[20px] shrink-0 bg-[#C6D4DF]" aria-hidden />
               ) : null}
             </div>
-            {!compact ? (
-              <span
-                className="pointer-events-none absolute bottom-[14px] left-1/2 h-[5px] w-[126px] -translate-x-1/2 rounded-full bg-ink/20"
-                aria-hidden
-              />
-            ) : null}
-          </form>
-          {compact ? (
-            <div className="h-[20px] shrink-0 bg-[#C6D4DF]" aria-hidden />
-          ) : null}
+          </div>
         </div>
-
-        <img
-          src={ASSETS.frame}
-          alt=""
-          className="pointer-events-none absolute inset-0 z-20 h-full w-full select-none object-fill"
-          draggable={false}
-        />
       </div>
     );
   },
@@ -436,9 +494,7 @@ function BubbleRow({
   showAvatar: boolean;
 }) {
   const mine = message.role === "user";
-  /** 시안 첫 인사 타임스탬프 */
-  const time =
-    message.id === "greeting" ? "오후 5:14" : formatTime(message.at);
+  const time = formatTime(message.at);
 
   return (
     <div
@@ -502,11 +558,11 @@ function BubbleRow({
 function HairUpAvatar() {
   return (
     <img
-      src={ASSETS.thumb}
+      src={THUMB_SRC}
       alt=""
       width={40}
       height={40}
-      className="size-10 rounded-full object-cover"
+      className="demo-chat-thumb size-10 shrink-0 bg-black object-cover"
       draggable={false}
       aria-hidden
     />
@@ -541,32 +597,45 @@ function TypingIndicator() {
 
 function SignalIcon() {
   return (
-    <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor">
-      <rect x="0" y="7" width="2.5" height="3" rx="0.5" opacity="0.35" />
-      <rect x="4" y="5" width="2.5" height="5" rx="0.5" opacity="0.55" />
-      <rect x="8" y="2.5" width="2.5" height="7.5" rx="0.5" opacity="0.75" />
-      <rect x="12" y="0" width="2.5" height="10" rx="0.5" />
+    <svg width="21" height="13" viewBox="0 0 21 13" fill="currentColor">
+      <rect x="0" y="9" width="3.2" height="4" rx="0.7" opacity="0.35" />
+      <rect x="5.2" y="6.2" width="3.2" height="6.8" rx="0.7" opacity="0.55" />
+      <rect x="10.4" y="3.2" width="3.2" height="9.8" rx="0.7" opacity="0.85" />
+      <rect x="15.6" y="0" width="3.2" height="13" rx="0.7" />
     </svg>
   );
 }
 
 function BatteryIcon() {
+  /* ref: 검정 채움 + 흰 100 + 우측 그린 도트 */
   return (
-    <svg width="22" height="11" viewBox="0 0 24 11" fill="none">
-      <rect
-        x="0.5"
-        y="0.5"
-        width="19"
-        height="10"
-        rx="2.5"
-        stroke="currentColor"
-        strokeOpacity="0.45"
-      />
-      <rect x="2" y="2" width="16" height="7" rx="1.2" fill="currentColor" />
+    <svg width="36" height="15" viewBox="0 0 36 15" fill="none" aria-hidden>
+      <rect x="0" y="1.5" width="28" height="12" rx="3" fill="#1C1A19" />
+      <text
+        x="14"
+        y="11"
+        textAnchor="middle"
+        fill="#FFFFFF"
+        fontSize="9.5"
+        fontWeight="700"
+        fontFamily="system-ui, -apple-system, sans-serif"
+      >
+        100
+      </text>
+      <circle cx="32.5" cy="7.5" r="2.2" fill="#34C759" />
+    </svg>
+  );
+}
+
+function BackChevron() {
+  return (
+    <svg width="13" height="22" viewBox="0 0 13 22" fill="none" aria-hidden>
       <path
-        d="M21 3.5v4a1.6 1.6 0 0 0 0-4Z"
-        fill="currentColor"
-        opacity="0.45"
+        d="M11 2 2 11l9 9"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -574,12 +643,12 @@ function BatteryIcon() {
 
 function SearchIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
-      <circle cx="8" cy="8" r="5.25" stroke="currentColor" strokeWidth="1.5" />
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden>
+      <circle cx="12.2" cy="12.2" r="7.8" stroke="currentColor" strokeWidth="2.2" />
       <path
-        d="M12.2 12.2 15 15"
+        d="M18.2 18.2 25 25"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="2.2"
         strokeLinecap="round"
       />
     </svg>
@@ -588,10 +657,43 @@ function SearchIcon() {
 
 function MenuIcon() {
   return (
-    <svg width="18" height="14" viewBox="0 0 18 14" fill="currentColor" aria-hidden>
-      <rect x="0" y="0" width="18" height="1.6" rx="0.8" />
-      <rect x="0" y="6" width="18" height="1.6" rx="0.8" />
-      <rect x="0" y="12" width="18" height="1.6" rx="0.8" />
+    <svg width="24" height="18" viewBox="0 0 24 18" fill="currentColor" aria-hidden>
+      <rect x="0" y="0" width="24" height="2.2" rx="1.1" />
+      <rect x="0" y="7.9" width="24" height="2.2" rx="1.1" />
+      <rect x="0" y="15.8" width="24" height="2.2" rx="1.1" />
     </svg>
   );
 }
+
+function PlusButton() {
+  return (
+    <span
+      className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#2c2c2e]"
+      aria-hidden
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path
+          d="M8 3.25v9.5M3.25 8h9.5"
+          stroke="#F5F5F5"
+          strokeWidth="1.7"
+          strokeLinecap="square"
+        />
+      </svg>
+    </span>
+  );
+}
+
+function SendButton() {
+  return (
+    <img
+      src={SEND_SRC}
+      alt=""
+      width={36}
+      height={36}
+      className="size-9 shrink-0"
+      draggable={false}
+      aria-hidden
+    />
+  );
+}
+

@@ -471,8 +471,11 @@ export const footer = {
     {
       title: "CONTACT",
       links: [
-        { label: "info@hairup.co.kr", href: "mailto:info@hairup.co.kr" },
-        { label: "+000 000 0000", href: "tel:+0000000000" },
+        {
+          label: "mars.officialkorea@gmail.com",
+          href: "mailto:mars.officialkorea@gmail.com",
+        },
+        { label: "070-8027-4688", href: "tel:07080274688" },
       ],
     },
     {
@@ -484,13 +487,21 @@ export const footer = {
     },
   ],
   company: [
-    "회사명 MARANATHA STUDIO",
-    "사업자등록번호 000-00-00000",
-    "통신판매업신고 2026-경기포천-00000",
+    [
+      { label: "회사명", value: "MARANATHA STUDIO" },
+      { label: "대표자", value: "최연주" },
+      { label: "사업자등록번호", value: "414-03-25569" },
+      { label: "통신판매업신고번호", value: "진행 중" },
+    ],
+    [
+      { label: "주소", value: "경기도 포천시 호병골길 16, 102동 1106호" },
+      { label: "대표전화", value: "070-8027-4688" },
+      { label: "이메일", value: "mars.officialkorea@gmail.com" },
+    ],
   ],
   copyright: "COPYRIGHT © 2026 MARANATHASTUDIO",
   legal: [
-    { label: "PRIVACY POLICY", href: "#" },
-    { label: "TERMS OF SERVICE", href: "#" },
+    { label: "PRIVACY POLICY", href: "/privacy" },
+    { label: "TERMS OF SERVICE", href: "/terms" },
   ],
 } as const;

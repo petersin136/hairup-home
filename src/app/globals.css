@@ -204,6 +204,11 @@ body {
   height: 0;
 }
 
+/* 카카오 채널 프로필 — 원 아님, 스쿼클(둥근 사각) */
+.demo-chat-thumb {
+  border-radius: 28%;
+}
+
 .demo-chat-bubble {
   border-radius: 14px;
 }
@@ -248,23 +253,20 @@ body {
   clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 
-/* DETAIL_03 · QUESTION-ICON — 좌향 쉐브론 `<` (줄기 없는 꺾쇠) */
-.question-chevron {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  box-sizing: border-box;
-  border-top: 2px solid #6c6864;
-  border-left: 2px solid #6c6864;
-  transform: rotate(-45deg);
-  transition: border-color 0.15s ease;
+/* DETAIL_03 · QUESTION-ICON — 짧은 좌향 화살표 ← */
+.question-arrow {
+  display: block;
+  width: 14px;
+  height: 12px;
+  flex-shrink: 0;
+  color: #6c6864;
+  transition: color 0.15s ease;
 }
 
-.group:hover .question-chevron,
-.group:active .question-chevron {
-  border-color: #2c3a2e;
+.group:hover .question-arrow,
+.group:active .question-arrow {
+  color: #2c3a2e;
 }
-
 @keyframes demo-chat-dot {
   0%,
   80%,
