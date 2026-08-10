@@ -33,8 +33,6 @@ const LOGO_TOP = HEIGHT - EDGE - LOGO_HEIGHT;
 const NEWSLETTER =
   26 + 26 + 16 * 1.69 * 2 + 50 + 26 + 16 + 1 + 16 + 12;
 
-const COLS_TOP = 100 + NEWSLETTER + 165;
-
 /**
  * INDEX / CONTACT / JOIN US — 시안 16-D 실측.
  * justify-between 으로 658을 채우지 않고, 폼 왼쪽 기준 고정 시작점.
@@ -42,11 +40,24 @@ const COLS_TOP = 100 + NEWSLETTER + 165;
  */
 const COL_LEFTS = [0, 224, 473] as const;
 
+/** 링크 줄높이 — 레퍼런스에 맞게 타이트하게 */
+const LINK_SIZE = 14;
+const LINK_LH = 1.65;
+const COL_TITLE = 12;
+const COL_TITLE_GAP = 14;
+const COL_LINKS = 4;
+const COLS_BLOCK_H =
+  COL_TITLE + COL_TITLE_GAP + LINK_SIZE * LINK_LH * COL_LINKS;
+
 /** 카피·약관 하단 = 높이 − 30 (로고와 동일) */
 const COPYRIGHT_TOP = HEIGHT - EDGE - 12;
-/** 사업자 정보 2줄 · 줄간격 1.55 · 카피 위 19 */
+/** 사업자 정보 2줄 — 위치·굵기 그대로 (올리지 않음) */
 const COMPANY_LINE = 12 * 1.55;
+const GAP_AFTER_FAQ = 22;
 const COMPANY_TOP = COPYRIGHT_TOP - 19 - COMPANY_LINE * 2;
+/** INDEX/CONTACT/JOIN US만 ~1cm 상향 */
+const COLS_LIFT = 19;
+const COLS_TOP = COMPANY_TOP - GAP_AFTER_FAQ - COLS_BLOCK_H - COLS_LIFT;
 
 export function Footer() {
   return (
@@ -81,7 +92,7 @@ export function Footer() {
           left: `${FORM_LEFT}px`,
           top: `${COLS_TOP}px`,
           width: `${FORM_WIDTH}px`,
-          height: `${12 + 14 + 14 * 1.93 * 4}px`,
+          height: `${COLS_BLOCK_H}px`,
         }}
       >
         {footer.columns.map((column, index) => (
@@ -90,7 +101,7 @@ export function Footer() {
             className="absolute top-0 min-w-0"
             style={{ left: `${COL_LEFTS[index]}px` }}
           >
-            <p className="font-latin text-[12px] font-normal uppercase leading-none tracking-[0.06em] text-ink/90">
+            <p className="font-latin text-[12px] font-bold uppercase leading-none tracking-[0.06em] text-ink">
               {column.title}
             </p>
             <ul className="mt-[14px]">
@@ -98,10 +109,10 @@ export function Footer() {
                 <li
                   key={item.label}
                   className={[
-                    "font-latin text-[14px] font-normal text-ink/90",
-                    column.title === "CONTACT" ? "normal-case" : "uppercase",
+                    "font-latin text-[14px] font-semibold text-ink",
+                    column.title === "INDEX" ? "uppercase" : "normal-case",
                   ].join(" ")}
-                  style={{ lineHeight: 1.93 }}
+                  style={{ lineHeight: LINK_LH }}
                 >
                   <Link
                     href={item.href}

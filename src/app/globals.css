@@ -115,17 +115,10 @@ body {
   border-color: var(--color-porcelain);
 }
 
-/* 입력창 — 시안 다크 바 · 유휴 시 노란 포인트 */
+/* 입력창 — 시안 다크 바 · 평시 노란띠 없음 */
 .demo-chat-input-shell {
   position: relative;
   min-width: 0;
-}
-
-.demo-chat-input-shell.is-idle {
-  animation: demo-input-glow 2.2s ease-in-out infinite;
-  box-shadow:
-    0 0 0 1.5px rgba(254, 229, 0, 0.75),
-    0 0 0 4px rgba(254, 229, 0, 0.22);
 }
 
 .demo-chat-caret {
@@ -169,23 +162,9 @@ body {
   }
 }
 
-@keyframes demo-input-glow {
-  0%,
-  100% {
-    filter: brightness(1);
-  }
-  50% {
-    filter: brightness(1.06);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .demo-chat-caret,
-  .demo-chat-input-shell.is-idle {
-    animation: none;
-  }
-
   .demo-chat-caret {
+    animation: none;
     opacity: 0.7;
   }
 }
@@ -497,14 +476,7 @@ body {
   }
 }
 
-/* 모바일 Experience 목업 — 시안 다크 입력 바 강조 */
-.mobile-demo-chat .demo-chat-input-shell.is-idle {
-  animation: demo-input-glow 2s ease-in-out infinite;
-  box-shadow:
-    0 0 0 2px rgba(254, 229, 0, 0.9),
-    0 0 0 5px rgba(254, 229, 0, 0.28);
-}
-
+/* 모바일 Experience 목업 — 입력 힌트 */
 .mobile-demo-chat .demo-chat-input-hint {
   font-size: 14px;
   font-weight: 500;

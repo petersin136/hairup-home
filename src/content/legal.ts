@@ -87,7 +87,7 @@ export const privacyPolicy = {
         "사업장 주소: 경기도 포천시 호병골길 16, 102동 1106호",
         "사업자등록번호: 414-03-25569",
         "대표 번호: 070-8027-4688",
-        "이메일: mars.officialkorea@gmail.com",
+        "이메일: mars.official.kr@gmail.com",
       ],
     },
   ],

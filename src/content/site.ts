@@ -472,8 +472,8 @@ export const footer = {
       title: "CONTACT",
       links: [
         {
-          label: "mars.officialkorea@gmail.com",
-          href: "mailto:mars.officialkorea@gmail.com",
+          label: "mars.official.kr@gmail.com",
+          href: "mailto:mars.official.kr@gmail.com",
         },
         { label: "070-8027-4688", href: "tel:07080274688" },
       ],
@@ -496,7 +496,7 @@ export const footer = {
     [
       { label: "주소", value: "경기도 포천시 호병골길 16, 102동 1106호" },
       { label: "대표전화", value: "070-8027-4688" },
-      { label: "이메일", value: "mars.officialkorea@gmail.com" },
+      { label: "이메일", value: "mars.official.kr@gmail.com" },
     ],
   ],
   copyright: "COPYRIGHT © 2026 MARANATHASTUDIO",
