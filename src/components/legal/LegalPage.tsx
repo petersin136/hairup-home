@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Wordmark } from "@/components/brand/Wordmark";
+import { SuppressEntryChrome } from "@/lib/entry-chrome";
 
 type LegalSection = {
   heading: string;
@@ -17,13 +18,20 @@ type LegalPageProps = {
 export function LegalPage({ title, en, sections }: LegalPageProps) {
   return (
     <div className="min-h-full bg-linen text-ink">
+      <SuppressEntryChrome />
       <header className="border-b border-mist/70 bg-porcelain/90">
         <div className="mx-auto flex max-w-[720px] items-center justify-between px-5 py-4">
-          <Link href="/" className="text-ink" aria-label="hair up">
+          <Link
+            href="/#footer"
+            scroll={false}
+            className="text-ink"
+            aria-label="hair up"
+          >
             <Wordmark width={110} />
           </Link>
           <Link
-            href="/"
+            href="/#footer"
+            scroll={false}
             className="font-latin text-[12px] uppercase tracking-[0.06em] text-ink/70 transition-colors hover:text-ink"
           >
             Back

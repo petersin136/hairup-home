@@ -6,6 +6,7 @@ import { Wordmark } from "@/components/brand/Wordmark";
 import { Canvas } from "@/components/layout/Canvas";
 import { FooterNewsletter } from "@/components/sections/FooterNewsletter";
 import { footer } from "@/content/site";
+import { saveReturnScroll } from "@/lib/entry-chrome";
 import { onHashClick } from "@/lib/scroll-to-hash";
 
 /**
@@ -176,6 +177,7 @@ export function Footer() {
           <Link
             key={item.label}
             href={item.href}
+            onClick={saveReturnScroll}
             className="font-latin text-[12px] font-normal uppercase leading-none text-ink underline decoration-ink underline-offset-[3px] transition-opacity duration-200 hover:opacity-55"
           >
             {item.label}

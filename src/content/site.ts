@@ -105,8 +105,53 @@ export const banner = {
   lines: ["24/7", "INTELLIGENT AI", "PRE - CONSULTANT"],
 } as const;
 
+export const automatedCrm = {
+  eyebrow: { index: "03 /", label: "AUTOMATED CRM" },
+  headline: ["예약까지", "손대지 않아도", "알아서 척척"],
+  body: [
+    "상담했던 모든 문의가 대시보드에",
+    "즉시 데이터로 쌓입니다.",
+    "누락 없이 깔끔한 자동화로",
+    "매장 관리의 피로도를 줄여드립니다.",
+  ],
+  systems: [
+    {
+      index: "SYSTEM 01",
+      title: "대화가 끝나면 알아서 쌓이는 데이터",
+      body: [
+        "고객과의 채팅 상담이 완료되는 순간, 수기 입력 없이 대기 목록에 실시간으로",
+        "자동 기록됩니다. 날짜, 시간, 담당 디자이너, 시술 메뉴까지 AI 실장이 스스로 정리합니다.",
+      ],
+    },
+    {
+      index: "SYSTEM 02",
+      title: "입금 확인부터 노쇼 관리까지 한곳에서",
+      body: [
+        "예약금 입금이 확인되면 '확정' 상태로 즉시 전환됩니다. 시술 완료 내역은 물론",
+        "취소·노쇼 내역까지 한눈에 분류하여 매장 관리의 피로도를 대폭 낮춥니다.",
+      ],
+    },
+    {
+      index: "SYSTEM 03",
+      title: "직관적으로 파악하는 매장 전체 스케줄",
+      body: [
+        "월간 및 주간 단위의 시각적 스케줄 확인은 물론, 디자이너별 개인 휴무와 예약 현황을",
+        "필터링하여 우측 상세 패널에서 한눈에 확인합니다.",
+      ],
+    },
+    {
+      index: "SYSTEM 04",
+      title: "디자이너 직급에 맞춘 유연한 단가 제어",
+      body: [
+        "시술별 소요 시간과 예약금 설정은 기본, 디자이너의 경력과 직급에 맞춘 개별 차등",
+        "단가를 자유롭게 지정하고 사이트에 실시간으로 반영합니다.",
+      ],
+    },
+  ],
+} as const;
+
 export const keyBenefits = {
-  eyebrow: { index: "03 /", label: "KEY BENEFITS" },
+  eyebrow: { index: "04 /", label: "KEY BENEFITS" },
   headline: ["고객은 기다리지 않고,", "당신은 끊기지 않도록."],
   body: [
     "24시간 언제든 이어지는 응대.",
@@ -150,7 +195,7 @@ export const keyBenefits = {
 } as const;
 
 export const templateCollection = {
-  eyebrow: { index: "04 /", label: "TEMPLATE COLLECTION" },
+  eyebrow: { index: "05 /", label: "TEMPLATE COLLECTION" },
   headline: ["수많은 디자이너 중", "하나가 아닌", "단 하나의 브랜드로."],
   body: [
     "플랫폼의 획일화된 목록 속에서는 당신의 미학을 온전히 보여줄 수 없습니다.",
@@ -228,11 +273,11 @@ export const process = {
 } as const;
 
 /*
- * 10_FAQ — 시안 표기는 06 / FAQ. 호버하면 해당 칸이 답변 면으로 뒤집어집니다.
+ * 10_FAQ — 시안 표기는 07 / FAQ. 호버하면 해당 칸이 답변 면으로 뒤집어집니다.
  * 답변 면 배경은 Q1·Q5 forest / Q2·Q6 clay / Q3·Q4 espresso.
  */
 export const faq = {
-  eyebrow: { index: "06 /", label: "FAQ" },
+  eyebrow: { index: "07 /", label: "FAQ" },
   headline: ["시작은 쉽고,", "변화는 빠르고 선명하게."],
   body: [
     "처음이어도 망설일 필요 없습니다.",
@@ -319,9 +364,9 @@ export const faq = {
   ],
 } as const;
 
-/** 05_Pricing Plan — 시안 2-D · 3-D · 4-D · GNB MEMBERSHIP → #pricing */
+/** 06_Pricing Plan — 시안 2-D · 3-D · 4-D · GNB MEMBERSHIP → #pricing */
 export const pricing = {
-  eyebrow: { index: "05 /", label: "PRICING PLAN" },
+  eyebrow: { index: "06 /", label: "PRICING PLAN" },
   headline: ["매출이 아무리 늘어도,", "비용은 변함없이."],
   body: [
     "월 1,000만 원을 시술할 때 플랫폼 수수료는 매달 수십만 원에 달합니다.",

@@ -13,6 +13,7 @@ import {
   IPHONE_MOCKUP_COMPACT,
 } from "@/components/sections/DemoChat";
 import {
+  automatedCrm,
   banner,
   cta,
   dilemma,
@@ -29,6 +30,7 @@ import {
   topBanner,
 } from "@/content/site";
 import { onHashClick } from "@/lib/scroll-to-hash";
+import { saveReturnScroll } from "@/lib/entry-chrome";
 
 /**
  * 모바일 전용 홈. 데스크톱 아트보드 컴포넌트는 렌더하지 않습니다.
@@ -299,6 +301,46 @@ export function MobileHome() {
                 </li>
               ))}
             </ul>
+          </div>
+        </section>
+
+        {/* Automated CRM */}
+        <section id="automated-crm" className="bg-linen px-5 py-14">
+          <p className="font-display text-[13px] font-medium uppercase text-ink">
+            <span className="font-latin mr-1.5 text-[12px]">
+              {automatedCrm.eyebrow.index}
+            </span>
+            {automatedCrm.eyebrow.label}
+          </p>
+          <h2 className="text-kr mt-5 text-[30px] font-bold leading-[1.25] text-ink">
+            {automatedCrm.headline.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </h2>
+          <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
+            {automatedCrm.body.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </p>
+          <div className="mt-8 flex flex-col gap-8">
+            {automatedCrm.systems.map((system) => (
+              <div key={system.index}>
+                <div className="aspect-[4/3] w-full bg-black" aria-hidden />
+                <p className="text-kr mt-4 text-[14px] font-semibold leading-[1.45] text-ink/85">
+                  <span className="font-latin mr-1.5 tracking-[0.02em]">
+                    {system.index}
+                  </span>
+                  {system.title}
+                </p>
+                <p className="text-kr mt-2 text-[13px] leading-[1.55] text-body">
+                  {system.body.join(" ")}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -605,7 +647,7 @@ export function MobileHome() {
         </section>
 
         {/* Footer */}
-        <footer className="bg-linen px-5 py-12">
+        <footer id="footer" className="bg-linen px-5 py-12">
           <Wordmark width={160} />
           <div className="text-kr mt-6 space-y-2 text-[12px] leading-[1.55] text-ink/70">
             {footer.company.map((row) => (
@@ -633,6 +675,7 @@ export function MobileHome() {
               <a
                 key={p.label}
                 href={p.href}
+                onClick={saveReturnScroll}
                 className="font-latin text-[12px] uppercase text-ink/70 underline underline-offset-2"
               >
                 {p.label}

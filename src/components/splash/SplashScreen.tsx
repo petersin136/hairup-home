@@ -36,9 +36,10 @@ export function SplashScreen() {
       // 시크릿 모드 등에서 sessionStorage 접근이 막히면 그냥 재생합니다.
     }
 
-    // 이미 본 세션이면 layout 의 인라인 스크립트가 붙인 .splash-seen 이
-    // 첫 페인트부터 감추고 있으므로 아무것도 하지 않습니다.
+    // 이미 본 세션(약관 복귀·클라이언트 라우팅 포함) — 렌더 자체를 끝냄
     if (alreadyPlayed) {
+      document.documentElement.classList.add("splash-seen");
+      setIsDone(true);
       window.dispatchEvent(new Event(SPLASH_REVEAL_EVENT));
       return;
     }
@@ -48,6 +49,7 @@ export function SplashScreen() {
       window.dispatchEvent(new Event(SPLASH_REVEAL_EVENT));
     }, REVEAL_MS);
     const timer = window.setTimeout(() => {
+      document.documentElement.classList.add("splash-seen");
       document.body.style.overflow = "";
       setIsDone(true);
     }, TOTAL_MS);

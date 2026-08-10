@@ -4,21 +4,31 @@ import Image from "next/image";
 import { useEffect, useId, useState } from "react";
 
 import { launchPopup } from "@/content/site";
+import {
+  hasSeenLaunchPopup,
+  markLaunchPopupSeen,
+} from "@/lib/entry-chrome";
 
 /**
  * 런치 오퍼 팝업
  * - 데스크톱(≥480): 시안 440×600 절대 배치 유지
  * - 모바일(<480): 스크롤 가능한 플로우 카드 + 큰 닫기
+ * - 최초 1회만 표시 (약관 복귀·새로고침 포함)
  */
 export function LaunchOfferPopup() {
   const titleId = useId();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    if (hasSeenLaunchPopup()) return;
+
     const splashSeen =
       document.documentElement.classList.contains("splash-seen");
     const delayMs = splashSeen ? 400 : 1650;
-    const timer = window.setTimeout(() => setOpen(true), delayMs);
+    const timer = window.setTimeout(() => {
+      markLaunchPopupSeen();
+      setOpen(true);
+    }, delayMs);
     return () => window.clearTimeout(timer);
   }, []);
 
@@ -27,7 +37,7 @@ export function LaunchOfferPopup() {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") dismiss();
     };
     window.addEventListener("keydown", onKey);
     return () => {
@@ -36,7 +46,10 @@ export function LaunchOfferPopup() {
     };
   }, [open]);
 
-  const dismiss = () => setOpen(false);
+  const dismiss = () => {
+    markLaunchPopupSeen();
+    setOpen(false);
+  };
 
   if (!open) return null;
 

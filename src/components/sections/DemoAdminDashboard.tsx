@@ -35,16 +35,7 @@ export function DemoAdminDashboard({
 
   useEffect(() => {
     const start = window.setTimeout(() => setVeilOpen(true), 20);
-    const scrollT = window.setTimeout(() => {
-      document.getElementById("experience")?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }, 120);
-    return () => {
-      window.clearTimeout(start);
-      window.clearTimeout(scrollT);
-    };
+    return () => window.clearTimeout(start);
   }, []);
 
   /* 오버레이가 휠을 가로채지 않도록 — 페이지 스크롤로 전달 */

@@ -1,6 +1,7 @@
 import { MobileHome } from "@/components/mobile/MobileHome";
 import { TopBanner } from "@/components/layout/TopBanner";
 import { LaunchOfferPopup } from "@/components/LaunchOfferPopup";
+import { AutomatedCrm } from "@/components/sections/AutomatedCrm";
 import { Banner } from "@/components/sections/Banner";
 import { Dilemma } from "@/components/sections/Dilemma";
 import { Experience } from "@/components/sections/Experience";
@@ -13,6 +14,7 @@ import { Process } from "@/components/sections/Process";
 import { Start } from "@/components/sections/Start";
 import { TemplateCollection } from "@/components/sections/TemplateCollection";
 import { SplashScreen } from "@/components/splash/SplashScreen";
+import { RestoreHomeScroll } from "@/lib/entry-chrome";
 
 /**
  * 데스크톱(≥1440): 기존 아트보드 그대로.
@@ -23,6 +25,7 @@ export default function Home() {
     <>
       <SplashScreen />
       <LaunchOfferPopup />
+      <RestoreHomeScroll />
 
       {/* 데스크톱 — 기존 픽셀 시안 (절대 수정 대상 아님) */}
       <div className="hidden min-[1440px]:block">
@@ -31,6 +34,7 @@ export default function Home() {
           <Hero />
           <Dilemma />
           <Experience />
+          <AutomatedCrm />
           <Banner />
           <KeyBenefits />
           <Process />
