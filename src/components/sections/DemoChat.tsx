@@ -172,6 +172,7 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
         const canScroll = maxScroll > 1;
         const atTop = list.scrollTop <= 0;
         const atBottom = list.scrollTop >= maxScroll - 1;
+        const passToPage =
           !canScroll ||
           (e.deltaY < 0 && atTop) ||
           (e.deltaY > 0 && atBottom);
