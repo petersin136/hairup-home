@@ -7,7 +7,8 @@ export const runtime = "nodejs";
 
 const FROM = "헤어업 <guide@hair-up.kr>";
 const DEFAULT_TO = "mars.official.kr@gmail.com";
-const GUIDEBOOK_PATH = "hairup AI automation solution.pdf";
+/** docs 버킷 객체 키 — 공백 경로는 일부 환경에서 Invalid path 오류를 냄 */
+const GUIDEBOOK_PATH = "hairup-AI-automation-solution.pdf";
 const GUIDEBOOK_FILENAME = "hairup-AI-automation-solution.pdf";
 
 /** 가이드북 발송 메일 본문 */
@@ -68,19 +69,25 @@ function isValidEmail(value: string) {
 
 async function loadGuidebookAttachment() {
   const supabase = createSupabaseAdminClient();
-  const { data, error } = await supabase.storage
-    .from("docs")
-    .download(GUIDEBOOK_PATH);
+    GUIDEBOOK_PATH,
+    // 예전 파일명(공백) 호환
+    "hairup AI automation solution.pdf",
+  ];
 
-  if (error || !data) {
-    throw new Error(error?.message ?? "가이드북 PDF를 불러오지 못했습니다.");
+  let lastError: string | undefined;
+  for (const path of tryPaths) {
+    const { data, error } = await supabase.storage.from("docs").download(path);
+    if (data && !error) {
+      const buffer = Buffer.from(await data.arrayBuffer());
+      return {
+        filename: GUIDEBOOK_FILENAME,
+        content: buffer,
+      };
+    }
+    lastError = error?.message ?? "가이드북 PDF를 불러오지 못했습니다.";
   }
 
-  const buffer = Buffer.from(await data.arrayBuffer());
-  return {
-    filename: GUIDEBOOK_FILENAME,
-    content: buffer,
-  };
+  throw new Error(lastError);
 }
 
 export async function POST(request: Request) {
