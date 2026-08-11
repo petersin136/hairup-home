@@ -395,7 +395,15 @@ export function MobileHome() {
                   key={card.title.join("-")}
                   className="w-[min(300px,78vw)] shrink-0"
                 >
-                  <div className="h-[200px] rounded-[6px] bg-black" />
+                  <div className="relative h-[200px] overflow-hidden rounded-[6px] bg-black">
+                    <Image
+                      src={card.image}
+                      alt=""
+                      fill
+                      sizes="300px"
+                      className="object-cover"
+                    />
+                  </div>
                   <h3 className="text-kr mt-5 text-[22px] font-semibold leading-[1.35] text-forest">
                     {card.title.map((line) => (
                       <span key={line} className="block">

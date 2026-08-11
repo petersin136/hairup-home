@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef } from "react";
 
 import { Canvas } from "@/components/layout/Canvas";
@@ -112,9 +113,18 @@ export function KeyBenefits() {
               style={{ width: `${CARD.width}px` }}
             >
               <div
-                className="rounded-ui bg-black"
+                className="relative overflow-hidden rounded-ui bg-black"
                 style={{ height: `${CARD.height}px` }}
-              />
+              >
+                <Image
+                  src={card.image}
+                  alt=""
+                  fill
+                  sizes={`${CARD.width}px`}
+                  className="pointer-events-none object-cover"
+                  draggable={false}
+                />
+              </div>
               <h3
                 className="text-kr text-left text-[32px] font-semibold tracking-[-0.4px] text-forest"
                 style={{
