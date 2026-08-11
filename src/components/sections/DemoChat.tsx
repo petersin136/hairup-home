@@ -165,7 +165,7 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
     useEffect(() => {
       const list = listRef.current;
       if (!list) return;
-      const shell = list.closest(".iphone-mockup");
+      const shell = list.closest(".iphone-mockup") as HTMLElement | null;
 
       const onListWheel = (e: WheelEvent) => {
         const maxScroll = list.scrollHeight - list.clientHeight;
