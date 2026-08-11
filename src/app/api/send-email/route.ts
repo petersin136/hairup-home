@@ -1,15 +1,25 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
+import { getServiceRoleKey, supabaseUrl } from "@/lib/env";
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
 const FROM = "헤어업 <guide@hair-up.kr>";
 const DEFAULT_TO = "mars.official.kr@gmail.com";
-/** docs 버킷 객체 키 — 공백 경로는 일부 환경에서 Invalid path 오류를 냄 */
+/** docs 버킷 / public/docs 공통 파일명 (공백 없음) */
 const GUIDEBOOK_PATH = "hairup-AI-automation-solution.pdf";
 const GUIDEBOOK_FILENAME = "hairup-AI-automation-solution.pdf";
+const GUIDEBOOK_LOCAL = path.join(
+  process.cwd(),
+  "public",
+  "docs",
+  GUIDEBOOK_FILENAME,
+);
 
 /** 가이드북 발송 메일 본문 */
 const GUIDEBOOK_HTML = `<!DOCTYPE html>
@@ -68,24 +78,91 @@ function isValidEmail(value: string) {
 }
 
 async function loadGuidebookAttachment() {
-  const supabase = createSupabaseAdminClient();
+  // 1) 배포물에 포함된 public/docs (Vercel에서도 우선 사용)
+  try {
+    const buffer = await readFile(GUIDEBOOK_LOCAL);
+    if (buffer.byteLength > 0) {
+      return { filename: GUIDEBOOK_FILENAME, content: buffer };
+    }
+  } catch {
+    // fall through
+  }
+
+  // 2) 같은 사이트의 정적 URL
+  const siteOrigins = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : undefined,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined,
+    "https://www.hair-up.kr",
+    "https://hair-up.kr",
+  ].filter((v): v is string => Boolean(v));
+
+  for (const origin of siteOrigins) {
+    try {
+      const res = await fetch(
+        new URL(`/docs/${GUIDEBOOK_FILENAME}`, origin).toString(),
+        { cache: "no-store" },
+      );
+      if (res.ok) {
+        const buffer = Buffer.from(await res.arrayBuffer());
+        if (buffer.byteLength > 0) {
+          return { filename: GUIDEBOOK_FILENAME, content: buffer };
+        }
+      }
+    } catch {
+      // try next
+    }
+  }
+
+  // 3) Supabase Storage (REST — 경로/공백 이슈 회피)
+  const base = supabaseUrl.replace(/\/+$/, "");
+  const key = getServiceRoleKey();
   const tryPaths = [
     GUIDEBOOK_PATH,
-    // 예전 파일명(공백) 호환
     "hairup AI automation solution.pdf",
   ];
 
-  let lastError: string | undefined;
-  for (const path of tryPaths) {
-    const { data, error } = await supabase.storage.from("docs").download(path);
+  let lastError = "가이드북 PDF를 불러오지 못했습니다.";
+  for (const objectPath of tryPaths) {
+    try {
+      const res = await fetch(
+        `${base}/storage/v1/object/docs/${encodeURIComponent(objectPath)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${key}`,
+            apikey: key,
+          },
+          cache: "no-store",
+        },
+      );
+      if (res.ok) {
+        const buffer = Buffer.from(await res.arrayBuffer());
+        return { filename: GUIDEBOOK_FILENAME, content: buffer };
+      }
+      lastError = `Supabase PDF 오류 (${res.status}): ${(await res.text()).slice(0, 180)}`;
+    } catch (error) {
+      lastError =
+        error instanceof Error ? error.message : "가이드북 PDF를 불러오지 못했습니다.";
+    }
+  }
+
+  // 4) 마지막: supabase-js
+  try {
+    const supabase = createSupabaseAdminClient();
+    const { data, error } = await supabase.storage
+      .from("docs")
+      .download(GUIDEBOOK_PATH);
     if (data && !error) {
-      const buffer = Buffer.from(await data.arrayBuffer());
       return {
         filename: GUIDEBOOK_FILENAME,
-        content: buffer,
+        content: Buffer.from(await data.arrayBuffer()),
       };
     }
-    lastError = error?.message ?? "가이드북 PDF를 불러오지 못했습니다.";
+    if (error?.message) lastError = error.message;
+  } catch (error) {
+    if (error instanceof Error) lastError = error.message;
   }
 
   throw new Error(lastError);
