@@ -113,6 +113,7 @@ export function Dilemma() {
             sizes={`${box.width}px`}
             className="object-cover"
             priority={i === 0}
+            unoptimized
           />
         </div>
       ))}

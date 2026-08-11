@@ -65,9 +65,9 @@ export const dilemma = {
   ],
   /* 위→아래(우상 · 좌중 · 우하) 순서 */
   images: [
-    "https://mirofkondedzmbddatnt.supabase.co/storage/v1/object/public/images/A_close-up_of_a_Korean_hairstylists_hands_cutting-1785809255648.jpg",
-    "https://mirofkondedzmbddatnt.supabase.co/storage/v1/object/public/images/A_tight_close-up_shot_focusing_on_a_hairstylists_-1785810335027.jpg",
-    "https://mirofkondedzmbddatnt.supabase.co/storage/v1/object/public/images/A_quiet_minimal_hair_salon_scene_an_empty_styling-1785809431372.jpg",
+    "/dilemma/01-cut.png",
+    "/dilemma/02-call.png",
+    "/dilemma/03-salon.png",
   ],
   floats: {
     smart: { sub: "hair up", label: "SMART AI" },

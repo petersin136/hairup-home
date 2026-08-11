@@ -200,6 +200,7 @@ export function MobileHome() {
                   fill
                   className="object-cover"
                   sizes="100vw"
+                  unoptimized
                 />
               </div>
             ))}
@@ -219,6 +220,7 @@ export function MobileHome() {
                 fill
                 className="object-cover"
                 sizes="100vw"
+                unoptimized
               />
             </div>
           </div>
@@ -402,6 +404,7 @@ export function MobileHome() {
                       fill
                       sizes="300px"
                       className="object-cover"
+                      unoptimized
                     />
                   </div>
                   <h3 className="text-kr mt-5 text-[22px] font-semibold leading-[1.35] text-forest">

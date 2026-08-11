@@ -123,6 +123,7 @@ export function KeyBenefits() {
                   sizes={`${CARD.width}px`}
                   className="pointer-events-none object-cover"
                   draggable={false}
+                  unoptimized
                 />
               </div>
               <h3
