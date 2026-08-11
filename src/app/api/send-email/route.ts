@@ -69,6 +69,7 @@ function isValidEmail(value: string) {
 
 async function loadGuidebookAttachment() {
   const supabase = createSupabaseAdminClient();
+  const tryPaths = [
     GUIDEBOOK_PATH,
     // 예전 파일명(공백) 호환
     "hairup AI automation solution.pdf",
