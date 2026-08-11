@@ -10,7 +10,8 @@ import { automatedCrm } from "@/content/site";
  * 좌측 시작 x = Experience 폰 왼쪽(SIDE_L 183)과 동일.
  * 타이포는 Experience와 동일.
  * 우측 [검정 프레임 + SYSTEM 카피] 스택 · sticky.
- * 아래로: 단계 whoosh 슬라이드. 위로: 홀드 없이 섹션을 바로 이탈.
+ * 스크롤은 단계(정수)만 고르고, 카드는 whoosh 슬라이드로만 이동 — 중간 정지 없음.
+ * (강제 scrollTo / 휠 hijack 없음 — 네이티브 스크롤만 사용)
  */
 const STEPS = automatedCrm.systems.length;
 
@@ -136,8 +137,6 @@ export function AutomatedCrm() {
     let rafScroll = 0;
     let rafAnim = 0;
     let running = true;
-    let releasing = false;
-    let lastY = window.scrollY;
 
     const setDisplay = (v: number) => {
       displayRef.current = v;
@@ -148,15 +147,9 @@ export function AutomatedCrm() {
       const rect = el.getBoundingClientRect();
       const total = Math.max(0, el.offsetHeight - window.innerHeight);
       const scrolled = Math.min(total, Math.max(0, -rect.top));
-      const sectionTop = rect.top + window.scrollY;
-      /**
-       * sticky가 화면을 붙잡고 있는 동안만 true.
-       * ※ bottom > 0 만으로 보면 CRM 박스 하단이 배너·KEY BENEFITS까지
-       *   겹쳐 “engaged”로 남아 배너 스킵이 전부 막힘.
-       */
       const pinned =
         rect.top <= 0 && rect.bottom >= window.innerHeight - 0.5;
-      return { total, scrolled, sectionTop, pinned };
+      return { total, scrolled, pinned };
     };
 
     const tickAnim = (now: number) => {
@@ -192,39 +185,8 @@ export function AutomatedCrm() {
       if (!rafAnim) rafAnim = window.requestAnimationFrame(tickAnim);
     };
 
-    /** 역스크롤 — sticky pin 중에만, 이전 섹션으로 즉시 이탈 */
-    const releaseUp = () => {
-      if (releasing) return true;
-      const { total, sectionTop, pinned } = pinMetrics();
-      if (!pinned || total <= 0) return false;
-
-      releasing = true;
-      animRef.current = null;
-      if (rafAnim) {
-        window.cancelAnimationFrame(rafAnim);
-        rafAnim = 0;
-      }
-      if (rafScroll) {
-        window.cancelAnimationFrame(rafScroll);
-        rafScroll = 0;
-      }
-      stepRef.current = 0;
-      setDisplay(0);
-      const target = Math.max(0, sectionTop - window.innerHeight);
-      window.scrollTo({ top: target });
-      lastY = target;
-      window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(() => {
-          releasing = false;
-          lastY = window.scrollY;
-        });
-      });
-      return true;
-    };
-
-    const readStepDown = () => {
+    const readStep = () => {
       rafScroll = 0;
-      if (releasing) return;
       const { total, scrolled, pinned } = pinMetrics();
       if (total <= 0) {
         goToStep(0);
@@ -238,32 +200,15 @@ export function AutomatedCrm() {
     };
 
     const onScroll = () => {
-      const y = window.scrollY;
-      const goingUp = y < lastY - 0.5;
-      lastY = y;
-      if (releasing) return;
-      if (goingUp) {
-        releaseUp();
-        return;
-      }
-      if (!rafScroll) rafScroll = window.requestAnimationFrame(readStepDown);
+      if (!rafScroll) rafScroll = window.requestAnimationFrame(readStep);
     };
 
-    const onWheel = (e: WheelEvent) => {
-      if (e.deltaY >= 0) return;
-      if (!pinMetrics().pinned) return;
-      e.preventDefault();
-      releaseUp();
-    };
-
-    readStepDown();
+    readStep();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("resize", onScroll);
     return () => {
       running = false;
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("wheel", onWheel);
       window.removeEventListener("resize", onScroll);
       if (rafScroll) window.cancelAnimationFrame(rafScroll);
       if (rafAnim) window.cancelAnimationFrame(rafAnim);

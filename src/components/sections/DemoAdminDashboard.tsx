@@ -38,17 +38,18 @@ export function DemoAdminDashboard({
     return () => window.clearTimeout(start);
   }, []);
 
-  /* 오버레이가 휠을 가로채지 않도록 — 페이지 스크롤로 전달 */
+  /* 오버레이가 휠을 가로채지 않도록 — 네이티브 1회만 스크롤 (scrollBy 중복 금지) */
   useEffect(() => {
     if (!veilOpen) return;
     const el = document.getElementById("salon-desk");
     if (!el) return;
 
     const onWheel = (e: WheelEvent) => {
-      window.scrollBy({ top: e.deltaY, left: 0 });
+      e.preventDefault();
+      window.scrollBy({ top: e.deltaY, left: 0, behavior: "instant" });
     };
 
-    el.addEventListener("wheel", onWheel, { passive: true });
+    el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
   }, [veilOpen]);
 
