@@ -277,22 +277,25 @@ export function MobileHome() {
                     onClick={() => chatRef.current?.ask(q)}
                     className="text-kr group flex w-full items-center gap-2.5 py-[18px] text-left text-[15px] font-normal leading-none text-[rgba(102,102,102,0.7)] active:text-forest"
                   >
-                    <svg
+                    <span
+                      className="flex size-[22px] shrink-0 items-center justify-center rounded-full bg-[#FEE500]"
                       aria-hidden
-                      className="question-arrow shrink-0"
-                      width="14"
-                      height="12"
-                      viewBox="0 0 14 12"
-                      fill="none"
                     >
-                      <path
-                        d="M12.5 6H2.2M2.2 6l3.8-3.5M2.2 6l3.8 3.5"
-                        stroke="currentColor"
-                        strokeWidth="1.6"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                      <svg
+                        width="10"
+                        height="12"
+                        viewBox="0 0 10 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M5 10.5V2.2M5 2.2L1.6 5.6M5 2.2l3.4 3.4"
+                          stroke="#191919"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
                     <span className="min-w-0 flex-1">{q}</span>
                   </button>
                   <div
@@ -306,44 +309,31 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* Automated CRM */}
-        <section id="automated-crm" className="bg-linen px-5 py-14">
-          <p className="font-display text-[13px] font-medium uppercase text-ink">
-            <span className="font-latin mr-1.5 text-[12px]">
-              {automatedCrm.eyebrow.index}
-            </span>
-            {automatedCrm.eyebrow.label}
-          </p>
-          <h2 className="text-kr mt-5 text-[30px] font-bold leading-[1.25] text-ink">
-            {automatedCrm.headline.map((line) => (
-              <span key={line} className="block">
-                {line}
+        {/* Automated CRM — 가로 스냅 캐러셀 (세로 길이 ↓) */}
+        <section id="automated-crm" className="bg-linen py-14">
+          <div className="px-5">
+            <p className="font-display text-[13px] font-medium uppercase text-ink">
+              <span className="font-latin mr-1.5 text-[12px]">
+                {automatedCrm.eyebrow.index}
               </span>
-            ))}
-          </h2>
-          <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
-            {automatedCrm.body.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
-          </p>
-          <div className="mt-8 flex flex-col gap-8">
-            {automatedCrm.systems.map((system) => (
-              <div key={system.index}>
-                <div className="aspect-[4/3] w-full bg-black" aria-hidden />
-                <p className="text-kr mt-4 text-[14px] font-semibold leading-[1.45] text-ink/85">
-                  <span className="font-latin mr-1.5 tracking-[0.02em]">
-                    {system.index}
-                  </span>
-                  {system.title}
-                </p>
-                <p className="text-kr mt-2 text-[13px] leading-[1.55] text-body">
-                  {system.body.join(" ")}
-                </p>
-              </div>
-            ))}
+              {automatedCrm.eyebrow.label}
+            </p>
+            <h2 className="text-kr mt-5 text-[30px] font-bold leading-[1.25] text-ink">
+              {automatedCrm.headline.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </h2>
+            <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
+              {automatedCrm.body.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </p>
           </div>
+          <MobileCrmCarousel />
         </section>
 
         {/* Banner strip */}
@@ -795,6 +785,155 @@ function MobileDemoPhone({
         }}
       >
         <DemoChat ref={chatRef} compact />
+      </div>
+    </div>
+  );
+}
+
+/** SYSTEM 01–04 가로 스냅 + 자동 전환. 세로 스크롤 부담을 줄입니다. */
+function MobileCrmCarousel() {
+  const systems = automatedCrm.systems;
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const userInteracted = useRef(false);
+
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+
+    const onScroll = () => {
+      const cards = Array.from(el.querySelectorAll<HTMLElement>("[data-crm-card]"));
+      if (!cards.length) return;
+      const mid = el.scrollLeft + el.clientWidth / 2;
+      let best = 0;
+      let bestDist = Infinity;
+      cards.forEach((card, i) => {
+        const c = card.offsetLeft + card.offsetWidth / 2;
+        const d = Math.abs(c - mid);
+        if (d < bestDist) {
+          bestDist = d;
+          best = i;
+        }
+      });
+      setActive(best);
+    };
+
+    el.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (paused) return;
+    const id = window.setInterval(() => {
+      if (userInteracted.current) return;
+      const el = scrollerRef.current;
+      if (!el) return;
+      const next = (active + 1) % systems.length;
+      const card = el.querySelectorAll<HTMLElement>("[data-crm-card]")[next];
+      if (!card) return;
+      card.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    }, 3800);
+    return () => window.clearInterval(id);
+  }, [active, paused, systems.length]);
+
+  const goTo = (i: number) => {
+    userInteracted.current = true;
+    const el = scrollerRef.current;
+    const card = el?.querySelectorAll<HTMLElement>("[data-crm-card]")[i];
+    if (card) {
+      card.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    }
+    window.setTimeout(() => {
+      userInteracted.current = false;
+    }, 5000);
+  };
+
+  return (
+    <div
+      className="mt-8"
+      onPointerDown={() => {
+        setPaused(true);
+        userInteracted.current = true;
+      }}
+      onPointerUp={() => {
+        setPaused(false);
+        window.setTimeout(() => {
+          userInteracted.current = false;
+        }, 5000);
+      }}
+    >
+      <div
+        ref={scrollerRef}
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-5 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        style={{ WebkitOverflowScrolling: "touch" }}
+      >
+        {systems.map((s, i) => (
+          <article
+            key={s.index}
+            data-crm-card
+            className="w-[82%] shrink-0 snap-center"
+            aria-current={i === active ? "true" : undefined}
+          >
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-black">
+              <div
+                className="absolute inset-0 bg-gradient-to-br from-white/12 to-transparent transition-opacity duration-500"
+                style={{ opacity: i === active ? 1 : 0.3 }}
+                aria-hidden
+              />
+              <span className="font-latin absolute left-3 top-3 text-[11px] font-medium tracking-[0.12em] text-porcelain/45">
+                {s.index}
+              </span>
+            </div>
+            <div
+              className="mt-4 transition-all duration-500 ease-out"
+              style={{
+                opacity: i === active ? 1 : 0.4,
+                transform: i === active ? "translateY(0)" : "translateY(6px)",
+              }}
+            >
+              <p className="text-kr text-[14px] font-semibold leading-[1.45] text-ink/85">
+                <span className="font-latin mr-1.5 tracking-[0.02em]">
+                  {s.index}
+                </span>
+                {s.title}
+              </p>
+              <p className="text-kr mt-2 text-[13px] leading-[1.55] text-body">
+                {s.body.join(" ")}
+              </p>
+            </div>
+          </article>
+        ))}
+        <div className="w-[8%] shrink-0" aria-hidden />
+      </div>
+
+      <div className="mt-6 flex items-center justify-center gap-2 px-5">
+        {systems.map((s, i) => (
+          <button
+            key={s.index}
+            type="button"
+            aria-label={`${s.index}로 이동`}
+            onClick={() => goTo(i)}
+            className="relative h-1.5 overflow-hidden rounded-full bg-ink/15 transition-all duration-300"
+            style={{ width: i === active ? 28 : 8 }}
+          >
+            {i === active && !paused ? (
+              <span
+                key={`prog-${active}`}
+                className="crm-dot-fill absolute inset-y-0 left-0 bg-ink"
+              />
+            ) : null}
+          </button>
+        ))}
       </div>
     </div>
   );
