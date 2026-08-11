@@ -9,8 +9,8 @@ import { automatedCrm } from "@/content/site";
  *
  * 좌측 시작 x = Experience 폰 왼쪽(SIDE_L 183)과 동일.
  * 타이포는 Experience와 동일.
- * 우측 [검정 프레임 + SYSTEM 카피] 스택 · sticky 스크롤 슬라이드 · 하단 peek.
- * (스크롤 위치 강제 이동 / 높이 토글 없음 — 네이티브 스크롤만 사용)
+ * 우측 [검정 프레임 + SYSTEM 카피] 스택 · sticky.
+ * 아래로: 단계 whoosh 슬라이드. 위로: 홀드 없이 섹션을 바로 이탈.
  */
 const STEPS = automatedCrm.systems.length;
 
@@ -35,29 +35,32 @@ const LEFT_COL_W = BOX_LEFT - LEFT - 40;
 
 /**
  * 스크롤 타임라인 (상대 가중치)
- * — 장면마다 HOLD로 머무른 뒤 MOVE로 다음으로 슬라이드
- * — 마지막은 END_HOLD로 더 오래 머문 뒤 다음 섹션으로 해제
+ * — HOLD에서 장면 유지, MOVE는 다음 단계 트리거 구간(짧을수록 중간에 머물기 어려움)
  */
-const HOLD = 0.88;
-/** 전환에 쓰는 스크롤 — 클수록 더 천천히·부드럽게 올라감 */
-const MOVE = 1.05;
-const END_HOLD = 1.15;
-/** 가중치 1당 뷰포트 높이 — 클수록 장면이 더 오래 유지 */
-const VH_PER_UNIT = 0.78;
+const HOLD = 1.15;
+const MOVE = 0.55;
+const END_HOLD = 1.25;
+const VH_PER_UNIT = 0.95;
+
+/** 단계 전환 whoosh 길이 — 현재 체감 속도 유지 */
+const WHOOSH_MS = 580;
 
 const SCROLL_UNITS = (STEPS - 1) * (HOLD + MOVE) + END_HOLD;
 const SCROLL_VH = SCROLL_UNITS * VH_PER_UNIT;
 
 type System = (typeof automatedCrm.systems)[number];
 
-/** smootherstep — 시작·끝이 부드럽고 중간만 일정하게 흐름 */
-function smoothMove(u: number): number {
-  const x = Math.min(1, Math.max(0, u));
-  return x * x * x * (x * (x * 6 - 15) + 10);
+/** ease-in-out cubic — 중간이 빠른 “사악” 슬라이드 */
+function whooshEase(t: number): number {
+  const x = Math.min(1, Math.max(0, t));
+  return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 }
 
-/** 0…1 진행률 → 슬라이드 위치 0…STEPS-1 (홀드 구간은 정수에 고정) */
-function progressToSlide(progress: number): number {
+/**
+ * 0…1 진행률 → 정수 단계 0…STEPS-1
+ * MOVE 구간은 절반 지나면 다음 단계로 스냅 (중간에 머물러도 카드는 완성본만 표시)
+ */
+function progressToStep(progress: number): number {
   const segments: { hold: boolean; w: number }[] = [];
   for (let i = 0; i < STEPS; i++) {
     segments.push({ hold: true, w: i === STEPS - 1 ? END_HOLD : HOLD });
@@ -65,16 +68,15 @@ function progressToSlide(progress: number): number {
   }
 
   let t = Math.min(1, Math.max(0, progress)) * SCROLL_UNITS;
-  let slide = 0;
+  let step = 0;
 
   for (const seg of segments) {
     if (t <= seg.w) {
-      if (seg.hold) return slide;
-      const u = seg.w <= 0 ? 1 : t / seg.w;
-      return slide + smoothMove(u);
+      if (seg.hold) return step;
+      return t / seg.w >= 0.5 ? step + 1 : step;
     }
     t -= seg.w;
-    if (!seg.hold) slide += 1;
+    if (!seg.hold) step += 1;
   }
 
   return STEPS - 1;
@@ -82,20 +84,20 @@ function progressToSlide(progress: number): number {
 
 function SystemCaption({
   system,
-  active,
+  emphasis,
 }: {
   system: System;
-  active: boolean;
+  /** 0…1 — 활성에 가까울수록 1 */
+  emphasis: number;
 }) {
+  const e = Math.min(1, Math.max(0, emphasis));
+  const titleOpacity = 0.42 + e * 0.58;
+  const bodyOpacity = 0.32 + e * 0.68;
   return (
-    <div
-      className="w-full transition-opacity duration-500 ease-out"
-      style={{ opacity: active ? 1 : 0.28 }}
-    >
+    <div className="w-full" style={{ opacity: 0.28 + e * 0.72 }}>
       <p
-        className={`text-kr text-[22px] font-semibold leading-[1.45] tracking-[-0.01em] ${
-          active ? "text-ink" : "text-ink/50"
-        }`}
+        className="text-kr text-[22px] font-semibold leading-[1.45] tracking-[-0.01em] text-ink"
+        style={{ opacity: titleOpacity }}
       >
         <span className="font-display mr-[6px] text-[22px] font-medium tracking-[0.02em]">
           {system.index}
@@ -103,9 +105,8 @@ function SystemCaption({
         {system.title}
       </p>
       <p
-        className={`text-kr mt-[12px] text-[19px] font-normal leading-[1.64] tracking-[-0.01em] ${
-          active ? "text-body" : "text-ink/40"
-        }`}
+        className="text-kr mt-[12px] text-[19px] font-normal leading-[1.64] tracking-[-0.01em] text-body"
+        style={{ opacity: bodyOpacity }}
       >
         {system.body.map((line) => (
           <span key={line} className="block">
@@ -119,43 +120,156 @@ function SystemCaption({
 
 export function AutomatedCrm() {
   const pinRef = useRef<HTMLElement>(null);
-  const [progress, setProgress] = useState(0);
+  const stepRef = useRef(0);
+  const displayRef = useRef(0);
+  const animRef = useRef<{
+    from: number;
+    to: number;
+    start: number;
+  } | null>(null);
+  const [raw, setRaw] = useState(0);
 
   useEffect(() => {
     const el = pinRef.current;
     if (!el) return;
 
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const total = el.offsetHeight - window.innerHeight;
-      if (total <= 0) {
-        setProgress(0);
+    let rafScroll = 0;
+    let rafAnim = 0;
+    let running = true;
+    let releasing = false;
+    let lastY = window.scrollY;
+
+    const setDisplay = (v: number) => {
+      displayRef.current = v;
+      setRaw(v);
+    };
+
+    const pinMetrics = () => {
+      const rect = el.getBoundingClientRect();
+      const total = Math.max(0, el.offsetHeight - window.innerHeight);
+      const scrolled = Math.min(total, Math.max(0, -rect.top));
+      const sectionTop = rect.top + window.scrollY;
+      /** sticky 고정 중 (단계 진행용) */
+      const pinned = rect.top <= 0 && rect.bottom >= window.innerHeight - 0.5;
+      /**
+       * 섹션이 뷰포트에 걸쳐 있고 시작을 지나침 — 아래에서 재진입하는 순간 포함.
+       * 역스크롤 이탈 판정에 사용 (푸터처럼 완전히 지나간 뒤에는 bottom <= 0 → false)
+       */
+      const engaged = rect.top <= 0 && rect.bottom > 0;
+      return { total, scrolled, sectionTop, pinned, engaged };
+    };
+
+    const tickAnim = (now: number) => {
+      rafAnim = 0;
+      if (!running) return;
+      const anim = animRef.current;
+      if (!anim) return;
+
+      const u = whooshEase((now - anim.start) / WHOOSH_MS);
+      if (u >= 1) {
+        animRef.current = null;
+        setDisplay(anim.to);
         return;
       }
-      const scrolled = Math.min(
-        total,
-        Math.max(0, -el.getBoundingClientRect().top),
-      );
-      setProgress(scrolled / total);
+      setDisplay(anim.from + (anim.to - anim.from) * u);
+      rafAnim = window.requestAnimationFrame(tickAnim);
+    };
+
+    const goToStep = (step: number) => {
+      const to = Math.min(STEPS - 1, Math.max(0, step));
+      if (to === stepRef.current && !animRef.current) return;
+      if (to === stepRef.current && animRef.current?.to === to) return;
+
+      stepRef.current = to;
+      const from = displayRef.current;
+      if (Math.abs(from - to) < 0.001) {
+        animRef.current = null;
+        setDisplay(to);
+        return;
+      }
+
+      animRef.current = { from, to, start: performance.now() };
+      if (!rafAnim) rafAnim = window.requestAnimationFrame(tickAnim);
+    };
+
+    /** 역스크롤 — 헤더 턱 포함해 이전 섹션으로 즉시 이탈 */
+    const releaseUp = () => {
+      if (releasing) return true;
+      const { total, sectionTop, engaged } = pinMetrics();
+      if (!engaged || total <= 0) return false;
+
+      releasing = true;
+      animRef.current = null;
+      if (rafAnim) {
+        window.cancelAnimationFrame(rafAnim);
+        rafAnim = 0;
+      }
+      if (rafScroll) {
+        window.cancelAnimationFrame(rafScroll);
+        rafScroll = 0;
+      }
+      stepRef.current = 0;
+      setDisplay(0);
+      const target = Math.max(0, sectionTop - window.innerHeight);
+      window.scrollTo({ top: target });
+      lastY = target;
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          releasing = false;
+          lastY = window.scrollY;
+        });
+      });
+      return true;
+    };
+
+    const readStepDown = () => {
+      rafScroll = 0;
+      if (releasing) return;
+      const { total, scrolled, pinned } = pinMetrics();
+      if (total <= 0) {
+        goToStep(0);
+        return;
+      }
+      if (!pinned) {
+        goToStep(scrolled <= 0 ? 0 : STEPS - 1);
+        return;
+      }
+      goToStep(progressToStep(scrolled / total));
     };
 
     const onScroll = () => {
-      if (raf) return;
-      raf = window.requestAnimationFrame(update);
+      const y = window.scrollY;
+      const goingUp = y < lastY - 0.5;
+      lastY = y;
+      if (releasing) return;
+      if (goingUp) {
+        releaseUp();
+        return;
+      }
+      if (!rafScroll) rafScroll = window.requestAnimationFrame(readStepDown);
     };
 
-    update();
+    const onWheel = (e: WheelEvent) => {
+      if (e.deltaY >= 0) return;
+      if (!pinMetrics().engaged) return;
+      e.preventDefault();
+      releaseUp();
+    };
+
+    readStepDown();
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("resize", onScroll);
     return () => {
+      running = false;
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("wheel", onWheel);
       window.removeEventListener("resize", onScroll);
-      if (raf) window.cancelAnimationFrame(raf);
+      if (rafScroll) window.cancelAnimationFrame(rafScroll);
+      if (rafAnim) window.cancelAnimationFrame(rafAnim);
     };
   }, []);
 
-  const raw = progressToSlide(progress);
   const slideY = raw * SLIDE_PITCH;
 
   return (
@@ -227,7 +341,7 @@ export function AutomatedCrm() {
             >
               {automatedCrm.systems.map((system, i) => {
                 const dist = Math.abs(raw - i);
-                const active = dist < 0.45;
+                const emphasis = Math.max(0, 1 - dist);
                 return (
                   <article
                     key={system.index}
@@ -249,7 +363,7 @@ export function AutomatedCrm() {
                         height: `${CAPTION_ZONE - 24}px`,
                       }}
                     >
-                      <SystemCaption system={system} active={active} />
+                      <SystemCaption system={system} emphasis={emphasis} />
                     </div>
                   </article>
                 );
