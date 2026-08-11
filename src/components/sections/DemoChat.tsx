@@ -161,6 +161,39 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
       list.scrollTop = list.scrollHeight;
     }, [messages, pending]);
 
+    /* 목업 위에서도 페이지 스크롤이 되도록 — 채팅 끝(또는 스크롤 불필요)이면 휠을 페이지로 전달 */
+    useEffect(() => {
+      const list = listRef.current;
+      if (!list) return;
+      const shell = list.closest(".iphone-mockup");
+
+      const onListWheel = (e: WheelEvent) => {
+        const maxScroll = list.scrollHeight - list.clientHeight;
+        const canScroll = maxScroll > 1;
+        const atTop = list.scrollTop <= 0;
+        const atBottom = list.scrollTop >= maxScroll - 1;
+          !canScroll ||
+          (e.deltaY < 0 && atTop) ||
+          (e.deltaY > 0 && atBottom);
+        if (!passToPage) return;
+        e.preventDefault();
+        window.scrollBy({ top: e.deltaY, left: 0 });
+      };
+
+      const onShellWheel = (e: WheelEvent) => {
+        if (list.contains(e.target as Node)) return;
+        e.preventDefault();
+        window.scrollBy({ top: e.deltaY, left: 0 });
+      };
+
+      list.addEventListener("wheel", onListWheel, { passive: false });
+      shell?.addEventListener("wheel", onShellWheel, { passive: false });
+      return () => {
+        list.removeEventListener("wheel", onListWheel);
+        shell?.removeEventListener("wheel", onShellWheel);
+      };
+    }, []);
+
     const sendText = async (raw: string) => {
       const text = raw.trim();
       if (!text || pendingRef.current || limitedRef.current) return;
@@ -388,7 +421,7 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
 
               <div
                 ref={listRef}
-                className="demo-chat-list min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-3"
+                className="demo-chat-list min-h-0 flex-1 overflow-y-auto overscroll-none px-3 py-3"
               >
                 <div className="mb-4 flex justify-center">
                   <span
