@@ -540,7 +540,7 @@ export const footer = {
       { label: "회사명", value: "MARANATHA STUDIO" },
       { label: "대표자", value: "최연주" },
       { label: "사업자등록번호", value: "414-03-25569" },
-      { label: "통신판매업신고번호", value: "진행 중" },
+      { label: "통신판매업신고번호", value: "제 2026-경기포천-0700호" },
     ],
     [
       { label: "주소", value: "경기도 포천시 호병골길 16, 102동 1106호" },
