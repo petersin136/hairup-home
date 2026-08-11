@@ -149,14 +149,14 @@ export function AutomatedCrm() {
       const total = Math.max(0, el.offsetHeight - window.innerHeight);
       const scrolled = Math.min(total, Math.max(0, -rect.top));
       const sectionTop = rect.top + window.scrollY;
-      /** sticky 고정 중 (단계 진행용) */
-      const pinned = rect.top <= 0 && rect.bottom >= window.innerHeight - 0.5;
       /**
-       * 섹션이 뷰포트에 걸쳐 있고 시작을 지나침 — 아래에서 재진입하는 순간 포함.
-       * 역스크롤 이탈 판정에 사용 (푸터처럼 완전히 지나간 뒤에는 bottom <= 0 → false)
+       * sticky가 화면을 붙잡고 있는 동안만 true.
+       * ※ bottom > 0 만으로 보면 CRM 박스 하단이 배너·KEY BENEFITS까지
+       *   겹쳐 “engaged”로 남아 배너 스킵이 전부 막힘.
        */
-      const engaged = rect.top <= 0 && rect.bottom > 0;
-      return { total, scrolled, sectionTop, pinned, engaged };
+      const pinned =
+        rect.top <= 0 && rect.bottom >= window.innerHeight - 0.5;
+      return { total, scrolled, sectionTop, pinned };
     };
 
     const tickAnim = (now: number) => {
@@ -192,11 +192,11 @@ export function AutomatedCrm() {
       if (!rafAnim) rafAnim = window.requestAnimationFrame(tickAnim);
     };
 
-    /** 역스크롤 — 헤더 턱 포함해 이전 섹션으로 즉시 이탈 */
+    /** 역스크롤 — sticky pin 중에만, 이전 섹션으로 즉시 이탈 */
     const releaseUp = () => {
       if (releasing) return true;
-      const { total, sectionTop, engaged } = pinMetrics();
-      if (!engaged || total <= 0) return false;
+      const { total, sectionTop, pinned } = pinMetrics();
+      if (!pinned || total <= 0) return false;
 
       releasing = true;
       animRef.current = null;
@@ -251,7 +251,7 @@ export function AutomatedCrm() {
 
     const onWheel = (e: WheelEvent) => {
       if (e.deltaY >= 0) return;
-      if (!pinMetrics().engaged) return;
+      if (!pinMetrics().pinned) return;
       e.preventDefault();
       releaseUp();
     };
