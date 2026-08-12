@@ -122,7 +122,7 @@ export function KeyBenefits() {
                   alt=""
                   fill
                   sizes={`${CARD.width}px`}
-                  className="pointer-events-none object-cover [filter:brightness(1.08)_saturate(1.12)_contrast(1.06)_hue-rotate(-4deg)]"
+                  className="pointer-events-none object-cover"
                   draggable={false}
                   unoptimized
                 />

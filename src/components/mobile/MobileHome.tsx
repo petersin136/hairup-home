@@ -46,7 +46,7 @@ export function MobileHome() {
         <span className="font-latin font-semibold">{topBanner.en}</span>
         <span className="mx-1.5 opacity-60">|</span>
         <span className="text-kr">
-          {topBanner.kr}{" "}
+          {topBanner.kr}
           <span className="font-latin font-semibold">{topBanner.offer}</span>
         </span>
       </div>
@@ -392,7 +392,7 @@ export function MobileHome() {
                       alt=""
                       fill
                       sizes="300px"
-                      className="object-cover [filter:brightness(1.08)_saturate(1.12)_contrast(1.06)_hue-rotate(-4deg)]"
+                      className="object-cover"
                       unoptimized
                     />
                   </div>

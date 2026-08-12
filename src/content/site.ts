@@ -21,7 +21,8 @@ export const cta = {
 export const topBanner = {
   en: "LAUNCH OFFER",
   kr: "헤어업 오픈 한정, 초기 세팅비 최대",
-  offer: "40% OFF",
+  /** 앞에 NBSP — flex에서도 ‘최대 40%’ 띄어쓰기 유지 */
+  offer: "\u00A040% OFF",
 } as const;
 
 /** 런치 오퍼 팝업 — 시안 POPUP · 440 × 600 */

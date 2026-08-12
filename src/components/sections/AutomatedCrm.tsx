@@ -18,6 +18,7 @@ const STEPS = automatedCrm.systems.length;
 /** Experience SIDE_L — 폰 왼쪽 끝과 맞춤 */
 const LEFT = 183;
 const BOX_LEFT = 742;
+/** Experience 폰 하단 여백(SECTION_BOTTOM)과 동일 — 150 */
 const BOX_TOP = 150;
 const BOX_W = 698;
 const BOX_H = 523;

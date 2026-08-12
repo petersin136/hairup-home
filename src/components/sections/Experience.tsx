@@ -34,7 +34,7 @@ const COL_GAP = 120;
 const TEXT_COL_W = 520;
 const LIST_W = 500;
 const SECTION_TOP = 96;
-/** 폰 목업 ↔ 다음 섹션 사이 */
+/** 폰 목업 하단 ↔ 섹션 끝 = 150 (다음 CRM 상단 여백과 동일) */
 const SECTION_BOTTOM = 150;
 
 export function Experience() {
@@ -231,19 +231,24 @@ export function Experience() {
 
       {isDev ? (
         <div
-          className="relative z-10 mx-auto w-[1440px]"
-          style={{
-            paddingLeft: SIDE_L + PHONE_W + COL_GAP,
-            paddingRight: SIDE_R,
-          }}
+          className="pointer-events-none absolute bottom-0 z-10 w-full"
+          style={{ paddingBottom: `${SECTION_BOTTOM + 8}px` }}
         >
-          <button
-            type="button"
-            onClick={previewDesk}
-            className="mt-4 rounded-[2px] border border-dashed border-ink/25 px-3 py-2 font-latin text-[11px] tracking-[0.08em] text-ink/55 uppercase transition-colors hover:border-gold hover:text-gold"
+          <div
+            className="mx-auto w-[1440px]"
+            style={{
+              paddingLeft: SIDE_L + PHONE_W + COL_GAP,
+              paddingRight: SIDE_R,
+            }}
           >
-            [Dev] Preview booking overlay
-          </button>
+            <button
+              type="button"
+              onClick={previewDesk}
+              className="pointer-events-auto rounded-[2px] border border-dashed border-ink/25 px-3 py-2 font-latin text-[11px] tracking-[0.08em] text-ink/55 uppercase transition-colors hover:border-gold hover:text-gold"
+            >
+              [Dev] Preview booking overlay
+            </button>
+          </div>
         </div>
       ) : null}
 

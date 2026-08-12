@@ -20,10 +20,9 @@ export function TopBanner() {
         <span className="mx-[6px] font-latin font-normal" aria-hidden>
           |
         </span>
-        <span className="text-kr font-normal">{topBanner.kr}</span>
-        <span className="font-latin font-semibold">
-          {" "}
-          {topBanner.offer}
+        <span className="text-kr font-normal">
+          {topBanner.kr}
+          <span className="font-latin font-semibold">{topBanner.offer}</span>
         </span>
       </p>
     </div>

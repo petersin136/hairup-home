@@ -8,8 +8,15 @@ export const metadata: Metadata = {
   description:
     "고객과의 대화부터 예약, 장부 정리까지. 헤어업 AI가 감각적으로 처리합니다.",
   icons: {
-    icon: [{ url: "/brand/favicon.png", type: "image/png", sizes: "56x56" }],
-    apple: [{ url: "/brand/apple-icon.png", type: "image/png", sizes: "180x180" }],
+    icon: [
+      { url: "/brand/favicon.svg", type: "image/svg+xml" },
+      { url: "/brand/favicon-32.png", type: "image/png", sizes: "32x32" },
+      { url: "/brand/favicon-64.png", type: "image/png", sizes: "64x64" },
+      { url: "/brand/favicon.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [
+      { url: "/brand/apple-icon.png", type: "image/png", sizes: "180x180" },
+    ],
   },
 };
 
