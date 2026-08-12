@@ -3,36 +3,40 @@ import { fontVariables } from "@/lib/fonts";
 import { SPLASH_SESSION_KEY } from "@/components/splash/SplashScreen";
 import "./globals.css";
 
-const SITE_URL = "https://hair-up.kr";
+const SITE_URL = "https://www.hair-up.kr";
 const TITLE = "hair up — 자동화 살롱 AI";
+const OG_TITLE = "hair up — AI 살롱 매니저";
 const DESCRIPTION =
   "고객과의 대화부터 예약, 장부 정리까지. 헤어업 AI가 감각적으로 처리합니다.";
+const OG_IMAGE = "/brand/og.png";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: TITLE,
   description: DESCRIPTION,
+  alternates: { canonical: SITE_URL },
   openGraph: {
     type: "website",
     locale: "ko_KR",
     url: SITE_URL,
     siteName: "hair up",
-    title: TITLE,
+    title: OG_TITLE,
     description: DESCRIPTION,
     images: [
       {
-        url: "/brand/og.png",
+        url: OG_IMAGE,
         width: 1024,
         height: 537,
-        alt: "hair up",
+        alt: OG_TITLE,
+        type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: TITLE,
+    title: OG_TITLE,
     description: DESCRIPTION,
-    images: ["/brand/og.png"],
+    images: [OG_IMAGE],
   },
   icons: {
     icon: [
