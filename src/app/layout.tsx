@@ -4,11 +4,8 @@ import { SPLASH_SESSION_KEY } from "@/components/splash/SplashScreen";
 import "./globals.css";
 
 const SITE_URL = "https://www.hair-up.kr";
-const TITLE = "hair up — 자동화 살롱 AI";
-const OG_TITLE = "hair up — AI 살롱 매니저";
-const DESCRIPTION =
-  "고객과의 대화부터 예약, 장부 정리까지. 헤어업 AI가 감각적으로 처리합니다.";
-const OG_DESCRIPTION = "탭하여 웹사이트로 이동합니다.";
+const TITLE = "hair up — AI 살롱 매니저";
+const DESCRIPTION = "탭하여 웹사이트로 이동합니다.";
 const OG_IMAGE = "/brand/og.png";
 
 export const metadata: Metadata = {
@@ -21,22 +18,22 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     url: SITE_URL,
     siteName: "hair up",
-    title: OG_TITLE,
-    description: OG_DESCRIPTION,
+    title: TITLE,
+    description: DESCRIPTION,
     images: [
       {
         url: OG_IMAGE,
         width: 1024,
         height: 537,
-        alt: OG_TITLE,
+        alt: TITLE,
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: OG_TITLE,
-    description: OG_DESCRIPTION,
+    title: TITLE,
+    description: DESCRIPTION,
     images: [OG_IMAGE],
   },
   icons: {
