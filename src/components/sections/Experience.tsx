@@ -29,11 +29,13 @@ const SIDE_L = 183;
 const SIDE_R = 160;
 const PHONE_W = IPHONE_MOCKUP.width;
 const PHONE_H = IPHONE_MOCKUP.height;
-/** 본문 최장줄(~505) + 여유 — 1440−183−475−160−520 = 102 */
-const COL_GAP = 102;
+/** 본문 최장줄 + 여유 — 폰↔텍스트 간격 120 */
+const COL_GAP = 120;
 const TEXT_COL_W = 520;
 const LIST_W = 500;
 const SECTION_TOP = 96;
+/** 폰 목업 ↔ 다음 섹션 사이 */
+const SECTION_BOTTOM = 150;
 
 export function Experience() {
   const chatRef = useRef<DemoChatHandle>(null);
@@ -122,21 +124,12 @@ export function Experience() {
       className="relative w-full overflow-x-clip bg-porcelain"
     >
       <div
-        className="pointer-events-none absolute inset-x-0 top-9 z-0 flex flex-col items-center gap-1 font-display text-[13px] font-medium tracking-[0.14em] text-ink/[0.12] uppercase"
-        aria-hidden
-      >
-        {experience.accents.map((line) => (
-          <span key={line}>{line}</span>
-        ))}
-      </div>
-
-      <div
         className="relative z-10 mx-auto flex w-[1440px] items-start"
         style={{
           paddingLeft: SIDE_L,
           paddingRight: SIDE_R,
           paddingTop: SECTION_TOP,
-          paddingBottom: SECTION_TOP,
+          paddingBottom: SECTION_BOTTOM,
           gap: COL_GAP,
         }}
       >
@@ -146,17 +139,17 @@ export function Experience() {
 
         <div className="min-w-0 shrink-0" style={{ width: TEXT_COL_W }}>
           {/* 02 / THE EXPERIENCE — Inter 14 + Playfair 25 · #2C3A2E */}
-          <p className="flex items-center leading-none text-forest">
-            <span className="font-latin mr-[6px] text-[14px] font-medium tracking-normal uppercase">
+          <p className="flex items-start leading-none text-forest">
+            <span className="section-eyebrow-index font-latin mr-[6px] text-[14px] font-medium leading-none tracking-normal uppercase">
               {experience.eyebrow.index}
             </span>
-            <span className="font-display text-[25px] font-medium uppercase">
+            <span className="font-display text-[25px] font-medium leading-none uppercase">
               {experience.eyebrow.label}
             </span>
           </p>
 
           {/* 타이틀 — Noto 70/700 · 행간 1.2 · mt 36 */}
-          <h2 className="text-kr mt-[36px] text-[70px] font-bold leading-[1.2] tracking-[-0.02em] text-ink">
+          <h2 className="text-kr mt-[36px] text-[70px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
             {experience.headline.map((line) => (
               <span key={line} className="block whitespace-nowrap">
                 {line}

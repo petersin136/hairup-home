@@ -222,7 +222,7 @@ export function TemplateCollection() {
         style={{ top: `${TITLE.top}px` }}
       >
         {/* .TITLE-TEMPLATE-COLLECTION .SUB.04/ */}
-        <span className="mr-[6px] font-latin text-[14px] font-medium tracking-normal">
+        <span className="section-eyebrow-index mr-[6px] font-latin text-[14px] font-medium leading-none tracking-normal">
           {templateCollection.eyebrow.index}
         </span>
         {templateCollection.eyebrow.label}
@@ -457,7 +457,7 @@ function TemplateCard({
             {/* .TITLE-STUDIO-SIGNATURE */}
             <p className="flex items-start justify-center font-display text-[25px] font-medium uppercase leading-none text-porcelain">
               {/* .TITLE-STUDIO-SIGNATURE .SUB.01/ */}
-              <span className="mr-[6px] font-latin text-[14px] font-medium tracking-normal">
+              <span className="section-eyebrow-index mr-[6px] font-latin text-[14px] font-medium leading-none tracking-normal">
                 {template.index} /
               </span>
               {template.name}

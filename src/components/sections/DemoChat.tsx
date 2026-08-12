@@ -34,7 +34,7 @@ type DemoChatProps = {
 };
 
 /** 시안 카카오 채널 인사 */
-const GREETING = "안녕하세요. 헤어업입니다. 무엇을 도와드릴까요?";
+const GREETING = "안녕하세요. 헤어업입니다.\n무엇을 도와드릴까요?";
 
 const FALLBACK =
   "잠시 연결이 불안정해요. 조금 뒤에 다시 말씀해 주세요.";

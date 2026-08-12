@@ -123,7 +123,7 @@ export function Dilemma() {
         className="absolute inset-x-0 flex items-start justify-center font-display text-[25px] font-medium uppercase leading-none text-forest"
         style={{ top: `${TITLE.top}px` }}
       >
-        <span className="mr-[6px] font-latin text-[14px] font-medium tracking-normal">
+        <span className="section-eyebrow-index mr-[6px] font-latin text-[14px] font-medium leading-none tracking-normal">
           {dilemma.eyebrow.index}
         </span>
         {dilemma.eyebrow.label}

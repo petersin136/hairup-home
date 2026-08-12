@@ -20,7 +20,7 @@ export const cta = {
 /** 헤더 위 띠배너 — 시안 5-D · 영문/숫자는 Inter 600, 한글은 Noto 400 */
 export const topBanner = {
   en: "LAUNCH OFFER",
-  kr: "헤어업 오픈 한정, 초기 세팅비 최대 ",
+  kr: "헤어업 오픈 한정, 초기 세팅비 최대",
   offer: "40% OFF",
 } as const;
 

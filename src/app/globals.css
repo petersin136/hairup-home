@@ -78,6 +78,14 @@ body {
   word-spacing: -0.057em;
 }
 
+/*
+ * 섹션 넘버(Inter 14) ↔ 영문(Playfair 25) 상단(캡 높이) 광학 정렬.
+ * items-start만 쓰면 Inter 메트릭 때문에 숫자가 영문보다 위로 뜹니다.
+ */
+.section-eyebrow-index {
+  margin-top: 5px;
+}
+
 /* Pricing · STARTER / BRANDING 체크 아이콘 */
 .pricing-check {
   position: relative;
@@ -239,7 +247,7 @@ body {
   width: 14px;
   height: 12px;
   flex-shrink: 0;
-  color: #6c6864;
+  color: rgba(102, 102, 102, 0.7);
   transition: color 0.15s ease;
 }
 

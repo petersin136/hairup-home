@@ -53,7 +53,8 @@ const TRACK_HEIGHT =
   CARD_DESC.gapAbove +
   CARD_DESC.size * CARD_DESC.leading * CARD_DESC.lines;
 
-const HEIGHT = Math.ceil(TRACK_TOP + TRACK_HEIGHT + 120);
+/** 카드 트랙 하단 → THE PROCESS 섹션 간격 */
+const HEIGHT = Math.ceil(TRACK_TOP + TRACK_HEIGHT + 300);
 
 /** 첫 화면에서 카드 2장이 가운데 오도록 하는 한쪽 패딩 */
 const PAIR = CARD.width * 2 + CARD.gap;
@@ -121,7 +122,7 @@ export function KeyBenefits() {
                   alt=""
                   fill
                   sizes={`${CARD.width}px`}
-                  className="pointer-events-none object-cover"
+                  className="pointer-events-none object-cover [filter:brightness(1.08)_saturate(1.12)_contrast(1.06)_hue-rotate(-4deg)]"
                   draggable={false}
                   unoptimized
                 />
@@ -162,7 +163,7 @@ export function KeyBenefits() {
         className="absolute inset-x-0 flex items-start justify-center font-display text-[25px] font-medium uppercase leading-none text-forest"
         style={{ top: `${TITLE.top}px` }}
       >
-        <span className="mr-[6px] font-latin text-[14px] font-medium tracking-normal">
+        <span className="section-eyebrow-index mr-[6px] font-latin text-[14px] font-medium leading-none tracking-normal">
           {keyBenefits.eyebrow.index}
         </span>
         {keyBenefits.eyebrow.label}

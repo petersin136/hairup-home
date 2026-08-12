@@ -21,7 +21,10 @@ export function TopBanner() {
           |
         </span>
         <span className="text-kr font-normal">{topBanner.kr}</span>
-        <span className="font-latin font-semibold">{topBanner.offer}</span>
+        <span className="font-latin font-semibold">
+          {" "}
+          {topBanner.offer}
+        </span>
       </p>
     </div>
   );

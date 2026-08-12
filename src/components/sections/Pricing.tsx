@@ -256,13 +256,13 @@ export function Pricing() {
   return (
     <Canvas id="pricing" height={HEIGHT} background="bg-porcelain">
       <p
-        className="absolute inset-x-0 flex items-baseline justify-center gap-[6px] uppercase leading-none text-forest"
+        className="absolute inset-x-0 flex items-start justify-center gap-[6px] uppercase leading-none text-forest"
         style={{ top: `${HEADER.top}px` }}
       >
-        <span className="font-latin text-[14px] font-medium tracking-normal">
+        <span className="section-eyebrow-index font-latin text-[14px] font-medium leading-none tracking-normal">
           {pricing.eyebrow.index}
         </span>
-        <span className="font-display text-[25px] font-medium tracking-normal">
+        <span className="font-display text-[25px] font-medium leading-none tracking-normal">
           {pricing.eyebrow.label}
         </span>
       </p>

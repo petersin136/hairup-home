@@ -94,16 +94,21 @@ function SystemCaption({
   const e = Math.min(1, Math.max(0, emphasis));
   const titleOpacity = 0.42 + e * 0.58;
   const bodyOpacity = 0.32 + e * 0.68;
+  /** "SYSTEM 01" → 숫자는 라이닝(대문자형) 피겨 */
+  const [systemLabel, systemNum] = system.index.split(" ");
   return (
     <div className="w-full" style={{ opacity: 0.28 + e * 0.72 }}>
       <p
-        className="text-kr text-[22px] font-semibold leading-[1.45] tracking-[-0.01em] text-ink"
+        className="text-kr text-[22px] leading-[1.45] tracking-[-0.01em]"
         style={{ opacity: titleOpacity }}
       >
-        <span className="font-display mr-[6px] text-[22px] font-medium tracking-[0.02em]">
-          {system.index}
+        <span className="mr-[6px] text-[22px] font-medium tracking-[0.02em] text-ink">
+          <span className="font-display">{systemLabel} </span>
+          <span className="font-latin font-semibold tracking-normal">
+            {systemNum}
+          </span>
         </span>
-        {system.title}
+        <span className="font-medium text-[#2c3a2e]">{system.title}</span>
       </p>
       <p
         className="text-kr mt-[12px] text-[19px] font-normal leading-[1.64] tracking-[-0.01em] text-body"
@@ -224,7 +229,7 @@ export function AutomatedCrm() {
       className="relative bg-linen"
       style={{ height: `${SCROLL_VH * 100}vh` }}
     >
-      <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden">
+      <div className="sticky top-0 flex h-screen items-start justify-center overflow-hidden">
         <div
           className="relative w-full max-w-[1440px] shrink-0"
           style={{ height: `${FRAME_H}px` }}
@@ -237,17 +242,17 @@ export function AutomatedCrm() {
               width: `${LEFT_COL_W}px`,
             }}
           >
-            <p className="flex items-center leading-none text-forest">
-              <span className="font-latin mr-[6px] text-[14px] font-medium tracking-normal uppercase">
+            <p className="flex items-start leading-none text-forest">
+              <span className="section-eyebrow-index font-latin mr-[6px] text-[14px] font-medium leading-none tracking-normal uppercase">
                 {automatedCrm.eyebrow.index}
               </span>
-              <span className="font-display text-[25px] font-medium uppercase">
+              <span className="font-display text-[25px] font-medium leading-none uppercase">
                 {automatedCrm.eyebrow.label}
               </span>
             </p>
 
             <h2
-              className="text-kr text-[70px] font-bold leading-[1.2] tracking-[-0.02em] text-ink"
+              className="text-kr text-[70px] font-bold leading-[1.37] tracking-[-0.01em] text-ink"
               style={{ marginTop: `${GAP_EYEBROW_TITLE}px` }}
             >
               {automatedCrm.headline.map((line) => (

@@ -2,7 +2,6 @@ import { MobileHome } from "@/components/mobile/MobileHome";
 import { TopBanner } from "@/components/layout/TopBanner";
 import { LaunchOfferPopup } from "@/components/LaunchOfferPopup";
 import { AutomatedCrm } from "@/components/sections/AutomatedCrm";
-import { Banner } from "@/components/sections/Banner";
 import { Dilemma } from "@/components/sections/Dilemma";
 import { Experience } from "@/components/sections/Experience";
 import { Faq } from "@/components/sections/Faq";
@@ -35,7 +34,6 @@ export default function Home() {
           <Dilemma />
           <Experience />
           <AutomatedCrm />
-          <Banner />
           <KeyBenefits />
           <Process />
           <TemplateCollection />
