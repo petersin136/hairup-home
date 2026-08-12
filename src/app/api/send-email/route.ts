@@ -38,13 +38,23 @@ const GUIDEBOOK_HTML = `<!DOCTYPE html>
             <td style="padding:40px 28px 36px;color:#3a3a3a;font-size:16px;line-height:1.7;">
               <p style="margin:0 0 20px;">안녕하세요, <strong>헤어업</strong>입니다.</p>
 
-              <p style="margin:0 0 20px;">요청해 주셔서 감사합니다. 원장님께서 궁금해하신 <strong>상세 가이드북</strong>을 첨부해 드려요.</p>
+              <p style="margin:0 0 20px;">요청해 주셔서 감사합니다.<br>
+              디자이너님께서 궁금해하신 <strong>상세 가이드북</strong>을 첨부해 드려요.</p>
 
-              <p style="margin:0 0 20px;">헤어업은 미용실 원장님을 위한 <strong>24시간 AI 예약 실장</strong>이에요. 원장님이 가위를 들고 계신 순간에도, 문 닫은 새벽에도, 손님의 카카오톡 문의에 사람처럼 응대하고 <strong>예약까지 알아서</strong> 잡아드립니다.</p>
+              <p style="margin:0 0 20px;">헤어업은 미용실 원장님을 위한 <strong>24시간 AI 예약 실장</strong>이에요.<br>
+              원장님이 가위를 들고 계신 순간에도, 문 닫은 새벽에도,<br>
+              손님의 카카오톡 문의에 사람처럼 응대하고 <strong>예약까지 알아서</strong> 잡아드립니다.</p>
 
-              <p style="margin:0 0 20px;"><strong>헤어업이 특별한 이유</strong>는 이거예요. 단순히 정해진 버튼만 누르게 하는 예약봇이 아니라, 손님이 사진 한 장을 보내거나 &ldquo;요즘 유행하는 그 스타일&rdquo;처럼 두루뭉술하게 말해도 맥락을 읽고 어울리는 시술을 먼저 제안해요. 시술마다 다른 소요 시간까지 계산해서 예약이 겹치지 않게 잡아드리고, 노쇼가 걱정되면 예약금도 받아드려요. <strong>건당 수수료 없이 월정액 하나</strong>로요.</p>
+              <p style="margin:0 0 20px;"><strong>헤어업이 특별한 이유</strong>는 이거예요.<br>
+              단순히 정해진 버튼만 누르게 하는 예약봇이 아니라, 손님이 사진 한 장을 보내거나<br>
+              &ldquo;요즘 유행하는 그 스타일&rdquo;처럼 두루뭉술하게 말해도<br>
+              맥락을 읽고 어울리는 시술을 먼저 제안해요.<br>
+              시술마다 다른 소요 시간까지 계산해서 예약이 겹치지 않게 잡아드리고,<br>
+              노쇼가 걱정되면 예약금도 받아드려요.<br>
+              <strong>건당 수수료 없이 월정액 하나로</strong>요.</p>
 
-              <p style="margin:0 0 28px;">첨부된 가이드북에 도입 방법과 실제 화면, 요금까지 자세히 담아두었어요. 편하게 살펴보시고 궁금한 점은 언제든 편하게 답장 주세요.</p>
+              <p style="margin:0 0 28px;">첨부된 가이드북에 도입 방법과 실제 화면, 요금까지 자세히 담아두었어요.<br>
+              편하게 살펴보시고 궁금한 점은 언제든 편하게 답장 주세요.</p>
 
               <p style="margin:0 0 32px;">헤어업 드림</p>
 
@@ -52,7 +62,7 @@ const GUIDEBOOK_HTML = `<!DOCTYPE html>
                 <tr>
                   <td align="center" style="border-radius:6px;background-color:#2c3a2e;">
                     <a href="https://hair-up.kr" target="_blank" style="display:inline-block;padding:14px 28px;color:#ffffff;font-size:15px;font-weight:600;line-height:1.2;text-decoration:none;border-radius:6px;">
-                      헤어업 체험해보기
+                      Experience Hair Up
                     </a>
                   </td>
                 </tr>
