@@ -85,18 +85,21 @@ export function RestoreHomeScroll() {
         return;
       }
       if (window.location.hash === "#footer") {
-        document
-          .getElementById("footer")
-          ?.scrollIntoView({ behavior: "instant", block: "nearest" });
+        const nodes = document.querySelectorAll<HTMLElement>("#footer");
+        const el =
+          [...nodes].find((n) => n.getClientRects().length > 0) ?? nodes[0];
+        el?.scrollIntoView({ behavior: "instant", block: "nearest" });
       }
     };
 
     restore();
     const t1 = window.setTimeout(restore, 0);
     const t2 = window.setTimeout(restore, 120);
+    const t3 = window.setTimeout(restore, 400);
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
+      window.clearTimeout(t3);
     };
   }, []);
 

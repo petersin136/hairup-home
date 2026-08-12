@@ -33,15 +33,14 @@ import { onHashClick } from "@/lib/scroll-to-hash";
 import { saveReturnScroll } from "@/lib/entry-chrome";
 
 /**
- * 모바일 전용 홈. 데스크톱 아트보드 컴포넌트는 렌더하지 않습니다.
- * min-[1440px] 미만에서만 노출됩니다.
+ * 모바일 전용 홈. HomeShell 이 1440px 미만일 때만 마운트합니다.
  */
 export function MobileHome() {
   const [menuOpen, setMenuOpen] = useState(false);
   const chatRef = useRef<DemoChatHandle>(null);
 
   return (
-    <div className="min-[1440px]:hidden">
+    <div>
       {/* 띠배너 */}
       <div className="bg-forest px-4 py-2.5 text-center text-[12px] leading-snug text-porcelain">
         <span className="font-latin font-semibold">{topBanner.en}</span>
@@ -790,92 +789,119 @@ function MobileDemoPhone({
   );
 }
 
-/** SYSTEM 01–04 가로 스냅 + 자동 전환. 세로 스크롤 부담을 줄입니다. */
+/** SYSTEM 01–04 가로 스냅 + 자동 전환. 세로 스크롤은 건드리지 않습니다. */
 function MobileCrmCarousel() {
   const systems = automatedCrm.systems;
+  const rootRef = useRef<HTMLDivElement>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
-  const userInteracted = useRef(false);
+  const [inView, setInView] = useState(false);
+  const activeRef = useRef(0);
+  const pauseUntilRef = useRef(0);
+
+  activeRef.current = active;
+
+  const scrollToIndex = (index: number, smooth: boolean) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const card = el.querySelectorAll<HTMLElement>("[data-crm-card]")[index];
+    if (!card) return;
+    /* scrollIntoView 금지 — 모바일에서 페이지 세로 스크롤까지 끌어당김 */
+    const left = card.offsetLeft - (el.clientWidth - card.offsetWidth) / 2;
+    el.scrollTo({
+      left: Math.max(0, left),
+      behavior: smooth ? "smooth" : "auto",
+    });
+  };
+
+  const bumpPause = (ms = 6000) => {
+    pauseUntilRef.current = Date.now() + ms;
+  };
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(Boolean(entry?.isIntersecting)),
+      { threshold: 0.25 },
+    );
+    io.observe(root);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
 
+    let raf = 0;
     const onScroll = () => {
-      const cards = Array.from(el.querySelectorAll<HTMLElement>("[data-crm-card]"));
-      if (!cards.length) return;
-      const mid = el.scrollLeft + el.clientWidth / 2;
-      let best = 0;
-      let bestDist = Infinity;
-      cards.forEach((card, i) => {
-        const c = card.offsetLeft + card.offsetWidth / 2;
-        const d = Math.abs(c - mid);
-        if (d < bestDist) {
-          bestDist = d;
-          best = i;
-        }
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        const cards = Array.from(
+          el.querySelectorAll<HTMLElement>("[data-crm-card]"),
+        );
+        if (!cards.length) return;
+        const mid = el.scrollLeft + el.clientWidth / 2;
+        let best = 0;
+        let bestDist = Infinity;
+        cards.forEach((card, i) => {
+          const c = card.offsetLeft + card.offsetWidth / 2;
+          const d = Math.abs(c - mid);
+          if (d < bestDist) {
+            bestDist = d;
+            best = i;
+          }
+        });
+        setActive(best);
       });
-      setActive(best);
     };
 
     el.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    return () => el.removeEventListener("scroll", onScroll);
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      if (raf) window.cancelAnimationFrame(raf);
+    };
   }, []);
 
   useEffect(() => {
-    if (paused) return;
+    if (paused || !inView) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
+
     const id = window.setInterval(() => {
-      if (userInteracted.current) return;
-      const el = scrollerRef.current;
-      if (!el) return;
-      const next = (active + 1) % systems.length;
-      const card = el.querySelectorAll<HTMLElement>("[data-crm-card]")[next];
-      if (!card) return;
-      card.scrollIntoView({
-        behavior: "smooth",
-        inline: "center",
-        block: "nearest",
-      });
+      if (Date.now() < pauseUntilRef.current) return;
+      if (!scrollerRef.current) return;
+      const next = (activeRef.current + 1) % systems.length;
+      scrollToIndex(next, true);
     }, 3800);
+
     return () => window.clearInterval(id);
-  }, [active, paused, systems.length]);
+  }, [paused, inView, systems.length]);
 
   const goTo = (i: number) => {
-    userInteracted.current = true;
-    const el = scrollerRef.current;
-    const card = el?.querySelectorAll<HTMLElement>("[data-crm-card]")[i];
-    if (card) {
-      card.scrollIntoView({
-        behavior: "smooth",
-        inline: "center",
-        block: "nearest",
-      });
-    }
-    window.setTimeout(() => {
-      userInteracted.current = false;
-    }, 5000);
+    bumpPause();
+    setActive(i);
+    scrollToIndex(i, true);
   };
 
   return (
     <div
+      ref={rootRef}
       className="mt-8"
       onPointerDown={() => {
         setPaused(true);
-        userInteracted.current = true;
+        bumpPause();
       }}
-      onPointerUp={() => {
-        setPaused(false);
-        window.setTimeout(() => {
-          userInteracted.current = false;
-        }, 5000);
-      }}
+      onPointerUp={() => setPaused(false)}
+      onPointerCancel={() => setPaused(false)}
     >
       <div
         ref={scrollerRef}
-        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-5 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        style={{ WebkitOverflowScrolling: "touch" }}
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-5 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-x pan-y" }}
       >
         {systems.map((s, i) => (
           <article
@@ -926,7 +952,7 @@ function MobileCrmCarousel() {
             className="relative h-1.5 overflow-hidden rounded-full bg-ink/15 transition-all duration-300"
             style={{ width: i === active ? 28 : 8 }}
           >
-            {i === active && !paused ? (
+            {i === active && !paused && inView ? (
               <span
                 key={`prog-${active}`}
                 className="crm-dot-fill absolute inset-y-0 left-0 bg-ink"
@@ -938,6 +964,7 @@ function MobileCrmCarousel() {
     </div>
   );
 }
+
 
 function MobilePlanCard({
   tone,
