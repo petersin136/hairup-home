@@ -37,6 +37,7 @@ import { saveReturnScroll } from "@/lib/entry-chrome";
  */
 export function MobileHome() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openFaq, setOpenFaq] = useState<string | null>(null);
   const chatRef = useRef<DemoChatHandle>(null);
 
   return (
@@ -165,64 +166,71 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* Dilemma */}
-        <section id="dilemma" className="bg-porcelain px-5 py-14">
-          <p className="font-display text-[13px] font-medium uppercase text-forest">
-            <span className="font-latin mr-1.5 text-[12px]">
+        {/* Dilemma — 모바일 시안 hu_m_Dilemma · 375 × 946 */}
+        <section
+          id="dilemma"
+          className="bg-porcelain px-4 pt-[80px] pb-[80px] text-center"
+        >
+          <p className="flex items-center justify-center leading-none text-forest">
+            <span className="font-latin mr-[6px] text-[12px] font-medium tracking-normal uppercase">
               {dilemma.eyebrow.index}
             </span>
-            {dilemma.eyebrow.label}
+            <span className="font-display text-[13px] font-medium uppercase">
+              {dilemma.eyebrow.label}
+            </span>
           </p>
-          <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
+          <h2 className="text-kr mt-[19px] text-[32px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
             {dilemma.headline.map((line) => (
               <span key={line} className="block">
                 {line}
               </span>
             ))}
           </h2>
-          <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
+
+          <div className="relative mt-[40px] aspect-[343/210] overflow-hidden rounded-[6px] bg-black">
+            <Image
+              src={dilemma.images[2]}
+              alt=""
+              fill
+              className="object-cover"
+              sizes="343px"
+              unoptimized
+            />
+          </div>
+
+          <p className="text-kr mt-[26px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
             {dilemma.body.map((line) => (
               <span key={line} className="block">
                 {line}
               </span>
             ))}
           </p>
-          <div className="mt-8 flex flex-col gap-3">
+
+          <div className="mt-[50px] flex gap-[11px]">
             {dilemma.images.slice(0, 2).map((src) => (
               <div
                 key={src}
-                className="relative aspect-[5/3] overflow-hidden rounded-[6px]"
+                className="relative aspect-[166/210] min-w-0 flex-1 overflow-hidden rounded-[6px] bg-black"
               >
                 <Image
                   src={src}
                   alt=""
                   fill
                   className="object-cover"
-                  sizes="100vw"
+                  sizes="166px"
                   unoptimized
                 />
               </div>
             ))}
           </div>
-          <p className="text-kr mt-6 text-[15px] leading-[1.65] text-body">
+
+          <p className="text-kr mt-[26px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
             {dilemma.bodyAside.map((line) => (
               <span key={line} className="block">
                 {line}
               </span>
             ))}
           </p>
-          <div className="mt-6">
-            <div className="relative aspect-[5/3] overflow-hidden rounded-[6px]">
-              <Image
-                src={dilemma.images[2]}
-                alt=""
-                fill
-                className="object-cover"
-                sizes="100vw"
-                unoptimized
-              />
-            </div>
-          </div>
         </section>
 
         {/* Experience — iPhone 데모 (시안 HU_TEST) */}
@@ -586,32 +594,48 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* FAQ */}
-        <section id="faq" className="bg-porcelain px-5 py-14">
-          <p className="font-display text-[13px] font-medium uppercase text-forest">
-            <span className="font-latin mr-1.5 text-[12px]">
+        {/* FAQ — 모바일 시안 hu_m_FAQ · 375 환산 */}
+        <section id="faq" className="bg-porcelain px-4 pt-[80px] pb-[81px] text-center">
+          <p className="flex items-center justify-center leading-none text-forest">
+            <span className="font-latin mr-[6px] text-[12px] font-medium tracking-normal uppercase">
               {faq.eyebrow.index}
             </span>
-            {faq.eyebrow.label}
+            <span className="font-display text-[13px] font-medium uppercase">
+              {faq.eyebrow.label}
+            </span>
           </p>
-          <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
+          <h2 className="text-kr mt-[22px] text-[32px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
             {faq.headline.map((line) => (
               <span key={line} className="block">
                 {line}
               </span>
             ))}
           </h2>
-          <div className="mt-8 flex flex-col gap-4">
+          <p className="text-kr mt-[30px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
+            <span className="block">{faq.body[0]}</span>
+            <span className="block">헤어업은 사용하기 쉽고,</span>
+            <span className="block">
+              몇 가지 설정만으로 간단하게 시작할 수 있습니다.
+            </span>
+          </p>
+          <div className="mt-[51px] flex flex-col gap-4">
             {faq.items.map((item) => (
-              <MobileFaqCard key={item.q} item={item} />
+              <MobileFaqCard
+                key={item.q}
+                item={item}
+                open={openFaq === item.q}
+                onToggle={() =>
+                  setOpenFaq((cur) => (cur === item.q ? null : item.q))
+                }
+              />
             ))}
           </div>
         </section>
 
-        {/* Start CTA */}
+        {/* Start CTA — 모바일 시안 hu_m_CTA / hu_m_CTA_HOVER · 375 × 620 */}
         <section
           id="start"
-          className="relative overflow-hidden px-5 py-16 text-porcelain"
+          className="relative flex min-h-[620px] flex-col justify-end overflow-hidden px-4 pb-[81px] text-porcelain"
         >
           <Image
             src="/images/cta-bg.jpg"
@@ -620,26 +644,29 @@ export function MobileHome() {
             className="object-cover"
             sizes="100vw"
             quality={90}
+            priority={false}
           />
-          <div className="absolute inset-0 bg-black/45" aria-hidden />
           <div className="relative">
-            <h2 className="text-kr text-[32px] font-bold leading-[1.25]">
+            <h2 className="text-kr text-[32px] font-bold leading-[1.37] tracking-[-0.01em]">
               {start.headline.map((line) => (
                 <span key={line} className="block">
                   {line}
                 </span>
               ))}
             </h2>
-            <p className="text-kr mt-5 text-[15px] leading-[1.65] text-porcelain/90">
-              {start.body.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
+            <p
+              className="text-kr mt-[31px] text-[15px] font-normal leading-[24px] tracking-[-0.01em]"
+              style={{ color: "rgba(250, 248, 245, 0.7)" }}
+            >
+              <span className="block">{start.body[0]}</span>
+              <span className="block">
+                이제 그 실력이 온전히 빛나도록 나머지는
+              </span>
+              <span className="block">헤어업이 하겠습니다.</span>
             </p>
             <a
               href={start.cta.href}
-              className="rounded-btn mt-8 inline-flex h-12 items-center justify-center border border-porcelain px-5 text-[15px] text-porcelain"
+              className="text-kr mt-[61px] flex h-[57px] w-full items-center justify-center rounded-btn border border-porcelain bg-transparent text-[16px] font-medium tracking-[-0.01em] text-porcelain transition-colors duration-200 ease-in-out hover:bg-porcelain hover:text-ink active:bg-porcelain active:text-ink"
             >
               {start.cta.label}
             </a>
@@ -696,48 +723,57 @@ const FAQ_TONE: Record<FaqItem["tone"], string> = {
   espresso: "bg-espresso",
 };
 
-function MobileFaqCard({ item }: { item: FaqItem }) {
-  const [flipped, setFlipped] = useState(false);
-
+function MobileFaqCard({
+  item,
+  open,
+  onToggle,
+}: {
+  item: FaqItem;
+  open: boolean;
+  onToggle: () => void;
+}) {
   return (
     <button
       type="button"
-      aria-pressed={flipped}
+      aria-pressed={open}
       aria-label={
-        flipped
+        open
           ? `${item.question.join(" ")} 답변 닫기`
           : `${item.question.join(" ")} 답변 보기`
       }
-      onClick={() => setFlipped((v) => !v)}
-      className="relative h-[168px] w-full cursor-pointer text-left [perspective:1200px]"
+      onClick={onToggle}
+      className="relative h-[191px] w-full cursor-pointer text-left [perspective:1200px]"
     >
       <div
         className="relative h-full w-full transition-transform duration-[600ms] ease-[cubic-bezier(0.65,0,0.35,1)] [transform-style:preserve-3d]"
         style={{
-          transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
+          transform: open ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
       >
-        {/* 앞면 — 질문 */}
-        <div className="absolute inset-0 flex flex-col rounded-[6px] bg-linen px-4 py-4 [backface-visibility:hidden]">
-          <p className="font-latin text-[16px] font-normal leading-none text-stone">
-            {item.q}
-          </p>
-          <p className="text-kr mt-3 text-[18px] font-bold leading-[1.35] text-ink">
+        <div
+          className="absolute inset-0 flex flex-col rounded-[6px] [backface-visibility:hidden]"
+          style={{
+            padding: "25px 16px 16px",
+            backgroundColor: "#EFEAE3",
+          }}
+        >
+          <p className="text-kr text-[18px] font-bold leading-[1.4] tracking-[-0.01em] text-ink [word-break:keep-all]">
+            <span className="font-latin font-normal text-stone">{item.q}</span>{" "}
             {item.question.join(" ")}
           </p>
-          <div className="mt-auto text-stone/40">
+          <div className="mt-auto self-end text-stone opacity-40">
             <Wordmark width={64} />
           </div>
         </div>
 
-        {/* 뒷면 — 답변 */}
         <div
-          className={`absolute inset-0 flex flex-col rounded-[6px] px-4 py-4 text-porcelain [backface-visibility:hidden] [transform:rotateY(180deg)] ${FAQ_TONE[item.tone]}`}
+          className={`absolute inset-0 flex flex-col rounded-[6px] text-porcelain [backface-visibility:hidden] [transform:rotateY(180deg)] ${FAQ_TONE[item.tone]}`}
+          style={{ padding: "25px 16px 16px" }}
         >
-          <p className="text-kr text-[18px] font-bold leading-none tracking-[-0.01em]">
+          <p className="text-kr text-[20px] font-bold leading-none tracking-[-0.01em]">
             {item.answerTitle}
           </p>
-          <p className="text-kr mt-3 overflow-y-auto text-[13px] leading-[1.65] text-porcelain/90">
+          <p className="text-kr mt-[16px] text-[13px] font-normal leading-[1.65] tracking-[-0.01em] text-porcelain/90 [word-break:keep-all]">
             {item.answer.join(" ")}
           </p>
         </div>
