@@ -70,7 +70,7 @@ export function MobileHome() {
   }, [menuOpen]);
 
   return (
-    <div>
+    <div className="[&_.text-kr]:break-keep">
       {/* 띠배너 — 모바일 시안 hu_m_Main */}
       <div className="flex h-[38px] w-full items-center justify-center bg-forest px-4">
         <p className="flex items-center text-center text-[12px] leading-none tracking-[0.01em] text-porcelain">
@@ -121,7 +121,7 @@ export function MobileHome() {
           aria-label="주요 메뉴"
         >
           <ul className="flex flex-col gap-[33px] pt-[44px]">
-            {MOBILE_NAV.map((item) => (
+            {MOBILE_NAV.map((item, i) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
@@ -129,9 +129,17 @@ export function MobileHome() {
                     onHashClick(e, item.href);
                     setMenuOpen(false);
                   }}
-                  className="group grid h-[32px] overflow-hidden text-left text-[#AEAEAD] transition-colors duration-300 hover:text-ink focus-visible:text-ink"
+                  className={
+                    i === 0
+                      ? "text-kr flex h-[32px] items-center text-[32px] font-normal leading-none text-ink"
+                      : "group grid h-[32px] overflow-hidden text-left text-[#909090] transition-colors duration-300 hover:text-ink focus-visible:text-ink"
+                  }
                 >
-                  <MobileMenuRoll en={item.en} ko={item.ko} />
+                  {i === 0 ? (
+                    item.ko
+                  ) : (
+                    <MobileMenuRoll en={item.en} ko={item.ko} />
+                  )}
                 </Link>
               </li>
             ))}
@@ -154,16 +162,16 @@ export function MobileHome() {
             </span>
             <svg
               aria-hidden
-              width="8"
-              height="14"
-              viewBox="0 0 8 14"
+              width="7"
+              height="11"
+              viewBox="0 0 7 11"
               fill="none"
               className="shrink-0"
             >
               <path
-                d="M1 1.5L6.5 7L1 12.5"
+                d="M1 1L5.5 5.5L1 10"
                 stroke="currentColor"
-                strokeWidth="1.4"
+                strokeWidth="1.3"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
@@ -888,14 +896,14 @@ function MobileProcess() {
 
       <div className="mt-auto">
         <p className="flex items-baseline">
-          <span className="font-latin mr-2 shrink-0 text-[15px] font-normal text-porcelain">
+          <span className="font-latin mr-2 shrink-0 text-[15px] font-normal text-stone">
             {step.index}
           </span>
           <span className="font-display text-[22px] font-medium uppercase leading-none text-porcelain">
             {step.caption}
           </span>
         </p>
-        <p className="text-kr mt-[26px] text-[15px] font-normal leading-[24px] text-[#d9d7d4]">
+        <p className="text-kr mt-[26px] flex flex-col gap-[11px] text-[15px] font-normal leading-none text-[#d9d7d4]">
           {step.bodyMobile.map((line) => (
             <span key={line} className="block">
               {line}
@@ -1246,7 +1254,11 @@ function MobilePlanCard({
       <p
         className={`text-kr mt-3 text-[15px] leading-[1.5] ${dark ? "text-porcelain/85" : "text-stone"}`}
       >
-        {plan.tagline.join(" ")}
+        {plan.tagline.map((line) => (
+          <span key={line} className="block">
+            {line}
+          </span>
+        ))}
       </p>
       <div className="mt-6 flex flex-col gap-3">
         {plan.prices.map((p) => (
@@ -1282,7 +1294,11 @@ function MobilePlanCard({
             <p
               className={`text-kr mt-1 text-[14px] leading-[1.5] ${dark ? "text-porcelain/75" : "text-stone"}`}
             >
-              {f.desc.join(" ")}
+              {("descMobile" in f ? f.descMobile : f.desc).map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
             </p>
           </li>
         ))}
