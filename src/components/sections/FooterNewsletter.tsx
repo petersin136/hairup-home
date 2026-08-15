@@ -14,13 +14,14 @@ const SEND_INSET = 70;
 
 type Status = "idle" | "sending" | "success" | "error";
 
-export function FooterNewsletter() {
+export function FooterNewsletter({ compact = false }: { compact?: boolean }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
   const filled = email.trim().length > 0;
   const busy = status === "sending";
   const canSubmit = filled && !busy;
+  const sendInset = compact ? 0 : SEND_INSET;
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -67,13 +68,23 @@ export function FooterNewsletter() {
 
   return (
     <div className="w-full">
-      <h2 className="font-display text-[26px] font-medium leading-none text-ink">
+      <h2
+        className={[
+          "font-display font-medium leading-none text-ink",
+          compact ? "text-[22px]" : "text-[26px]",
+        ].join(" ")}
+      >
         {footer.newsletter.title}
       </h2>
 
       <p
-        className="text-kr mt-[26px] text-[16px] font-normal text-ink"
-        style={{ lineHeight: 1.69 }}
+        className={[
+          "text-kr font-normal text-ink",
+          compact
+            ? "mt-[25px] text-[15px] leading-[25px]"
+            : "mt-[26px] text-[16px]",
+        ].join(" ")}
+        style={compact ? undefined : { lineHeight: 1.69 }}
       >
         {footer.newsletter.body.map((line) => (
           <span key={line} className="block">
@@ -82,17 +93,26 @@ export function FooterNewsletter() {
         ))}
       </p>
 
-      <form onSubmit={onSubmit} className="mt-[50px]" noValidate>
-        {/* 텍스트 행 — 밑줄과 16px 띄움 */}
+      <form
+        onSubmit={onSubmit}
+        className={compact ? "mt-[51px]" : "mt-[50px]"}
+        noValidate
+      >
         <div
-          className="relative flex h-[26px] items-center"
-          style={{ marginBottom: 16 }}
+          className={[
+            "relative flex items-center",
+            compact ? "h-[18px]" : "h-[26px]",
+          ].join(" ")}
+          style={{ marginBottom: compact ? 10 : 16 }}
         >
-          <label className="sr-only" htmlFor="footer-email">
+          <label
+            className="sr-only"
+            htmlFor={compact ? "footer-email-mobile" : "footer-email"}
+          >
             이메일
           </label>
           <input
-            id="footer-email"
+            id={compact ? "footer-email-mobile" : "footer-email"}
             type="email"
             name="email"
             value={email}
@@ -106,21 +126,25 @@ export function FooterNewsletter() {
             placeholder={footer.newsletter.placeholder}
             autoComplete="email"
             disabled={busy}
-            className="min-w-0 flex-1 bg-transparent font-display text-[26px] font-normal leading-none text-ink outline-none placeholder:text-stone/60 disabled:opacity-60"
-            style={{ paddingRight: SEND_INSET + 110 }}
+            className={[
+              "min-w-0 flex-1 bg-transparent font-display font-normal leading-none text-ink outline-none placeholder:text-stone/60 disabled:opacity-60",
+              compact ? "text-[18px]" : "text-[26px]",
+            ].join(" ")}
+            style={{ paddingRight: sendInset + (compact ? 108 : 110) }}
           />
           <button
             type="submit"
             disabled={!canSubmit}
             aria-busy={busy}
             className={[
-              "absolute top-1/2 -translate-y-1/2 font-latin text-[16px] font-normal leading-none transition-all duration-150",
+              "absolute top-1/2 -translate-y-1/2 font-latin font-normal leading-none transition-all duration-150",
+              compact ? "text-[14px]" : "text-[16px]",
               canSubmit
                 ? "cursor-pointer text-stone hover:text-ink active:scale-95 active:text-ink"
                 : "cursor-default text-stone/60",
               busy ? "opacity-70" : "",
             ].join(" ")}
-            style={{ right: SEND_INSET }}
+            style={{ right: sendInset }}
           >
             {busy ? "Sending…" : footer.newsletter.submit}
           </button>

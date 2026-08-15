@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
+import { FooterNewsletter } from "@/components/sections/FooterNewsletter";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { CountUp } from "@/components/motion/CountUp";
 import {
@@ -35,114 +36,168 @@ import { saveReturnScroll } from "@/lib/entry-chrome";
 /**
  * 모바일 전용 홈. HomeShell 이 1440px 미만일 때만 마운트합니다.
  */
+const MOBILE_NAV = nav.map((item) =>
+  item.href === "#ai-manager" ? { ...item, ko: "AI 매니저" } : item,
+);
+
+const MENU_ROLL = "duration-500 ease-[cubic-bezier(0.65,0,0.35,1)]";
+
 export function MobileHome() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [menuTop, setMenuTop] = useState(94);
   const [openFaq, setOpenFaq] = useState<string | null>(null);
+  const headerRef = useRef<HTMLElement>(null);
   const chatRef = useRef<DemoChatHandle>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const update = () => {
+      const bottom = headerRef.current?.getBoundingClientRect().bottom;
+      if (bottom != null) setMenuTop(bottom);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, [menuOpen]);
 
   return (
     <div>
-      {/* 띠배너 */}
-      <div className="bg-forest px-4 py-2.5 text-center text-[12px] leading-snug text-porcelain">
-        <span className="font-latin font-semibold">{topBanner.en}</span>
-        <span className="mx-1.5 opacity-60">|</span>
-        <span className="text-kr">
-          {topBanner.kr}
-          <span className="font-latin font-semibold">{topBanner.offer}</span>
-        </span>
+      {/* 띠배너 — 모바일 시안 hu_m_Main */}
+      <div className="flex h-[38px] w-full items-center justify-center bg-forest px-4">
+        <p className="flex items-center text-center text-[12px] leading-none tracking-[0.01em] text-porcelain">
+          <span className="font-latin font-semibold">{topBanner.en}</span>
+          <span className="mx-[6px] font-latin font-normal" aria-hidden>
+            |
+          </span>
+          <span className="text-kr font-normal">
+            초기 세팅비 최대
+            <span className="font-latin font-semibold">{topBanner.offer}</span>
+          </span>
+        </p>
       </div>
 
-      {/* 헤더 + 메뉴 (sticky 안에서 열리도록) */}
-      <header className="relative sticky top-0 z-50 border-b border-mist/60 bg-porcelain/95 backdrop-blur">
-        <div className="flex items-center justify-between px-4 py-3">
+      {/* 헤더 + 메뉴 — 시안 hu_m_Menu_open */}
+      <header ref={headerRef} className="relative sticky top-0 z-50 bg-porcelain">
+        <div className="flex h-[56px] items-center justify-between px-4">
           <Link href="/" className="text-ink" aria-label="hair up">
-            <Wordmark width={110} />
+            <Wordmark width={101} />
           </Link>
           <button
             type="button"
             aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((v) => !v)}
-            className="flex size-10 items-center justify-center rounded-btn text-ink"
+            className="flex size-10 items-center justify-center text-ink"
           >
             <span className="sr-only">메뉴</span>
-            <span className="flex w-5 flex-col gap-1.5" aria-hidden>
+            <span className="flex w-[22px] flex-col gap-[8px]" aria-hidden>
               <span
-                className={`block h-0.5 w-full bg-ink transition ${menuOpen ? "translate-y-[7px] rotate-45" : ""}`}
+                className={`block h-[2px] w-full bg-ink transition ${menuOpen ? "translate-y-[10px] rotate-45" : ""}`}
               />
               <span
-                className={`block h-0.5 w-full bg-ink transition ${menuOpen ? "opacity-0" : ""}`}
+                className={`block h-[2px] w-full bg-ink transition ${menuOpen ? "opacity-0" : ""}`}
               />
               <span
-                className={`block h-0.5 w-full bg-ink transition ${menuOpen ? "-translate-y-[7px] -rotate-45" : ""}`}
+                className={`block h-[2px] w-full bg-ink transition ${menuOpen ? "-translate-y-[10px] -rotate-45" : ""}`}
               />
             </span>
           </button>
         </div>
-
-        {menuOpen ? (
-          <>
-            <button
-              type="button"
-              aria-label="메뉴 닫기"
-              className="fixed inset-0 z-40 cursor-default bg-ink/25"
-              onClick={() => setMenuOpen(false)}
-            />
-            <nav className="absolute inset-x-0 top-full z-50 border-b border-mist bg-porcelain px-4 py-3 shadow-[0_12px_24px_rgba(28,26,25,0.08)]">
-              <ul className="flex flex-col gap-1">
-                {nav.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      onClick={(e) => {
-                        onHashClick(e, item.href);
-                        setMenuOpen(false);
-                      }}
-                      className="text-kr block rounded-btn px-2 py-3 text-[16px] text-ink"
-                    >
-                      {item.ko}
-                    </Link>
-                  </li>
-                ))}
-                <li>
-                  <Link
-                    href={cta.href}
-                    onClick={(e) => {
-                      onHashClick(e, cta.href);
-                      setMenuOpen(false);
-                    }}
-                    className="rounded-btn mt-2 flex h-12 items-center justify-center bg-forest text-[15px] text-porcelain"
-                  >
-                    {cta.ko}
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-          </>
-        ) : null}
       </header>
 
+      {menuOpen ? (
+        <nav
+          className="fixed inset-x-0 bottom-0 z-40 bg-porcelain px-4"
+          style={{ top: menuTop }}
+          aria-label="주요 메뉴"
+        >
+          <ul className="flex flex-col gap-[33px] pt-[44px]">
+            {MOBILE_NAV.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  onClick={(e) => {
+                    onHashClick(e, item.href);
+                    setMenuOpen(false);
+                  }}
+                  className="group grid h-[32px] overflow-hidden text-left text-[#AEAEAD] transition-colors duration-300 hover:text-ink focus-visible:text-ink"
+                >
+                  <MobileMenuRoll en={item.en} ko={item.ko} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <Link
+            href={cta.href}
+            onClick={(e) => {
+              onHashClick(e, cta.href);
+              setMenuOpen(false);
+            }}
+            className="rounded-btn group mt-[52px] flex h-[56px] w-full items-center justify-between bg-forest px-[25px] text-porcelain no-underline transition-colors duration-300 hover:bg-forest-deep focus-visible:bg-forest-deep active:bg-forest-deep"
+          >
+            <span className="grid h-6 overflow-hidden">
+              <MobileMenuRoll
+                en={cta.en}
+                ko={cta.ko}
+                enClassName="font-latin text-[17px] font-normal uppercase"
+                koClassName="text-kr text-[17px] font-normal"
+              />
+            </span>
+            <svg
+              aria-hidden
+              width="8"
+              height="14"
+              viewBox="0 0 8 14"
+              fill="none"
+              className="shrink-0"
+            >
+              <path
+                d="M1 1.5L6.5 7L1 12.5"
+                stroke="currentColor"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </Link>
+        </nav>
+      ) : null}
+
       <main>
-        {/* Hero */}
-        <section id="hero" className="bg-porcelain px-5 pb-10 pt-10">
-          <p className="font-display text-[13px] font-medium uppercase tracking-[0.04em] text-forest">
-            {hero.eyebrow}
-          </p>
-          <h1 className="text-kr mt-5 text-[34px] font-bold leading-[1.25] tracking-[-0.02em] text-ink">
-            {hero.headline.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
-          </h1>
-          <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
-            {hero.body.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
-          </p>
-          <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-[6px] bg-black">
+        {/* Hero — 모바일 시안 hu_m_Main · 375 × 691 */}
+        <section id="hero" className="bg-porcelain">
+          <div className="px-4 pt-[80px]">
+            <p className="font-display text-[13px] font-medium uppercase leading-none tracking-[0.02em] text-forest">
+              {hero.eyebrow}
+            </p>
+            <h1 className="text-kr mt-[18px] text-[32px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
+              {hero.headline.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </h1>
+            <p className="text-kr mt-[31px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
+              {hero.body.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </p>
+          </div>
+          <div
+            className="relative mt-[42px] h-[280px] w-full overflow-hidden bg-black"
+            aria-label="비주얼 영상 영역"
+          >
             <video
               className="absolute inset-0 h-full w-full object-cover"
               src="/videos/hero-visual.mp4"
@@ -151,17 +206,6 @@ export function MobileHome() {
               loop
               playsInline
               preload="metadata"
-              style={{
-                filter: "saturate(0.55) brightness(0.72) contrast(1.08)",
-              }}
-            />
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(180deg, rgba(20,18,16,0.28) 0%, rgba(20,18,16,0.18) 45%, rgba(20,18,16,0.42) 100%)",
-              }}
-              aria-hidden
             />
           </div>
         </section>
@@ -360,23 +404,25 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* Key benefits — 가로 슬라이드 */}
-        <section className="bg-porcelain py-14">
-          <div className="px-5">
-            <p className="font-display text-[13px] font-medium uppercase text-forest">
-              <span className="font-latin mr-1.5 text-[12px]">
+        {/* Key benefits — 모바일 시안 hu_m_Key_Benefits · 375 × 757 */}
+        <section id="key-benefits" className="bg-porcelain pt-[80px] pb-[81px]">
+          <div className="px-4">
+            <p className="flex items-center leading-none text-forest">
+              <span className="font-latin mr-[6px] text-[12px] font-medium tracking-normal uppercase">
                 {keyBenefits.eyebrow.index}
               </span>
-              {keyBenefits.eyebrow.label}
+              <span className="font-display text-[13px] font-medium uppercase">
+                {keyBenefits.eyebrow.label}
+              </span>
             </p>
-            <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
+            <h2 className="text-kr mt-[21px] text-[32px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
               {keyBenefits.headline.map((line) => (
                 <span key={line} className="block">
                   {line}
                 </span>
               ))}
             </h2>
-            <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
+            <p className="text-kr mt-[29px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
               {keyBenefits.body.map((line) => (
                 <span key={line} className="block">
                   {line}
@@ -385,33 +431,30 @@ export function MobileHome() {
             </p>
           </div>
           <div
-            className="mt-8 overflow-x-auto overscroll-x-contain pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="mt-[51px] overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             style={{ touchAction: "pan-x pan-y" }}
           >
-            <div className="flex w-max gap-4 px-5">
+            <div className="flex w-max gap-3 px-4">
               {keyBenefits.cards.map((card) => (
-                <article
-                  key={card.title.join("-")}
-                  className="w-[min(300px,78vw)] shrink-0"
-                >
-                  <div className="relative h-[200px] overflow-hidden rounded-[6px] bg-black">
+                <article key={card.title.join("-")} className="w-[290px] shrink-0">
+                  <div className="relative h-[195px] overflow-hidden rounded-[6px] bg-black">
                     <Image
                       src={card.image}
                       alt=""
                       fill
-                      sizes="300px"
+                      sizes="290px"
                       className="object-cover"
                       unoptimized
                     />
                   </div>
-                  <h3 className="text-kr mt-5 text-[22px] font-semibold leading-[1.35] text-forest">
+                  <h3 className="text-kr mt-[26px] text-[22px] font-semibold leading-[30px] tracking-[-0.01em] text-forest">
                     {card.title.map((line) => (
                       <span key={line} className="block">
                         {line}
                       </span>
                     ))}
                   </h3>
-                  <p className="text-kr mt-3 text-[15px] leading-[1.6] text-body">
+                  <p className="text-kr mt-[20px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
                     {card.body.map((line) => (
                       <span key={line} className="block">
                         {line}
@@ -424,24 +467,7 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* Process */}
-        <section className="bg-forest px-5 py-14 text-porcelain">
-          <h2 className="font-display text-[28px] font-medium uppercase leading-none">
-            {process.title}
-          </h2>
-          <div className="mt-10 flex flex-col gap-8">
-            {process.steps.map((step) => (
-              <article key={step.index}>
-                <p className="font-latin text-[13px] tracking-wide opacity-70">
-                  {step.index} {step.caption}
-                </p>
-                <p className="text-kr mt-3 text-[15px] leading-[1.65] text-porcelain/80">
-                  {step.body.join(" ")}
-                </p>
-              </article>
-            ))}
-          </div>
-        </section>
+        <MobileProcess />
 
         {/* Template collection */}
         <section id="template" className="bg-porcelain py-14">
@@ -673,42 +699,75 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* Footer */}
-        <footer id="footer" className="bg-linen px-5 py-12">
-          <Wordmark width={160} />
-          <div className="text-kr mt-6 space-y-2 text-[12px] leading-[1.55] text-ink/70">
-            {footer.company.map((row) => (
-              <p
-                key={row.map((p) => p.label).join("-")}
-                className="flex flex-wrap gap-x-5 gap-y-1"
-              >
-                {row.map((part) => (
-                  <span key={part.label} className="whitespace-nowrap">
-                    {part.label}
-                    <span className="mx-[0.35em] text-ink/35" aria-hidden>
-                      |
-                    </span>
-                    {part.value}
-                  </span>
-                ))}
+        {/* Footer — 모바일 시안 hu_m_FOOTER */}
+        <footer id="footer" className="bg-linen px-4 pt-[80px] pb-[30px]">
+          <FooterNewsletter compact />
+
+          {footer.columns
+            .filter((column) => column.title !== "INDEX")
+            .map((column) => (
+              <div key={column.title} className="mt-[93px]">
+                <p className="font-latin text-[12px] font-bold uppercase leading-none tracking-[0.06em] text-ink">
+                  {column.title}
+                </p>
+                <ul className="mt-[14px]">
+                  {column.links.map((item) => (
+                    <li
+                      key={item.label}
+                      className="font-latin text-[15px] font-semibold leading-[1.65] text-ink"
+                    >
+                      <Link
+                        href={item.href}
+                        onClick={(e) => onHashClick(e, item.href)}
+                        className="transition-colors duration-200 hover:underline hover:underline-offset-[3px]"
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+
+          <div className="text-kr mt-[93px] text-[12px] font-normal leading-[1.55] text-ink/65">
+            {footer.company.flat().map((part) => (
+              <p key={part.label}>
+                {part.label}
+                <span className="mx-[0.35em] text-ink/35" aria-hidden>
+                  |
+                </span>
+                {part.value}
               </p>
             ))}
           </div>
-          <p className="font-latin mt-3 text-[12px] text-ink/55">
+
+          <p className="font-latin mt-[30px] text-[12px] font-normal uppercase leading-none tracking-[0.01em] text-ink/65">
             {footer.copyright}
           </p>
-          <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2">
-            {footer.legal.map((p) => (
-              <a
-                key={p.label}
-                href={p.href}
+
+          <nav
+            className="mt-[12px] flex items-center gap-[20px]"
+            aria-label="약관"
+          >
+            {footer.legal.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
                 onClick={saveReturnScroll}
-                className="font-latin text-[12px] uppercase text-ink/70 underline underline-offset-2"
+                className="font-latin text-[12px] font-normal uppercase leading-none text-ink underline decoration-ink underline-offset-[3px]"
               >
-                {p.label}
-              </a>
+                {item.label}
+              </Link>
             ))}
-          </div>
+          </nav>
+
+          <Link
+            href="/"
+            className="mt-[82px] block w-full text-ink"
+            aria-label="hair up"
+          >
+            <Wordmark width={343} className="h-auto w-full" />
+          </Link>
         </footer>
       </main>
     </div>
@@ -722,6 +781,166 @@ const FAQ_TONE: Record<FaqItem["tone"], string> = {
   clay: "bg-clay",
   espresso: "bg-espresso",
 };
+
+function MobileMenuRoll({
+  en,
+  ko,
+  enClassName = "font-latin text-[32px] font-normal uppercase leading-none",
+  koClassName = "text-kr text-[32px] font-normal leading-none",
+}: {
+  en: string;
+  ko: string;
+  enClassName?: string;
+  koClassName?: string;
+}) {
+  return (
+    <>
+      <span
+        className={`relative flex items-center whitespace-nowrap [grid-area:1/1] transition-transform ${MENU_ROLL} group-hover:-translate-y-full group-focus-visible:-translate-y-full ${enClassName}`}
+      >
+        {en}
+      </span>
+      <span
+        aria-hidden
+        className={`relative flex translate-y-full items-center whitespace-nowrap [grid-area:1/1] transition-transform ${MENU_ROLL} group-hover:translate-y-0 group-focus-visible:translate-y-0 ${koClassName}`}
+      >
+        {ko}
+      </span>
+    </>
+  );
+}
+
+const PROCESS_AUTO_MS = 5000;
+const PROCESS_COUNT = process.steps.length;
+
+function MobileProcess() {
+  const [active, setActive] = useState(0);
+  const [barKey, setBarKey] = useState(0);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const [manual, setManual] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const touchRef = useRef<{ x: number; y: number } | null>(null);
+  const manualRef = useRef(manual);
+  manualRef.current = manual;
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReducedMotion(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  const resume = () => {
+    if (!manualRef.current) return;
+    setManual(false);
+    setBarKey((k) => k + 1);
+  };
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return;
+        if (entry.intersectionRatio < 0.35) resume();
+      },
+      { threshold: [0, 0.35, 0.7] },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const go = (next: number, fromGesture = false) => {
+    setActive(((next % PROCESS_COUNT) + PROCESS_COUNT) % PROCESS_COUNT);
+    setBarKey((k) => k + 1);
+    if (fromGesture) setManual(true);
+  };
+
+  const step = process.steps[active] ?? process.steps[0];
+
+  return (
+    <section
+      ref={sectionRef}
+      id="process"
+      className="flex min-h-[620px] flex-col bg-black px-4 pt-[80px] pb-[81px]"
+      aria-roledescription="carousel"
+      aria-label="The Process"
+      onTouchStart={(e) => {
+        const t = e.changedTouches[0];
+        if (!t) return;
+        touchRef.current = { x: t.clientX, y: t.clientY };
+      }}
+      onTouchEnd={(e) => {
+        const start = touchRef.current;
+        const t = e.changedTouches[0];
+        touchRef.current = null;
+        if (!start || !t) return;
+        const dx = t.clientX - start.x;
+        const dy = t.clientY - start.y;
+        if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
+        go(active + (dx < 0 ? 1 : -1), true);
+      }}
+    >
+      <h2 className="font-display text-[28px] font-medium uppercase leading-none text-porcelain">
+        {process.title}
+      </h2>
+
+      <div className="mt-auto">
+        <p className="flex items-baseline">
+          <span className="font-latin mr-2 shrink-0 text-[15px] font-normal text-porcelain">
+            {step.index}
+          </span>
+          <span className="font-display text-[22px] font-medium uppercase leading-none text-porcelain">
+            {step.caption}
+          </span>
+        </p>
+        <p className="text-kr mt-[26px] text-[15px] font-normal leading-[24px] text-[#d9d7d4]">
+          {step.bodyMobile.map((line) => (
+            <span key={line} className="block">
+              {line}
+            </span>
+          ))}
+        </p>
+
+        <div
+          className="mt-[39px] flex gap-2"
+          role="tablist"
+          aria-label="Process steps"
+        >
+          {process.steps.map((item, i) => {
+            const isActive = active === i;
+            return (
+              <button
+                key={item.caption}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                aria-label={`${item.index} ${item.caption}`}
+                className="relative h-[3px] min-w-0 flex-1 overflow-hidden"
+                style={{ backgroundColor: "rgb(90, 90, 90)" }}
+                onClick={() => go(i, true)}
+              >
+                {isActive ? (
+                  reducedMotion || manual ? (
+                    <span className="absolute inset-y-0 left-0 w-full bg-porcelain" />
+                  ) : (
+                    <span
+                      key={`${barKey}-${i}`}
+                      className="process-bar-fill absolute inset-y-0 left-0 w-full bg-porcelain"
+                      style={{ animationDuration: `${PROCESS_AUTO_MS}ms` }}
+                      onAnimationEnd={() => go(i + 1)}
+                    />
+                  )
+                ) : null}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function MobileFaqCard({
   item,
