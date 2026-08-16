@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 
 import { FooterNewsletter } from "@/components/sections/FooterNewsletter";
 import { Wordmark } from "@/components/brand/Wordmark";
@@ -30,7 +30,7 @@ import {
   templateCollection,
   topBanner,
 } from "@/content/site";
-import { onHashClick } from "@/lib/scroll-to-hash";
+import { onHashClick, scrollToHash } from "@/lib/scroll-to-hash";
 import { saveReturnScroll } from "@/lib/entry-chrome";
 
 /**
@@ -49,14 +49,31 @@ export function MobileHome() {
   const headerRef = useRef<HTMLElement>(null);
   const chatRef = useRef<DemoChatHandle>(null);
 
+  const unlockPageScroll = () => {
+    document.body.style.overflow = "";
+    document.documentElement.style.overflow = "";
+  };
+
   useEffect(() => {
     if (!menuOpen) return;
-    const prev = document.body.style.overflow;
+    const prevBody = document.body.style.overflow;
+    const prevHtml = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prevBody;
+      document.documentElement.style.overflow = prevHtml;
     };
   }, [menuOpen]);
+
+  const goHashFromMenu = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return;
+    }
+    unlockPageScroll();
+    setMenuOpen(false);
+    if (scrollToHash(href)) event.preventDefault();
+  };
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -88,14 +105,25 @@ export function MobileHome() {
       {/* 헤더 + 메뉴 — 시안 hu_m_Menu_open */}
       <header ref={headerRef} className="relative sticky top-0 z-50 bg-porcelain">
         <div className="flex h-[56px] items-center justify-between px-4">
-          <Link href="/" className="text-ink" aria-label="hair up">
+          <Link
+            href="/"
+            className="text-ink"
+            aria-label="hair up"
+            onClick={() => setMenuOpen(false)}
+          >
             <Wordmark width={101} />
           </Link>
           <button
             type="button"
             aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
             aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((v) => !v)}
+            onClick={() => {
+              if (!menuOpen) {
+                const bottom = headerRef.current?.getBoundingClientRect().bottom;
+                if (bottom != null) setMenuTop(bottom);
+              }
+              setMenuOpen((v) => !v);
+            }}
             className="flex size-10 items-center justify-center text-ink"
           >
             <span className="sr-only">메뉴</span>
@@ -125,10 +153,7 @@ export function MobileHome() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  onClick={(e) => {
-                    onHashClick(e, item.href);
-                    setMenuOpen(false);
-                  }}
+                  onClick={(e) => goHashFromMenu(e, item.href)}
                   className={
                     i === 0
                       ? "text-kr flex h-[32px] items-center text-[32px] font-normal leading-none text-ink"
@@ -146,10 +171,7 @@ export function MobileHome() {
           </ul>
           <Link
             href={cta.href}
-            onClick={(e) => {
-              onHashClick(e, cta.href);
-              setMenuOpen(false);
-            }}
+            onClick={(e) => goHashFromMenu(e, cta.href)}
             className="rounded-btn group mt-[52px] flex h-[56px] w-full items-center justify-between bg-forest px-[25px] text-porcelain no-underline transition-colors duration-300 hover:bg-forest-deep focus-visible:bg-forest-deep active:bg-forest-deep"
           >
             <span className="grid h-6 overflow-hidden">
@@ -180,7 +202,7 @@ export function MobileHome() {
         </nav>
       ) : null}
 
-      <main>
+      <main className="[&_section]:scroll-mt-[56px]">
         {/* Hero — 모바일 시안 hu_m_Main · 375 × 691 */}
         <section id="hero" className="bg-porcelain">
           <div className="px-4 pt-[80px]">
@@ -708,7 +730,7 @@ export function MobileHome() {
         </section>
 
         {/* Footer — 모바일 시안 hu_m_FOOTER */}
-        <footer id="footer" className="bg-linen px-4 pt-[80px] pb-[30px]">
+        <footer id="footer" className="scroll-mt-[56px] bg-linen px-4 pt-[80px] pb-[30px]">
           <FooterNewsletter compact />
 
           {footer.columns
@@ -829,7 +851,9 @@ function MobileProcess() {
   const sectionRef = useRef<HTMLElement>(null);
   const touchRef = useRef<{ x: number; y: number } | null>(null);
   const manualRef = useRef(manual);
+  const activeRef = useRef(active);
   manualRef.current = manual;
+  activeRef.current = active;
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -887,7 +911,7 @@ function MobileProcess() {
         const dx = t.clientX - start.x;
         const dy = t.clientY - start.y;
         if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
-        go(active + (dx < 0 ? 1 : -1), true);
+        go(activeRef.current + (dx < 0 ? 1 : -1), true);
       }}
     >
       <h2 className="font-display text-[28px] font-medium uppercase leading-none text-porcelain">
