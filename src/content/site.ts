@@ -113,7 +113,7 @@ export const experience = {
   ],
   kakaoDemo: {
     label: "카카오톡 데모 체험하기",
-    href: "https://pf.kakao.com/_hairup",
+    href: "https://pf.kakao.com/_xeWxdSX/chat",
   },
   tryAsking: {
     title: "TRY ASKING.",
