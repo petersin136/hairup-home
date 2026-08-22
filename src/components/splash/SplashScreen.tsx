@@ -9,14 +9,22 @@ export const SPLASH_SESSION_KEY = "hairup:splash-played";
 export const SPLASH_REVEAL_EVENT = "hairup:splash-reveal";
 
 /**
- * 01. SPLASH SCREEN — 아트보드 1440 × 900, 배경 #2c3a2e
+ * SPLASH SCREEN — 배경 #2c3a2e
  *
- * 타임라인 (시안 참고사항)
+ * 모바일
+ *   서브문구 Inter 9px / 400 / tracking 0.075em / #faf8f5
+ *   로고 SVG 151px · 간격 11px
+ *
+ * PC (≥1440)
+ *   서브문구 Inter 14px / 400 / tracking 0.1em / #faf8f5
+ *   로고 SVG 240px · 간격 15px
+ *
+ * 텍스트+로고 그룹을 화면 가로·세로 정중앙에 둡니다.
+ *
+ * 타임라인
  *   0    ~ 0.4s  서브문구 + 로고가 아래에서 위로 올라오며 불투명도 0 → 100
  *   0.4  ~ 1.2s  0.8초간 정지 유지
  *   1.2  ~ 1.6s  커튼업 — 전체가 위로 빠지며 랜딩페이지가 드러남
- *
- * 로고는 화면 정중앙(y 450), 서브문구는 로고 폭(193px)에 맞춰 자간을 벌려 정렬됩니다.
  */
 const RISE_MS = 400;
 const HOLD_MS = 800;
@@ -69,17 +77,9 @@ export function SplashScreen() {
       aria-hidden
       className="splash-root fixed inset-0 z-50 flex items-center justify-center bg-forest"
     >
-      {/* 로고 중심을 화면 정중앙에 두고, 서브문구는 그 위에 얹습니다. */}
-      <div className="splash-content relative">
-        <p
-          className="absolute bottom-full left-0 mb-[15px] w-full text-center font-latin text-[14px] font-semibold leading-none tracking-[1.75px] text-porcelain"
-          style={{ textIndent: "1.75px" }}
-        >
-          {splash.eyebrow}
-        </p>
-        <span className="block text-porcelain">
-          <Wordmark width={193} />
-        </span>
+      <div className="splash-content">
+        <p className="splash-sub">{splash.eyebrow}</p>
+        <Wordmark width={151} className="splash-logo" />
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { SiteHeader } from "@/components/layout/SiteHeader";
 import { TopBanner } from "@/components/layout/TopBanner";
 import { MobileHome } from "@/components/mobile/MobileHome";
 import { AutomatedCrm } from "@/components/sections/AutomatedCrm";
@@ -41,6 +42,7 @@ export function HomeShell() {
     return (
       <main>
         <TopBanner />
+        <SiteHeader />
         <Hero />
         <Dilemma />
         <Experience />

@@ -1,13 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { DemoAdminDashboard } from "@/components/sections/DemoAdminDashboard";
-import {
-  DemoChat,
-  type DemoChatHandle,
-  IPHONE_MOCKUP,
-} from "@/components/sections/DemoChat";
+import { DemoChat, type DemoChatHandle } from "@/components/sections/DemoChat";
 import { experience } from "@/content/site";
 import {
   type BookingPayload,
@@ -17,25 +14,31 @@ import {
 } from "@/lib/demo-chat/booking";
 
 /**
- * THE EXPERIENCE — HU_TEST DETAIL 시안
+ * THE EXPERIENCE — PC 시안
  *
- * 아트보드 1440
- * - L 183 · 폰 475×980 · R 160
- * - 리스트 구분선 500
- * - 세로(시각 보정): 36 / 52 / 80 / 36 / 36
- *   ※ 시안 표기 45/65/100/45/45 — 행간 포함 시 과해 보여 약 80%로 조정
+ * 좌우 여백 30 · 카드 간격 24 · 세로 패딩 80
+ * .DASHBOARD-CARD      880×600 · r 10 · AI 채팅 모션
+ * .DASHBOARD-SUB-CARD  476×600 · r 10 · 원본 그레인 BG
+ *
+ * .EXPERIENCE-TAG    Playfair 13/500 · #2C3A2E · tracking 0.025em
+ * .EXPERIENCE-TITLE  Noto 40/600 · lh 1.375 · #1C1A19
+ * .EXPERIENCE-DESC   Noto 17/400 · lh 1.588 · tracking -0.01em · rgba(28,26,25,0.8)
+ * 서브카드 좌표는 시안 시각 아웃라인 (tag→title 42 · title→desc 36 · desc→btn 55)
+ *
+ * .BTN-KAKAO-DEMO  232×55 · r 4 · #FAF8F5 / #352923 · hover 반전
  */
-const SIDE_L = 183;
-const SIDE_R = 160;
-const PHONE_W = IPHONE_MOCKUP.width;
-const PHONE_H = IPHONE_MOCKUP.height;
-/** 본문 최장줄 + 여유 — 폰↔텍스트 간격 120 */
-const COL_GAP = 120;
-const TEXT_COL_W = 520;
-const LIST_W = 500;
-const SECTION_TOP = 96;
-/** 폰 목업 하단 ↔ 섹션 끝 = 150 (다음 CRM 상단 여백과 동일) */
-const SECTION_BOTTOM = 150;
+const PAD_X = 30;
+const PAD_Y = 80;
+const GAP = 24;
+const CARD = { width: 880, height: 600, radius: 10 } as const;
+const SUB = { width: 476, height: 600, radius: 10 } as const;
+const PAD_LEFT = 50;
+const TAG_TOP = 132;
+const TITLE_TOP = 183;
+const TITLE_LEADING = 1.375;
+const DESC_TOP = 313;
+const DESC_LEADING = 1.588;
+const BTN_TOP = 414;
 
 export function Experience() {
   const chatRef = useRef<DemoChatHandle>(null);
@@ -126,120 +129,112 @@ export function Experience() {
       <div
         className="relative z-10 mx-auto flex w-[1440px] items-start"
         style={{
-          paddingLeft: SIDE_L,
-          paddingRight: SIDE_R,
-          paddingTop: SECTION_TOP,
-          paddingBottom: SECTION_BOTTOM,
-          gap: COL_GAP,
+          paddingLeft: PAD_X,
+          paddingRight: PAD_X,
+          paddingTop: PAD_Y,
+          paddingBottom: PAD_Y,
+          gap: GAP,
         }}
       >
-        <div className="relative shrink-0" style={{ width: PHONE_W, height: PHONE_H }}>
-          <DemoChat ref={chatRef} onBooking={handleBooking} />
+        {/* .DASHBOARD-CARD */}
+        <div
+          className="relative shrink-0 overflow-hidden bg-[#C6D4DF]"
+          style={{
+            width: CARD.width,
+            height: CARD.height,
+            borderRadius: CARD.radius,
+          }}
+        >
+          <DemoChat ref={chatRef} fill onBooking={handleBooking} />
         </div>
 
-        <div className="min-w-0 shrink-0" style={{ width: TEXT_COL_W }}>
-          {/* 02 / THE EXPERIENCE — Inter 14 + Playfair 25 · #2C3A2E */}
-          <p className="flex items-start leading-none text-forest">
-            <span className="section-eyebrow-index font-latin mr-[6px] text-[14px] font-medium leading-none tracking-normal uppercase">
-              {experience.eyebrow.index}
-            </span>
-            <span className="font-display text-[25px] font-medium leading-none uppercase">
-              {experience.eyebrow.label}
-            </span>
+        {/* .DASHBOARD-SUB-CARD */}
+        <div
+          className="relative shrink-0 overflow-hidden"
+          style={{
+            width: SUB.width,
+            height: SUB.height,
+            borderRadius: SUB.radius,
+          }}
+        >
+          <Image
+            src="/experience/ex-right-pc-bg.png"
+            alt=""
+            width={476}
+            height={600}
+            unoptimized
+            quality={100}
+            sizes="476px"
+            className="pointer-events-none absolute inset-0 h-full w-full"
+            style={{ objectFit: "fill" }}
+            priority
+          />
+
+          {/* .EXPERIENCE-TAG */}
+          <p
+            className="absolute z-10 font-display text-left text-[13px] font-medium leading-none tracking-[0.025em] text-forest"
+            style={{ top: TAG_TOP, left: PAD_LEFT }}
+          >
+            {experience.tag}
           </p>
 
-          {/* 타이틀 — Noto 70/700 · 행간 1.2 · mt 36 */}
-          <h2 className="text-kr mt-[36px] text-[70px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
-            {experience.headline.map((line) => (
-              <span key={line} className="block whitespace-nowrap">
+          {/* .EXPERIENCE-TITLE */}
+          <h2
+            className="text-kr absolute z-10 text-left text-[40px] font-semibold whitespace-nowrap text-ink"
+            style={{
+              top: TITLE_TOP,
+              left: PAD_LEFT,
+              lineHeight: TITLE_LEADING,
+            }}
+          >
+            {experience.headlinePc.map((line) => (
+              <span key={line} className="block">
                 {line}
               </span>
             ))}
           </h2>
 
-          {/* 본문 — Noto 22/400 · #6C6864 · lh 1.64 · mt 52 */}
-          <p className="text-kr mt-[52px] text-[22px] font-normal leading-[1.64] text-body">
-            {experience.body.map((line) => (
-              <span key={line} className="block whitespace-nowrap">
+          {/* .EXPERIENCE-DESC */}
+          <p
+            className="text-kr absolute z-10 text-left text-[17px] font-normal tracking-[-0.01em] whitespace-nowrap"
+            style={{
+              top: DESC_TOP,
+              left: PAD_LEFT,
+              lineHeight: DESC_LEADING,
+              color: "rgba(28, 26, 25, 0.8)",
+            }}
+          >
+            {experience.bodyPc.map((line) => (
+              <span key={line} className="block">
                 {line}
               </span>
             ))}
           </p>
 
-          {/* TRY ASKING. — Playfair 44/500 · #2C3A2E · mt 80 */}
-          <p className="font-display mt-[80px] text-[44px] font-medium leading-none text-forest uppercase">
-            {experience.tryAsking.title}
-          </p>
-
-          {/* 설명 — Noto 22/400 · lh 1.64 · mt 36 */}
-          <p className="text-kr mt-[36px] text-[22px] font-normal leading-[1.64] text-body">
-            {experience.tryAsking.body.map((line) => (
-              <span key={line} className="block whitespace-nowrap">
-                {line}
-              </span>
-            ))}
-          </p>
-
-          {/*
-            질문 리스트 — DETAIL_03
-            구분선 500 · 1px rgba(108,104,100,0.7)
-            글 22/400 rgba(102,102,102,0.7) · 호버 #2C3A2E
-          */}
-          <ul className="mt-[36px]" style={{ width: LIST_W }}>
-            {experience.examples.map((q, i) => (
-              <li key={q} style={{ width: LIST_W }}>
-                {i === 0 ? (
-                  <div
-                    className="h-px w-full"
-                    style={{ background: "rgba(108, 104, 100, 0.7)" }}
-                    aria-hidden
-                  />
-                ) : null}
-                <button
-                  type="button"
-                  onClick={() => chatRef.current?.ask(q)}
-                  className="text-kr group flex w-full items-center gap-3 py-[22px] text-left text-[22px] font-normal leading-none tracking-[-0.01em] text-[rgba(102,102,102,0.7)] transition-colors hover:text-forest"
-                >
-                  <svg
-                    aria-hidden
-                    className="question-arrow shrink-0"
-                    width="14"
-                    height="12"
-                    viewBox="0 0 14 12"
-                    fill="none"
-                  >
-                    <path
-                      d="M12.5 6H2.2M2.2 6l3.8-3.5M2.2 6l3.8 3.5"
-                      stroke="currentColor"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <span className="min-w-0 flex-1 whitespace-nowrap">{q}</span>
-                </button>
-                <div
-                  className="h-px w-full"
-                  style={{ background: "rgba(108, 104, 100, 0.7)" }}
-                  aria-hidden
-                />
-              </li>
-            ))}
-          </ul>
+          {/* .BTN-KAKAO-DEMO */}
+          <a
+            href={experience.kakaoDemo.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-kr absolute z-10 inline-flex cursor-pointer items-center justify-center bg-porcelain text-[16px] leading-none font-medium text-espresso no-underline uppercase transition-colors hover:bg-espresso hover:text-porcelain"
+            style={{
+              top: BTN_TOP,
+              left: PAD_LEFT,
+              width: 232,
+              height: 55,
+              borderRadius: 4,
+            }}
+          >
+            {experience.kakaoDemo.label}
+          </a>
         </div>
       </div>
 
       {isDev ? (
-        <div
-          className="pointer-events-none absolute bottom-0 z-10 w-full"
-          style={{ paddingBottom: `${SECTION_BOTTOM + 8}px` }}
-        >
+        <div className="pointer-events-none absolute bottom-0 z-10 w-full pb-4">
           <div
             className="mx-auto w-[1440px]"
-            style={{
-              paddingLeft: SIDE_L + PHONE_W + COL_GAP,
-              paddingRight: SIDE_R,
-            }}
+            style={{ paddingLeft: PAD_X }}
           >
             <button
               type="button"

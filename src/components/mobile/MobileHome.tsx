@@ -88,17 +88,14 @@ export function MobileHome() {
 
   return (
     <div className="[&_.text-kr]:break-keep">
-      {/* 띠배너 — 모바일 시안 hu_m_Main */}
-      <div className="flex h-[38px] w-full items-center justify-center bg-forest px-4">
-        <p className="flex items-center text-center text-[12px] leading-none tracking-[0.01em] text-porcelain">
-          <span className="font-latin font-semibold">{topBanner.en}</span>
-          <span className="mx-[6px] font-latin font-normal" aria-hidden>
-            |
+      {/* 띠배너 — hu_TOP_BANNER__M */}
+      <div className="TOP_BANNER is-mobile px-4">
+        <p className="BANNER_TEXT">
+          <span className="EN">{topBanner.en}</span>
+          <span className="BAR" aria-hidden>
+            {" | "}
           </span>
-          <span className="text-kr font-normal">
-            초기 세팅비 최대
-            <span className="font-latin font-semibold">{topBanner.offer}</span>
-          </span>
+          <span className="KR">{topBanner.krMobile}</span>
         </p>
       </div>
 
@@ -393,11 +390,8 @@ export function MobileHome() {
         {/* Automated CRM — 가로 스냅 캐러셀 (세로 길이 ↓) */}
         <section id="automated-crm" className="bg-linen py-14">
           <div className="px-5">
-            <p className="font-display text-[13px] font-medium uppercase text-ink">
-              <span className="font-latin mr-1.5 text-[12px]">
-                {automatedCrm.eyebrow.index}
-              </span>
-              {automatedCrm.eyebrow.label}
+            <p className="font-display text-[13px] font-medium uppercase tracking-[0.025em] text-forest">
+              {automatedCrm.tag}
             </p>
             <h2 className="text-kr mt-5 text-[30px] font-bold leading-[1.25] text-ink">
               {automatedCrm.headline.map((line) => (
@@ -437,13 +431,8 @@ export function MobileHome() {
         {/* Key benefits — 모바일 시안 hu_m_Key_Benefits · 375 × 757 */}
         <section id="key-benefits" className="bg-porcelain pt-[80px] pb-[81px]">
           <div className="px-4">
-            <p className="flex items-center leading-none text-forest">
-              <span className="font-latin mr-[6px] text-[12px] font-medium tracking-normal uppercase">
-                {keyBenefits.eyebrow.index}
-              </span>
-              <span className="font-display text-[13px] font-medium uppercase">
-                {keyBenefits.eyebrow.label}
-              </span>
+            <p className="font-display text-[13px] font-medium uppercase leading-none tracking-[0.025em] text-forest">
+              {keyBenefits.tag}
             </p>
             <h2 className="text-kr mt-[21px] text-[32px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
               {keyBenefits.headline.map((line) => (
@@ -466,7 +455,7 @@ export function MobileHome() {
           >
             <div className="flex w-max gap-3 px-4">
               {keyBenefits.cards.map((card) => (
-                <article key={card.title.join("-")} className="w-[290px] shrink-0">
+                <article key={card.title} className="w-[290px] shrink-0">
                   <div className="relative h-[195px] overflow-hidden rounded-[6px] bg-black">
                     <Image
                       src={card.image}
@@ -478,11 +467,7 @@ export function MobileHome() {
                     />
                   </div>
                   <h3 className="text-kr mt-[26px] text-[22px] font-semibold leading-[30px] tracking-[-0.01em] text-forest">
-                    {card.title.map((line) => (
-                      <span key={line} className="block">
-                        {line}
-                      </span>
-                    ))}
+                    {card.title}
                   </h3>
                   <p className="text-kr mt-[20px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
                     {card.body.map((line) => (
@@ -1218,7 +1203,7 @@ function MobileCrmCarousel() {
                 <span className="font-latin mr-1.5 tracking-[0.02em]">
                   {s.index}
                 </span>
-                {s.title}
+                {s.title.join(" ")}
               </p>
               <p className="text-kr mt-2 text-[13px] leading-[1.55] text-body">
                 {s.body.join(" ")}

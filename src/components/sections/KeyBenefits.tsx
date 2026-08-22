@@ -1,196 +1,61 @@
-"use client";
-
 import Image from "next/image";
-import { useRef } from "react";
 
-import { Canvas } from "@/components/layout/Canvas";
-import { RainInLines } from "@/components/motion/RainInLines";
 import { keyBenefits } from "@/content/site";
 
 /**
- * 05_Key Benefits — 시안 07-D · 08-D · 09-D
- * 카드는 시안(500×360)보다 약간 키우고, 트랙은 뷰포트 기준 가운데 정렬.
- * 가로 이동은 드래그만 (휠은 페이지 세로 스크롤 유지).
+ * 04_Key Benefits — hu_KB_PC_01 · hu_KB_PC_02 · hu_KB_SPACING_PC
+ *
+ * 상하 패딩 200 · 좌우 152
+ * 태그↔타이틀 42 · 타이틀↔본문 36 · 본문↔그리드 85
+ * 썸네일 558 × 360 · radius 6 · 열 간격 20 · 행 간격 50
+ * 썸네일↔카드타이틀 28 · 카드타이틀↔카드본문 18
+ *
+ * 영문 태그는 cap/alphabetic, 한글은 ideographic 으로 trim.
+ * 여러 줄은 br 로 한 요소의 라인박스를 유지해 line-height 가 줄 사이에 남게 함.
  */
-const TITLE = { top: 300, size: 25 };
-const SECTION_TITLE = {
-  top: TITLE.top + TITLE.size + 45,
-  size: 70,
-  leading: 1.37,
-  lines: 2,
-};
-const SECTION_DESC = {
-  top:
-    SECTION_TITLE.top +
-    SECTION_TITLE.size * SECTION_TITLE.leading * SECTION_TITLE.lines +
-    65,
-  size: 22,
-  leading: 1.64,
-  lines: keyBenefits.body.length,
-};
-
-/** 시안 500×360 · gap 33 → 살짝 키움 */
-const CARD = { width: 540, height: 390, gap: 36 };
-const CARD_TITLE = { size: 32, leading: 1.44, lines: 2, gapAbove: 45 };
-const CARD_DESC = {
-  size: 19,
-  leading: 1.63,
-  lines: 3,
-  gapAbove: 36,
-  color: "#6C6B64",
-};
-
-const DESC_BOTTOM =
-  SECTION_DESC.top +
-  SECTION_DESC.size * SECTION_DESC.leading * SECTION_DESC.lines;
-
-const TRACK_TOP = DESC_BOTTOM + 150;
-
-const TRACK_HEIGHT =
-  CARD.height +
-  CARD_TITLE.gapAbove +
-  CARD_TITLE.size * CARD_TITLE.leading * CARD_TITLE.lines +
-  CARD_DESC.gapAbove +
-  CARD_DESC.size * CARD_DESC.leading * CARD_DESC.lines;
-
-/** 카드 트랙 하단 → THE PROCESS 섹션 간격 */
-const HEIGHT = Math.ceil(TRACK_TOP + TRACK_HEIGHT + 300);
-
-/** 첫 화면에서 카드 2장이 가운데 오도록 하는 한쪽 패딩 */
-const PAIR = CARD.width * 2 + CARD.gap;
-const SIDE_PAD = `max(80px, calc(50% - ${PAIR / 2}px))`;
-
 export function KeyBenefits() {
-  const track = useRef<HTMLDivElement>(null);
-  const drag = useRef<{ x: number; left: number } | null>(null);
-
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    const el = track.current;
-    if (!el || e.button !== 0) return;
-    drag.current = { x: e.clientX, left: el.scrollLeft };
-    el.setPointerCapture(e.pointerId);
-  };
-
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const el = track.current;
-    if (!el || !drag.current) return;
-    el.scrollLeft = drag.current.left - (e.clientX - drag.current.x);
-  };
-
-  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (drag.current && e.currentTarget.hasPointerCapture(e.pointerId)) {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    }
-    drag.current = null;
-  };
-
   return (
-    <Canvas
-      id="key-benefits"
-      height={HEIGHT}
-      background="bg-porcelain"
-      bleed={
-        <div
-          ref={track}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={endDrag}
-          onPointerCancel={endDrag}
-          className="pointer-events-auto absolute inset-x-0 flex cursor-grab overflow-x-auto overscroll-x-contain [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
-          style={{
-            top: `${TRACK_TOP}px`,
-            height: `${TRACK_HEIGHT}px`,
-            gap: `${CARD.gap}px`,
-            paddingLeft: SIDE_PAD,
-            paddingRight: SIDE_PAD,
-            touchAction: "pan-y",
-          }}
-        >
-          {keyBenefits.cards.map((card, i) => (
-            <article
-              key={card.title.join("-")}
-              data-card={i}
-              className="relative shrink-0 select-none"
-              style={{ width: `${CARD.width}px` }}
-            >
-              <div
-                className="relative overflow-hidden rounded-ui bg-black"
-                style={{ height: `${CARD.height}px` }}
-              >
+    <section id="key-benefits" className="BENEFITS">
+      <div className="BENEFITS-INNER">
+        <p className="BENEFITS-TAG">{keyBenefits.tag}</p>
+
+        <h2 className="BENEFITS-TITLE">
+          {keyBenefits.headline[0]}
+          <br />
+          {keyBenefits.headline[1]}
+        </h2>
+
+        <p className="BENEFITS-DESC">
+          {keyBenefits.body[0]}
+          <br />
+          {keyBenefits.body[1]}
+          <br />
+          {keyBenefits.body[2]}
+        </p>
+
+        <div className="BENEFITS-GRID">
+          {keyBenefits.cards.map((card) => (
+            <article key={card.title} className="BENEFIT-CARD">
+              <div className="BENEFIT-CARD-THUMB">
                 <Image
                   src={card.image}
                   alt=""
                   fill
-                  sizes={`${CARD.width}px`}
-                  className="pointer-events-none object-cover"
-                  draggable={false}
+                  sizes="558px"
+                  className="object-cover"
                   unoptimized
                 />
               </div>
-              <h3
-                className="text-kr text-left text-[32px] font-semibold tracking-[-0.4px] text-forest"
-                style={{
-                  marginTop: `${CARD_TITLE.gapAbove}px`,
-                  lineHeight: CARD_TITLE.leading,
-                }}
-              >
-                {card.title.map((line) => (
-                  <span key={line} className="block whitespace-pre">
-                    {line}
-                  </span>
-                ))}
-              </h3>
-              <p
-                className="text-kr text-left text-[19px] font-normal tracking-[-0.01em]"
-                style={{
-                  marginTop: `${CARD_DESC.gapAbove}px`,
-                  lineHeight: CARD_DESC.leading,
-                  color: CARD_DESC.color,
-                }}
-              >
-                {card.body.map((line) => (
-                  <span key={line} className="block whitespace-pre">
-                    {line}
-                  </span>
-                ))}
+              <h3 className="BENEFIT-CARD-TITLE">{card.title}</h3>
+              <p className="BENEFIT-CARD-DESC">
+                {card.body[0]}
+                <br />
+                {card.body[1]}
               </p>
             </article>
           ))}
         </div>
-      }
-    >
-      <p
-        className="absolute inset-x-0 flex items-start justify-center font-display text-[25px] font-medium uppercase leading-none text-forest"
-        style={{ top: `${TITLE.top}px` }}
-      >
-        <span className="section-eyebrow-index mr-[6px] font-latin text-[14px] font-medium leading-none tracking-normal">
-          {keyBenefits.eyebrow.index}
-        </span>
-        {keyBenefits.eyebrow.label}
-      </p>
-
-      <h2
-        className="text-kr absolute inset-x-0 text-center text-[70px] font-bold tracking-[-0.01em] text-ink"
-        style={{
-          top: `${SECTION_TITLE.top}px`,
-          lineHeight: SECTION_TITLE.leading,
-        }}
-      >
-        {keyBenefits.headline.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
-      </h2>
-
-      <RainInLines
-        lines={keyBenefits.body}
-        className="text-kr absolute inset-x-0 text-center text-[22px] font-normal tracking-[-0.01em] text-body"
-        style={{
-          top: `${SECTION_DESC.top}px`,
-          lineHeight: SECTION_DESC.leading,
-        }}
-      />
-    </Canvas>
+      </div>
+    </section>
   );
 }

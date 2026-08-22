@@ -17,28 +17,38 @@ export const cta = {
   href: "#start",
 } as const;
 
-/** 헤더 위 띠배너 — 시안 5-D · 영문/숫자는 Inter 600, 한글은 Noto 400 */
+/** GNB 우측 — hu_GNB_PC · LOGIN 도 메뉴와 동일 스타일, 호버 시 한글 */
+export const login = {
+  en: "LOGIN",
+  ko: "로그인",
+  href: "#",
+} as const;
+
+/** 헤더 위 띠배너 — hu_TOP_BANNER__PC / hu_TOP_BANNER__M */
 export const topBanner = {
-  en: "LAUNCH OFFER",
-  kr: "헤어업 오픈 한정, 초기 세팅비 최대",
-  /** 앞에 NBSP — flex에서도 ‘최대 40%’ 띄어쓰기 유지 */
-  offer: "\u00A040% OFF",
+  en: "ONBOARDING OFFER",
+  kr: "1:1 맞춤 세팅비 최대 40% 지원 (선착순)",
+  krMobile: "1:1 맞춤 세팅비 최대 40% 지원",
 } as const;
 
 /** 런치 오퍼 팝업 — 시안 POPUP · 440 × 600 */
 export const launchPopup = {
-  image: "/images/popup-top.jpg",
+  image: "/images/popup-top.png",
   desc: [
-    "단독 웹 쇼룸과 통합 예약 시스템, 헤어업 브랜딩 플랜.",
-    "신규 오픈 기간 한정, 초기 세팅비 혜택으로 시작하세요.",
+    "우리 헤어샵을 위해 정교하게 맞춰지는 AI 살롱 매니저.",
+    "완성도 높은 첫 시작을 위한 1:1 맞춤 세팅 오퍼를 제안합니다.",
   ],
-  discount: { num: "35", percent: "%", off: "Off" },
-  price: { from: "200만원", to: "130만원" },
-  cta: { label: "브랜딩 플랜 혜택받고 시작하기", href: "#start" },
+  benefit: {
+    upto: "Up to",
+    num: "40",
+    unit: "%",
+    limited: "(선착순 한정)",
+  },
+  cta: { label: "1:1 맞춤 세팅 상담하기", href: "#start" },
 } as const;
 
 export const splash = {
-  eyebrow: "AUTOMATED SALON AI",
+  eyebrow: "THE 24/7 AI SALON MANAGER",
 } as const;
 
 export const hero = {
@@ -46,19 +56,27 @@ export const hero = {
   headline: ["가위를 든 순간에도,", "오롯이 작업에만."],
   body: [
     "고객과의 대화부터 예약, 장부 정리까지.",
-    "헤어업 AI가 감각적으로 처리합니다.",
+    "헤어업 AI 매니저가 감각적으로 처리합니다.",
     "당신은 그저, 오늘 최고의 헤어 스타일링에만 집중하세요.",
   ],
 } as const;
 
 export const dilemma = {
   eyebrow: { index: "01 /", label: "THE DILEMMA" },
+  /** PC 시안 .DILEMMA-TAG — 대소문자 그대로 */
+  tag: "( 01. the DILEMMA )",
   headline: ["가위를 들었을 때,", "휴대폰이 울리면?"],
   body: [
     "약제 묻은 장갑을 벗고 답장할 수 없고,",
     "체어 앞 고객을 두고 전화를 받을 수도 없는 순간들.",
     "“얼마예요?”만 묻고 사라지는 단발성 문의와",
     "어처구니 없는 노쇼까지.",
+  ],
+  /** PC 시안 .DILEMMA-DESC 3행 — 마지막 두 줄을 한 줄로 */
+  bodyPc: [
+    "약제 묻은 장갑을 벗고 답장할 수 없고,",
+    "체어 앞 고객을 두고 전화를 받을 수도 없는 순간들.",
+    "“얼마예요?”만 묻고 사라지는 단발성 문의와 어처구니 없는 노쇼까지.",
   ],
   bodyAside: [
     "여러분의 소중한 작업시간이",
@@ -81,11 +99,22 @@ export const dilemma = {
 export const experience = {
   /* 앞머리 "02 /" 만 산세리프, 뒤는 세리프입니다. */
   eyebrow: { index: "02 /", label: "THE EXPERIENCE" },
+  /** PC 시안 .EXPERIENCE-TAG — 대소문자 그대로 */
+  tag: "( 02. the EXPERIENCE )",
   headline: ["주저하지 말고,", "지금 직접", "말을 건네보세요."],
+  headlinePc: ["카카오톡으로", "직접 말을 걸어보세요."],
   body: [
     "실제 매장에 문의하듯 자유롭게 질문을 입력해 보세요.",
     "다정하고 정교하게 응답합니다.",
   ],
+  bodyPc: [
+    "고객의 문의에 AI 매니저가 어떻게 응답하는지",
+    "실제 헤어업 데모 채널에서 바로 확인해 보세요.",
+  ],
+  kakaoDemo: {
+    label: "카카오톡 데모 체험하기",
+    href: "https://pf.kakao.com/_hairup",
+  },
   tryAsking: {
     title: "TRY ASKING.",
     body: [
@@ -107,18 +136,16 @@ export const banner = {
 } as const;
 
 export const automatedCrm = {
-  eyebrow: { index: "03 /", label: "AUTOMATED CRM" },
-  headline: ["예약까지", "손대지 않아도", "알아서 척척"],
+  tag: "( 03. AUTOMATED CRM )",
+  headline: ["상담부터 예약까지", "알아서 척척."],
   body: [
-    "상담했던 모든 문의가 대시보드에",
-    "즉시 데이터로 쌓입니다.",
-    "누락 없이 깔끔한 자동화로",
-    "매장 관리의 피로도를 줄여드립니다.",
+    "상담했던 모든 문의가 대시보드에 즉시 데이터로 쌓입니다.",
+    "누락 없이 깔끔한 자동화로 매장 관리의 피로도를 줄여드립니다.",
   ],
   systems: [
     {
       index: "SYSTEM 01",
-      title: "대화가 끝나면 알아서 쌓이는 데이터",
+      title: ["대화가 끝나면", "알아서 쌓이는 데이터"],
       body: [
         "고객과의 채팅 상담이 완료되는 순간, 수기 입력 없이 대기 목록에 실시간으로",
         "자동 기록됩니다. 날짜, 시간, 담당 디자이너, 시술 메뉴까지 AI 실장이 스스로 정리합니다.",
@@ -126,15 +153,15 @@ export const automatedCrm = {
     },
     {
       index: "SYSTEM 02",
-      title: "입금 확인부터 노쇼 관리까지 한곳에서",
+      title: ["입금 확인부터", "노쇼 관리까지 한곳에"],
       body: [
-        "예약금 입금이 확인되면 '확정' 상태로 즉시 전환됩니다. 시술 완료 내역은 물론",
-        "취소·노쇼 내역까지 한눈에 분류하여 매장 관리의 피로도를 대폭 낮춥니다.",
+        "예약금 입금이 확인되면 '확정' 상태로 즉시 전환됩니다.",
+        "시술 완료 내역은 물론 취소·노쇼 내역까지 한눈에 분류하여 매장 관리의 피로도를 낮춥니다.",
       ],
     },
     {
       index: "SYSTEM 03",
-      title: "직관적으로 파악하는 매장 전체 스케줄",
+      title: ["직관적으로 파악하는", "매장 전체 스케줄"],
       body: [
         "월간 및 주간 단위의 시각적 스케줄 확인은 물론, 디자이너별 개인 휴무와 예약 현황을",
         "필터링하여 우측 상세 패널에서 한눈에 확인합니다.",
@@ -142,7 +169,7 @@ export const automatedCrm = {
     },
     {
       index: "SYSTEM 04",
-      title: "디자이너 직급에 맞춘 유연한 단가 제어",
+      title: ["디자이너 직급에 맞춘", "유연한 단가 제어"],
       body: [
         "시술별 소요 시간과 예약금 설정은 기본, 디자이너의 경력과 직급에 맞춘 개별 차등",
         "단가를 자유롭게 지정하고 사이트에 실시간으로 반영합니다.",
@@ -152,47 +179,43 @@ export const automatedCrm = {
 } as const;
 
 export const keyBenefits = {
-  eyebrow: { index: "04 /", label: "KEY BENEFITS" },
+  tag: "( 04. Key BENEFITS )",
   headline: ["고객은 기다리지 않고,", "당신은 끊기지 않도록."],
   body: [
     "24시간 언제든 이어지는 응대.",
-    "고객의 질문과 디자이너의 작업 시간이 서로를 기다릴 필요 없이",
-    "완벽하게 맞아떨어집니다.",
+    "고객의 질문과 디자이너의 작업 시간이",
+    "서로를 기다릴 필요 없이 완벽하게 맞아떨어집니다.",
   ],
   cards: [
     {
-      title: ["첫째,", "맥락을 아는 디테일한 상담"],
+      title: "맥락을 아는 디테일한 상담",
       body: [
-        "‘요즘 이 드라마 여주인공 머리 하고 싶은데",
-        "저한테 어울릴까요?’ 같은 사소한 질문에도",
-        "AI가 자연스럽게 제안하고 추천합니다.",
+        "‘요즘 이 드라마 여주인공 머리 하고 싶은데 저한테 어울릴까요?’ 같은",
+        "사소한 질문에도 AI가 자연스럽게 제안하고 추천합니다.",
       ],
       image: "/key-benefits/01-consult.png",
     },
     {
-      title: ["둘째,", "대화를 통한 자동 예약"],
+      title: "대화를 통한 자동 예약",
       body: [
-        "시술 소요 시간과 실시간 예약을 정교하게 계산해",
-        "가능한 시간을 안내합니다.",
+        "시술 소요 시간과 실시간 예약을 정교하게 계산해 가능한 시간을 안내합니다.",
         "고객이 “그럼 그때로 할게요” 한마디면 끝납니다.",
       ],
       image: "/key-benefits/02-booking.png",
     },
     {
-      title: ["셋째,", "알아서 정리되는 장부"],
+      title: "알아서 정리되는 장부",
       body: [
-        "예약이 확정되는 순간, 관리자 화면에",
-        "차곡차곡 정리됩니다. 손으로 옮겨 적는",
-        "번거로운 과정은 이제 완전히 사라집니다.",
+        "예약이 확정되는 순간, 관리자 화면에 차곡차곡 정리됩니다.",
+        "손으로 옮겨 적는 번거로운 과정은 이제 완전히 사라집니다.",
       ],
       image: "/key-benefits/03-ledger.png",
     },
     {
-      title: ["넷째,", "노쇼 방지 안심 예약금"],
+      title: "노쇼 방지 안심 예약금",
       body: [
         "진짜 방문할 고객만 예약금을 걸고 확정됩니다.",
-        "오지 않을 문의로 낭비하던 시간과 감정을",
-        "되찾으세요.",
+        "오지 않을 문의로 낭비하던 시간과 감정을 되찾으세요.",
       ],
       image: "/key-benefits/04-deposit.png",
     },
@@ -479,7 +502,7 @@ export const pricing = {
   },
 } as const;
 
-/** 11_CTA — 헤더 CREATE BRAND 가 가리키는 #start · 시안 10-D · 11-D */
+/** 11_CTA — 히어로 CREATE BRAND 가 가리키는 #start · 시안 10-D · 11-D */
 export const start = {
   floats: [
     {

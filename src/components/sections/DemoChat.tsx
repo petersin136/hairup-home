@@ -31,6 +31,8 @@ type DemoChatProps = {
   onBooking?: (payload: BookingPayload) => void;
   /** 가로는 유지하고 세로만 약 절반 — 입력창은 화면 안에 유지 */
   compact?: boolean;
+  /** 폰 프레임 없이 부모를 채움 — PC 대시보드 카드 */
+  fill?: boolean;
 };
 
 /** 시안 카카오 채널 인사 */
@@ -106,7 +108,7 @@ function formatTime(at: number) {
 }
 
 export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
-  function DemoChat({ onBooking, compact = false }, ref) {
+  function DemoChat({ onBooking, compact = false, fill = false }, ref) {
     const [messages, setMessages] = useState<ChatMessage[]>([
       { id: "greeting", role: "assistant", content: GREETING, at: 0 },
     ]);
@@ -254,70 +256,13 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
       ? `${screenR}px ${screenR}px 0 0`
       : `${screenR}px`;
 
-    return (
-      <div
-        className="iphone-mockup relative shrink-0"
-        style={{
-          width: `${IPHONE_MOCKUP.width}px`,
-          height: `${mockupHeight}px`,
-          /* filter drop-shadow 금지 — 레이어 래스터화로 텍스트·아이콘이 뭉개짐 */
-          boxShadow: compact
-            ? "0 16px 32px rgba(28,26,25,0.14)"
-            : "0 28px 56px rgba(28,26,25,0.18), 0 8px 20px rgba(28,26,25,0.1)",
-          borderRadius: outerRadius,
-        }}
-        aria-label="헤어업 상담 데모"
-      >
-        <span
-          className="pointer-events-none absolute top-[148px] -left-[2.5px] h-[26px] w-[3px] rounded-l-[1px]"
-          style={{ background: METAL_BTN }}
-          aria-hidden
-        />
-        <span
-          className="pointer-events-none absolute top-[198px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
-          style={{ background: METAL_BTN }}
-          aria-hidden
-        />
-        {!compact ? (
-          <span
-            className="pointer-events-none absolute top-[256px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
-            style={{ background: METAL_BTN }}
-            aria-hidden
-          />
-        ) : null}
-        <span
-          className="pointer-events-none absolute top-[220px] -right-[2.5px] h-[84px] w-[3px] rounded-r-[1px]"
-          style={{ background: METAL_BTN }}
-          aria-hidden
-        />
-
-        <div
-          className="absolute inset-0"
-          style={{
-            borderRadius: outerRadius,
-            padding: compact
-              ? `${FRAME.metal}px ${FRAME.metal}px 0`
-              : `${FRAME.metal}px`,
-            background: METAL,
-            boxShadow: compact
-              ? "inset 0 1px 0 rgba(255,255,255,0.35)"
-              : "inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.18)",
-          }}
-        >
-          <div
-            className="h-full w-full bg-[#0a0a0a]"
-            style={{
-              borderRadius: bezelRadius,
-              padding: compact
-                ? `${FRAME.bezel}px ${FRAME.bezel}px 0`
-                : `${FRAME.bezel}px`,
-            }}
-          >
+    const chatScreen = (
             <div
               className="demo-chat relative flex h-full min-h-0 w-full flex-col overflow-hidden bg-[#C6D4DF]"
-              style={{ borderRadius: screenRadius }}
+              style={{ borderRadius: fill ? undefined : screenRadius }}
             >
               {/* Status + Dynamic Island — 시간·안테나·배터리 레퍼런스 스케일 */}
+              {fill ? null : (
               <div className="relative z-20 h-[54px] shrink-0">
                 <div
                   className="pointer-events-none absolute top-[12px] left-1/2 z-30 flex h-[36px] w-[128px] -translate-x-1/2 items-center rounded-full bg-black pl-[15px]"
@@ -342,6 +287,7 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
                   <BatteryIcon />
                 </div>
               </div>
+              )}
 
               {/* 채널 헤더 — 타이틀 중앙 · 구분선 없음 */}
               <header className="relative z-10 flex h-[54px] shrink-0 items-center bg-[#C6D4DF] px-0.5">
@@ -423,11 +369,12 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
               <form
                 onSubmit={onSubmit}
                 className="relative flex shrink-0 items-center justify-center gap-2 bg-[#C6D4DF] px-[17px] pt-2"
-                style={{ paddingBottom: compact ? 12 : 52 }}
+                style={{ paddingBottom: fill ? 20 : compact ? 12 : 52 }}
               >
                 <div
                   className={[
-                    "demo-chat-input-shell flex h-[68px] w-full max-w-[402px] items-center gap-3 rounded-[34px] bg-[#3F4042] px-3",
+                    "demo-chat-input-shell flex h-[68px] w-full items-center gap-3 rounded-[34px] bg-[#3F4042] px-3",
+                    fill ? "max-w-[720px]" : "max-w-[402px]",
                     idle ? "is-idle" : "",
                   ].join(" ")}
                 >
@@ -466,17 +413,87 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
                     </button>
                   ) : null}
                 </div>
-                {!compact ? (
+                {!fill && !compact ? (
                   <span
                     className="pointer-events-none absolute bottom-[14px] left-1/2 h-[5px] w-[126px] -translate-x-1/2 rounded-full bg-ink/20"
                     aria-hidden
                   />
                 ) : null}
               </form>
-              {compact ? (
+              {compact && !fill ? (
                 <div className="h-[20px] shrink-0 bg-[#C6D4DF]" aria-hidden />
               ) : null}
             </div>
+    );
+
+    if (fill) {
+      return (
+        <div className="h-full min-h-0 w-full" aria-label="헤어업 상담 데모">
+          {chatScreen}
+        </div>
+      );
+    }
+
+    return (
+      <div
+        className="iphone-mockup relative shrink-0"
+        style={{
+          width: `${IPHONE_MOCKUP.width}px`,
+          height: `${mockupHeight}px`,
+          /* filter drop-shadow 금지 — 레이어 래스터화로 텍스트·아이콘이 뭉개짐 */
+          boxShadow: compact
+            ? "0 16px 32px rgba(28,26,25,0.14)"
+            : "0 28px 56px rgba(28,26,25,0.18), 0 8px 20px rgba(28,26,25,0.1)",
+          borderRadius: outerRadius,
+        }}
+        aria-label="헤어업 상담 데모"
+      >
+        <span
+          className="pointer-events-none absolute top-[148px] -left-[2.5px] h-[26px] w-[3px] rounded-l-[1px]"
+          style={{ background: METAL_BTN }}
+          aria-hidden
+        />
+        <span
+          className="pointer-events-none absolute top-[198px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
+          style={{ background: METAL_BTN }}
+          aria-hidden
+        />
+        {!compact ? (
+          <span
+            className="pointer-events-none absolute top-[256px] -left-[2.5px] h-[50px] w-[3px] rounded-l-[1px]"
+            style={{ background: METAL_BTN }}
+            aria-hidden
+          />
+        ) : null}
+        <span
+          className="pointer-events-none absolute top-[220px] -right-[2.5px] h-[84px] w-[3px] rounded-r-[1px]"
+          style={{ background: METAL_BTN }}
+          aria-hidden
+        />
+
+        <div
+          className="absolute inset-0"
+          style={{
+            borderRadius: outerRadius,
+            padding: compact
+              ? `${FRAME.metal}px ${FRAME.metal}px 0`
+              : `${FRAME.metal}px`,
+            background: METAL,
+            boxShadow: compact
+              ? "inset 0 1px 0 rgba(255,255,255,0.35)"
+              : "inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.18)",
+          }}
+        >
+          <div
+            className="h-full w-full bg-[#0a0a0a]"
+            style={{
+              borderRadius: bezelRadius,
+              padding: compact
+                ? `${FRAME.bezel}px ${FRAME.bezel}px 0`
+                : `${FRAME.bezel}px`,
+            }}
+          >
+            {chatScreen}
           </div>
         </div>
       </div>

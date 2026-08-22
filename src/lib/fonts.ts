@@ -39,7 +39,7 @@ export const inter = Inter({
  */
 export const notoSansKr = Noto_Sans_KR({
   subsets: ["korean" as "latin", "latin"],
-  weight: ["300", "400", "500", "700", "900"],
+  weight: ["300", "400", "500", "600", "700", "900"],
   variable: "--font-noto-sans-kr",
   display: "swap",
 });
