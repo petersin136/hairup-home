@@ -54,8 +54,12 @@ export function Hero() {
               onClick={(e) => onHashClick(e, cta.href)}
               className="BTN-CREATE-BRAND"
             >
-              <span className="TXT-EN">{cta.en}</span>
-              <span className="TXT-KR">{cta.ko}</span>
+              <span className="BTN-CREATE-BRAND-ROLL">
+                <span className="TXT-EN">{cta.en}</span>
+                <span className="TXT-KR" aria-hidden>
+                  {cta.ko}
+                </span>
+              </span>
             </Link>
           </div>
         </div>

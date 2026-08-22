@@ -14,31 +14,38 @@ import {
 } from "@/lib/demo-chat/booking";
 
 /**
- * THE EXPERIENCE — PC 시안
+ * THE EXPERIENCE — PC
  *
- * 좌우 여백 30 · 카드 간격 24 · 세로 패딩 80
- * .DASHBOARD-CARD      880×600 · r 10 · AI 채팅 모션
- * .DASHBOARD-SUB-CARD  476×600 · r 10 · 원본 그레인 BG
+ * Dilemma / Key Benefits 와 동일 헤더 스택
+ *   padding-top 200
+ *   .SECTION-TAG  Playfair 13/500 · center
+ *   tag→cards 42
  *
- * .EXPERIENCE-TAG    Playfair 13/500 · #2C3A2E · tracking 0.025em
- * .EXPERIENCE-TITLE  Noto 40/600 · lh 1.375 · #1C1A19
- * .EXPERIENCE-DESC   Noto 17/400 · lh 1.588 · tracking -0.01em · rgba(28,26,25,0.8)
- * 서브카드 좌표는 시안 시각 아웃라인 (tag→title 42 · title→desc 36 · desc→btn 55)
+ * 좌우 여백 30 · 카드 간격 24 · padding-bottom 80
+ * .DASHBOARD-CARD      880×600 · r 10
+ * .DASHBOARD-SUB-CARD  476×600 · r 10
  *
- * .BTN-KAKAO-DEMO  232×55 · r 4 · #FAF8F5 / #352923 · hover 반전
+ * 서브카드 카피 (기존 문구 유지)
+ *   tag → title 42 · title → desc 36 · desc → btn 55
+ *   title top 132 · left 50
  */
 const PAD_X = 30;
-const PAD_Y = 80;
+const PAD_TOP = 200;
+const PAD_BOTTOM = 80;
+const GAP_TAG_CARDS = 42;
 const GAP = 24;
 const CARD = { width: 880, height: 600, radius: 10 } as const;
 const SUB = { width: 476, height: 600, radius: 10 } as const;
-const PAD_LEFT = 50;
-const TAG_TOP = 132;
-const TITLE_TOP = 183;
+const COPY = {
+  top: 132,
+  left: 50,
+  gapTagTitle: 42,
+  gapTitleDesc: 36,
+  gapDescBtn: 55,
+} as const;
 const TITLE_LEADING = 1.375;
-const DESC_TOP = 313;
 const DESC_LEADING = 1.588;
-const BTN_TOP = 414;
+const BTN = { width: 232, height: 55, radius: 4 } as const;
 
 export function Experience() {
   const chatRef = useRef<DemoChatHandle>(null);
@@ -127,115 +134,111 @@ export function Experience() {
       className="relative w-full overflow-x-clip bg-porcelain"
     >
       <div
-        className="relative z-10 mx-auto flex w-[1440px] items-start"
+        className="relative z-10 mx-auto w-[1440px]"
         style={{
           paddingLeft: PAD_X,
           paddingRight: PAD_X,
-          paddingTop: PAD_Y,
-          paddingBottom: PAD_Y,
-          gap: GAP,
+          paddingTop: PAD_TOP,
+          paddingBottom: PAD_BOTTOM,
         }}
       >
-        {/* .DASHBOARD-CARD */}
+        {/* Dilemma / Key Benefits 와 동일 — 섹션 위 태그 */}
+        <p className="SECTION-TAG text-center text-forest">
+          {experience.tag}
+        </p>
+
         <div
-          className="relative shrink-0 overflow-hidden bg-[#C6D4DF]"
-          style={{
-            width: CARD.width,
-            height: CARD.height,
-            borderRadius: CARD.radius,
-          }}
+          className="flex items-start"
+          style={{ marginTop: GAP_TAG_CARDS, gap: GAP }}
         >
-          <DemoChat ref={chatRef} fill onBooking={handleBooking} />
-        </div>
-
-        {/* .DASHBOARD-SUB-CARD */}
-        <div
-          className="relative shrink-0 overflow-hidden"
-          style={{
-            width: SUB.width,
-            height: SUB.height,
-            borderRadius: SUB.radius,
-          }}
-        >
-          <Image
-            src="/experience/ex-right-pc-bg.png"
-            alt=""
-            width={476}
-            height={600}
-            unoptimized
-            quality={100}
-            sizes="476px"
-            className="pointer-events-none absolute inset-0 h-full w-full"
-            style={{ objectFit: "fill" }}
-            priority
-          />
-
-          {/* .EXPERIENCE-TAG */}
-          <p
-            className="absolute z-10 font-display text-left text-[13px] font-medium leading-none tracking-[0.025em] text-forest"
-            style={{ top: TAG_TOP, left: PAD_LEFT }}
-          >
-            {experience.tag}
-          </p>
-
-          {/* .EXPERIENCE-TITLE */}
-          <h2
-            className="text-kr absolute z-10 text-left text-[40px] font-semibold whitespace-nowrap text-ink"
+          {/* .DASHBOARD-CARD */}
+          <div
+            className="relative shrink-0 overflow-hidden bg-[#C6D4DF]"
             style={{
-              top: TITLE_TOP,
-              left: PAD_LEFT,
-              lineHeight: TITLE_LEADING,
+              width: CARD.width,
+              height: CARD.height,
+              borderRadius: CARD.radius,
             }}
           >
-            {experience.headlinePc.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
-          </h2>
+            <DemoChat ref={chatRef} fill onBooking={handleBooking} />
+          </div>
 
-          {/* .EXPERIENCE-DESC */}
-          <p
-            className="text-kr absolute z-10 text-left text-[17px] font-normal tracking-[-0.01em] whitespace-nowrap"
+          {/* .DASHBOARD-SUB-CARD */}
+          <div
+            className="relative shrink-0 overflow-hidden"
             style={{
-              top: DESC_TOP,
-              left: PAD_LEFT,
-              lineHeight: DESC_LEADING,
-              color: "rgba(28, 26, 25, 0.8)",
+              width: SUB.width,
+              height: SUB.height,
+              borderRadius: SUB.radius,
             }}
           >
-            {experience.bodyPc.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
-          </p>
+            <Image
+              src="/experience/ex-right-pc-bg.png"
+              alt=""
+              width={476}
+              height={600}
+              unoptimized
+              quality={100}
+              sizes="476px"
+              className="pointer-events-none absolute inset-0 h-full w-full"
+              style={{ objectFit: "fill" }}
+              priority
+            />
 
-          {/* .BTN-KAKAO-DEMO */}
-          <a
-            href={experience.kakaoDemo.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-kr absolute z-10 inline-flex cursor-pointer items-center justify-center bg-porcelain text-[16px] leading-none font-medium text-espresso no-underline uppercase transition-colors hover:bg-espresso hover:text-porcelain"
-            style={{
-              top: BTN_TOP,
-              left: PAD_LEFT,
-              width: 232,
-              height: 55,
-              borderRadius: 4,
-            }}
-          >
-            {experience.kakaoDemo.label}
-          </a>
+            <div
+              className="EXPERIENCE-COPY absolute z-10 flex flex-col items-start"
+              style={{ top: COPY.top, left: COPY.left }}
+            >
+              <p className="SECTION-TAG text-left text-forest">
+                {experience.tag}
+              </p>
+
+              <h2
+                className="EXPERIENCE-TITLE text-kr text-left text-[40px] font-semibold text-ink"
+                style={{
+                  marginTop: COPY.gapTagTitle,
+                  lineHeight: TITLE_LEADING,
+                }}
+              >
+                {experience.headlinePc[0]}
+                <br />
+                {experience.headlinePc[1]}
+              </h2>
+
+              <p
+                className="EXPERIENCE-DESC text-kr text-left text-[17px] font-normal tracking-[-0.01em]"
+                style={{
+                  marginTop: COPY.gapTitleDesc,
+                  lineHeight: DESC_LEADING,
+                  color: "rgba(28, 26, 25, 0.8)",
+                }}
+              >
+                {experience.bodyPc[0]}
+                <br />
+                {experience.bodyPc[1]}
+              </p>
+
+              <button
+                type="button"
+                onClick={() => chatRef.current?.focusInput()}
+                className="text-kr inline-flex cursor-pointer items-center justify-center border-0 bg-porcelain text-[16px] leading-none font-medium text-espresso uppercase transition-colors hover:bg-espresso hover:text-porcelain"
+                style={{
+                  marginTop: COPY.gapDescBtn,
+                  width: BTN.width,
+                  height: BTN.height,
+                  borderRadius: BTN.radius,
+                }}
+              >
+                {experience.kakaoDemo.label}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
       {isDev ? (
         <div className="pointer-events-none absolute bottom-0 z-10 w-full pb-4">
-          <div
-            className="mx-auto w-[1440px]"
-            style={{ paddingLeft: PAD_X }}
-          >
+          <div className="mx-auto w-[1440px]" style={{ paddingLeft: PAD_X }}>
             <button
               type="button"
               onClick={previewDesk}

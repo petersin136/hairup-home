@@ -92,7 +92,7 @@ export function Dilemma() {
 
       {/* .DILEMMA-TAG */}
       <p
-        className="absolute inset-x-0 text-center font-display text-[13px] font-medium leading-none tracking-[0.025em] text-forest"
+        className="SECTION-TAG absolute inset-x-0 text-center text-forest"
         style={{ top: `${TAG_TOP}px` }}
       >
         {dilemma.tag}

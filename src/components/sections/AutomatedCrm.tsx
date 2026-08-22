@@ -11,7 +11,7 @@ import { automatedCrm } from "@/content/site";
  * 캐러셀 중앙 940×600.
  * 왼쪽 대기 카드는 메인과 상단 정렬, 오른쪽 대기 카드는 하단 정렬
  * (564×360 · opacity 0.4). 그 빈 자리에 화살표가 앉습니다.
- * 화살표는 ico-arrow-right 하나 · PREV 만 180deg.
+ * 화살표는 첨부 원본(가로축 + 꺾쇠) · PREV 만 180deg.
  */
 const N = automatedCrm.systems.length;
 const STAGE_W = 1440;
@@ -30,17 +30,7 @@ const HIDDEN_LEFT = PEEK_LEFT - GAP - SUB_W;
 const HIDDEN_RIGHT = PEEK_RIGHT + SUB_W + GAP;
 
 const ArrowIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    aria-hidden
-    focusable="false"
-  >
-    <path
-      fill="currentColor"
-      d="m18.541,10.894l-4.717-4.717-.707.707,4.616,4.617H5v1h12.735l-4.618,4.617.707.707,4.717-4.716c.296-.296.459-.69.459-1.108s-.163-.812-.459-1.106Z"
-    />
-  </svg>
+  <span className="CRM-SLIDER-ARROW" aria-hidden />
 );
 
 export function AutomatedCrm() {
@@ -98,7 +88,7 @@ export function AutomatedCrm() {
   return (
     <section id="automated-crm" className="CRM" aria-label="AUTOMATED CRM">
       <div className="CRM-STAGE">
-        <p className="CRM-TAG">{automatedCrm.tag}</p>
+        <p className="SECTION-TAG CRM-TAG">{automatedCrm.tag}</p>
 
         <div className="CRM-HEAD">
           <h2 className="CRM-TITLE">

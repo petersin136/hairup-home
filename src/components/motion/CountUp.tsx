@@ -55,7 +55,6 @@ export function CountUp({
   const played = useRef(false);
   const valueRef = useRef(0);
   const rafRef = useRef(0);
-  const visibleRef = useRef(false);
   const lastTsRef = useRef(0);
   const doneRef = useRef(false);
   const startedRef = useRef(false);
@@ -74,7 +73,7 @@ export function CountUp({
 
     if (continuous) {
       const tick = (now: number) => {
-        if (!visibleRef.current || doneRef.current) {
+        if (doneRef.current) {
           rafRef.current = 0;
           return;
         }
@@ -95,30 +94,15 @@ export function CountUp({
 
       const io = new IntersectionObserver(([entry]) => {
         const on = Boolean(entry?.isIntersecting);
-        visibleRef.current = on;
 
-        if (on && !doneRef.current) {
-          // 화면에 처음(또는 다시) 들어올 때 0부터
-          if (!startedRef.current) {
-            startedRef.current = true;
-            valueRef.current = 0;
-            setText(`${format(0)}${suffix}`);
-          }
+        // 한 번 시작되면 화면 밖으로 나가도 끝값까지 계속 카운트 — 중간에 0으로 되돌리지 않음
+        if (on && !doneRef.current && !startedRef.current) {
+          startedRef.current = true;
+          valueRef.current = 0;
+          setText(`${format(0)}${suffix}`);
           lastTsRef.current = 0;
           if (!rafRef.current) {
             rafRef.current = requestAnimationFrame(tick);
-          }
-          return;
-        }
-
-        if (!on && rafRef.current) {
-          cancelAnimationFrame(rafRef.current);
-          rafRef.current = 0;
-          // 아직 끝나기 전에 화면 밖으로 나가면 다음에 다시 0부터
-          if (!doneRef.current) {
-            startedRef.current = false;
-            valueRef.current = 0;
-            setText(`${format(0)}${suffix}`);
           }
         }
       }, IO_OPTIONS);

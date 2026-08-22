@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, type MouseEvent } from "react";
 
 import { FooterNewsletter } from "@/components/sections/FooterNewsletter";
 import { Wordmark } from "@/components/brand/Wordmark";
+import { TopBanner } from "@/components/layout/TopBanner";
 import { CountUp } from "@/components/motion/CountUp";
 import {
   DemoChat,
@@ -28,7 +29,6 @@ import {
   process,
   start,
   templateCollection,
-  topBanner,
 } from "@/content/site";
 import { onHashClick, scrollToHash } from "@/lib/scroll-to-hash";
 import { saveReturnScroll } from "@/lib/entry-chrome";
@@ -88,19 +88,14 @@ export function MobileHome() {
 
   return (
     <div className="[&_.text-kr]:break-keep">
-      {/* 띠배너 — hu_TOP_BANNER__M */}
-      <div className="TOP_BANNER is-mobile px-4">
-        <p className="BANNER_TEXT">
-          <span className="EN">{topBanner.en}</span>
-          <span className="BAR" aria-hidden>
-            {" | "}
-          </span>
-          <span className="KR">{topBanner.krMobile}</span>
-        </p>
-      </div>
+      {/* 띠배너 — hu_TOP_BANNER__M · sticky + 스크롤 진행 */}
+      <TopBanner mobile />
 
       {/* 헤더 + 메뉴 — 시안 hu_m_Menu_open */}
-      <header ref={headerRef} className="relative sticky top-0 z-50 bg-porcelain">
+      <header
+        ref={headerRef}
+        className="relative sticky top-[38px] z-50 bg-porcelain"
+      >
         <div className="flex h-[56px] items-center justify-between px-4">
           <Link
             href="/"
@@ -199,7 +194,7 @@ export function MobileHome() {
         </nav>
       ) : null}
 
-      <main className="[&_section]:scroll-mt-[56px]">
+      <main className="[&_section]:scroll-mt-[94px]">
         {/* Hero — 모바일 시안 hu_m_Main · 375 × 691 */}
         <section id="hero" className="bg-porcelain">
           <div className="px-4 pt-[80px]">
@@ -243,7 +238,7 @@ export function MobileHome() {
           className="bg-porcelain px-4 pt-[80px] pb-[80px] text-center"
         >
           <p className="flex items-center justify-center leading-none text-forest">
-            <span className="font-latin mr-[6px] text-[12px] font-medium tracking-normal uppercase">
+            <span className="section-eyebrow-index mr-[6px] text-[12px] font-medium tracking-normal uppercase">
               {dilemma.eyebrow.index}
             </span>
             <span className="font-display text-[13px] font-medium uppercase">
@@ -307,7 +302,7 @@ export function MobileHome() {
         {/* Experience — iPhone 데모 (시안 HU_TEST) */}
         <section id="ai-manager" className="bg-porcelain px-5 py-14">
           <p className="font-display text-[13px] font-medium uppercase text-forest">
-            <span className="font-latin mr-1.5 text-[12px]">
+            <span className="section-eyebrow-index mr-1.5 text-[12px] font-medium">
               {experience.eyebrow.index}
             </span>
             {experience.eyebrow.label}
@@ -488,7 +483,7 @@ export function MobileHome() {
         <section id="template" className="bg-porcelain py-14">
           <div className="px-5">
             <p className="font-display text-[13px] font-medium uppercase text-forest">
-              <span className="font-latin mr-1.5 text-[12px]">
+              <span className="section-eyebrow-index mr-1.5 text-[12px] font-medium">
                 {templateCollection.eyebrow.index}
               </span>
               {templateCollection.eyebrow.label}
@@ -574,7 +569,7 @@ export function MobileHome() {
         {/* Pricing */}
         <section id="pricing" className="bg-porcelain px-5 py-14">
           <p className="font-display text-[13px] font-medium uppercase text-forest">
-            <span className="font-latin mr-1.5 text-[12px]">
+            <span className="section-eyebrow-index mr-1.5 text-[12px] font-medium">
               {pricing.eyebrow.index}
             </span>
             {pricing.eyebrow.label}
@@ -638,7 +633,7 @@ export function MobileHome() {
         {/* FAQ — 모바일 시안 hu_m_FAQ · 375 환산 */}
         <section id="faq" className="bg-porcelain px-4 pt-[80px] pb-[81px] text-center">
           <p className="flex items-center justify-center leading-none text-forest">
-            <span className="font-latin mr-[6px] text-[12px] font-medium tracking-normal uppercase">
+            <span className="section-eyebrow-index mr-[6px] text-[12px] font-medium tracking-normal uppercase">
               {faq.eyebrow.index}
             </span>
             <span className="font-display text-[13px] font-medium uppercase">
@@ -707,6 +702,8 @@ export function MobileHome() {
             </p>
             <a
               href={start.cta.href}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-kr mt-[61px] flex h-[57px] w-full items-center justify-center rounded-btn border border-porcelain bg-transparent text-[16px] font-medium tracking-[-0.01em] text-porcelain transition-colors duration-200 ease-in-out hover:bg-porcelain hover:text-ink active:bg-porcelain active:text-ink"
             >
               {start.cta.label}
@@ -715,7 +712,7 @@ export function MobileHome() {
         </section>
 
         {/* Footer — 모바일 시안 hu_m_FOOTER */}
-        <footer id="footer" className="scroll-mt-[56px] bg-linen px-4 pt-[80px] pb-[30px]">
+        <footer id="footer" className="scroll-mt-[94px] bg-linen px-4 pt-[80px] pb-[30px]">
           <FooterNewsletter compact />
 
           {footer.columns

@@ -59,6 +59,14 @@ html {
   background-color: #faf8f5;
   /* auto — JS scrollBy/트랙패드와 smooth 가 겹치면 스크롤이 멈추지 않음 */
   scroll-behavior: auto;
+  /* 네이티브 스크롤바 숨김 — 상단 초록 띠의 진행 바로 대체 */
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 body {
@@ -66,6 +74,12 @@ body {
   color: var(--color-ink);
   font-family: var(--font-kr);
   overflow-x: clip;
+}
+
+/* 스플래시·런치 팝업 동안 배경 스크롤 잠금 (body.style.overflow 직접 토글 금지) */
+html.entry-scroll-lock,
+html.entry-scroll-lock body {
+  overflow: hidden;
 }
 
 /*
@@ -79,11 +93,14 @@ body {
 }
 
 /*
- * 섹션 넘버(Inter 14) ↔ 영문(Playfair 25) 상단(캡 높이) 광학 정렬.
- * items-start만 쓰면 Inter 메트릭 때문에 숫자가 영문보다 위로 뜹니다.
+ * 구형 섹션 헤더 — Playfair 14/500 인덱스 (FAQ · Pricing · Template 등)
+ * Inter 14 대신 래퍼런스와 동일한 Playfair lining nums
  */
 .section-eyebrow-index {
   margin-top: 5px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
 }
 
 /* Pricing · STARTER / BRANDING 체크 아이콘 */
@@ -180,7 +197,7 @@ body {
 
 /* 데모 채팅 — HU_TEST DETAIL_01 말풍선 */
 .demo-chat-list {
-  overscroll-behavior: contain;
+  overscroll-behavior: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -583,12 +600,46 @@ body {
 
 /* --- Top Banner PC ------------------------------------------------------- */
 .TOP_BANNER {
+  position: sticky;
+  top: 0;
+  z-index: 60;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 45px;
   background-color: #2c3a2e;
+  color: #faf8f5;
+}
+
+.TOP_BANNER-LOGO {
+  position: absolute;
+  left: 72px;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  transform: translateY(-50%);
+  color: #faf8f5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.TOP_BANNER.is-scrolled .TOP_BANNER-LOGO {
+  opacity: 1;
+}
+
+.TOP_BANNER-PROGRESS {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background-color: #faf8f5;
+  transform-origin: left center;
+  transform: scaleX(0);
+  will-change: transform;
+  pointer-events: none;
 }
 
 .BANNER_TEXT {
@@ -624,6 +675,12 @@ body {
 /* --- Top Banner Mobile (hu_TOP_BANNER__M) -------------------------------- */
 .TOP_BANNER.is-mobile {
   height: 38px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.TOP_BANNER.is-mobile .TOP_BANNER-LOGO {
+  left: 40px;
 }
 
 .TOP_BANNER.is-mobile .BANNER_TEXT {
@@ -691,6 +748,7 @@ body {
 .GNB-LOGIN {
   display: grid;
   place-items: center;
+  overflow: hidden;
   font-family: var(--font-latin), "Inter", sans-serif;
   font-size: 15px;
   font-weight: 500;
@@ -707,6 +765,7 @@ body {
 .GNB-LOGIN .TXT-KR {
   grid-area: 1 / 1;
   white-space: nowrap;
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .GNB-ITEM A .TXT-EN,
@@ -717,29 +776,29 @@ body {
   color: #1c1a19;
 }
 
-/* 시안: DISPLAY NONE. 칸 폭은 영·한글 중 넓은 쪽으로 고정해 65px gap 이 흔들리지 않게 함 */
+/* 칸 폭은 영·한글 중 넓은 쪽으로 고정 — 한글은 아래에서 올라옴 */
 .GNB-ITEM A .TXT-KR,
 .GNB-LOGIN .TXT-KR {
-  visibility: hidden;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-size: 15px;
   font-weight: 400;
   color: #1c1a19;
   word-spacing: -0.057em;
+  transform: translateY(100%);
 }
 
 .GNB-ITEM A:hover .TXT-EN,
 .GNB-ITEM A:focus-visible .TXT-EN,
 .GNB-LOGIN:hover .TXT-EN,
 .GNB-LOGIN:focus-visible .TXT-EN {
-  visibility: hidden;
+  transform: translateY(-100%);
 }
 
 .GNB-ITEM A:hover .TXT-KR,
 .GNB-ITEM A:focus-visible .TXT-KR,
 .GNB-LOGIN:hover .TXT-KR,
 .GNB-LOGIN:focus-visible .TXT-KR {
-  visibility: visible;
+  transform: translateY(0);
 }
 
 .GNB-LOGIN {
@@ -810,6 +869,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   width: 200px;
   height: 55px;
   margin-top: 55px;
@@ -820,7 +880,6 @@ body {
   font-weight: 400;
   line-height: 1;
   color: #2c3a2e;
-  text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
   transition:
@@ -834,32 +893,86 @@ body {
   color: #faf8f5;
 }
 
-.BTN-CREATE-BRAND .TXT-EN {
+/* 한 줄 높이만 보이게 — 영·한 겹침 롤 */
+.BTN-CREATE-BRAND-ROLL {
+  display: grid;
+  overflow: hidden;
+  height: 16px;
+  line-height: 1;
+}
+
+.BTN-CREATE-BRAND-ROLL .TXT-EN,
+.BTN-CREATE-BRAND-ROLL .TXT-KR {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.BTN-CREATE-BRAND-ROLL .TXT-EN {
   font-family: var(--font-latin), "Inter", sans-serif;
   font-size: 16px;
   font-weight: 400;
+  text-transform: uppercase;
 }
 
-.BTN-CREATE-BRAND .TXT-KR {
-  text-transform: none;
-}
-
-.BTN-CREATE-BRAND .TXT-KR {
-  display: none;
+.BTN-CREATE-BRAND-ROLL .TXT-KR {
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-size: 16px;
   font-weight: 400;
+  text-transform: none;
   word-spacing: -0.057em;
+  transform: translateY(100%);
 }
 
 .BTN-CREATE-BRAND:hover .TXT-EN,
 .BTN-CREATE-BRAND:focus-visible .TXT-EN {
-  display: none;
+  transform: translateY(-100%);
 }
 
 .BTN-CREATE-BRAND:hover .TXT-KR,
 .BTN-CREATE-BRAND:focus-visible .TXT-KR {
-  display: inline;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .GNB-ITEM A .TXT-EN,
+  .GNB-LOGIN .TXT-EN,
+  .GNB-ITEM A .TXT-KR,
+  .GNB-LOGIN .TXT-KR,
+  .BTN-CREATE-BRAND-ROLL .TXT-EN,
+  .BTN-CREATE-BRAND-ROLL .TXT-KR {
+    transition: none;
+  }
+
+  .GNB-ITEM A .TXT-KR,
+  .GNB-LOGIN .TXT-KR,
+  .BTN-CREATE-BRAND-ROLL .TXT-KR {
+    transform: none;
+    visibility: hidden;
+  }
+
+  .GNB-ITEM A:hover .TXT-EN,
+  .GNB-ITEM A:focus-visible .TXT-EN,
+  .GNB-LOGIN:hover .TXT-EN,
+  .GNB-LOGIN:focus-visible .TXT-EN,
+  .BTN-CREATE-BRAND:hover .TXT-EN,
+  .BTN-CREATE-BRAND:focus-visible .TXT-EN {
+    transform: none;
+    visibility: hidden;
+  }
+
+  .GNB-ITEM A:hover .TXT-KR,
+  .GNB-ITEM A:focus-visible .TXT-KR,
+  .GNB-LOGIN:hover .TXT-KR,
+  .GNB-LOGIN:focus-visible .TXT-KR,
+  .BTN-CREATE-BRAND:hover .TXT-KR,
+  .BTN-CREATE-BRAND:focus-visible .TXT-KR {
+    transform: none;
+    visibility: visible;
+  }
 }
 
 /* --- Automated CRM PC (hu_CRM PC 01–04 · hu_CRM SPACING PC) -------------- */
@@ -876,26 +989,43 @@ body {
   padding-top: 200px;
 }
 
-.CRM-TAG,
-.CRM-TITLE,
-.CRM-DESC {
-  text-box-trim: trim-both;
-  text-box-edge: cap alphabetic;
-}
-
-.CRM-TAG {
+/*
+ * PC 섹션 태그 — Playfair 13/500 · 숫자·영문 동일 세리프 (lining nums)
+ * text-box-trim 금지 — cap trim 시 숫자 글리프가 sans처럼 깨짐
+ */
+.SECTION-TAG {
   margin: 0;
-  width: 940px;
-  margin-left: auto;
-  margin-right: auto;
   font-size: 13px;
   font-family: var(--font-display), "Playfair Display", serif;
   font-weight: 500;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
   color: #2c3a2e;
   text-transform: uppercase;
   letter-spacing: 0.025em;
-  text-align: left;
   line-height: 1;
+}
+
+.CRM-TAG {
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.CRM-TITLE,
+.CRM-DESC {
+  text-box-trim: trim-both;
+  text-box-edge: text text;
+}
+
+/* Experience 서브카드 카피 — Key Benefits / CRM 과 동일 trim */
+.EXPERIENCE-TITLE,
+.EXPERIENCE-DESC {
+  text-box-trim: trim-both;
+  text-box-edge: text text;
+  word-spacing: -0.057em;
+  white-space: nowrap;
 }
 
 .CRM-HEAD {
@@ -1032,14 +1162,16 @@ body {
     color 0.3s ease;
 }
 
-.CRM-SLIDER-BTN svg {
+.CRM-SLIDER-ARROW {
+  display: block;
   width: 18px;
   height: 16px;
-  fill: currentColor;
-  display: block;
+  background-color: currentColor;
+  -webkit-mask: url("/icons/ico-arrow-right.png") no-repeat center / contain;
+  mask: url("/icons/ico-arrow-right.png") no-repeat center / contain;
 }
 
-.CRM-SLIDER-BTN.PREV svg {
+.CRM-SLIDER-BTN.PREV .CRM-SLIDER-ARROW {
   transform: rotate(180deg);
 }
 
@@ -1075,19 +1207,9 @@ body {
   box-sizing: border-box;
 }
 
-/* .BENEFITS-TAG — 영문 Playfair. cap 기준 trim */
+/* .BENEFITS-TAG — SECTION-TAG + 가운데 정렬 */
 .BENEFITS-TAG {
-  margin: 0;
-  font-size: 13px;
-  font-family: var(--font-display), "Playfair Display", serif;
-  font-weight: 500;
-  color: #2c3a2e;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
   text-align: center;
-  line-height: 1;
-  text-box-trim: trim-both;
-  text-box-edge: cap alphabetic;
 }
 
 /* .BENEFITS-TITLE — 한글. ideographic 박스 기준 trim (시안 42/36 간격) */

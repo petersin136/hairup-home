@@ -25,6 +25,7 @@ type ChatMessage = {
 
 export type DemoChatHandle = {
   ask: (text: string) => void;
+  focusInput: () => void;
 };
 
 type DemoChatProps = {
@@ -117,7 +118,10 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
     const [limited, setLimited] = useState(false);
     const [focused, setFocused] = useState(false);
     const [now, setNow] = useState<Date | null>(null);
+    const chatRootRef = useRef<HTMLDivElement>(null);
     const listRef = useRef<HTMLDivElement>(null);
+    const stickToBottomRef = useRef(true);
+    const innerScrollRef = useRef(false);
     const field = useRef<HTMLInputElement>(null);
     const messagesRef = useRef(messages);
     const pendingRef = useRef(pending);
@@ -160,8 +164,57 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
     useEffect(() => {
       const list = listRef.current;
       if (!list) return;
+      const onScroll = () => {
+        const gap = list.scrollHeight - list.clientHeight - list.scrollTop;
+        stickToBottomRef.current = gap < 48;
+      };
+      list.addEventListener("scroll", onScroll, { passive: true });
+      return () => list.removeEventListener("scroll", onScroll);
+    }, []);
+
+    useEffect(() => {
+      const list = listRef.current;
+      if (!list || !stickToBottomRef.current) return;
       list.scrollTop = list.scrollHeight;
     }, [messages, pending]);
+
+    /* 기본은 페이지 스크롤. 하늘색 창을 클릭한 뒤에만 채팅이 스크롤됩니다. */
+    useEffect(() => {
+      const root = chatRootRef.current;
+      const list = listRef.current;
+      if (!root || !list) return;
+
+      const onPointerDown = (event: PointerEvent) => {
+        innerScrollRef.current = root.contains(event.target as Node);
+      };
+
+      const onWheel = (event: WheelEvent) => {
+        if (event.ctrlKey) return;
+
+        let dy = event.deltaY;
+        if (event.deltaMode === 1) dy *= 16;
+        if (event.deltaMode === 2) dy *= list.clientHeight;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (!innerScrollRef.current) {
+          window.scrollBy({ top: dy, left: 0, behavior: "instant" });
+          return;
+        }
+
+        const max = Math.max(0, list.scrollHeight - list.clientHeight);
+        if (max <= 0) return;
+        list.scrollTop = Math.min(max, Math.max(0, list.scrollTop + dy));
+      };
+
+      document.addEventListener("pointerdown", onPointerDown);
+      root.addEventListener("wheel", onWheel, { passive: false });
+      return () => {
+        document.removeEventListener("pointerdown", onPointerDown);
+        root.removeEventListener("wheel", onWheel);
+      };
+    }, []);
 
     const sendText = async (raw: string) => {
       const text = raw.trim();
@@ -231,6 +284,10 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
       ask: (text: string) => {
         void sendText(text);
       },
+      focusInput: () => {
+        innerScrollRef.current = true;
+        field.current?.focus({ preventScroll: true });
+      },
     }));
 
     const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -258,6 +315,7 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
 
     const chatScreen = (
             <div
+              ref={chatRootRef}
               className="demo-chat relative flex h-full min-h-0 w-full flex-col overflow-hidden bg-[#C6D4DF]"
               style={{ borderRadius: fill ? undefined : screenRadius }}
             >
@@ -334,7 +392,8 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
 
               <div
                 ref={listRef}
-                className="demo-chat-list min-h-0 flex-1 overflow-y-auto overscroll-y-auto px-3 py-3"
+                tabIndex={-1}
+                className="demo-chat-list h-0 min-h-0 flex-1 overflow-y-auto px-3 py-3 outline-none"
               >
                 <div className="mb-4 flex justify-center">
                   <span

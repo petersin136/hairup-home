@@ -54,10 +54,10 @@ const CARD_H =
   40 +
   1 +
   35 +
-  22 +
-  20 +
-  80 +
-  25 +
+  18 +
+  16 +
+  72 +
+  35 +
   1 +
   35 +
   featureBlock(4, 1) +
@@ -136,23 +136,28 @@ function PlanCard({
         style={{ marginTop: 40 }}
       />
 
-      {/* 구분선은 콘텐츠 풀폭 · 가격 블록은 왼쪽 정렬 · + 좌우 50px */}
-      <div className="flex w-fit items-end" style={{ marginTop: 35 }}>
-        <div className="flex flex-col">
-          <p className={`text-kr text-[22px] font-normal leading-none ${muted}`}>
+      {/* 세팅비 + 구독료 — 카드 안쪽 464에 맞춤 · + 좌우 여백을 좁게 */}
+      <div
+        className="flex w-full min-w-0 items-end justify-center gap-[16px]"
+        style={{ marginTop: 35 }}
+      >
+        <div className="flex w-max shrink-0 flex-col">
+          <p
+            className={`text-kr whitespace-nowrap text-[18px] font-normal leading-none ${muted}`}
+          >
             {plan.prices[0].label}
           </p>
           <p
-            className="flex items-baseline gap-[6px] whitespace-nowrap"
-            style={{ marginTop: 20 }}
+            className="flex items-baseline gap-[3px] whitespace-nowrap"
+            style={{ marginTop: 16 }}
           >
             <span
-              className={`font-latin text-[80px] font-bold leading-none tabular-nums ${numColor}`}
+              className={`font-latin text-[72px] font-bold leading-none tabular-nums ${numColor}`}
             >
               {plan.prices[0].num}
             </span>
             <span
-              className={`text-kr shrink-0 text-[22px] font-normal leading-none ${muted}`}
+              className={`text-kr shrink-0 text-[16px] font-normal leading-none ${muted}`}
             >
               {plan.prices[0].unit}
             </span>
@@ -160,27 +165,29 @@ function PlanCard({
         </div>
 
         <span
-          className={`flex h-[80px] shrink-0 items-center px-[50px] font-latin text-[40px] font-normal leading-none ${plusColor}`}
+          className={`mb-[22px] shrink-0 font-latin text-[28px] font-normal leading-none ${plusColor}`}
           aria-hidden
         >
           +
         </span>
 
-        <div className="flex flex-col">
-          <p className={`text-kr text-[22px] font-normal leading-none ${muted}`}>
+        <div className="flex w-max shrink-0 flex-col">
+          <p
+            className={`text-kr whitespace-nowrap text-[18px] font-normal leading-none ${muted}`}
+          >
             {plan.prices[1].label}
           </p>
           <p
-            className="flex items-baseline gap-[6px] whitespace-nowrap"
-            style={{ marginTop: 20 }}
+            className="flex items-baseline gap-[3px] whitespace-nowrap"
+            style={{ marginTop: 16 }}
           >
             <span
-              className={`font-latin text-[80px] font-bold leading-none tabular-nums ${numColor}`}
+              className={`font-latin text-[46px] font-bold leading-none tabular-nums ${numColor}`}
             >
               {plan.prices[1].num}
             </span>
             <span
-              className={`text-kr shrink-0 text-[22px] font-normal leading-none ${muted}`}
+              className={`text-kr shrink-0 text-[16px] font-normal leading-none ${muted}`}
             >
               {plan.prices[1].unit}
             </span>
@@ -259,7 +266,7 @@ export function Pricing() {
         className="absolute inset-x-0 flex items-start justify-center gap-[6px] uppercase leading-none text-forest"
         style={{ top: `${HEADER.top}px` }}
       >
-        <span className="section-eyebrow-index font-latin text-[14px] font-medium leading-none tracking-normal">
+        <span className="section-eyebrow-index text-[14px] font-medium leading-none tracking-normal">
           {pricing.eyebrow.index}
         </span>
         <span className="font-display text-[25px] font-medium leading-none tracking-normal">

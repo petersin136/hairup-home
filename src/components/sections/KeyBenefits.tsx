@@ -17,7 +17,7 @@ export function KeyBenefits() {
   return (
     <section id="key-benefits" className="BENEFITS">
       <div className="BENEFITS-INNER">
-        <p className="BENEFITS-TAG">{keyBenefits.tag}</p>
+        <p className="SECTION-TAG BENEFITS-TAG">{keyBenefits.tag}</p>
 
         <h2 className="BENEFITS-TITLE">
           {keyBenefits.headline[0]}

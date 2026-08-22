@@ -56,7 +56,7 @@ export function Faq() {
         className="absolute flex items-start gap-[6px] uppercase leading-none text-forest"
         style={{ left: `${GUTTER}px`, top: `${HEADER.top}px` }}
       >
-        <span className="section-eyebrow-index font-latin text-[14px] font-medium leading-none tracking-normal">
+        <span className="section-eyebrow-index text-[14px] font-medium leading-none tracking-normal">
           {faq.eyebrow.index}
         </span>
         <span className="font-display text-[25px] font-medium leading-none tracking-normal">

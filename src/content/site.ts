@@ -14,7 +14,7 @@ export const nav = [
 export const cta = {
   en: "CREATE BRAND",
   ko: "내 브랜드 만들기",
-  href: "#start",
+  href: "#template",
 } as const;
 
 /** GNB 우측 — hu_GNB_PC · LOGIN 도 메뉴와 동일 스타일, 호버 시 한글 */
@@ -410,7 +410,7 @@ export const pricing = {
   headline: ["매출이 아무리 늘어도,", "비용은 변함없이."],
   body: [
     "월 1,000만 원을 시술할 때 플랫폼 수수료는 매달 수십만 원에 달합니다.",
-    "헤어업은 매출이 얼마든 월 5만 원입니다.",
+    "헤어업은 매출이 얼마든 월 7만 9천 원입니다.",
   ],
   compare: {
     left: {
@@ -424,7 +424,7 @@ export const pricing = {
     right: {
       subtitle: "언제나 월 정액인",
       title: "헤어업 구독료",
-      amount: 50_000,
+      amount: 79_000,
     },
   },
   starter: {
@@ -432,7 +432,7 @@ export const pricing = {
     tagline: ["24시간 쉼 없이,", "손님을 맞이하는 전담 예약 실장."],
     prices: [
       { label: "초기 세팅비(1회)", num: "50", unit: "만원" },
-      { label: "월 구독료", num: "5", unit: "만원" },
+      { label: "월 구독료", num: "79,000", unit: "원" },
     ],
     features: [
       {
@@ -448,7 +448,7 @@ export const pricing = {
         desc: ["예약 확정 및 방문 전 유의사항 안내 메시지 자동 발송"],
       },
     ],
-    cta: { label: "1:1 맞춤 세팅 상담하기", href: "#start" },
+    cta: { label: "1:1 맞춤 세팅 상담하기", href: "https://pf.kakao.com/_xlfqiX/chat" },
   },
   branding: {
     name: "BRANDING",
@@ -459,7 +459,7 @@ export const pricing = {
     ],
     prices: [
       { label: "초기 세팅비(1회)", num: "200", unit: "만원" },
-      { label: "월 구독료", num: "5", unit: "만원" },
+      { label: "월 구독료", num: "79,000", unit: "원" },
     ],
     features: [
       {
@@ -498,11 +498,11 @@ export const pricing = {
         ],
       },
     ],
-    cta: { label: "내 브랜드 만들기", href: "#start" },
+    cta: { label: "내 브랜드 만들기", href: "#template" },
   },
 } as const;
 
-/** 11_CTA — 히어로 CREATE BRAND 가 가리키는 #start · 시안 10-D · 11-D */
+/** 11_CTA — 히어로 CREATE BRAND 가 가리키는 #template · 시안 10-D · 11-D */
 export const start = {
   floats: [
     {
@@ -542,7 +542,7 @@ export const start = {
   ],
   cta: {
     label: "1:1 맞춤 세팅 상담하기",
-    href: "mailto:mars.official.kr@gmail.com",
+    href: "https://pf.kakao.com/_xlfqiX/chat",
   },
 } as const;
 

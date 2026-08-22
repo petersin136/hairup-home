@@ -6,7 +6,7 @@ import { Resend } from "resend";
 
 import { getServiceRoleKey, supabaseUrl } from "@/lib/env";
 import {
-  GUIDEBOOK_WORDMARK_CID,
+  GUIDEBOOK_IMAGE_ASSETS,
   guidebookEmailHtml,
 } from "@/lib/guidebook-email";
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
@@ -24,12 +24,7 @@ const GUIDEBOOK_LOCAL = path.join(
   "docs",
   GUIDEBOOK_FILENAME,
 );
-const WORDMARK_LOCAL = path.join(
-  process.cwd(),
-  "public",
-  "brand",
-  "wordmark-email.png",
-);
+const BRAND_DIR = path.join(process.cwd(), "public", "brand");
 
 type SendEmailBody = {
   to?: string;
@@ -184,16 +179,15 @@ export async function POST(request: Request) {
   if (body.attachGuidebook) {
     try {
       const guidebook = await loadGuidebookAttachment();
-      const wordmark = await readFile(WORDMARK_LOCAL);
-      attachments = [
-        guidebook,
-        {
-          filename: "wordmark-email.png",
-          content: wordmark,
-          contentId: GUIDEBOOK_WORDMARK_CID,
-          contentType: "image/png",
-        },
-      ];
+      const slices = await Promise.all(
+        GUIDEBOOK_IMAGE_ASSETS.map(async (asset) => ({
+          filename: asset.filename,
+          content: await readFile(path.join(BRAND_DIR, asset.filename)),
+          contentId: asset.contentId,
+          contentType: "image/png" as const,
+        })),
+      );
+      attachments = [guidebook, ...slices];
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "가이드북 PDF를 불러오지 못했습니다.";

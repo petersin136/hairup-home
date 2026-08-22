@@ -2,18 +2,35 @@
 
 import { useEffect } from "react";
 
-import { SPLASH_SESSION_KEY } from "@/components/splash/SplashScreen";
+import { SPLASH_DONE_EVENT, SPLASH_SESSION_KEY } from "@/components/splash/SplashScreen";
 
-/** 런치 팝업 — 한 번 보였거나 홈을 떠난 뒤에는 다시 안 띄움 */
-export const LAUNCH_POPUP_SEEN_KEY = "hairup:launch-popup-seen";
+/**
+ * 런치 팝업 — 닫기/CTA 후에만 저장.
+ * v2: 예전 버그가 open 시점에 seen 을 찍어 영구 차단하던 키와 분리.
+ */
+export const LAUNCH_POPUP_SEEN_KEY = "hairup:launch-popup-dismissed-v2";
+const LEGACY_LAUNCH_POPUP_KEYS = [
+  "hairup:launch-popup-seen",
+] as const;
 
 /** 약관에서 홈으로 돌아올 때 복원할 스크롤 위치 */
 export const RETURN_SCROLL_KEY = "hairup:return-scroll-y";
 
+function clearLegacyLaunchPopupKeys() {
+  try {
+    for (const key of LEGACY_LAUNCH_POPUP_KEYS) {
+      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
+    }
+  } catch {
+    // ignore
+  }
+}
+
 export function hasSeenLaunchPopup(): boolean {
+  clearLegacyLaunchPopupKeys();
   try {
     if (localStorage.getItem(LAUNCH_POPUP_SEEN_KEY) === "1") return true;
-    if (sessionStorage.getItem(LAUNCH_POPUP_SEEN_KEY) === "1") return true;
   } catch {
     // ignore
   }
@@ -21,9 +38,9 @@ export function hasSeenLaunchPopup(): boolean {
 }
 
 export function markLaunchPopupSeen(): void {
+  clearLegacyLaunchPopupKeys();
   try {
     localStorage.setItem(LAUNCH_POPUP_SEEN_KEY, "1");
-    sessionStorage.setItem(LAUNCH_POPUP_SEEN_KEY, "1");
   } catch {
     // ignore
   }
@@ -36,6 +53,8 @@ export function markSplashSeen(): void {
     // ignore
   }
   document.documentElement.classList.add("splash-seen");
+  document.documentElement.classList.remove("entry-scroll-lock");
+  window.dispatchEvent(new Event(SPLASH_DONE_EVENT));
 }
 
 export function saveReturnScroll(): void {

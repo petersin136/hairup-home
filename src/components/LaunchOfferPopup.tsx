@@ -2,56 +2,107 @@
 
 import Image from "next/image";
 import { useEffect, useId, useState } from "react";
+import { createPortal } from "react-dom";
 
+import { SPLASH_DONE_EVENT } from "@/components/splash/SplashScreen";
 import { launchPopup } from "@/content/site";
 import {
   hasSeenLaunchPopup,
   markLaunchPopupSeen,
 } from "@/lib/entry-chrome";
 
+/** 스플래시 커튼이 완전히 사라진 뒤 팝업까지의 여유 */
+const POPUP_AFTER_SPLASH_MS = 400;
+
+function lockScroll() {
+  document.documentElement.classList.add("entry-scroll-lock");
+}
+
+function unlockScroll() {
+  document.documentElement.classList.remove("entry-scroll-lock");
+}
+
 /**
  * 런치 오퍼 팝업 — 시안 규격 그대로 (440 × 600)
- * 최초 1회만 표시 (약관 복귀·새로고침 포함)
+ *
+ * - 닫기/CTA 전까지 저장하지 않음
+ * - 예전 localStorage 키는 무시 (v2)
+ * - splash-seen 폴링으로 이벤트 유실에도 반드시 표시
  */
 export function LaunchOfferPopup() {
   const titleId = useId();
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (hasSeenLaunchPopup()) return;
 
-    const splashSeen =
-      document.documentElement.classList.contains("splash-seen");
-    const delayMs = splashSeen ? 400 : 1650;
-    const timer = window.setTimeout(() => {
-      markLaunchPopupSeen();
+    let alive = true;
+    let openTimer: ReturnType<typeof setTimeout> | null = null;
+    let pollTimer: ReturnType<typeof setInterval> | null = null;
+
+    const reveal = () => {
+      if (!alive || hasSeenLaunchPopup()) return;
       setOpen(true);
-    }, delayMs);
-    return () => window.clearTimeout(timer);
+      lockScroll();
+    };
+
+    const schedule = () => {
+      if (!alive || openTimer != null) return;
+      openTimer = window.setTimeout(() => {
+        openTimer = null;
+        reveal();
+      }, POPUP_AFTER_SPLASH_MS);
+    };
+
+    const onSplashDone = () => schedule();
+
+    window.addEventListener(SPLASH_DONE_EVENT, onSplashDone);
+
+    if (document.documentElement.classList.contains("splash-seen")) {
+      schedule();
+    } else {
+      pollTimer = window.setInterval(() => {
+        if (document.documentElement.classList.contains("splash-seen")) {
+          if (pollTimer != null) {
+            window.clearInterval(pollTimer);
+            pollTimer = null;
+          }
+          schedule();
+        }
+      }, 50);
+    }
+
+    return () => {
+      alive = false;
+      window.removeEventListener(SPLASH_DONE_EVENT, onSplashDone);
+      if (openTimer != null) window.clearTimeout(openTimer);
+      if (pollTimer != null) window.clearInterval(pollTimer);
+    };
   }, []);
 
   useEffect(() => {
     if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") dismiss();
     };
     window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKey);
-    };
+    return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
   const dismiss = () => {
     markLaunchPopupSeen();
+    unlockScroll();
     setOpen(false);
   };
 
-  if (!open) return null;
+  if (!open || !mounted) return null;
 
-  return (
+  return createPortal(
     <>
       <div className="popup-overlay" role="presentation" onClick={dismiss} />
       <div
@@ -112,6 +163,7 @@ export function LaunchOfferPopup() {
           </a>
         </div>
       </div>
-    </>
+    </>,
+    document.body,
   );
 }

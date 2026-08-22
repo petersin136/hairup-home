@@ -112,6 +112,8 @@ export function Start() {
       {/* .BTN-CONSULT */}
       <a
         href={start.cta.href}
+        target="_blank"
+        rel="noopener noreferrer"
         data-cta-btn
         className="rounded-btn text-kr absolute inline-flex items-center justify-center border border-porcelain bg-transparent text-[17px] font-medium tracking-[-0.01em] text-porcelain transition-all duration-200 ease-in-out hover:bg-porcelain hover:text-ink"
         style={{
