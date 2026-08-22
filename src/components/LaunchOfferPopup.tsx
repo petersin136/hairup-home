@@ -42,8 +42,8 @@ export function LaunchOfferPopup() {
     if (hasSeenLaunchPopup()) return;
 
     let alive = true;
-    let openTimer: ReturnType<typeof setTimeout> | null = null;
-    let pollTimer: ReturnType<typeof setInterval> | null = null;
+    let openTimer: number | null = null;
+    let pollTimer: number | null = null;
 
     const reveal = () => {
       if (!alive || hasSeenLaunchPopup()) return;
