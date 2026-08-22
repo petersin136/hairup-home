@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   /* send-email 라우트가 public/docs PDF를 fs로 읽을 수 있게 번들에 포함 */
   outputFileTracingIncludes: {
-    "/api/send-email": ["./public/docs/**/*"],
+    "/api/send-email": ["./public/docs/**/*", "./public/brand/wordmark-email.png"],
   },
   images: {
     remotePatterns: [

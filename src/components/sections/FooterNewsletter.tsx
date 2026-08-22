@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 
 import { footer } from "@/content/site";
+import { GUIDEBOOK_EMAIL_SUBJECT } from "@/lib/guidebook-email";
 
 /**
  * 15-D · 18-D 뉴스레터.
@@ -37,13 +38,7 @@ export function FooterNewsletter({ compact = false }: { compact?: boolean }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           to,
-          subject: "헤어업 가이드북을 보내드립니다",
-          html: `
-            <p>안녕하세요, 헤어업입니다.</p>
-            <p>요청하신 상세 가이드북 PDF를 첨부해 드립니다.</p>
-            <p>확인해 보시고 궁금한 점이 있으시면 언제든 연락 주세요.</p>
-            <p style="margin-top:24px;color:#6c6864;font-size:12px;">Hair up · Automated Salon AI</p>
-          `,
+          subject: GUIDEBOOK_EMAIL_SUBJECT,
           attachGuidebook: true,
         }),
       });
