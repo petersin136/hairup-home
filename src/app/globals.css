@@ -27,6 +27,9 @@
   --color-gold: #b08d57; /* Experience 데모 대시보드 포인트 */
   --color-black: #000000; /* 04_Banner 배경. ink(#1c1a19) 가 아닌 순수 검정입니다. */
 
+  /* 섹션 태그 ↔ 타이틀 간격 (hu spacing PC) */
+  --spacing-section-tag-title: 42px;
+
   /* 06_The Process 의 배경 위에 낮은 명도차로 얹히는 텍스트.
      세 값 사이에 일정한 비율 관계가 없어서 상태별로 각각 둡니다. */
   --color-clay-dim: #955c3f;
@@ -1004,6 +1007,15 @@ html.entry-scroll-lock body {
   text-transform: uppercase;
   letter-spacing: 0.025em;
   line-height: 1;
+  /* cap trim 금지(숫자 깨짐) · 하단만 trim */
+  text-box-trim: trim-end;
+  text-box-edge: text alphabetic;
+}
+
+/* 한글 섹션 타이틀 — trim 후 margin으로 시안 42/36 간격 */
+.SECTION-HEADLINE {
+  text-box-trim: trim-both;
+  text-box-edge: text text;
 }
 
 .CRM-TAG {
@@ -1033,7 +1045,7 @@ html.entry-scroll-lock body {
   align-items: flex-end;
   gap: 212px;
   width: 940px;
-  margin: 42px auto 0;
+  margin: var(--spacing-section-tag-title) auto 0;
 }
 
 .CRM-TITLE {
@@ -1214,7 +1226,7 @@ html.entry-scroll-lock body {
 
 /* .BENEFITS-TITLE — 한글. ideographic 박스 기준 trim (시안 42/36 간격) */
 .BENEFITS-TITLE {
-  margin: 42px 0 0;
+  margin: var(--spacing-section-tag-title) 0 0;
   font-size: 40px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 600;

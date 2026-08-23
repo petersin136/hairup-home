@@ -16,23 +16,16 @@ import {
 /**
  * THE EXPERIENCE — PC
  *
- * Dilemma / Key Benefits 와 동일 헤더 스택
- *   padding-top 200
- *   .SECTION-TAG  Playfair 13/500 · center
- *   tag→cards 42
- *
- * 좌우 여백 30 · 카드 간격 24 · padding-bottom 80
+ * 좌우 여백 30 · 카드 간격 24 · padding 80
  * .DASHBOARD-CARD      880×600 · r 10
  * .DASHBOARD-SUB-CARD  476×600 · r 10
  *
- * 서브카드 카피 (기존 문구 유지)
+ * 서브카드 카피 (태그는 카드 내부)
  *   tag → title 42 · title → desc 36 · desc → btn 55
  *   title top 132 · left 50
  */
 const PAD_X = 30;
-const PAD_TOP = 200;
-const PAD_BOTTOM = 80;
-const GAP_TAG_CARDS = 42;
+const PAD_Y = 80;
 const GAP = 24;
 const CARD = { width: 880, height: 600, radius: 10 } as const;
 const SUB = { width: 476, height: 600, radius: 10 } as const;
@@ -134,25 +127,17 @@ export function Experience() {
       className="relative w-full overflow-x-clip bg-porcelain"
     >
       <div
-        className="relative z-10 mx-auto w-[1440px]"
+        className="relative z-10 mx-auto flex w-[1440px] items-start"
         style={{
           paddingLeft: PAD_X,
           paddingRight: PAD_X,
-          paddingTop: PAD_TOP,
-          paddingBottom: PAD_BOTTOM,
+          paddingTop: PAD_Y,
+          paddingBottom: PAD_Y,
+          gap: GAP,
         }}
       >
-        {/* Dilemma / Key Benefits 와 동일 — 섹션 위 태그 */}
-        <p className="SECTION-TAG text-center text-forest">
-          {experience.tag}
-        </p>
-
+        {/* .DASHBOARD-CARD */}
         <div
-          className="flex items-start"
-          style={{ marginTop: GAP_TAG_CARDS, gap: GAP }}
-        >
-          {/* .DASHBOARD-CARD */}
-          <div
             className="relative shrink-0 overflow-hidden bg-[#C6D4DF]"
             style={{
               width: CARD.width,
@@ -233,7 +218,6 @@ export function Experience() {
               </button>
             </div>
           </div>
-        </div>
       </div>
 
       {isDev ? (

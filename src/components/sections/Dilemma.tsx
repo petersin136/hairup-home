@@ -21,11 +21,11 @@ import { dilemma } from "@/content/site";
  * .CARD-ITEM-RIGHT   300×385 · r 10 · left 1080
  */
 const TAG_TOP = 200;
-const TITLE_TOP = 250; /* 태그 시각 아웃라인 아래 42 */
+const TITLE_TOP = 255; /* 태그 박스(13) 아래 42 */
 const TITLE_LEADING = 1.375;
-const DESC_TOP = 381; /* 타이틀 시각 아웃라인 아래 36 */
+const DESC_TOP = 386; /* 타이틀 시각 아웃라인 아래 36 */
 const DESC_LEADING = 1.588;
-const CENTER_TOP = 541; /* 본문 시각 아웃라인 아래 93 */
+const CENTER_TOP = 546; /* 본문 시각 아웃라인 아래 93 */
 const BOTTOM_GAP = 170;
 const BOTTOM_SIZE = 24;
 const BOTTOM_LEADING = 1.5;
@@ -100,7 +100,7 @@ export function Dilemma() {
 
       {/* .DILEMMA-TITLE */}
       <h2
-        className="text-kr absolute inset-x-0 text-center text-[40px] font-semibold text-ink"
+        className="SECTION-HEADLINE text-kr absolute inset-x-0 text-center text-[40px] font-semibold text-ink"
         style={{
           top: `${TITLE_TOP}px`,
           lineHeight: TITLE_LEADING,
