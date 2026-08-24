@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
 
+import { GlyphLines } from "@/components/copy/GlyphLines";
 import { SPLASH_DONE_EVENT } from "@/components/splash/SplashScreen";
 import { launchPopup } from "@/content/site";
 import {
@@ -127,9 +128,9 @@ export function LaunchOfferPopup() {
             aria-label="닫기"
             onClick={dismiss}
           >
-            <svg width="25" height="25" viewBox="0 0 25 25" aria-hidden>
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
               <path
-                d="M6.5 6.5l12 12M18.5 6.5L6.5 18.5"
+                d="M4 4l10 10M14 4L4 14"
                 stroke="#FFFFFF"
                 strokeWidth="1.4"
                 strokeLinecap="butt"
@@ -140,11 +141,7 @@ export function LaunchOfferPopup() {
 
         <div className="popup-body">
           <p id={titleId} className="popup-desc">
-            {launchPopup.desc.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
+            <GlyphLines lines={launchPopup.desc} />
           </p>
 
           <p className="popup-benefit-rate">
@@ -157,6 +154,8 @@ export function LaunchOfferPopup() {
           <a
             href={launchPopup.cta.href}
             className="popup-cta-btn"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={dismiss}
           >
             {launchPopup.cta.label}

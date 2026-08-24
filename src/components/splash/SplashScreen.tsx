@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+
 import { Wordmark } from "@/components/brand/Wordmark";
 import { splash } from "@/content/site";
 
@@ -36,10 +38,28 @@ function launchPopupAlreadySeen() {
   return false;
 }
 
+function coverViewport(el: HTMLElement) {
+  const vv = window.visualViewport;
+  const width = Math.ceil(vv?.width ?? window.innerWidth);
+  const height = Math.ceil(vv?.height ?? window.innerHeight);
+  const top = Math.floor(vv?.offsetTop ?? 0);
+  const left = Math.floor(vv?.offsetLeft ?? 0);
+  el.style.top = `${top}px`;
+  el.style.left = `${left}px`;
+  el.style.right = "auto";
+  el.style.bottom = "auto";
+  el.style.width = `${width}px`;
+  el.style.height = `${height}px`;
+}
+
 export function SplashScreen() {
   const [isDone, setIsDone] = useState(false);
+  const [portalEl, setPortalEl] = useState<HTMLElement | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setPortalEl(document.body);
+
     let alreadyPlayed = false;
     try {
       alreadyPlayed = sessionStorage.getItem(SPLASH_SESSION_KEY) === "1";
@@ -87,13 +107,31 @@ export function SplashScreen() {
     };
   }, []);
 
+  useLayoutEffect(() => {
+    if (isDone) return;
+    const el = rootRef.current;
+    if (!el) return;
+
+    const fit = () => coverViewport(el);
+    fit();
+    window.addEventListener("resize", fit);
+    window.visualViewport?.addEventListener("resize", fit);
+    window.visualViewport?.addEventListener("scroll", fit);
+    return () => {
+      window.removeEventListener("resize", fit);
+      window.visualViewport?.removeEventListener("resize", fit);
+      window.visualViewport?.removeEventListener("scroll", fit);
+    };
+  }, [isDone, portalEl]);
+
   if (isDone) return null;
 
-  return (
+  const node = (
     <div
+      ref={rootRef}
       data-splash
       aria-hidden
-      className="splash-root fixed inset-0 z-50 flex items-center justify-center bg-forest"
+      className="splash-root flex items-center justify-center bg-forest"
     >
       <div className="splash-content">
         <p className="splash-sub">{splash.eyebrow}</p>
@@ -101,4 +139,6 @@ export function SplashScreen() {
       </div>
     </div>
   );
+
+  return portalEl ? createPortal(node, portalEl) : node;
 }

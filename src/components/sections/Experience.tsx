@@ -16,7 +16,8 @@ import {
 /**
  * THE EXPERIENCE — PC
  *
- * 좌우 여백 30 · 카드 간격 24 · padding 80
+ * 좌우 여백 30 · 카드 간격 24 · padding-top 80 · padding-bottom 0
+ * (다음 CRM 구간 padding-top 200 과 합쳐 섹션 간격 200)
  * .DASHBOARD-CARD      880×600 · r 10
  * .DASHBOARD-SUB-CARD  476×600 · r 10
  *
@@ -25,7 +26,9 @@ import {
  *   title top 132 · left 50
  */
 const PAD_X = 30;
-const PAD_Y = 80;
+/** 상단만 80 — 하단은 CRM padding-top 200 이 구간 간격(총 200) */
+const PAD_TOP = 80;
+const PAD_BOTTOM = 0;
 const GAP = 24;
 const CARD = { width: 880, height: 600, radius: 10 } as const;
 const SUB = { width: 476, height: 600, radius: 10 } as const;
@@ -131,93 +134,95 @@ export function Experience() {
         style={{
           paddingLeft: PAD_X,
           paddingRight: PAD_X,
-          paddingTop: PAD_Y,
-          paddingBottom: PAD_Y,
+          paddingTop: PAD_TOP,
+          paddingBottom: PAD_BOTTOM,
           gap: GAP,
         }}
       >
         {/* .DASHBOARD-CARD */}
         <div
-            className="relative shrink-0 overflow-hidden bg-[#C6D4DF]"
-            style={{
-              width: CARD.width,
-              height: CARD.height,
-              borderRadius: CARD.radius,
-            }}
-          >
-            <DemoChat ref={chatRef} fill onBooking={handleBooking} />
-          </div>
+          className="relative shrink-0 overflow-hidden bg-[#C6D4DF]"
+          style={{
+            width: CARD.width,
+            height: CARD.height,
+            borderRadius: CARD.radius,
+          }}
+        >
+          <DemoChat ref={chatRef} fill onBooking={handleBooking} />
+        </div>
 
-          {/* .DASHBOARD-SUB-CARD */}
+        {/* .DASHBOARD-SUB-CARD */}
+        <div
+          className="relative shrink-0 overflow-hidden"
+          style={{
+            width: SUB.width,
+            height: SUB.height,
+            borderRadius: SUB.radius,
+          }}
+        >
+          <Image
+            src="/experience/ex-right-pc-bg.png"
+            alt=""
+            width={476}
+            height={600}
+            unoptimized
+            quality={100}
+            sizes="476px"
+            className="pointer-events-none absolute inset-0 h-full w-full"
+            style={{ objectFit: "fill" }}
+            priority
+          />
+
           <div
-            className="relative shrink-0 overflow-hidden"
-            style={{
-              width: SUB.width,
-              height: SUB.height,
-              borderRadius: SUB.radius,
-            }}
+            className="EXPERIENCE-COPY absolute z-10 flex flex-col items-start"
+            style={{ top: COPY.top, left: COPY.left }}
           >
-            <Image
-              src="/experience/ex-right-pc-bg.png"
-              alt=""
-              width={476}
-              height={600}
-              unoptimized
-              quality={100}
-              sizes="476px"
-              className="pointer-events-none absolute inset-0 h-full w-full"
-              style={{ objectFit: "fill" }}
-              priority
-            />
+            <p className="SECTION-TAG text-left text-forest">
+              {experience.tag.before}
+              <em>{experience.tag.article}</em>
+              {experience.tag.after}
+            </p>
 
-            <div
-              className="EXPERIENCE-COPY absolute z-10 flex flex-col items-start"
-              style={{ top: COPY.top, left: COPY.left }}
+            <h2
+              className="EXPERIENCE-TITLE text-kr text-left text-[40px] font-semibold text-ink"
+              style={{
+                marginTop: COPY.gapTagTitle,
+                lineHeight: TITLE_LEADING,
+              }}
             >
-              <p className="SECTION-TAG text-left text-forest">
-                {experience.tag}
-              </p>
+              {experience.headlinePc[0]}
+              <br />
+              {experience.headlinePc[1]}
+            </h2>
 
-              <h2
-                className="EXPERIENCE-TITLE text-kr text-left text-[40px] font-semibold text-ink"
-                style={{
-                  marginTop: COPY.gapTagTitle,
-                  lineHeight: TITLE_LEADING,
-                }}
-              >
-                {experience.headlinePc[0]}
-                <br />
-                {experience.headlinePc[1]}
-              </h2>
+            <p
+              className="EXPERIENCE-DESC text-kr text-left text-[17px] font-normal tracking-[-0.01em]"
+              style={{
+                marginTop: COPY.gapTitleDesc,
+                lineHeight: DESC_LEADING,
+                color: "rgba(28, 26, 25, 0.8)",
+              }}
+            >
+              {experience.bodyPc[0]}
+              <br />
+              {experience.bodyPc[1]}
+            </p>
 
-              <p
-                className="EXPERIENCE-DESC text-kr text-left text-[17px] font-normal tracking-[-0.01em]"
-                style={{
-                  marginTop: COPY.gapTitleDesc,
-                  lineHeight: DESC_LEADING,
-                  color: "rgba(28, 26, 25, 0.8)",
-                }}
-              >
-                {experience.bodyPc[0]}
-                <br />
-                {experience.bodyPc[1]}
-              </p>
-
-              <button
-                type="button"
-                onClick={() => chatRef.current?.focusInput()}
-                className="text-kr inline-flex cursor-pointer items-center justify-center border-0 bg-porcelain text-[16px] leading-none font-medium text-espresso uppercase transition-colors hover:bg-espresso hover:text-porcelain"
-                style={{
-                  marginTop: COPY.gapDescBtn,
-                  width: BTN.width,
-                  height: BTN.height,
-                  borderRadius: BTN.radius,
-                }}
-              >
-                {experience.kakaoDemo.label}
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => chatRef.current?.focusInput()}
+              className="text-kr inline-flex cursor-pointer items-center justify-center border-0 bg-porcelain text-[16px] leading-none font-medium text-espresso uppercase transition-colors hover:bg-espresso hover:text-porcelain"
+              style={{
+                marginTop: COPY.gapDescBtn,
+                width: BTN.width,
+                height: BTN.height,
+                borderRadius: BTN.radius,
+              }}
+            >
+              {experience.kakaoDemo.label}
+            </button>
           </div>
+        </div>
       </div>
 
       {isDev ? (

@@ -13,7 +13,6 @@ import { Footer } from "@/components/sections/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { KeyBenefits } from "@/components/sections/KeyBenefits";
 import { Pricing } from "@/components/sections/Pricing";
-import { Process } from "@/components/sections/Process";
 import { Start } from "@/components/sections/Start";
 import { TemplateCollection } from "@/components/sections/TemplateCollection";
 
@@ -48,7 +47,6 @@ export function HomeShell() {
         <Experience />
         <AutomatedCrm />
         <KeyBenefits />
-        <Process />
         <TemplateCollection />
         <Pricing />
         <Faq />

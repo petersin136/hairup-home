@@ -1,138 +1,141 @@
 import Image from "next/image";
 
-import { Canvas } from "@/components/layout/Canvas";
+import { GlyphLines } from "@/components/copy/GlyphLines";
 import { RainInLines } from "@/components/motion/RainInLines";
 import { dilemma } from "@/content/site";
 
 /**
- * The Dilemma — PC 시안
+ * The Dilemma — hu_DILEMMA_SPACING_PC
  *
  * padding-top 200 · tag→title 42 · title→desc 36
  * desc→center card 93 · center→bottom 170 · padding-bottom 170
  * 좌우 카드 여백 60 · center↔right 간격 70
  *
- * .DILEMMA-TAG          Playfair 13/500 · #2C3A2E · tracking 0.025em
- * .DILEMMA-TITLE        Noto 40/600 · lh 1.375 · #1C1A19
- * .DILEMMA-DESC         Noto 17/400 · lh 1.588 · tracking -0.01em · rgba(28,26,25,0.8)
- * .DILEMMA-BOTTOM-TEXT  Noto 24/500 · lh 1.5 · #1C1A19
+ * .DILEMMA-TAG          Playfair 13/500 · the 만 소문자 이탤릭
+ * .DILEMMA-TITLE        Noto 40/600 · lh 1.375
+ * .DILEMMA-DESC         Noto 17/400 · lh 1.588
+ * .DILEMMA-BOTTOM-TEXT  Noto 24/500 · lh 1.5
  *
- * .CARD-ITEM-LEFT    300×385 · r 10 · left 60
+ * .CARD-ITEM-LEFT    300×385 · r 10 · left 60 · center 대비 -178
  * .CARD-ITEM-CENTER  330×260 · r 10 · left 680
- * .CARD-ITEM-RIGHT   300×385 · r 10 · left 1080
+ * .CARD-ITEM-RIGHT   300×385 · r 10 · left 1080 · center 대비 -279
  */
-const TAG_TOP = 200;
-const TITLE_TOP = 255; /* 태그 박스(13) 아래 42 */
-const TITLE_LEADING = 1.375;
-const DESC_TOP = 386; /* 타이틀 시각 아웃라인 아래 36 */
-const DESC_LEADING = 1.588;
-const CENTER_TOP = 546; /* 본문 시각 아웃라인 아래 93 */
-const BOTTOM_GAP = 170;
-const BOTTOM_SIZE = 24;
-const BOTTOM_LEADING = 1.5;
-const BOTTOM_LINES = 2;
+const PAD_TOP = 200;
 const PAD_BOTTOM = 170;
+const GAP_TAG_TITLE = 42;
+const GAP_TITLE_DESC = 36;
+const GAP_DESC_CENTER = 93;
+const GAP_CENTER_BOTTOM = 170;
+const TITLE_LEADING = 1.375;
+const DESC_LEADING = 1.588;
+const BOTTOM_LEADING = 1.5;
 
+/** 시안 카드 — center top = 0 기준 */
 const BOXES = [
   {
-    /* .CARD-ITEM-LEFT */
     left: 60,
-    top: 363,
+    top: -178,
     width: 300,
     height: 385,
     src: dilemma.images[1],
   },
   {
-    /* .CARD-ITEM-CENTER — 우측 60 · 카드 사이 70 → left 680 */
     left: 680,
-    top: CENTER_TOP,
+    top: 0,
     width: 330,
     height: 260,
     src: dilemma.images[2],
   },
   {
-    /* .CARD-ITEM-RIGHT */
     left: 1080,
-    top: 262,
+    top: -279,
     width: 300,
     height: 385,
     src: dilemma.images[0],
   },
 ] as const;
 
-const BOTTOM_TOP = CENTER_TOP + BOXES[1].height + BOTTOM_GAP;
-const HEIGHT =
-  BOTTOM_TOP + BOTTOM_SIZE * BOTTOM_LEADING * BOTTOM_LINES + PAD_BOTTOM;
+const CENTER_H = 260;
 
 export function Dilemma() {
   return (
-    <Canvas id="dilemma" height={HEIGHT} background="bg-porcelain">
-      {BOXES.map((box) => (
-        <div
-          key={box.src}
-          className="absolute overflow-hidden bg-ink"
+    <section id="dilemma" className="relative w-full overflow-x-clip bg-porcelain">
+      <div
+        className="relative z-10 mx-auto w-[1440px]"
+        style={{
+          paddingTop: PAD_TOP,
+          paddingBottom: PAD_BOTTOM,
+        }}
+      >
+        {/* .DILEMMA-TAG — the 만 소문자 이탤릭 */}
+        <p className="SECTION-TAG text-center text-forest">
+          {dilemma.tag.before}
+          <em>{dilemma.tag.article}</em>
+          {dilemma.tag.after}
+        </p>
+
+        {/* .DILEMMA-TITLE */}
+        <h2
+          className="SECTION-HEADLINE text-kr text-center text-[40px] font-semibold text-ink"
           style={{
-            left: `${box.left}px`,
-            top: `${box.top}px`,
-            width: `${box.width}px`,
-            height: `${box.height}px`,
-            borderRadius: 10,
+            marginTop: GAP_TAG_TITLE,
+            lineHeight: TITLE_LEADING,
           }}
         >
-          <Image
-            src={box.src}
-            alt=""
-            fill
-            sizes={`${box.width}px`}
-            className="object-cover"
-            priority={box.src === dilemma.images[0]}
-            unoptimized
-          />
+          <GlyphLines lines={dilemma.headline} />
+        </h2>
+
+        {/* .DILEMMA-DESC */}
+        <RainInLines
+          lines={dilemma.bodyPc}
+          className="text-kr text-center text-[17px] font-normal tracking-[-0.01em]"
+          style={{
+            marginTop: GAP_TITLE_DESC,
+            lineHeight: DESC_LEADING,
+            color: "rgba(28, 26, 25, 0.8)",
+          }}
+        />
+
+        {/* 카드 스테이지 — 93은 본문↔센터 카드. 좌·우는 위로 삐져나옴 */}
+        <div
+          className="relative overflow-visible"
+          style={{ marginTop: GAP_DESC_CENTER, height: CENTER_H }}
+        >
+          {BOXES.map((box) => (
+            <div
+              key={box.src}
+              className="absolute overflow-hidden bg-ink"
+              style={{
+                left: box.left,
+                top: box.top,
+                width: box.width,
+                height: box.height,
+                borderRadius: 10,
+              }}
+            >
+              <Image
+                src={box.src}
+                alt=""
+                fill
+                sizes={`${box.width}px`}
+                className="object-cover"
+                priority={box.src === dilemma.images[0]}
+                unoptimized
+              />
+            </div>
+          ))}
         </div>
-      ))}
 
-      {/* .DILEMMA-TAG */}
-      <p
-        className="SECTION-TAG absolute inset-x-0 text-center text-forest"
-        style={{ top: `${TAG_TOP}px` }}
-      >
-        {dilemma.tag}
-      </p>
-
-      {/* .DILEMMA-TITLE */}
-      <h2
-        className="SECTION-HEADLINE text-kr absolute inset-x-0 text-center text-[40px] font-semibold text-ink"
-        style={{
-          top: `${TITLE_TOP}px`,
-          lineHeight: TITLE_LEADING,
-        }}
-      >
-        {dilemma.headline.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
-      </h2>
-
-      {/* .DILEMMA-DESC */}
-      <RainInLines
-        lines={dilemma.bodyPc}
-        className="text-kr absolute inset-x-0 text-center text-[17px] font-normal tracking-[-0.01em]"
-        style={{
-          top: `${DESC_TOP}px`,
-          lineHeight: DESC_LEADING,
-          color: "rgba(28, 26, 25, 0.8)",
-        }}
-      />
-
-      {/* .DILEMMA-BOTTOM-TEXT */}
-      <RainInLines
-        lines={dilemma.bodyAside}
-        className="text-kr absolute inset-x-0 text-center text-[24px] font-medium text-ink"
-        style={{
-          top: `${BOTTOM_TOP}px`,
-          lineHeight: BOTTOM_LEADING,
-        }}
-      />
-    </Canvas>
+        {/* .DILEMMA-BOTTOM-TEXT */}
+        <RainInLines
+          lines={dilemma.bodyAside}
+          className="text-kr text-center text-[24px] font-medium text-ink"
+          style={{
+            marginTop: GAP_CENTER_BOTTOM,
+            lineHeight: BOTTOM_LEADING,
+          }}
+        />
+      </div>
+    </section>
   );
 }

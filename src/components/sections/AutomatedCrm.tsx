@@ -7,27 +7,28 @@ import { automatedCrm } from "@/content/site";
 /**
  * 03. AUTOMATED CRM — hu_CRM PC 01–04 · hu_CRM SPACING PC
  *
- * 헤더 컬럼 940 (= 메인 슬라이드 폭). 좌측 250에 태그·타이틀 정렬.
- * 캐러셀 중앙 940×600.
- * 왼쪽 대기 카드는 메인과 상단 정렬, 오른쪽 대기 카드는 하단 정렬
- * (564×360 · opacity 0.4). 그 빈 자리에 화살표가 앉습니다.
+ * 헤더는 1440 스테이지 · 940 컬럼 유지.
+ * 캐러셀만 뷰포트 풀와이드 — 대기 카드(564×360)가 잘리지 않음.
+ * 슬라이드는 뷰포트 중앙 기준 calc(50% ± …).
+ * 왼쪽 대기 = 메인과 상단 정렬, 오른쪽 대기 = 하단 정렬 · opacity 0.4.
  * 화살표는 첨부 원본(가로축 + 꺾쇠) · PREV 만 180deg.
  */
 const N = automatedCrm.systems.length;
-const STAGE_W = 1440;
 const MAIN_W = 940;
 const MAIN_H = 600;
 const SUB_W = 564;
 const SUB_H = 360;
 const GAP = 24;
 const BTN = 52;
-const MAIN_LEFT = (STAGE_W - MAIN_W) / 2; /* 250 */
-const PREV_LEFT = MAIN_LEFT - GAP - BTN; /* 174 */
-const NEXT_LEFT = MAIN_LEFT + MAIN_W + GAP; /* 1214 */
-const PEEK_LEFT = MAIN_LEFT - GAP - SUB_W; /* -338 */
-const PEEK_RIGHT = NEXT_LEFT;
-const HIDDEN_LEFT = PEEK_LEFT - GAP - SUB_W;
-const HIDDEN_RIGHT = PEEK_RIGHT + SUB_W + GAP;
+/** 메인 왼쪽 가장자리까지 (뷰포트 중앙 → 왼쪽) */
+const MAIN_HALF = MAIN_W / 2; /* 470 */
+const PREV_LEFT = `calc(50% - ${MAIN_HALF + GAP + BTN}px)`;
+const NEXT_LEFT = `calc(50% + ${MAIN_HALF + GAP}px)`;
+const MAIN_LEFT = `calc(50% - ${MAIN_HALF}px)`;
+const PEEK_LEFT = `calc(50% - ${MAIN_HALF + GAP + SUB_W}px)`;
+const PEEK_RIGHT = `calc(50% + ${MAIN_HALF + GAP}px)`;
+const HIDDEN_LEFT = `calc(50% - ${MAIN_HALF + GAP * 2 + SUB_W * 2}px)`;
+const HIDDEN_RIGHT = `calc(50% + ${MAIN_HALF + GAP * 2 + SUB_W}px)`;
 
 const ArrowIcon = () => (
   <span className="CRM-SLIDER-ARROW" aria-hidden />

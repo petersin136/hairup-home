@@ -6,6 +6,8 @@ import { Resend } from "resend";
 
 import { getServiceRoleKey, supabaseUrl } from "@/lib/env";
 import {
+  GUIDEBOOK_EMAIL_FROM_NAME,
+  GUIDEBOOK_EMAIL_SUBJECT,
   GUIDEBOOK_IMAGE_ASSETS,
   guidebookEmailHtml,
 } from "@/lib/guidebook-email";
@@ -13,7 +15,8 @@ import { createSupabaseAdminClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
-const FROM = "헤어업 <guide@hair-up.kr>";
+const FROM_EMAIL = "guide@hair-up.kr";
+const FROM = `${GUIDEBOOK_EMAIL_FROM_NAME} <${FROM_EMAIL}>`;
 const DEFAULT_TO = "mars.official.kr@gmail.com";
 /** docs 버킷 / public/docs 공통 파일명 (공백 없음) */
 const GUIDEBOOK_PATH = "hairup-AI-automation-solution.pdf";
@@ -147,7 +150,9 @@ export async function POST(request: Request) {
     );
   }
 
-  const subject = body.subject?.trim();
+  const subject = body.attachGuidebook
+    ? GUIDEBOOK_EMAIL_SUBJECT
+    : body.subject?.trim();
   // 가이드북 첨부 메일은 서버에 정의된 본문을 사용합니다.
   const html = body.attachGuidebook
     ? guidebookEmailHtml()

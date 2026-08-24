@@ -1,4 +1,5 @@
 import { Wordmark } from "@/components/brand/Wordmark";
+import { GlyphLines } from "@/components/copy/GlyphLines";
 import { Canvas } from "@/components/layout/Canvas";
 import { RainInLines } from "@/components/motion/RainInLines";
 import { faq } from "@/content/site";
@@ -17,30 +18,32 @@ import { faq } from "@/content/site";
  * 호버 시 답변 면으로 뒤집힘
  */
 const GUTTER = 120;
-const HEADER = { top: 300, size: 25 };
+const TAG_TOP = 300;
+const GAP_TAG_TITLE = 42;
+const TAG_SIZE = 13;
+const TITLE_SIZE = 40;
+const TITLE_LEADING = 1.375;
+const TITLE_LINES = 2;
+const GAP_TITLE_DESC = 36;
+const DESC_SIZE = 17;
+const DESC_LEADING = 1.588;
+const DESC_LINES = faq.body.length;
+
 const SECTION_TITLE = {
-  top: HEADER.top + HEADER.size + 45,
-  size: 70,
-  leading: 1.37,
-  lines: 2,
+  top: TAG_TOP + TAG_SIZE + GAP_TAG_TITLE,
 };
 const SECTION_DESC = {
   top:
     SECTION_TITLE.top +
-    SECTION_TITLE.size * SECTION_TITLE.leading * SECTION_TITLE.lines +
-    65,
-  size: 22,
-  leading: 1.64,
-  lines: faq.body.length,
+    TITLE_SIZE * TITLE_LEADING * TITLE_LINES +
+    GAP_TITLE_DESC,
 };
 const CARD = { width: 384, height: 600 };
 const GAP_X = 24;
 const GAP_Y = 32;
 const CARD_PAD = 50;
 const CARD_TOP =
-  SECTION_DESC.top +
-  SECTION_DESC.size * SECTION_DESC.leading * SECTION_DESC.lines +
-  150;
+  SECTION_DESC.top + DESC_SIZE * DESC_LEADING * DESC_LINES + 150;
 const HEIGHT = Math.ceil(CARD_TOP + CARD.height * 2 + GAP_Y + 120);
 
 const TONE: Record<(typeof faq.items)[number]["tone"], string> = {
@@ -53,39 +56,30 @@ export function Faq() {
   return (
     <Canvas id="faq" height={HEIGHT} background="bg-porcelain">
       <p
-        className="absolute flex items-start gap-[6px] uppercase leading-none text-forest"
-        style={{ left: `${GUTTER}px`, top: `${HEADER.top}px` }}
+        className="SECTION-TAG absolute text-left text-forest"
+        style={{ left: `${GUTTER}px`, top: `${TAG_TOP}px` }}
       >
-        <span className="section-eyebrow-index text-[14px] font-medium leading-none tracking-normal">
-          {faq.eyebrow.index}
-        </span>
-        <span className="font-display text-[25px] font-medium leading-none tracking-normal">
-          {faq.eyebrow.label}
-        </span>
+        {faq.tag.before}
+        <em>{faq.tag.article}</em>
+        {faq.tag.after}
       </p>
 
       <h2
-        className="text-kr absolute text-left text-[70px] font-bold tracking-[-0.01em] text-ink"
+        className="SECTION-COPY-TITLE text-kr absolute text-left"
         style={{
           left: `${GUTTER}px`,
           top: `${SECTION_TITLE.top}px`,
-          lineHeight: SECTION_TITLE.leading,
         }}
       >
-        {faq.headline.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
+        <GlyphLines lines={faq.headline} />
       </h2>
 
       <RainInLines
         lines={faq.body}
-        className="text-kr absolute text-left text-[22px] font-normal tracking-[-0.01em] text-body"
+        className="SECTION-COPY-DESC text-kr absolute text-left"
         style={{
           left: `${GUTTER}px`,
           top: `${SECTION_DESC.top}px`,
-          lineHeight: SECTION_DESC.leading,
         }}
       />
 
@@ -139,11 +133,7 @@ function FaqCard({ item, index }: { item: Item; index: number }) {
               wordBreak: "keep-all",
             }}
           >
-            {item.question.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
+            <GlyphLines lines={item.question} />
           </p>
           <div
             className="mt-auto text-stone opacity-40"
@@ -165,11 +155,7 @@ function FaqCard({ item, index }: { item: Item; index: number }) {
             className="text-kr text-[18px] font-normal tracking-[-0.01em] text-porcelain"
             style={{ marginTop: 45, lineHeight: 2 }}
           >
-            {item.answer.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
+            <GlyphLines lines={item.answer} />
           </p>
         </div>
       </div>

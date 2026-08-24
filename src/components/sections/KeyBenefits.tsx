@@ -5,7 +5,7 @@ import { keyBenefits } from "@/content/site";
 /**
  * 04_Key Benefits — hu_KB_PC_01 · hu_KB_PC_02 · hu_KB_SPACING_PC
  *
- * 상하 패딩 200 · 좌우 152
+ * 상단 패딩 200 · 하단 0 (다음 Template 섹션 top 이 구간 간격) · 좌우 152
  * 태그↔타이틀 42 · 타이틀↔본문 36 · 본문↔그리드 85
  * 썸네일 558 × 360 · radius 6 · 열 간격 20 · 행 간격 50
  * 썸네일↔카드타이틀 28 · 카드타이틀↔카드본문 18
@@ -17,7 +17,11 @@ export function KeyBenefits() {
   return (
     <section id="key-benefits" className="BENEFITS">
       <div className="BENEFITS-INNER">
-        <p className="SECTION-TAG BENEFITS-TAG">{keyBenefits.tag}</p>
+        <p className="SECTION-TAG BENEFITS-TAG">
+          {keyBenefits.tag.before}
+          <em>{keyBenefits.tag.article}</em>
+          {keyBenefits.tag.after}
+        </p>
 
         <h2 className="BENEFITS-TITLE">
           {keyBenefits.headline[0]}

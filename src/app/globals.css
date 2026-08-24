@@ -30,12 +30,6 @@
   /* 섹션 태그 ↔ 타이틀 간격 (hu spacing PC) */
   --spacing-section-tag-title: 42px;
 
-  /* 06_The Process 의 배경 위에 낮은 명도차로 얹히는 텍스트.
-     세 값 사이에 일정한 비율 관계가 없어서 상태별로 각각 둡니다. */
-  --color-clay-dim: #955c3f;
-  --color-forest-dim: #151e16;
-  --color-espresso-dim: #1b130f;
-
   /* --- 폰트 ---------------------------------------------------------------
      실제 브랜드 폰트를 받으면 src/lib/fonts.ts 한 곳만 교체하면 됩니다. */
   --font-display: var(--font-playfair), "Playfair Display", serif;
@@ -93,17 +87,74 @@ html.entry-scroll-lock body {
 .text-kr {
   font-family: var(--font-kr);
   word-spacing: -0.057em;
+  /*
+   * 시안 상·하 간격은 텍스트 박스가 아니라 글리프 외곽선 기준.
+   * line-height Half-leading 이 margin/padding 에 더해지지 않게 trim.
+   * cap 금지 — Playfair 숫자가 sans처럼 깨짐. text / alphabetic 만 사용.
+   */
+  text-box-trim: trim-both;
+  text-box-edge: text text;
+}
+
+/*
+ * span.block 으로 나눈 여러 줄은 부모 trim 이 먹지 않음.
+ * 첫 줄 위·마지막 줄 아래만 걷고, 줄 사이 line-height 는 유지.
+ */
+h1 > span.block:first-child,
+h2 > span.block:first-child,
+h3 > span.block:first-child,
+p > span.block:first-child,
+div > span.block:first-child,
+p > .rain-line:first-child,
+.HERO-TITLE > span.block:first-child,
+.HERO-DESC > span.block:first-child,
+.popup-desc > span.block:first-child {
+  text-box-trim: trim-start;
+  text-box-edge: text text;
+}
+
+h1 > span.block:last-child,
+h2 > span.block:last-child,
+h3 > span.block:last-child,
+p > span.block:last-child,
+div > span.block:last-child,
+p > .rain-line:last-child,
+.HERO-TITLE > span.block:last-child,
+.HERO-DESC > span.block:last-child,
+.popup-desc > span.block:last-child {
+  text-box-trim: trim-end;
+  text-box-edge: text text;
+}
+
+h1 > span.block:only-child,
+h2 > span.block:only-child,
+h3 > span.block:only-child,
+p > span.block:only-child,
+div > span.block:only-child,
+p > .rain-line:only-child,
+.HERO-TITLE > span.block:only-child,
+.HERO-DESC > span.block:only-child,
+.popup-desc > span.block:only-child {
+  text-box-trim: trim-both;
+  text-box-edge: text text;
+}
+
+.glyph-trim-latin {
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
 }
 
 /*
  * 구형 섹션 헤더 — Playfair 14/500 인덱스 (FAQ · Pricing · Template 등)
  * Inter 14 대신 래퍼런스와 동일한 Playfair lining nums
+ * margin-top 보정 금지 — 넘버링↔타이틀 시안 간격에 5px 가 더해졌음
  */
 .section-eyebrow-index {
-  margin-top: 5px;
   font-family: var(--font-display), "Playfair Display", serif;
   font-variant-numeric: lining-nums;
   font-feature-settings: "lnum" 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
 }
 
 /* Pricing · STARTER / BRANDING 체크 아이콘 */
@@ -401,33 +452,6 @@ html.entry-scroll-lock body {
   animation: rain-fall 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* 06 Process — 프로그레스 탭 바 채움 · 스텝 유닛 팝업 */
-@keyframes process-bar-fill {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-.process-bar-fill {
-  transform-origin: left center;
-  animation-name: process-bar-fill;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards;
-}
-
-.process-step-unit {
-  transform: translateY(0);
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* 활성 시 타이틀+설명이 붙은 채로 살짝 더 위로 튀어 오르는 느낌 */
-.process-step-unit.is-active:not(.motion-reduce) {
-  transform: translateY(-8px);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .faq-card-inner {
     transition: none !important;
@@ -438,16 +462,6 @@ html.entry-scroll-lock body {
     opacity: 1;
     transform: none;
     animation: none;
-  }
-
-  .process-bar-fill {
-    animation: none;
-    transform: scaleX(1);
-  }
-
-  .process-step-unit {
-    transition: none;
-    transform: none;
   }
 }
 
@@ -535,9 +549,34 @@ html.entry-scroll-lock body {
 }
 
 .splash-root {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100vw;
+  width: 100dvw;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  overscroll-behavior: none;
   animation: splash-curtain-up 1600ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+}
+
+/*
+ * 스플래시가 떠 있는 동안 띠배너·GNB 는 아래로 깔아 둡니다.
+ * sticky z-index(60/50)가 스플래시보다 높아 리사이즈 때 비치던 것을 막습니다.
+ * 커튼이 올라간 뒤(.splash-seen) 원래 쌓임으로 돌아갑니다.
+ */
+html:not(.splash-seen) .TOP_BANNER,
+html:not(.splash-seen) .GNB,
+html:not(.splash-seen) [data-site-header] {
+  z-index: 0 !important;
 }
 
 .splash-content {
@@ -603,8 +642,7 @@ html.entry-scroll-lock body {
 
 /* --- Top Banner PC ------------------------------------------------------- */
 .TOP_BANNER {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 60;
   display: flex;
   justify-content: center;
@@ -615,39 +653,9 @@ html.entry-scroll-lock body {
   color: #faf8f5;
 }
 
-.TOP_BANNER-LOGO {
-  position: absolute;
-  left: 72px;
-  top: 50%;
-  display: flex;
-  align-items: center;
-  transform: translateY(-50%);
-  color: #faf8f5;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-
-.TOP_BANNER.is-scrolled .TOP_BANNER-LOGO {
-  opacity: 1;
-}
-
-.TOP_BANNER-PROGRESS {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 2px;
-  width: 100%;
-  background-color: #faf8f5;
-  transform-origin: left center;
-  transform: scaleX(0);
-  will-change: transform;
-  pointer-events: none;
-}
-
 .BANNER_TEXT {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: center;
   margin: 0;
   font-size: 14px;
@@ -661,18 +669,26 @@ html.entry-scroll-lock body {
 .BANNER_TEXT .EN {
   font-family: var(--font-latin), "Inter", sans-serif;
   font-weight: 600;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
 }
 
 .BANNER_TEXT .KR {
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 500;
   word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+  /* Noto 한글 잉크가 Inter 캡보다 아래로 내려가 보여 1.5px 올림 */
+  transform: translateY(-1.5px);
 }
 
 .BANNER_TEXT .BAR {
   font-family: var(--font-latin), "Inter", sans-serif;
   font-weight: 400;
   margin: 0 6px;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
 }
 
 /* --- Top Banner Mobile (hu_TOP_BANNER__M) -------------------------------- */
@@ -680,10 +696,6 @@ html.entry-scroll-lock body {
   height: 38px;
   padding-left: 16px;
   padding-right: 16px;
-}
-
-.TOP_BANNER.is-mobile .TOP_BANNER-LOGO {
-  left: 40px;
 }
 
 .TOP_BANNER.is-mobile .BANNER_TEXT {
@@ -855,6 +867,8 @@ html.entry-scroll-lock body {
   color: #faf8f5;
   text-align: left;
   word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: text text;
 }
 
 .HERO-DESC {
@@ -866,6 +880,8 @@ html.entry-scroll-lock body {
   color: rgba(250, 248, 245, 0.8);
   text-align: left;
   word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: text text;
 }
 
 .BTN-CREATE-BRAND {
@@ -880,7 +896,7 @@ html.entry-scroll-lock body {
   border-radius: 4px;
   font-family: var(--font-latin), "Inter", sans-serif;
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1;
   color: #2c3a2e;
   text-decoration: none;
@@ -917,7 +933,7 @@ html.entry-scroll-lock body {
 .BTN-CREATE-BRAND-ROLL .TXT-EN {
   font-family: var(--font-latin), "Inter", sans-serif;
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 500;
   text-transform: uppercase;
 }
 
@@ -981,20 +997,23 @@ html.entry-scroll-lock body {
 /* --- Automated CRM PC (hu_CRM PC 01–04 · hu_CRM SPACING PC) -------------- */
 .CRM {
   width: 100%;
+  overflow: visible;
   background-color: #faf8f5;
 }
 
 .CRM-STAGE {
   position: relative;
   width: 1440px;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
   padding-top: 200px;
+  overflow: visible;
 }
 
 /*
  * PC 섹션 태그 — Playfair 13/500 · 숫자·영문 동일 세리프 (lining nums)
- * text-box-trim 금지 — cap trim 시 숫자 글리프가 sans처럼 깨짐
+ * cap trim 금지(숫자 깨짐) · text/alphabetic 으로 상·하 Half-leading 만 제거
  */
 .SECTION-TAG {
   margin: 0;
@@ -1007,9 +1026,15 @@ html.entry-scroll-lock body {
   text-transform: uppercase;
   letter-spacing: 0.025em;
   line-height: 1;
-  /* cap trim 금지(숫자 깨짐) · 하단만 trim */
-  text-box-trim: trim-end;
+  text-box-trim: trim-both;
   text-box-edge: text alphabetic;
+}
+
+/* "( 02. the EXPERIENCE )" · "( 04. Key BENEFITS )" — 관사/Key 만 이탤릭 */
+.SECTION-TAG em {
+  font-style: italic;
+  font-weight: 500;
+  text-transform: none;
 }
 
 /* 한글 섹션 타이틀 — trim 후 margin으로 시안 42/36 간격 */
@@ -1076,12 +1101,15 @@ html.entry-scroll-lock body {
   white-space: nowrap;
 }
 
+/* 캐러셀만 뷰포트 풀와이드 — 양옆 564×360 대기 카드가 잘리지 않음 */
 .CRM-CAROUSEL {
   position: relative;
-  width: 1440px;
+  left: 50%;
+  width: 100vw;
   height: 600px;
   margin: 70px 0 0;
-  overflow: hidden;
+  margin-left: -50vw;
+  overflow: visible;
 }
 
 .CRM-SLIDE {
@@ -1127,7 +1155,7 @@ html.entry-scroll-lock body {
   flex-shrink: 0;
   font-size: 21px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.476;
   letter-spacing: -0.01em;
   color: #2c3a2e;
@@ -1135,7 +1163,7 @@ html.entry-scroll-lock body {
   word-spacing: -0.057em;
   white-space: nowrap;
   text-box-trim: trim-both;
-  text-box-edge: cap alphabetic;
+  text-box-edge: text text;
 }
 
 .CARD-INFO-DESC {
@@ -1150,7 +1178,7 @@ html.entry-scroll-lock body {
   text-align: left;
   word-spacing: -0.057em;
   text-box-trim: trim-both;
-  text-box-edge: cap alphabetic;
+  text-box-edge: text text;
 }
 
 .CRM-SLIDER-BTN {
@@ -1215,7 +1243,7 @@ html.entry-scroll-lock body {
   width: 1440px;
   margin-left: auto;
   margin-right: auto;
-  padding: 200px 152px;
+  padding: 200px 152px 0;
   box-sizing: border-box;
 }
 
@@ -1280,7 +1308,7 @@ html.entry-scroll-lock body {
   margin: 28px 0 0;
   font-size: 21px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.01em;
   color: #2c3a2e;
   text-align: left;
@@ -1376,6 +1404,7 @@ html.entry-scroll-lock body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 }
 
 /* .POPUP-DESC */
@@ -1387,11 +1416,15 @@ html.entry-scroll-lock body {
   color: #1c1a19;
   text-align: center;
   word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: text text;
+  margin: 0;
+  flex-shrink: 0;
 }
 
 /* .POPUP-BENEFIT-RATE */
 .popup-benefit-rate {
-  margin-top: 14px;
+  margin: 0;
   font-family: var(--font-display);
   color: #2c3a2e;
   letter-spacing: 0;
@@ -1402,21 +1435,30 @@ html.entry-scroll-lock body {
   font-feature-settings: "lnum" 1;
   line-height: 1;
   white-space: nowrap;
+  flex-shrink: 0;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
 }
 
 .popup-benefit-rate .upto {
   font-size: 40px;
   font-weight: 400;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
 }
 
 .popup-benefit-rate .num {
   font-size: 40px;
   font-weight: 500;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
 }
 
 .popup-benefit-rate .unit {
   font-size: 26px;
   font-weight: 400;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
 }
 
 .popup-benefit-rate .limited {
@@ -1427,13 +1469,85 @@ html.entry-scroll-lock body {
   text-align: center;
   margin-left: 7px;
   word-spacing: -0.057em;
-  align-self: center;
   line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+/* ============================================================================
+   CTA-BANNER — 시안 1380 × 650 · 좌우하 30
+   ========================================================================== */
+.CTA-BANNER {
+  position: absolute;
+  top: 0;
+  left: 30px;
+  box-sizing: border-box;
+  width: 1380px;
+  height: 650px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background-image: url("/images/cta-banner-bg.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.BOTTOM-BANNER-TITLE {
+  margin: 0;
+  font-size: 40px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  line-height: 1.375;
+  color: #faf8f5;
+  text-align: center;
+  text-box-trim: trim-both;
+  text-box-edge: text text;
+}
+
+.BOTTOM-BANNER-DESC {
+  margin: 36px 0 0;
+  font-size: 17px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  line-height: 1.588;
+  letter-spacing: -0.01em;
+  color: rgba(250, 248, 245, 0.8);
+  text-align: center;
+  text-box-trim: trim-both;
+  text-box-edge: text text;
+}
+
+.BOTTOM-BANNER-BTN {
+  margin-top: 55px;
+  width: 238px;
+  height: 55px;
+  background-color: #faf8f5;
+  border-radius: 4px;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  color: #2c3a2e;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.BOTTOM-BANNER-BTN:hover {
+  background-color: #212d23;
+  color: #faf8f5;
 }
 
 /* .POPUP-CTA-BTN */
 .popup-cta-btn {
-  margin-top: auto;
+  margin: 0;
   width: 390px;
   height: 50px;
   background-color: #2c3a2e;
@@ -1450,5 +1564,212 @@ html.entry-scroll-lock body {
   justify-content: center;
   text-decoration: none;
   word-spacing: -0.057em;
+  flex-shrink: 0;
+}
+
+/* --- hu_FOOTER PC -------------------------------------------------------- */
+/* 시안 표기 739 — PC_08 간격 스택은 브라우저에서 ≈794 (Footer.tsx HEIGHT) */
+.BACKGROUND {
+  width: 1440px;
+  height: 739px;
+  background-color: #efeae3;
+}
+
+.LOGO {
+  width: 660px;
+  height: auto;
+  display: block;
+}
+
+.NEED_MORE_DETAILS_ {
+  margin: 0;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-size: 26px;
+  font-weight: 500;
+  color: #1c1a19;
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+.SUB_DESCRIPTION {
+  margin: 0;
+  font-size: 16px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  line-height: 1.625;
+  letter-spacing: -0.01em;
+  color: rgba(28, 26, 25, 0.8);
+  text-align: left;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: text text;
+}
+
+.E_MAIL {
+  margin: 0;
+  font-size: 26px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-weight: 400;
+  color: #1c1a19;
+  text-align: left;
+  line-height: 1;
+}
+
+.E_MAIL::placeholder {
+  color: rgba(28, 26, 25, 0.4);
+  opacity: 1;
+}
+
+.가이드북_받기 {
+  font-size: 16px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: rgba(28, 26, 25, 0.4);
+  text-align: left;
+  cursor: pointer;
+  word-spacing: -0.057em;
+  line-height: 1;
+}
+
+.가이드북_받기.is-filled {
+  color: rgba(28, 26, 25, 1);
+}
+
+.가이드북_받기:disabled {
+  cursor: default;
+}
+
+.SHAPE_1 {
+  width: 658px;
+  border-bottom: 1px solid #1c1a19;
+  height: 0;
+  box-sizing: border-box;
+}
+
+.NOTICE_TEXT {
+  margin: 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: rgba(28, 26, 25, 0.7);
+  text-align: left;
+  word-spacing: -0.057em;
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: text text;
+}
+
+.NOTICE_SUCCESS_TEXT {
+  margin: 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: #2c3a2e;
+  text-align: left;
+  word-spacing: -0.057em;
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: text text;
+}
+
+.INDEX,
+.CONTACT,
+.CONNECT {
+  margin: 0;
+  font-size: 12px;
+  font-family: var(--font-latin), Inter, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: rgba(28, 26, 25, 0.7);
+  text-align: left;
+  line-height: 1;
+  text-transform: uppercase;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+.FOOTER_MENU_LIST {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  font-family: var(--font-latin), Inter, sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 2.071;
+  color: #1c1a19;
+  text-align: left;
+}
+
+.FOOTER_MENU_LIST a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.COMPANY_INFO {
+  margin: 0;
+  font-size: 12px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  color: rgba(28, 26, 25, 0.6);
+  text-align: left;
+  word-spacing: -0.057em;
+  line-height: 1;
+  white-space: nowrap;
+  text-box-trim: trim-both;
+  text-box-edge: text text;
+}
+
+/* 회사정보 너비 = COPYRIGHT·약관 행 너비 (시안 — TERMS OF SERVICE 끝 = 0700호 끝) */
+.FOOTER-META {
+  display: inline-block;
+  max-width: 100%;
+  margin-top: 65px;
+  vertical-align: top;
+}
+
+.FOOTER-LEGAL-ROW {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 28px;
+  margin-top: 18px;
+}
+
+.FOOTER-LEGAL-NAV {
+  display: flex;
+  align-items: baseline;
+  flex-shrink: 0;
+}
+
+.COPYRIGHT {
+  margin: 0;
+  font-family: var(--font-latin), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(28, 26, 25, 0.6);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+.LEGAL_LINKS {
+  font-family: var(--font-latin), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1c1a19;
+  text-transform: uppercase;
+  text-decoration: underline;
+  line-height: 1;
+  white-space: nowrap;
   flex-shrink: 0;
 }

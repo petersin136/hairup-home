@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 
+import { GlyphLines } from "@/components/copy/GlyphLines";
 import { FooterNewsletter } from "@/components/sections/FooterNewsletter";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { TopBanner } from "@/components/layout/TopBanner";
@@ -26,7 +27,6 @@ import {
   keyBenefits,
   nav,
   pricing,
-  process,
   start,
   templateCollection,
 } from "@/content/site";
@@ -36,9 +36,6 @@ import { saveReturnScroll } from "@/lib/entry-chrome";
 /**
  * 모바일 전용 홈. HomeShell 이 1440px 미만일 때만 마운트합니다.
  */
-const MOBILE_NAV = nav.map((item) =>
-  item.href === "#ai-manager" ? { ...item, ko: "AI 매니저" } : item,
-);
 
 const MENU_ROLL = "duration-500 ease-[cubic-bezier(0.65,0,0.35,1)]";
 
@@ -88,13 +85,14 @@ export function MobileHome() {
 
   return (
     <div className="[&_.text-kr]:break-keep">
-      {/* 띠배너 — hu_TOP_BANNER__M · sticky + 스크롤 진행 */}
+      {/* 띠배너 — hu_TOP_BANNER__M */}
       <TopBanner mobile />
 
       {/* 헤더 + 메뉴 — 시안 hu_m_Menu_open */}
       <header
         ref={headerRef}
-        className="relative sticky top-[38px] z-50 bg-porcelain"
+        data-site-header
+        className="relative sticky top-0 z-50 bg-porcelain"
       >
         <div className="flex h-[56px] items-center justify-between px-4">
           <Link
@@ -141,7 +139,7 @@ export function MobileHome() {
           aria-label="주요 메뉴"
         >
           <ul className="flex flex-col gap-[33px] pt-[44px]">
-            {MOBILE_NAV.map((item, i) => (
+            {nav.map((item, i) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
@@ -202,18 +200,10 @@ export function MobileHome() {
               {hero.eyebrow}
             </p>
             <h1 className="text-kr mt-[18px] text-[32px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
-              {hero.headline.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
+              <GlyphLines lines={hero.headline} />
             </h1>
             <p className="text-kr mt-[31px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
-              {hero.body.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
+              <GlyphLines lines={hero.body} />
             </p>
           </div>
           <div
@@ -237,7 +227,7 @@ export function MobileHome() {
           id="dilemma"
           className="bg-porcelain px-4 pt-[80px] pb-[80px] text-center"
         >
-          <p className="flex items-center justify-center leading-none text-forest">
+          <p className="glyph-trim-latin flex items-center justify-center leading-none text-forest">
             <span className="section-eyebrow-index mr-[6px] text-[12px] font-medium tracking-normal uppercase">
               {dilemma.eyebrow.index}
             </span>
@@ -246,11 +236,7 @@ export function MobileHome() {
             </span>
           </p>
           <h2 className="text-kr mt-[19px] text-[32px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
-            {dilemma.headline.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
+            <GlyphLines lines={dilemma.headline} />
           </h2>
 
           <div className="relative mt-[40px] aspect-[343/210] overflow-hidden rounded-[6px] bg-black">
@@ -265,11 +251,7 @@ export function MobileHome() {
           </div>
 
           <p className="text-kr mt-[26px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
-            {dilemma.body.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
+            <GlyphLines lines={dilemma.body} />
           </p>
 
           <div className="mt-[50px] flex gap-[11px]">
@@ -291,35 +273,23 @@ export function MobileHome() {
           </div>
 
           <p className="text-kr mt-[26px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
-            {dilemma.bodyAside.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
+            <GlyphLines lines={dilemma.bodyAside} />
           </p>
         </section>
 
         {/* Experience — iPhone 데모 (시안 HU_TEST) */}
         <section id="ai-manager" className="bg-porcelain px-5 py-14">
-          <p className="font-display text-[13px] font-medium uppercase text-forest">
+          <p className="glyph-trim-latin font-display text-[13px] font-medium uppercase text-forest">
             <span className="section-eyebrow-index mr-1.5 text-[12px] font-medium">
               {experience.eyebrow.index}
             </span>
             {experience.eyebrow.label}
           </p>
           <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
-            {experience.headline.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
+            <GlyphLines lines={experience.headline} />
           </h2>
           <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
-            {experience.body.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
+            <GlyphLines lines={experience.body} />
           </p>
 
           <MobileDemoPhone chatRef={chatRef} />
@@ -329,11 +299,7 @@ export function MobileHome() {
               {experience.tryAsking.title}
             </p>
             <p className="text-kr mt-4 text-[15px] font-normal leading-[1.64] text-body">
-              {experience.tryAsking.body.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
+              <GlyphLines lines={experience.tryAsking.body} />
             </p>
             <ul className="mt-5 w-full">
               {experience.examples.map((q, i) => (
@@ -389,18 +355,10 @@ export function MobileHome() {
               {automatedCrm.tag}
             </p>
             <h2 className="text-kr mt-5 text-[30px] font-bold leading-[1.25] text-ink">
-              {automatedCrm.headline.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
+              <GlyphLines lines={automatedCrm.headline} />
             </h2>
             <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
-              {automatedCrm.body.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
+              <GlyphLines lines={automatedCrm.body} />
             </p>
           </div>
           <MobileCrmCarousel />
@@ -427,21 +385,15 @@ export function MobileHome() {
         <section id="key-benefits" className="bg-porcelain pt-[80px] pb-[81px]">
           <div className="px-4">
             <p className="font-display text-[13px] font-medium uppercase leading-none tracking-[0.025em] text-forest">
-              {keyBenefits.tag}
+              {keyBenefits.tag.before}
+              <em className="italic normal-case">{keyBenefits.tag.article}</em>
+              {keyBenefits.tag.after}
             </p>
             <h2 className="text-kr mt-[21px] text-[32px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
-              {keyBenefits.headline.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
+              <GlyphLines lines={keyBenefits.headline} />
             </h2>
             <p className="text-kr mt-[29px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
-              {keyBenefits.body.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
+              <GlyphLines lines={keyBenefits.body} />
             </p>
           </div>
           <div
@@ -465,11 +417,7 @@ export function MobileHome() {
                     {card.title}
                   </h3>
                   <p className="text-kr mt-[20px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
-                    {card.body.map((line) => (
-                      <span key={line} className="block">
-                        {line}
-                      </span>
-                    ))}
+                    <GlyphLines lines={card.body} />
                   </p>
                 </article>
               ))}
@@ -477,30 +425,19 @@ export function MobileHome() {
           </div>
         </section>
 
-        <MobileProcess />
-
         {/* Template collection */}
         <section id="template" className="bg-porcelain py-14">
           <div className="px-5">
-            <p className="font-display text-[13px] font-medium uppercase text-forest">
-              <span className="section-eyebrow-index mr-1.5 text-[12px] font-medium">
-                {templateCollection.eyebrow.index}
-              </span>
-              {templateCollection.eyebrow.label}
+            <p className="SECTION-TAG text-forest">
+              {templateCollection.tag.before}
+              <em>{templateCollection.tag.article}</em>
+              {templateCollection.tag.after}
             </p>
             <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
-              {templateCollection.headline.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
+              <GlyphLines lines={templateCollection.headline} />
             </h2>
             <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
-              {templateCollection.body.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
+              <GlyphLines lines={templateCollection.body} />
             </p>
           </div>
 
@@ -568,25 +505,16 @@ export function MobileHome() {
 
         {/* Pricing */}
         <section id="pricing" className="bg-porcelain px-5 py-14">
-          <p className="font-display text-[13px] font-medium uppercase text-forest">
-            <span className="section-eyebrow-index mr-1.5 text-[12px] font-medium">
-              {pricing.eyebrow.index}
-            </span>
-            {pricing.eyebrow.label}
+          <p className="SECTION-TAG text-forest">
+            {pricing.tag.before}
+            <em>{pricing.tag.article}</em>
+            {pricing.tag.after}
           </p>
           <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
-            {pricing.headline.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
+            <GlyphLines lines={pricing.headline} />
           </h2>
           <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
-            {pricing.body.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
+            <GlyphLines lines={pricing.body} />
           </p>
 
           <div className="mt-10 grid grid-cols-1 gap-8">
@@ -632,20 +560,13 @@ export function MobileHome() {
 
         {/* FAQ — 모바일 시안 hu_m_FAQ · 375 환산 */}
         <section id="faq" className="bg-porcelain px-4 pt-[80px] pb-[81px] text-center">
-          <p className="flex items-center justify-center leading-none text-forest">
-            <span className="section-eyebrow-index mr-[6px] text-[12px] font-medium tracking-normal uppercase">
-              {faq.eyebrow.index}
-            </span>
-            <span className="font-display text-[13px] font-medium uppercase">
-              {faq.eyebrow.label}
-            </span>
+          <p className="SECTION-TAG text-center text-forest">
+            {faq.tag.before}
+            <em>{faq.tag.article}</em>
+            {faq.tag.after}
           </p>
           <h2 className="text-kr mt-[22px] text-[32px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
-            {faq.headline.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
+            <GlyphLines lines={faq.headline} />
           </h2>
           <p className="text-kr mt-[30px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
             <span className="block">{faq.body[0]}</span>
@@ -684,11 +605,7 @@ export function MobileHome() {
           />
           <div className="relative">
             <h2 className="text-kr text-[32px] font-bold leading-[1.37] tracking-[-0.01em]">
-              {start.headline.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
+              <GlyphLines lines={start.headline} />
             </h2>
             <p
               className="text-kr mt-[31px] text-[15px] font-normal leading-[24px] tracking-[-0.01em]"
@@ -819,140 +736,6 @@ function MobileMenuRoll({
         {ko}
       </span>
     </>
-  );
-}
-
-const PROCESS_AUTO_MS = 5000;
-const PROCESS_COUNT = process.steps.length;
-
-function MobileProcess() {
-  const [active, setActive] = useState(0);
-  const [barKey, setBarKey] = useState(0);
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const [manual, setManual] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-  const touchRef = useRef<{ x: number; y: number } | null>(null);
-  const manualRef = useRef(manual);
-  const activeRef = useRef(active);
-  manualRef.current = manual;
-  activeRef.current = active;
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReducedMotion(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
-
-  const resume = () => {
-    if (!manualRef.current) return;
-    setManual(false);
-    setBarKey((k) => k + 1);
-  };
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry) return;
-        if (entry.intersectionRatio < 0.35) resume();
-      },
-      { threshold: [0, 0.35, 0.7] },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  const go = (next: number, fromGesture = false) => {
-    setActive(((next % PROCESS_COUNT) + PROCESS_COUNT) % PROCESS_COUNT);
-    setBarKey((k) => k + 1);
-    if (fromGesture) setManual(true);
-  };
-
-  const step = process.steps[active] ?? process.steps[0];
-
-  return (
-    <section
-      ref={sectionRef}
-      id="process"
-      className="flex min-h-[620px] flex-col bg-black px-4 pt-[80px] pb-[81px]"
-      aria-roledescription="carousel"
-      aria-label="The Process"
-      onTouchStart={(e) => {
-        const t = e.changedTouches[0];
-        if (!t) return;
-        touchRef.current = { x: t.clientX, y: t.clientY };
-      }}
-      onTouchEnd={(e) => {
-        const start = touchRef.current;
-        const t = e.changedTouches[0];
-        touchRef.current = null;
-        if (!start || !t) return;
-        const dx = t.clientX - start.x;
-        const dy = t.clientY - start.y;
-        if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
-        go(activeRef.current + (dx < 0 ? 1 : -1), true);
-      }}
-    >
-      <h2 className="font-display text-[28px] font-medium uppercase leading-none text-porcelain">
-        {process.title}
-      </h2>
-
-      <div className="mt-auto">
-        <p className="flex items-baseline">
-          <span className="font-latin mr-2 shrink-0 text-[15px] font-normal text-stone">
-            {step.index}
-          </span>
-          <span className="font-display text-[22px] font-medium uppercase leading-none text-porcelain">
-            {step.caption}
-          </span>
-        </p>
-        <p className="text-kr mt-[26px] flex flex-col gap-[11px] text-[15px] font-normal leading-none text-[#d9d7d4]">
-          {step.bodyMobile.map((line) => (
-            <span key={line} className="block">
-              {line}
-            </span>
-          ))}
-        </p>
-
-        <div
-          className="mt-[39px] flex gap-2"
-          role="tablist"
-          aria-label="Process steps"
-        >
-          {process.steps.map((item, i) => {
-            const isActive = active === i;
-            return (
-              <button
-                key={item.caption}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                aria-label={`${item.index} ${item.caption}`}
-                className="relative h-[3px] min-w-0 flex-1 overflow-hidden"
-                style={{ backgroundColor: "rgb(90, 90, 90)" }}
-                onClick={() => go(i, true)}
-              >
-                {isActive ? (
-                  reducedMotion || manual ? (
-                    <span className="absolute inset-y-0 left-0 w-full bg-porcelain" />
-                  ) : (
-                    <span
-                      key={`${barKey}-${i}`}
-                      className="process-bar-fill absolute inset-y-0 left-0 w-full bg-porcelain"
-                      style={{ animationDuration: `${PROCESS_AUTO_MS}ms` }}
-                      onAnimationEnd={() => go(i + 1)}
-                    />
-                  )
-                ) : null}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -1260,11 +1043,7 @@ function MobilePlanCard({
       <p
         className={`text-kr mt-3 text-[15px] leading-[1.5] ${dark ? "text-porcelain/85" : "text-stone"}`}
       >
-        {plan.tagline.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
+        <GlyphLines lines={plan.tagline} />
       </p>
       <div className="mt-6 flex flex-col gap-3">
         {plan.prices.map((p) => (
@@ -1300,11 +1079,7 @@ function MobilePlanCard({
             <p
               className={`text-kr mt-1 text-[14px] leading-[1.5] ${dark ? "text-porcelain/75" : "text-stone"}`}
             >
-              {("descMobile" in f ? f.descMobile : f.desc).map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
-              ))}
+              <GlyphLines lines={("descMobile" in f ? f.descMobile : f.desc)} />
             </p>
           </li>
         ))}
@@ -1312,6 +1087,9 @@ function MobilePlanCard({
       <a
         href={plan.cta.href}
         onClick={(e) => onHashClick(e, plan.cta.href)}
+        {...(plan.cta.href.startsWith("http")
+          ? { target: "_blank", rel: "noopener noreferrer" }
+          : {})}
         className={`rounded-btn mt-8 flex h-12 items-center justify-center text-[15px] no-underline ${
           dark
             ? "bg-porcelain text-forest"

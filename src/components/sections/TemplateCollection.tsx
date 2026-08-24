@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
+import { GlyphLines } from "@/components/copy/GlyphLines";
 import { Canvas } from "@/components/layout/Canvas";
 import { RainInLines } from "@/components/motion/RainInLines";
 import { templateCollection } from "@/content/site";
@@ -10,39 +11,41 @@ import { templateCollection } from "@/content/site";
 /**
  * 07_Template Collection — 시안 12-D 지시사항
  *
- * .TITLE-TEMPLATE-COLLECTION Playfair 25/500 · #2C3A2E · uppercase · flex center
- *   .SUB.04/                 Inter 14/500 · margin-right 6
- * .SECTION-TITLE             Noto 70/700 · #1C1A19 · lh 1.37 · center · gap 45
- * .SECTION-DESC              Noto 22/400 · #6C6864 · lh 1.64 · center · gap 65
+ * .SECTION-TAG      Playfair 13/500 · center · tag→title 42
+ * .SECTION-COPY-TITLE  Noto 40/600 · lh 1.375 · title→desc 36
+ * .SECTION-COPY-DESC   Noto 17/400 · lh 1.588 · rgba(28,26,25,0.8)
  *
  * .TEMPLATE-CARD-CENTER  840 × 500 · radius 6
  * .TEMPLATE-CARD-LEFT/RIGHT  688 × 410 · radius 6 · 대기상태 overlay black/50%
  * 카드 간격 33 · 본문 아래 150 · 카드 아래 200
- * 마퀴→Pricing 여백 300 은 Pricing HEADER.top 이 담당
+ * 마퀴→Pricing 여백 300 은 Pricing TAG_TOP 이 담당
  *
  * 카드 줄은 가운데 한 장만 크고 좌우 이웃이 화면 밖으로 잘려 나갑니다.
  * 좌우 카드는 커서를 올리기만 해도 가운데로 미끄러져 옵니다.
  */
-const TITLE = { top: 344, size: 25 };
+const TAG_TOP = 344;
+const GAP_TAG_TITLE = 42;
+const TAG_SIZE = 13;
+const TITLE_SIZE = 40;
+const TITLE_LEADING = 1.375;
+const TITLE_LINES = 3;
+const GAP_TITLE_DESC = 36;
+const DESC_SIZE = 17;
+const DESC_LEADING = 1.588;
+const DESC_LINES = templateCollection.body.length;
+
 const SECTION_TITLE = {
-  top: TITLE.top + TITLE.size + 45,
-  size: 70,
-  leading: 1.37,
-  lines: 3,
+  top: TAG_TOP + TAG_SIZE + GAP_TAG_TITLE,
 };
 const SECTION_DESC = {
   top:
     SECTION_TITLE.top +
-    SECTION_TITLE.size * SECTION_TITLE.leading * SECTION_TITLE.lines +
-    65,
-  size: 22,
-  leading: 1.64,
-  lines: templateCollection.body.length,
+    TITLE_SIZE * TITLE_LEADING * TITLE_LINES +
+    GAP_TITLE_DESC,
 };
 
 const DESC_BOTTOM =
-  SECTION_DESC.top +
-  SECTION_DESC.size * SECTION_DESC.leading * SECTION_DESC.lines;
+  SECTION_DESC.top + DESC_SIZE * DESC_LEADING * DESC_LINES;
 
 const CARD = {
   activeW: 840,
@@ -216,41 +219,29 @@ export function TemplateCollection() {
       background="bg-porcelain"
       className="overflow-hidden"
     >
-      {/* .TITLE-TEMPLATE-COLLECTION */}
+      {/* .SECTION-TAG — Dilemma 와 동일 */}
       <p
-        className="absolute inset-x-0 flex items-start justify-center font-display text-[25px] font-medium uppercase leading-none text-forest"
-        style={{ top: `${TITLE.top}px` }}
+        className="SECTION-TAG absolute inset-x-0 text-center text-forest"
+        style={{ top: `${TAG_TOP}px` }}
       >
-        {/* .TITLE-TEMPLATE-COLLECTION .SUB.04/ */}
-        <span className="section-eyebrow-index mr-[6px] text-[14px] font-medium leading-none tracking-normal">
-          {templateCollection.eyebrow.index}
-        </span>
-        {templateCollection.eyebrow.label}
+        {templateCollection.tag.before}
+        <em>{templateCollection.tag.article}</em>
+        {templateCollection.tag.after}
       </p>
 
-      {/* .SECTION-TITLE */}
+      {/* .SECTION-COPY-TITLE */}
       <h2
-        className="text-kr absolute inset-x-0 text-center text-[70px] font-bold tracking-[-0.01em] text-ink"
-        style={{
-          top: `${SECTION_TITLE.top}px`,
-          lineHeight: SECTION_TITLE.leading,
-        }}
+        className="SECTION-COPY-TITLE text-kr absolute inset-x-0 text-center"
+        style={{ top: `${SECTION_TITLE.top}px` }}
       >
-        {templateCollection.headline.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
+        <GlyphLines lines={templateCollection.headline} />
       </h2>
 
-      {/* .SECTION-DESC */}
+      {/* .SECTION-COPY-DESC */}
       <RainInLines
         lines={templateCollection.body}
-        className="text-kr absolute inset-x-0 text-center text-[22px] font-normal tracking-[-0.01em] text-body"
-        style={{
-          top: `${SECTION_DESC.top}px`,
-          lineHeight: SECTION_DESC.leading,
-        }}
+        className="SECTION-COPY-DESC text-kr absolute inset-x-0 text-center"
+        style={{ top: `${SECTION_DESC.top}px` }}
       />
 
       <div

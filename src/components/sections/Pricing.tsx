@@ -1,9 +1,11 @@
 "use client";
 
+import { GlyphLines } from "@/components/copy/GlyphLines";
 import { Canvas } from "@/components/layout/Canvas";
 import { CountUp } from "@/components/motion/CountUp";
 import { RainInLines } from "@/components/motion/RainInLines";
 import { pricing } from "@/content/site";
+import { onHashClick } from "@/lib/scroll-to-hash";
 
 /**
  * 05_Pricing Plan — 시안 2-D · 3-D · 4-D
@@ -17,9 +19,11 @@ const CARD_GAP = 32;
 const CARD_PAD_X = 60;
 const CARD_PAD_Y = 65;
 
-const HEADER = { top: 300, size: 25 };
+const TAG_TOP = 300;
+const GAP_TAG_TITLE = 42;
+const TAG_SIZE = 13;
 const SECTION_TITLE = {
-  top: HEADER.top + HEADER.size + 45,
+  top: TAG_TOP + TAG_SIZE + GAP_TAG_TITLE,
   size: 70,
   leading: 1.37,
   lines: 2,
@@ -90,6 +94,7 @@ function PlanCard({
   const divider = dark ? "border-mist" : "border-stone";
 
   const isBranding = "badge" in plan;
+  const ctaExternal = plan.cta.href.startsWith("http");
 
   return (
     <article
@@ -233,6 +238,10 @@ function PlanCard({
         <div className="mt-auto flex justify-center" style={{ paddingTop: 45 }}>
           <a
             href={plan.cta.href}
+            onClick={(e) => onHashClick(e, plan.cta.href)}
+            {...(ctaExternal
+              ? { target: "_blank", rel: "noopener noreferrer" }
+              : {})}
             className="rounded-btn text-kr flex items-center justify-center bg-porcelain text-[17px] font-normal text-forest transition-colors duration-200 hover:bg-[#1A251B] hover:text-porcelain"
             style={{ width: 465, height: 61 }}
           >
@@ -243,6 +252,10 @@ function PlanCard({
         <div className="mt-auto flex justify-center" style={{ paddingTop: 45 }}>
           <a
             href={plan.cta.href}
+            onClick={(e) => onHashClick(e, plan.cta.href)}
+            {...(ctaExternal
+              ? { target: "_blank", rel: "noopener noreferrer" }
+              : {})}
             className="rounded-btn text-kr flex items-center justify-center text-[17px] font-normal text-espresso transition-colors duration-200 hover:bg-[#E5E1D9]"
             style={{
               width: 465,
@@ -263,15 +276,12 @@ export function Pricing() {
   return (
     <Canvas id="pricing" height={HEIGHT} background="bg-porcelain">
       <p
-        className="absolute inset-x-0 flex items-start justify-center gap-[6px] uppercase leading-none text-forest"
-        style={{ top: `${HEADER.top}px` }}
+        className="SECTION-TAG absolute inset-x-0 text-center text-forest"
+        style={{ top: `${TAG_TOP}px` }}
       >
-        <span className="section-eyebrow-index text-[14px] font-medium leading-none tracking-normal">
-          {pricing.eyebrow.index}
-        </span>
-        <span className="font-display text-[25px] font-medium leading-none tracking-normal">
-          {pricing.eyebrow.label}
-        </span>
+        {pricing.tag.before}
+        <em>{pricing.tag.article}</em>
+        {pricing.tag.after}
       </p>
 
       <h2
@@ -281,11 +291,7 @@ export function Pricing() {
           lineHeight: SECTION_TITLE.leading,
         }}
       >
-        {pricing.headline.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
+        <GlyphLines lines={pricing.headline} />
       </h2>
 
       <RainInLines

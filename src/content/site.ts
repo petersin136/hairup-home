@@ -5,9 +5,9 @@
  * 영문 표기는 시안에 없어 한글 뜻에 맞춰 새로 정한 값입니다.
  */
 export const nav = [
-  { en: "AI MANAGER", ko: "AI실장", href: "#ai-manager" },
+  { en: "AI MANAGER", ko: "AI 매니저", href: "#ai-manager" },
   { en: "TEMPLATES", ko: "템플릿", href: "#template" },
-  { en: "MEMBERSHIP", ko: "멤버십 요금", href: "#pricing" },
+  { en: "PRICING", ko: "요금안내", href: "#pricing" },
   { en: "FAQ", ko: "FAQ", href: "#faq" },
 ] as const;
 
@@ -44,7 +44,10 @@ export const launchPopup = {
     unit: "%",
     limited: "(선착순 한정)",
   },
-  cta: { label: "1:1 맞춤 세팅 상담하기", href: "#start" },
+  cta: {
+    label: "1:1 맞춤 세팅 상담하기",
+    href: "https://pf.kakao.com/_xlfqiX/chat",
+  },
 } as const;
 
 export const splash = {
@@ -63,8 +66,12 @@ export const hero = {
 
 export const dilemma = {
   eyebrow: { index: "01 /", label: "THE DILEMMA" },
-  /** PC 시안 .DILEMMA-TAG — 대소문자 그대로 */
-  tag: "( 01. the DILEMMA )",
+  /** PC 시안 .DILEMMA-TAG — the 만 소문자 이탤릭 */
+  tag: {
+    before: "( 01. ",
+    article: "the",
+    after: " DILEMMA )",
+  },
   headline: ["가위를 들었을 때,", "휴대폰이 울리면?"],
   body: [
     "약제 묻은 장갑을 벗고 답장할 수 없고,",
@@ -99,8 +106,12 @@ export const dilemma = {
 export const experience = {
   /* 앞머리 "02 /" 만 산세리프, 뒤는 세리프입니다. */
   eyebrow: { index: "02 /", label: "THE EXPERIENCE" },
-  /** PC 시안 .EXPERIENCE-TAG — 대소문자 그대로 */
-  tag: "( 02. the EXPERIENCE )",
+  /** PC 시안 .EXPERIENCE-TAG — the 만 소문자 이탤릭 */
+  tag: {
+    before: "( 02. ",
+    article: "the",
+    after: " EXPERIENCE )",
+  },
   headline: ["주저하지 말고,", "지금 직접", "말을 건네보세요."],
   headlinePc: ["카카오톡으로", "직접 말을 걸어보세요."],
   body: [
@@ -113,7 +124,7 @@ export const experience = {
   ],
   kakaoDemo: {
     label: "카카오톡 데모 체험하기",
-    href: "https://pf.kakao.com/_xeWxdSX/chat",
+    href: "http://pf.kakao.com/_xeWxdSX/chat",
   },
   tryAsking: {
     title: "TRY ASKING.",
@@ -179,7 +190,12 @@ export const automatedCrm = {
 } as const;
 
 export const keyBenefits = {
-  tag: "( 04. Key BENEFITS )",
+  /** PC 시안 — Key 만 이탤릭 (uppercase 예외) */
+  tag: {
+    before: "( 04. ",
+    article: "Key",
+    after: " BENEFITS )",
+  },
   headline: ["고객은 기다리지 않고,", "당신은 끊기지 않도록."],
   body: [
     "24시간 언제든 이어지는 응대.",
@@ -223,7 +239,12 @@ export const keyBenefits = {
 } as const;
 
 export const templateCollection = {
-  eyebrow: { index: "05 /", label: "TEMPLATE COLLECTION" },
+  /** PC — Dilemma 와 동일 SECTION-TAG · the 이탤릭 */
+  tag: {
+    before: "( 05. ",
+    article: "the",
+    after: " TEMPLATE COLLECTION )",
+  },
   headline: ["수많은 디자이너 중", "하나가 아닌", "단 하나의 브랜드로."],
   body: [
     "플랫폼의 획일화된 목록 속에서는 당신의 미학을 온전히 보여줄 수 없습니다.",
@@ -268,56 +289,17 @@ export const templateCollection = {
   ],
 } as const;
 
-export const process = {
-  title: "THE PROCESS",
-  steps: [
-    {
-      index: "STEP 1 /",
-      caption: "DISCOVERY",
-      body: [
-        "피드 속에서 마음에 드는",
-        "헤어 스타일을 찾다가",
-        "당신의 작업물을 발견합니다",
-      ],
-      bodyMobile: [
-        "피드 속에서 마음에 드는 헤어 스타일을",
-        "찾다가 당신의 작업물을 발견합니다",
-      ],
-    },
-    {
-      index: "STEP 2 /",
-      caption: "INQUIRY",
-      body: [
-        "프로필의 24시간 예약 · 상담 링크를",
-        "누르면 카카오톡으로 연결되어",
-        "AI와 대화가 시작됩니다.",
-      ],
-      bodyMobile: [
-        "프로필의 24시간 예약 · 상담 링크를 누르면",
-        "카카오톡으로 연결되어 AI와 대화가 시작됩니다.",
-      ],
-    },
-    {
-      index: "STEP 3 /",
-      caption: "BOOKING",
-      body: [
-        "상담부터 예약금 입금까지 한꺼번에 완료!",
-        "당신은 확정된 손님만 반갑게 맞이하면 됩니다.",
-      ],
-      bodyMobile: [
-        "상담부터 예약금 입금까지 한꺼번에 완료!",
-        "당신은 확정된 손님만 반갑게 맞이하면 됩니다.",
-      ],
-    },
-  ],
-} as const;
-
 /*
  * 10_FAQ — 시안 표기는 07 / FAQ. 호버하면 해당 칸이 답변 면으로 뒤집어집니다.
  * 답변 면 배경은 Q1·Q5 forest / Q2·Q6 clay / Q3·Q4 espresso.
  */
 export const faq = {
-  eyebrow: { index: "07 /", label: "FAQ" },
+  /** PC — Dilemma 와 동일 SECTION-TAG · the 이탤릭 */
+  tag: {
+    before: "( 07. ",
+    article: "the",
+    after: " FAQ )",
+  },
   headline: ["시작은 쉽고,", "변화는 빠르고 선명하게."],
   body: [
     "처음이어도 망설일 필요 없습니다.",
@@ -404,9 +386,14 @@ export const faq = {
   ],
 } as const;
 
-/** 06_Pricing Plan — 시안 2-D · 3-D · 4-D · GNB MEMBERSHIP → #pricing */
+/** 06_Pricing Plan — 시안 2-D · 3-D · 4-D · GNB PRICING → #pricing */
 export const pricing = {
-  eyebrow: { index: "06 /", label: "PRICING PLAN" },
+  /** PC — Dilemma 와 동일 SECTION-TAG · the 이탤릭 */
+  tag: {
+    before: "( 06. ",
+    article: "the",
+    after: " PRICING PLAN )",
+  },
   headline: ["매출이 아무리 늘어도,", "비용은 변함없이."],
   body: [
     "월 1,000만 원을 시술할 때 플랫폼 수수료는 매달 수십만 원에 달합니다.",
@@ -535,10 +522,10 @@ export const start = {
       opacity: 1,
     },
   ],
-  headline: ["감각은 온전히,", "비즈니스는 유용하게."],
+  headline: ["감각은 온전히.", "운영은 더 간편하게."],
   body: [
-    "당신의 실력은 이미 충분합니다.",
-    "이제 그 실력이 온전히 빛나도록 나머지는 헤어업이 하겠습니다.",
+    "당신의 실력과 스타일에 집중할 수 있도록",
+    "반복되는 상담과 예약 관리는 헤어업이 덜어드립니다.",
   ],
   cta: {
     label: "1:1 맞춤 세팅 상담하기",
@@ -546,18 +533,19 @@ export const start = {
   },
 } as const;
 
-/** 15_Footer — 시안 15-D · 1440 × 739 · #EFEAE3 */
+/** 15_Footer — hu_FOOTER PC · 1440 × 739 · #EFEAE3 */
 export const footer = {
   newsletter: {
     title: "NEED MORE DETAILS?",
     body: [
-      "더 궁금한 사항이 있으신가요?",
-      "이메일을 남겨주시면 상세 가이드북을 보내드립니다.",
+      "헤어업 서비스와 플랜이 궁금하다면",
+      "가이드북에서 자세한 내용을 확인해보세요.",
     ],
     placeholder: "E-mail",
-    submit: "Send me PDF",
+    submit: "가이드북 받기",
     notice:
       "* 이메일 입력 시 가이드북 발송 및 브랜드의 새로운 소식·혜택 수신에 동의하게 됩니다.",
+    success: "• 가이드북을 보내드렸습니다. 메일함을 확인해 주세요.",
   },
   columns: [
     {
@@ -565,7 +553,7 @@ export const footer = {
       links: [
         { label: "AI MANAGER", href: "#ai-manager" },
         { label: "TEMPLATES", href: "#template" },
-        { label: "MEMBERSHIP", href: "#pricing" },
+        { label: "PRICING", href: "#pricing" },
         { label: "FAQ", href: "#faq" },
       ],
     },
@@ -580,13 +568,17 @@ export const footer = {
       ],
     },
     {
-      title: "JOIN US",
+      title: "CONNECT",
       links: [
         { label: "Instagram", href: "#" },
         { label: "KakaoTalk", href: "#" },
       ],
     },
   ],
+  /** PC .COMPANY_INFO — 시안 1행 */
+  companyPc:
+    "MARANATHA STUDIO | 대표 | 최연주 | 사업자등록번호 | 414-03-25569 | 통신판매업신고번호 | 제 2026-경기포천-0700호",
+  /** 모바일용 (기존 구조 유지) */
   company: [
     [
       { label: "회사명", value: "MARANATHA STUDIO" },
