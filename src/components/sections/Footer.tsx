@@ -93,26 +93,23 @@ export function Footer() {
 
           <div className="FOOTER-META">
             <p className="COMPANY_INFO">{footer.companyPc}</p>
-
-            <div className="FOOTER-LEGAL-ROW">
-              <p className="COPYRIGHT">{footer.copyright}</p>
-              <nav
-                className="FOOTER-LEGAL-NAV"
-                style={{ gap: LEGAL_GAP }}
-                aria-label="약관"
-              >
-                {footer.legal.map((item) => (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    onClick={saveReturnScroll}
-                    className="LEGAL_LINKS"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
-            </div>
+            <p className="COPYRIGHT">{footer.copyright}</p>
+            <nav
+              className="FOOTER-LEGAL-NAV"
+              style={{ gap: LEGAL_GAP }}
+              aria-label="약관"
+            >
+              {footer.legal.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={saveReturnScroll}
+                  className="LEGAL_LINKS"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
           </div>
         </div>
       </div>

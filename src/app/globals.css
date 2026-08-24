@@ -1727,23 +1727,41 @@ html:not(.splash-seen) [data-site-header] {
 
 /* 회사정보 너비 = COPYRIGHT·약관 행 너비 (시안 — TERMS OF SERVICE 끝 = 0700호 끝) */
 .FOOTER-META {
-  display: inline-block;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 28px;
+  row-gap: 18px;
+  width: max-content;
   max-width: 100%;
   margin-top: 65px;
-  vertical-align: top;
 }
 
-.FOOTER-LEGAL-ROW {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 28px;
-  margin-top: 18px;
+.COMPANY_INFO {
+  grid-column: 1 / -1;
+}
+
+.COPYRIGHT {
+  grid-column: 1;
+  align-self: baseline;
 }
 
 .FOOTER-LEGAL-NAV {
+  grid-column: 2;
   display: flex;
   align-items: baseline;
+  justify-self: end;
+  flex-shrink: 0;
+}
+
+.LEGAL_LINKS {
+  font-family: var(--font-latin), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1c1a19;
+  text-transform: uppercase;
+  text-decoration: underline;
+  line-height: 1;
+  white-space: nowrap;
   flex-shrink: 0;
 }
 
@@ -1757,19 +1775,6 @@ html:not(.splash-seen) [data-site-header] {
   text-transform: uppercase;
   line-height: 1;
   white-space: nowrap;
-  flex-shrink: 0;
   text-box-trim: trim-both;
   text-box-edge: text alphabetic;
-}
-
-.LEGAL_LINKS {
-  font-family: var(--font-latin), Inter, sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  color: #1c1a19;
-  text-transform: uppercase;
-  text-decoration: underline;
-  line-height: 1;
-  white-space: nowrap;
-  flex-shrink: 0;
 }
