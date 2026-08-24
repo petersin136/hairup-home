@@ -92,7 +92,13 @@ export function Footer() {
           </div>
 
           <div className="FOOTER-META">
-            <p className="COMPANY_INFO">{footer.companyPc}</p>
+            <p className="COMPANY_INFO">
+              {footer.companyPc.map((block) => (
+                <span key={block} className="COMPANY-INFO-BLOCK">
+                  {block}
+                </span>
+              ))}
+            </p>
             <p className="COPYRIGHT">{footer.copyright}</p>
             <nav
               className="FOOTER-LEGAL-NAV"

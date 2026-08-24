@@ -575,9 +575,13 @@ export const footer = {
       ],
     },
   ],
-  /** PC .COMPANY_INFO — 시안 1행 */
-  companyPc:
-    "MARANATHA STUDIO | 대표 | 최연주 | 사업자등록번호 | 414-03-25569 | 통신판매업신고번호 | 제 2026-경기포천-0700호",
+  /** PC .COMPANY_INFO — 4블록 · 블록 사이 간격(시안) */
+  companyPc: [
+    "MARANATHA STUDIO",
+    "대표 | 최연주",
+    "사업자등록번호 | 414-03-25569",
+    "통신판매업신고번호 | 제 2026-경기포천-0700호",
+  ],
   /** 모바일용 (기존 구조 유지) */
   company: [
     [
