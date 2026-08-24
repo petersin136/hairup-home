@@ -1252,6 +1252,57 @@ html:not(.splash-seen) [data-site-header] {
   text-align: center;
 }
 
+/*
+ * 05·06·07 섹션 카피 — Key Benefits (.BENEFITS-TITLE / .BENEFITS-DESC) 와 동일
+ * margin stack: tag → +42 → title → +36 → desc
+ */
+.SECTION-COPY-STACK {
+  box-sizing: border-box;
+}
+
+.SECTION-COPY-STACK--center {
+  text-align: center;
+}
+
+.SECTION-COPY-STACK--left {
+  text-align: left;
+}
+
+.SECTION-COPY-TITLE {
+  margin: var(--spacing-section-tag-title) 0 0;
+  font-size: 40px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  line-height: 1.375;
+  color: #1c1a19;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: text text;
+}
+
+.SECTION-COPY-DESC {
+  margin: 36px 0 0;
+  font-size: 17px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  line-height: 1.588;
+  letter-spacing: -0.01em;
+  color: rgba(28, 26, 25, 0.8);
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: text text;
+}
+
+.SECTION-COPY-STACK--center .SECTION-COPY-TITLE,
+.SECTION-COPY-STACK--center .SECTION-COPY-DESC {
+  text-align: center;
+}
+
+.SECTION-COPY-STACK--left .SECTION-COPY-TITLE,
+.SECTION-COPY-STACK--left .SECTION-COPY-DESC {
+  text-align: left;
+}
+
 /* .BENEFITS-TITLE — 한글. ideographic 박스 기준 trim (시안 42/36 간격) */
 .BENEFITS-TITLE {
   margin: var(--spacing-section-tag-title) 0 0;
@@ -1699,10 +1750,13 @@ html:not(.splash-seen) [data-site-header] {
   font-size: 14px;
   font-family: var(--font-latin), Inter, sans-serif;
   font-weight: 500;
-  text-transform: uppercase;
   line-height: 2.071;
   color: #1c1a19;
   text-align: left;
+}
+
+.FOOTER_MENU_LIST--uppercase {
+  text-transform: uppercase;
 }
 
 .FOOTER_MENU_LIST a {

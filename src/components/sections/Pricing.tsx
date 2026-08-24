@@ -3,14 +3,14 @@
 import { GlyphLines } from "@/components/copy/GlyphLines";
 import { Canvas } from "@/components/layout/Canvas";
 import { CountUp } from "@/components/motion/CountUp";
-import { RainInLines } from "@/components/motion/RainInLines";
 import { pricing } from "@/content/site";
 import { onHashClick } from "@/lib/scroll-to-hash";
 
 /**
  * 05_Pricing Plan — 시안 2-D · 3-D · 4-D
  *
- * 보드 1 VS · 보드 2 STARTER · 보드 3 BRANDING
+ * 카피 스택: Key Benefits(04) 와 동일 — SECTION-TAG + SECTION-COPY-TITLE/DESC
+ * tag→title 42 · title→desc 36 · desc→비교 150 · 비교→카드 120
  * 카드 584 × 2 · gap 32 · 좌우 거터 120
  */
 const GUTTER = 120;
@@ -20,28 +20,10 @@ const CARD_PAD_X = 60;
 const CARD_PAD_Y = 65;
 
 const TAG_TOP = 300;
-const GAP_TAG_TITLE = 42;
-const TAG_SIZE = 13;
-const SECTION_TITLE = {
-  top: TAG_TOP + TAG_SIZE + GAP_TAG_TITLE,
-  size: 70,
-  leading: 1.37,
-  lines: 2,
-};
-const SECTION_DESC = {
-  top:
-    SECTION_TITLE.top +
-    SECTION_TITLE.size * SECTION_TITLE.leading * SECTION_TITLE.lines +
-    65,
-  size: 22,
-  leading: 1.64,
-  lines: pricing.body.length,
-};
-const COMPARE_TOP =
-  SECTION_DESC.top +
-  SECTION_DESC.size * SECTION_DESC.leading * SECTION_DESC.lines +
-  150;
+const GAP_DESC_COMPARE = 150;
 const COMPARE_BLOCK = 24 + 23 + 50 + 36 + 60;
+/** copy 스택(2줄 타이틀·2줄 본문) + desc→비교 150 */
+const COMPARE_TOP = TAG_TOP + 255 + GAP_DESC_COMPARE;
 const CARD_TOP = COMPARE_TOP + COMPARE_BLOCK + 120;
 
 const featureBlock = (count: number, extraLines = 0) =>
@@ -275,33 +257,24 @@ function PlanCard({
 export function Pricing() {
   return (
     <Canvas id="pricing" height={HEIGHT} background="bg-porcelain">
-      <p
-        className="SECTION-TAG absolute inset-x-0 text-center text-forest"
+      <div
+        className="SECTION-COPY-STACK SECTION-COPY-STACK--center absolute inset-x-0"
         style={{ top: `${TAG_TOP}px` }}
       >
-        {pricing.tag.before}
-        <em>{pricing.tag.article}</em>
-        {pricing.tag.after}
-      </p>
+        <p className="SECTION-TAG text-forest">
+          {pricing.tag.before}
+          <em>{pricing.tag.article}</em>
+          {pricing.tag.after}
+        </p>
 
-      <h2
-        className="text-kr absolute inset-x-0 text-center text-[70px] font-bold tracking-[-0.01em] text-ink"
-        style={{
-          top: `${SECTION_TITLE.top}px`,
-          lineHeight: SECTION_TITLE.leading,
-        }}
-      >
-        <GlyphLines lines={pricing.headline} />
-      </h2>
+        <h2 className="SECTION-COPY-TITLE text-kr">
+          <GlyphLines lines={pricing.headline} />
+        </h2>
 
-      <RainInLines
-        lines={pricing.body}
-        className="text-kr absolute inset-x-0 text-center text-[22px] font-normal tracking-[-0.01em] text-body"
-        style={{
-          top: `${SECTION_DESC.top}px`,
-          lineHeight: SECTION_DESC.leading,
-        }}
-      />
+        <p className="SECTION-COPY-DESC text-kr">
+          <GlyphLines lines={pricing.body} />
+        </p>
+      </div>
 
       <div
         className="absolute inset-x-0 flex items-center justify-center"

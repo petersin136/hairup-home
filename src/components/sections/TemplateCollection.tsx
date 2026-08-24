@@ -5,17 +5,13 @@ import { useEffect, useRef, useState } from "react";
 
 import { GlyphLines } from "@/components/copy/GlyphLines";
 import { Canvas } from "@/components/layout/Canvas";
-import { RainInLines } from "@/components/motion/RainInLines";
 import { templateCollection } from "@/content/site";
 
 /**
  * 07_Template Collection — 시안 12-D 지시사항
  *
- * .SECTION-TAG      Playfair 13/500 · center · tag→title 42
- * .SECTION-COPY-TITLE  Noto 40/600 · lh 1.375 · title→desc 36
- * .SECTION-COPY-DESC   Noto 17/400 · lh 1.588 · rgba(28,26,25,0.8)
- *
- * .TEMPLATE-CARD-CENTER  840 × 500 · radius 6
+ * 카피 스택: Key Benefits(04) 와 동일 — SECTION-TAG + SECTION-COPY-TITLE/DESC
+ * tag→title 42 · title→desc 36 · desc→카드 150 · 카드→마퀴 200
  * .TEMPLATE-CARD-LEFT/RIGHT  688 × 410 · radius 6 · 대기상태 overlay black/50%
  * 카드 간격 33 · 본문 아래 150 · 카드 아래 200
  * 마퀴→Pricing 여백 300 은 Pricing TAG_TOP 이 담당
@@ -24,28 +20,8 @@ import { templateCollection } from "@/content/site";
  * 좌우 카드는 커서를 올리기만 해도 가운데로 미끄러져 옵니다.
  */
 const TAG_TOP = 344;
-const GAP_TAG_TITLE = 42;
-const TAG_SIZE = 13;
-const TITLE_SIZE = 40;
-const TITLE_LEADING = 1.375;
-const TITLE_LINES = 3;
-const GAP_TITLE_DESC = 36;
-const DESC_SIZE = 17;
-const DESC_LEADING = 1.588;
-const DESC_LINES = templateCollection.body.length;
-
-const SECTION_TITLE = {
-  top: TAG_TOP + TAG_SIZE + GAP_TAG_TITLE,
-};
-const SECTION_DESC = {
-  top:
-    SECTION_TITLE.top +
-    TITLE_SIZE * TITLE_LEADING * TITLE_LINES +
-    GAP_TITLE_DESC,
-};
-
-const DESC_BOTTOM =
-  SECTION_DESC.top + DESC_SIZE * DESC_LEADING * DESC_LINES;
+const GAP_DESC_CARDS = 150;
+const GAP_CARDS_MARQUEE = 200;
 
 const CARD = {
   activeW: 840,
@@ -56,7 +32,8 @@ const CARD = {
 };
 /** 자리 간격은 활성 카드 폭 + 거터. 비활성은 슬롯 안에서 가운데 쪽으로 붙입니다. */
 const PITCH = CARD.activeW + CARD.gap;
-const CARD_TOP = DESC_BOTTOM + 150;
+/** copy 스택 + desc→카드 150 — margin stack 과 동일한 여백 */
+const CARD_TOP = TAG_TOP + 488 + GAP_DESC_CARDS;
 const ROW_CENTER = CARD_TOP + CARD.activeH / 2;
 /** 카드 폭의 몇 할을 끌어야 다음 장으로 넘어가는지 */
 const SNAP = 0.2;
@@ -219,30 +196,25 @@ export function TemplateCollection() {
       background="bg-porcelain"
       className="overflow-hidden"
     >
-      {/* .SECTION-TAG — Dilemma 와 동일 */}
-      <p
-        className="SECTION-TAG absolute inset-x-0 text-center text-forest"
+      {/* 카피 — Key Benefits 와 동일 margin stack */}
+      <div
+        className="SECTION-COPY-STACK SECTION-COPY-STACK--center absolute inset-x-0"
         style={{ top: `${TAG_TOP}px` }}
       >
-        {templateCollection.tag.before}
-        <em>{templateCollection.tag.article}</em>
-        {templateCollection.tag.after}
-      </p>
+        <p className="SECTION-TAG text-forest">
+          {templateCollection.tag.before}
+          <em>{templateCollection.tag.article}</em>
+          {templateCollection.tag.after}
+        </p>
 
-      {/* .SECTION-COPY-TITLE */}
-      <h2
-        className="SECTION-COPY-TITLE text-kr absolute inset-x-0 text-center"
-        style={{ top: `${SECTION_TITLE.top}px` }}
-      >
-        <GlyphLines lines={templateCollection.headline} />
-      </h2>
+        <h2 className="SECTION-COPY-TITLE text-kr">
+          <GlyphLines lines={templateCollection.headline} />
+        </h2>
 
-      {/* .SECTION-COPY-DESC */}
-      <RainInLines
-        lines={templateCollection.body}
-        className="SECTION-COPY-DESC text-kr absolute inset-x-0 text-center"
-        style={{ top: `${SECTION_DESC.top}px` }}
-      />
+        <p className="SECTION-COPY-DESC text-kr">
+          <GlyphLines lines={templateCollection.body} />
+        </p>
+      </div>
 
       <div
         className="absolute inset-x-0 cursor-grab touch-pan-y select-none active:cursor-grabbing"

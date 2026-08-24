@@ -73,7 +73,11 @@ export function Footer() {
                   {column.title}
                 </p>
                 <ul
-                  className="FOOTER_MENU_LIST"
+                  className={
+                    column.title === "INDEX"
+                      ? "FOOTER_MENU_LIST FOOTER_MENU_LIST--uppercase"
+                      : "FOOTER_MENU_LIST"
+                  }
                   style={{ marginTop: 29 }}
                 >
                   {column.links.map((item) => (

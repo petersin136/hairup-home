@@ -1,13 +1,13 @@
 import { Wordmark } from "@/components/brand/Wordmark";
 import { GlyphLines } from "@/components/copy/GlyphLines";
 import { Canvas } from "@/components/layout/Canvas";
-import { RainInLines } from "@/components/motion/RainInLines";
 import { faq } from "@/content/site";
 
 /**
  * 06 / FAQ — 시안 6-D
  *
- * Pricing 카드 하단 → FAQ 아이브로우 여백 300 (HEADER.top)
+ * 카피 스택: Key Benefits(04) 와 동일 — 좌측 정렬 · 거터 120
+ * tag→title 42 · title→desc 36 · desc→카드 150
  *
  * .FAQ_CARD   384 × 600 · pad 50 · #EFEAE3 · radius 6 · flex column
  * .FAQ_NUM    Inter 34/400 · #8C847A
@@ -19,31 +19,13 @@ import { faq } from "@/content/site";
  */
 const GUTTER = 120;
 const TAG_TOP = 300;
-const GAP_TAG_TITLE = 42;
-const TAG_SIZE = 13;
-const TITLE_SIZE = 40;
-const TITLE_LEADING = 1.375;
-const TITLE_LINES = 2;
-const GAP_TITLE_DESC = 36;
-const DESC_SIZE = 17;
-const DESC_LEADING = 1.588;
-const DESC_LINES = faq.body.length;
-
-const SECTION_TITLE = {
-  top: TAG_TOP + TAG_SIZE + GAP_TAG_TITLE,
-};
-const SECTION_DESC = {
-  top:
-    SECTION_TITLE.top +
-    TITLE_SIZE * TITLE_LEADING * TITLE_LINES +
-    GAP_TITLE_DESC,
-};
+const GAP_DESC_CARDS = 150;
+/** copy 스택(2줄 타이틀·2줄 본문) + desc→카드 150 */
+const CARD_TOP = TAG_TOP + 255 + GAP_DESC_CARDS;
 const CARD = { width: 384, height: 600 };
 const GAP_X = 24;
 const GAP_Y = 32;
 const CARD_PAD = 50;
-const CARD_TOP =
-  SECTION_DESC.top + DESC_SIZE * DESC_LEADING * DESC_LINES + 150;
 const HEIGHT = Math.ceil(CARD_TOP + CARD.height * 2 + GAP_Y + 120);
 
 const TONE: Record<(typeof faq.items)[number]["tone"], string> = {
@@ -55,33 +37,24 @@ const TONE: Record<(typeof faq.items)[number]["tone"], string> = {
 export function Faq() {
   return (
     <Canvas id="faq" height={HEIGHT} background="bg-porcelain">
-      <p
-        className="SECTION-TAG absolute text-left text-forest"
+      <div
+        className="SECTION-COPY-STACK SECTION-COPY-STACK--left absolute"
         style={{ left: `${GUTTER}px`, top: `${TAG_TOP}px` }}
       >
-        {faq.tag.before}
-        <em>{faq.tag.article}</em>
-        {faq.tag.after}
-      </p>
+        <p className="SECTION-TAG text-forest">
+          {faq.tag.before}
+          <em>{faq.tag.article}</em>
+          {faq.tag.after}
+        </p>
 
-      <h2
-        className="SECTION-COPY-TITLE text-kr absolute text-left"
-        style={{
-          left: `${GUTTER}px`,
-          top: `${SECTION_TITLE.top}px`,
-        }}
-      >
-        <GlyphLines lines={faq.headline} />
-      </h2>
+        <h2 className="SECTION-COPY-TITLE text-kr">
+          <GlyphLines lines={faq.headline} />
+        </h2>
 
-      <RainInLines
-        lines={faq.body}
-        className="SECTION-COPY-DESC text-kr absolute text-left"
-        style={{
-          left: `${GUTTER}px`,
-          top: `${SECTION_DESC.top}px`,
-        }}
-      />
+        <p className="SECTION-COPY-DESC text-kr">
+          <GlyphLines lines={faq.body} />
+        </p>
+      </div>
 
       <div
         className="absolute grid"
