@@ -20,6 +20,13 @@ import { templateCollection } from "@/content/site";
  * 좌우 카드는 커서를 올리기만 해도 가운데로 미끄러져 옵니다.
  */
 const TAG_TOP = 344;
+const TAG_H = 13;
+const GAP_TAG_TITLE = 42;
+const GAP_TITLE_DESC = 36;
+/** 40/600 · lh 1.375 · 3줄 · text-box trim(cap alphabetic) 실측 */
+const TITLE_H = 139.3;
+/** 17/400 · lh 1.588 · 3줄 · text-box trim(cap alphabetic) 실측 */
+const DESC_H = 66.4;
 const GAP_DESC_CARDS = 150;
 const GAP_CARDS_MARQUEE = 200;
 
@@ -32,8 +39,9 @@ const CARD = {
 };
 /** 자리 간격은 활성 카드 폭 + 거터. 비활성은 슬롯 안에서 가운데 쪽으로 붙입니다. */
 const PITCH = CARD.activeW + CARD.gap;
-/** copy 스택 + desc→카드 150 — margin stack 과 동일한 여백 */
-const CARD_TOP = TAG_TOP + 488 + GAP_DESC_CARDS;
+/** tag→title 42 · title→desc 36 · desc→카드 150 (01–04 와 동일) */
+const COPY_STACK_H = TAG_H + GAP_TAG_TITLE + TITLE_H + GAP_TITLE_DESC + DESC_H;
+const CARD_TOP = TAG_TOP + COPY_STACK_H + GAP_DESC_CARDS;
 const ROW_CENTER = CARD_TOP + CARD.activeH / 2;
 /** 카드 폭의 몇 할을 끌어야 다음 장으로 넘어가는지 */
 const SNAP = 0.2;

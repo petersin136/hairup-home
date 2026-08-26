@@ -1,17 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
-import { DemoAdminDashboard } from "@/components/sections/DemoAdminDashboard";
 import { DemoChat, type DemoChatHandle } from "@/components/sections/DemoChat";
 import { experience } from "@/content/site";
-import {
-  type BookingPayload,
-  type DemoBooking,
-  createSampleBookings,
-  toDemoBooking,
-} from "@/lib/demo-chat/booking";
 
 /**
  * THE EXPERIENCE — PC
@@ -45,84 +38,6 @@ const BTN = { width: 232, height: 55, radius: 4 } as const;
 
 export function Experience() {
   const chatRef = useRef<DemoChatHandle>(null);
-  const deskOpenRef = useRef(false);
-  const deskDelayRef = useRef<number | null>(null);
-  const [deskOpen, setDeskOpen] = useState(false);
-  const [bookings, setBookings] = useState<DemoBooking[]>([]);
-
-  const handleBooking = useCallback((payload: BookingPayload) => {
-    const next = toDemoBooking(payload, { isNew: true });
-    setBookings((prev) => {
-      if (prev.length === 0) {
-        return [
-          next,
-          ...createSampleBookings().map((b) => ({ ...b, isNew: false })),
-        ];
-      }
-      return [next, ...prev.map((b) => ({ ...b, isNew: false }))];
-    });
-
-    if (deskOpenRef.current || deskDelayRef.current !== null) return;
-
-    deskDelayRef.current = window.setTimeout(() => {
-      deskOpenRef.current = true;
-      setDeskOpen(true);
-      deskDelayRef.current = null;
-    }, 1500);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (deskDelayRef.current) window.clearTimeout(deskDelayRef.current);
-    };
-  }, []);
-
-  const clearNewFlag = useCallback((id: string) => {
-    setBookings((prev) =>
-      prev.map((b) => (b.id === id ? { ...b, isNew: false } : b)),
-    );
-  }, []);
-
-  const closeDesk = useCallback(() => {
-    deskOpenRef.current = false;
-    setDeskOpen(false);
-  }, []);
-
-  const previewDesk = useCallback(() => {
-    if (deskDelayRef.current) {
-      window.clearTimeout(deskDelayRef.current);
-      deskDelayRef.current = null;
-    }
-    deskOpenRef.current = false;
-    setDeskOpen(false);
-
-    const demo = toDemoBooking(
-      {
-        date: new Date().toISOString().slice(0, 10),
-        time: "15:00",
-        designer: "카이",
-        services: "남성 컷",
-        name: "테스트",
-        gender: "M",
-        phone: "01012345678",
-        request: "개발용 미리보기",
-        total: 27000,
-      },
-      { isNew: true },
-    );
-    setBookings([
-      demo,
-      ...createSampleBookings().map((b) => ({ ...b, isNew: false })),
-    ]);
-
-    deskDelayRef.current = window.setTimeout(() => {
-      deskOpenRef.current = true;
-      setDeskOpen(true);
-      deskDelayRef.current = null;
-    }, 400);
-  }, []);
-
-  const isDev = process.env.NODE_ENV === "development";
 
   return (
     <section
@@ -148,7 +63,7 @@ export function Experience() {
             borderRadius: CARD.radius,
           }}
         >
-          <DemoChat ref={chatRef} fill onBooking={handleBooking} />
+          <DemoChat ref={chatRef} fill />
         </div>
 
         {/* .DASHBOARD-SUB-CARD */}
@@ -224,28 +139,6 @@ export function Experience() {
           </div>
         </div>
       </div>
-
-      {isDev ? (
-        <div className="pointer-events-none absolute bottom-0 z-10 w-full pb-4">
-          <div className="mx-auto w-[1440px]" style={{ paddingLeft: PAD_X }}>
-            <button
-              type="button"
-              onClick={previewDesk}
-              className="pointer-events-auto rounded-[2px] border border-dashed border-ink/25 px-3 py-2 font-latin text-[11px] tracking-[0.08em] text-ink/55 uppercase transition-colors hover:border-gold hover:text-gold"
-            >
-              [Dev] Preview booking overlay
-            </button>
-          </div>
-        </div>
-      ) : null}
-
-      {deskOpen ? (
-        <DemoAdminDashboard
-          bookings={bookings}
-          onBookingOpened={clearNewFlag}
-          onClose={closeDesk}
-        />
-      ) : null}
     </section>
   );
 }

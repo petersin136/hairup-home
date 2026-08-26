@@ -9,10 +9,7 @@ import {
   useState,
 } from "react";
 
-import {
-  type BookingPayload,
-  parseBookingReply,
-} from "@/lib/demo-chat/booking";
+import { parseBookingReply } from "@/lib/demo-chat/booking";
 
 type Role = "assistant" | "user";
 
@@ -29,7 +26,6 @@ export type DemoChatHandle = {
 };
 
 type DemoChatProps = {
-  onBooking?: (payload: BookingPayload) => void;
   /** 가로는 유지하고 세로만 약 절반 — 입력창은 화면 안에 유지 */
   compact?: boolean;
   /** 폰 프레임 없이 부모를 채움 — PC 대시보드 카드 */
@@ -109,7 +105,7 @@ function formatTime(at: number) {
 }
 
 export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
-  function DemoChat({ onBooking, compact = false, fill = false }, ref) {
+  function DemoChat({ compact = false, fill = false }, ref) {
     const [messages, setMessages] = useState<ChatMessage[]>([
       { id: "greeting", role: "assistant", content: GREETING, at: 0 },
     ]);
@@ -126,17 +122,12 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
     const messagesRef = useRef(messages);
     const pendingRef = useRef(pending);
     const limitedRef = useRef(limited);
-    const onBookingRef = useRef(onBooking);
 
     useEffect(() => {
       messagesRef.current = messages;
       pendingRef.current = pending;
       limitedRef.current = limited;
     }, [messages, pending, limited]);
-
-    useEffect(() => {
-      onBookingRef.current = onBooking;
-    }, [onBooking]);
 
     useEffect(() => {
       if (process.env.NODE_ENV === "development") setLimited(false);
@@ -256,7 +247,7 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
           data.reply?.trim() ||
           (res.ok ? FALLBACK : data.error?.trim() || FALLBACK);
 
-        const { text: visible, booking } = parseBookingReply(reply);
+        const { text: visible } = parseBookingReply(reply);
 
         setMessages((prev) => [
           ...prev,
@@ -267,8 +258,6 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
             at: Date.now(),
           },
         ]);
-
-        if (booking) onBookingRef.current?.(booking);
       } catch {
         setMessages((prev) => [
           ...prev,
@@ -348,7 +337,7 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
               )}
 
               {/* 채널 헤더 — 타이틀 중앙 · 구분선 없음 */}
-              <header className="relative z-10 flex h-[54px] shrink-0 items-center bg-[#C6D4DF] px-0.5">
+              <header className="relative z-10 flex h-[58px] shrink-0 items-center bg-[#C6D4DF] px-0.5">
                 <div className="relative z-10 flex shrink-0 items-center">
                   <span
                     className="flex size-10 items-center justify-center text-ink"
@@ -364,12 +353,12 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
                   </span>
                 </div>
 
-                <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                  <p className="text-[20px] font-semibold leading-[1.15] tracking-[-0.01em] text-ink">
+                <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-[6px]">
+                  <p className="text-[20px] font-semibold leading-none tracking-[-0.01em] text-ink">
                     <span className="font-latin">hair up</span>
                     <span className="text-kr ml-[3px]">헤어업</span>
                   </p>
-                  <p className="text-kr mt-[3px] text-[14px] leading-none text-[#6B6B6B]">
+                  <p className="text-kr text-[14px] leading-none text-[#6B6B6B]">
                     @hairup 카카오톡 채널
                   </p>
                 </div>
@@ -577,7 +566,7 @@ function BubbleRow({
       className={[
         "flex",
         mine ? "justify-end" : "justify-start",
-        lead ? "mt-3" : "mt-1",
+        lead ? "mt-3.5" : "mt-1.5",
       ].join(" ")}
     >
       {!mine ? (
@@ -605,7 +594,7 @@ function BubbleRow({
           {/* DETAIL_01 · bubble #1C1A19 · r14 · pad 12 16 · tail 12×12 */}
           <p
             className={[
-              "demo-chat-bubble text-kr relative whitespace-pre-wrap break-words px-4 py-3 text-[15px] leading-[1.45]",
+              "demo-chat-bubble text-kr relative whitespace-pre-wrap break-words px-4 py-3 text-[15px] leading-[1.55]",
               mine
                 ? "demo-chat-bubble-mine text-ink"
                 : "demo-chat-bubble-kai text-porcelain",

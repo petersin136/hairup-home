@@ -20,11 +20,19 @@ const CARD_PAD_X = 60;
 const CARD_PAD_Y = 65;
 
 const TAG_TOP = 300;
+const TAG_H = 13;
+const GAP_TAG_TITLE = 42;
+const GAP_TITLE_DESC = 36;
+/** 40/600 · lh 1.375 · 2줄 · text-box trim(cap alphabetic) 실측 */
+const TITLE_H = 84.3;
+/** 17/400 · lh 1.588 · 2줄 · text-box trim(cap alphabetic) 실측 */
+const DESC_H = 39.4;
 const GAP_DESC_COMPARE = 150;
 /** 비교 블록 — 섹션 타이틀(40)보다 작게: 부제 18 · 타이틀 36 · 숫자 48 */
 const COMPARE_BLOCK = 18 + 23 + 36 + 36 + 48;
-/** copy 스택(2줄 타이틀·2줄 본문) + desc→비교 150 */
-const COMPARE_TOP = TAG_TOP + 255 + GAP_DESC_COMPARE;
+/** tag→title 42 · title→desc 36 · desc→비교 150 (01–04 와 동일) */
+const COPY_STACK_H = TAG_H + GAP_TAG_TITLE + TITLE_H + GAP_TITLE_DESC + DESC_H;
+const COMPARE_TOP = TAG_TOP + COPY_STACK_H + GAP_DESC_COMPARE;
 const CARD_TOP = COMPARE_TOP + COMPARE_BLOCK + 120;
 
 const featureBlock = (count: number, extraLines = 0) =>
