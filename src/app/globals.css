@@ -1906,6 +1906,12 @@ html:not(.splash-seen) [data-site-header] {
   text-align: left;
 }
 
+/* 전역 li text-box-trim 이 line-height 행간을 접어 메뉴가 겹침 → 목록은 trim 해제 */
+.FOOTER_MENU_LIST li {
+  text-box-trim: none;
+  text-box-edge: initial;
+}
+
 .FOOTER_MENU_LIST--uppercase {
   text-transform: uppercase;
 }
