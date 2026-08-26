@@ -486,9 +486,9 @@ export const faq = {
   ],
 } as const;
 
-/** 06_Pricing Plan — 시안 2-D · 3-D · 4-D · GNB PRICING → #pricing */
+/** 06_Pricing Plan — hu_PRICING_PC · GNB PRICING → #pricing */
 export const pricing = {
-  /** PC — Dilemma 와 동일 SECTION-TAG · the 이탤릭 */
+  /** PC — 다른 섹션과 동일 SECTION-TAG · the 이탤릭 */
   tag: {
     before: "( 06. ",
     article: "the",
@@ -496,15 +496,15 @@ export const pricing = {
   },
   headline: ["매출이 아무리 늘어도,", "비용은 변함없이."],
   body: [
-    "월 1,000만 원을 시술할 때 플랫폼 수수료는 매달 수십만 원에 달합니다.",
-    "헤어업은 매출이 얼마든 월 7만 9천 원입니다.",
+    "예약 건수나 매출에 따른 추가 수수료는 없습니다.",
+    "모든 플랜은 고정된 월 이용료로만 운영됩니다.",
   ],
   starter: {
-    name: "STARTER",
-    tagline: ["24시간 쉼 없이,", "손님을 맞이하는 전담 예약 실장."],
+    name: "STARTER PLAN",
+    tagline: ["24시간 쉬지 않고,", "손님을 맞이하는 전담 예약 매니저."],
     prices: [
-      { label: "초기 세팅비(1회)", num: "50", unit: "만원" },
-      { label: "월 구독료", num: "79,000", unit: "원" },
+      { num: "100", unit: "만원", label: "초기 세팅비 1회" },
+      { num: "7.9", unit: "만원", label: "월 구독료" },
     ],
     features: [
       {
@@ -520,18 +520,20 @@ export const pricing = {
         desc: ["예약 확정 및 방문 전 유의사항 안내 메시지 자동 발송"],
       },
     ],
-    cta: { label: "1:1 맞춤 세팅 상담하기", href: "https://pf.kakao.com/_xlfqiX/chat" },
+    cta: {
+      label: "스타터 플랜 시작하기",
+      href: "https://pf.kakao.com/_xlfqiX/chat",
+    },
   },
   branding: {
-    name: "BRANDING",
-    badge: "/ RECOMMEND",
+    name: "BRAND PLAN",
     tagline: [
       "매장의 브랜드 가치를 완성하는",
       "단독 웹 쇼룸과 통합 예약 시스템.",
     ],
     prices: [
-      { label: "초기 세팅비(1회)", num: "200", unit: "만원" },
-      { label: "월 구독료", num: "79,000", unit: "원" },
+      { num: "200", unit: "만원", label: "초기 세팅비 1회" },
+      { num: "7.9", unit: "만원", label: "월 구독료" },
     ],
     features: [
       {
@@ -543,7 +545,7 @@ export const pricing = {
         ],
       },
       {
-        title: "단독 브랜드 랜딩페이지",
+        title: "단독 브랜드 렌딩페이지",
         desc: ["시술 철학과 포트폴리오를 감각적으로 담아내는 전용 웹 쇼룸"],
         descMobile: [
           "시술 철학과 포트폴리오를",
@@ -551,26 +553,34 @@ export const pricing = {
         ],
       },
       {
-        title: "검색엔진 최적화 (SEO)",
-        desc: ["네이버 · 구글 포털 검색 시 매장 브랜드를 상단에 안정적 노출"],
+        title: "검색엔진 최적화(SEO)",
+        desc: ["네이버 · 구글 포털 검색 시 매장 브랜드 안정적 노출"],
         descMobile: [
           "네이버 · 구글 포털 검색 시",
-          "매장 브랜드를 상단에 안정적 노출",
+          "매장 브랜드 안정적 노출",
         ],
       },
       {
-        title: "웹 인앱 AI 상담 위젯",
-        desc: [
-          "사이트를 둘러보던 손님의 이탈 없이 그 자리에서 즉시",
-          "AI 상담 · 예약",
-        ],
+        title: "웹 전용 카카오 AI 연동 위젯",
+        desc: ["클릭 한 번으로 매장 카카오 채널에 연결되어 AI 매니저와 상담·예약"],
         descMobile: [
-          "사이트를 둘러보던 손님의 이탈 없이",
-          "그 자리에서 즉시 AI 상담 · 예약",
+          "클릭 한 번으로 매장 카카오 채널에 연결되어",
+          "AI 매니저와 상담·예약",
         ],
       },
     ],
-    cta: { label: "내 브랜드 만들기", href: "#template" },
+    cta: {
+      label: "브랜드 플랜 시작하기",
+      href: "https://pf.kakao.com/_xlfqiX/chat",
+    },
+  },
+  year: {
+    headlineBefore: "A whole year, ",
+    headlineEm: "Together.",
+    body: "연간 결제 시 10개월 요금으로 1년 이용",
+    badgeLeft: "12 for 10",
+    savedNum: "158,000",
+    savedLabel: "SAVED",
   },
 } as const;
 

@@ -31,6 +31,7 @@ import {
 } from "@/content/site";
 import { onHashClick, scrollToHash } from "@/lib/scroll-to-hash";
 import { saveReturnScroll } from "@/lib/entry-chrome";
+import { libreBodoni } from "@/lib/fonts";
 
 /**
  * 모바일 전용 홈. HomeShell 이 1440px 미만일 때만 마운트합니다.
@@ -1019,7 +1020,7 @@ function MobilePlanCard({
             </p>
             <p className="mt-1 flex items-baseline gap-1">
               <span
-                className={`font-latin text-[40px] font-bold tabular-nums ${dark ? "text-porcelain" : "text-forest"}`}
+                className={`font-didot-num ${libreBodoni.className} text-[40px] font-bold leading-none tabular-nums ${dark ? "text-porcelain" : "text-forest"}`}
               >
                 {p.num}
               </span>
