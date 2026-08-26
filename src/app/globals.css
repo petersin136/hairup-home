@@ -1691,11 +1691,27 @@ html:not(.splash-seen) [data-site-header] {
   justify-content: center;
   text-align: center;
   overflow: hidden;
-  background-image: url("/images/cta-banner-bg.jpg");
-  background-repeat: no-repeat;
-  background-position: center center;
-  /* 원본 1024×482 → 1380×650, 비율 거의 동일 — stretch 1회만 */
-  background-size: 100% 100%;
+  isolation: isolate;
+}
+
+.CTA-BANNER-BG {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  /* 업스케일 시 브라우저 기본 보간 */
+  image-rendering: auto;
+}
+
+.CTA-BANNER .BOTTOM-BANNER-TITLE,
+.CTA-BANNER .BOTTOM-BANNER-DESC,
+.CTA-BANNER .BOTTOM-BANNER-BTN {
+  position: relative;
+  z-index: 1;
 }
 
 .BOTTOM-BANNER-TITLE {
