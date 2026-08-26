@@ -128,12 +128,12 @@ export function LaunchOfferPopup() {
             aria-label="닫기"
             onClick={dismiss}
           >
-            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
+            <svg viewBox="0 0 10 10" aria-hidden>
               <path
-                d="M4 4l10 10M14 4L4 14"
+                d="M1 1l8 8M9 1L1 9"
                 stroke="#FFFFFF"
-                strokeWidth="1.4"
-                strokeLinecap="butt"
+                strokeWidth="1.2"
+                strokeLinecap="round"
               />
             </svg>
           </button>

@@ -12,6 +12,8 @@ import { start } from "@/content/site";
  * .BOTTOM-BANNER-BTN    238 × 55 · #FAF8F5 · radius 4 · Noto 16/500 · #2C3A2E
  *                       본문 글리프 ↔ 버튼 55
  *                       hover bg #212D23 · color #FAF8F5
+ *
+ * 배경: 디자이너 원본 JPG 그대로 — 업스케일·PNG 변환 없음
  */
 const BANNER_H = 650;
 const EDGE = 30;

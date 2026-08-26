@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
 
-import { DemoChat, type DemoChatHandle } from "@/components/sections/DemoChat";
+import { DemoChat } from "@/components/sections/DemoChat";
 import { experience } from "@/content/site";
 
 /**
@@ -37,8 +36,6 @@ const DESC_LEADING = 1.588;
 const BTN = { width: 232, height: 55, radius: 4 } as const;
 
 export function Experience() {
-  const chatRef = useRef<DemoChatHandle>(null);
-
   return (
     <section
       id="ai-manager"
@@ -63,7 +60,7 @@ export function Experience() {
             borderRadius: CARD.radius,
           }}
         >
-          <DemoChat ref={chatRef} fill />
+          <DemoChat fill />
         </div>
 
         {/* .DASHBOARD-SUB-CARD */}
@@ -123,10 +120,11 @@ export function Experience() {
               {experience.bodyPc[1]}
             </p>
 
-            <button
-              type="button"
-              onClick={() => chatRef.current?.focusInput()}
-              className="text-kr inline-flex cursor-pointer items-center justify-center border-0 bg-porcelain text-[16px] leading-none font-medium text-espresso uppercase transition-colors hover:bg-espresso hover:text-porcelain"
+            <a
+              href={experience.kakaoDemo.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-kr inline-flex cursor-pointer items-center justify-center border-0 bg-porcelain text-[16px] leading-none font-medium text-espresso no-underline uppercase transition-colors hover:bg-espresso hover:text-porcelain"
               style={{
                 marginTop: COPY.gapDescBtn,
                 width: BTN.width,
@@ -135,7 +133,7 @@ export function Experience() {
               }}
             >
               {experience.kakaoDemo.label}
-            </button>
+            </a>
           </div>
         </div>
       </div>

@@ -28,7 +28,6 @@ const GAP_DESC_CENTER = 93;
 const GAP_CENTER_BOTTOM = 170;
 const TITLE_LEADING = 1.375;
 const DESC_LEADING = 1.588;
-const BOTTOM_LEADING = 1.5;
 
 /** 시안 카드 — center top = 0 기준 */
 const BOXES = [
@@ -126,15 +125,13 @@ export function Dilemma() {
           ))}
         </div>
 
-        {/* .DILEMMA-BOTTOM-TEXT */}
-        <RainInLines
-          lines={dilemma.bodyAside}
-          className="text-kr text-center text-[24px] font-medium text-ink"
-          style={{
-            marginTop: GAP_CENTER_BOTTOM,
-            lineHeight: BOTTOM_LEADING,
-          }}
-        />
+        {/* .DILEMMA-BOTTOM-TEXT — br 한 요소 + trim (rain-line block 금지) */}
+        <p
+          className="DILEMMA-BOTTOM-TEXT text-kr"
+          style={{ marginTop: GAP_CENTER_BOTTOM }}
+        >
+          <GlyphLines lines={dilemma.bodyAside} />
+        </p>
       </div>
     </section>
   );

@@ -1021,6 +1021,18 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
+/* Dilemma 하단 카피 — Noto 24/500 · lh 1.5 · center↔bottom 170 대칭 */
+.DILEMMA-BOTTOM-TEXT {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #1c1a19;
+  text-align: center;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
 .CRM-TAG {
   width: 940px;
   margin-left: auto;
@@ -1281,6 +1293,160 @@ html:not(.splash-seen) [data-site-header] {
   text-align: left;
 }
 
+/* ============================================================================
+   FAQ PC — hu_FAQ_PC 아코디언
+   ========================================================================== */
+.FAQ {
+  width: 100%;
+  background-color: #faf8f5;
+}
+
+.FAQ-INNER {
+  box-sizing: border-box;
+  width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.FAQ-LIST {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.FAQ-ITEM {
+  position: relative;
+  display: grid;
+  grid-template-columns: max-content 1fr 16px;
+  column-gap: 10px;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 42px 0;
+  border-top: 1px solid #dad9d5;
+}
+
+.FAQ-ITEM:last-child {
+  border-bottom: 1px solid #dad9d5;
+}
+
+.FAQ-ITEM.is-open {
+  align-items: start;
+  background-color: #f5f2eb;
+  padding-bottom: 44px;
+}
+
+.FAQ-HIT {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.FAQ-CAT {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  font-family: var(--font-latin), "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+  color: #8c847a;
+  letter-spacing: 0.02em;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+  pointer-events: none;
+}
+
+.FAQ-Q {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  margin: 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1;
+  color: #1c1a19;
+  text-align: left;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+  pointer-events: none;
+}
+
+.FAQ-ICON {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.FAQ-A {
+  grid-column: 1 / 3;
+  grid-row: 2;
+  margin-top: 40px;
+  pointer-events: none;
+}
+
+.FAQ-A-P,
+.FAQ-A-PG,
+.FAQ-A-H,
+.FAQ-A-LI,
+.FAQ-A-EQ {
+  margin: 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(28, 26, 25, 0.8);
+  text-align: left;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+.FAQ-A-H {
+  font-weight: 600;
+  color: #1c1a19;
+}
+
+.FAQ-A-P,
+.FAQ-A-PG,
+.FAQ-A-LI,
+.FAQ-A-EQ {
+  font-weight: 400;
+}
+
+/* 그룹 간격 42 — 본문→소제목, 소제목 사이, INTEGRATION 단락 */
+.FAQ-A-P + .FAQ-A-H,
+.FAQ-A-PG + .FAQ-A-H,
+.FAQ-A-LI + .FAQ-A-H,
+.FAQ-A-EQ + .FAQ-A-H,
+.FAQ-A-H + .FAQ-A-H,
+.FAQ-A-P + .FAQ-A-PG {
+  margin-top: 42px;
+}
+
+/* 줄 간격 13 — 소제목 아래, 리스트, 같은 그룹 본문 */
+.FAQ-A-H + .FAQ-A-LI,
+.FAQ-A-H + .FAQ-A-P,
+.FAQ-A-H + .FAQ-A-PG,
+.FAQ-A-LI + .FAQ-A-LI,
+.FAQ-A-LI + .FAQ-A-EQ,
+.FAQ-A-P + .FAQ-A-LI,
+.FAQ-A-P + .FAQ-A-P,
+.FAQ-A-PG + .FAQ-A-P {
+  margin-top: 13px;
+}
+
 /* .BENEFITS-TITLE — 한글. cap alphabetic 으로 글리프에 핏 (시안 42/36) */
 .BENEFITS-TITLE {
   margin: var(--spacing-section-tag-title) 0 0;
@@ -1417,13 +1583,19 @@ html:not(.splash-seen) [data-site-header] {
   border: none;
   border-radius: 50%;
   background-color: rgba(28, 26, 25, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   cursor: pointer;
   z-index: 10;
   box-sizing: border-box;
   line-height: 0;
+}
+
+.btn-close svg {
+  display: block;
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
 }
 
 .popup-body {
@@ -1433,7 +1605,6 @@ html:not(.splash-seen) [data-site-header] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
 }
 
 /* .POPUP-DESC */
@@ -1453,7 +1624,7 @@ html:not(.splash-seen) [data-site-header] {
 
 /* .POPUP-BENEFIT-RATE */
 .popup-benefit-rate {
-  margin: 0;
+  margin: 14px 0 0;
   font-family: var(--font-display);
   color: #2c3a2e;
   letter-spacing: 0;
@@ -1521,8 +1692,10 @@ html:not(.splash-seen) [data-site-header] {
   text-align: center;
   overflow: hidden;
   background-image: url("/images/cta-banner-bg.jpg");
-  background-size: cover;
-  background-position: center;
+  background-repeat: no-repeat;
+  background-position: center center;
+  /* 원본 1024×482 → 1380×650, 비율 거의 동일 — stretch 1회만 */
+  background-size: 100% 100%;
 }
 
 .BOTTOM-BANNER-TITLE {
@@ -1576,7 +1749,7 @@ html:not(.splash-seen) [data-site-header] {
 
 /* .POPUP-CTA-BTN */
 .popup-cta-btn {
-  margin: 0;
+  margin-top: auto;
   width: 390px;
   height: 50px;
   background-color: #2c3a2e;

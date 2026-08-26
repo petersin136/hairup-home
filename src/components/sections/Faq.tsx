@@ -1,145 +1,121 @@
-import { Wordmark } from "@/components/brand/Wordmark";
+"use client";
+
+import { useState } from "react";
+
 import { GlyphLines } from "@/components/copy/GlyphLines";
-import { Canvas } from "@/components/layout/Canvas";
-import { faq } from "@/content/site";
+import { faq, type FaqAnswerBlock } from "@/content/site";
 
 /**
- * 06 / FAQ — 시안 6-D
+ * 07 / FAQ — hu_FAQ_PC 아코디언
  *
- * 카피 스택: Key Benefits(04) 와 동일 — 좌측 정렬 · 거터 120
- * tag→title 42 · title→desc 36 · desc→카드 150
- *
- * .FAQ_CARD   384 × 600 · pad 50 · #EFEAE3 · radius 6 · flex column
- * .FAQ_NUM    Inter 34/400 · #8C847A
- * .FAQ_TITLE  Noto 44/700 · #1C1A19 · lh 1.41 · keep-all · gap 45
- * .CARD_LOGO  90 × 35 · #8C847A · opacity 0.4 · mt auto
- *
- * 그리드: 거터 120 · 카드 384 × 3 · gapX 24 · gapY 32
- * 호버 시 답변 면으로 뒤집힘
+ * 헤더: Pricing / Template 과 동일
+ *   SECTION-TAG 13/500 · title 40/600 · desc 17/400
+ *   tag→title 42 · title→desc 36 · 상 300
+ * 리스트 시안 1440 환산: 폭 940 · 닫힘 101 · desc→리스트 101
  */
-const GUTTER = 120;
-const TAG_TOP = 300;
-const TAG_H = 13;
-const GAP_TAG_TITLE = 42;
-const GAP_TITLE_DESC = 36;
-/** 40/600 · lh 1.375 · 2줄 · text-box trim(cap alphabetic) 실측 */
-const TITLE_H = 84.3;
-/** 17/400 · lh 1.588 · 2줄 · text-box trim(cap alphabetic) 실측 */
-const DESC_H = 39.4;
-const GAP_DESC_CARDS = 150;
-/** tag→title 42 · title→desc 36 · desc→카드 150 (01–04 와 동일) */
-const COPY_STACK_H = TAG_H + GAP_TAG_TITLE + TITLE_H + GAP_TITLE_DESC + DESC_H;
-const CARD_TOP = TAG_TOP + COPY_STACK_H + GAP_DESC_CARDS;
-const CARD = { width: 384, height: 600 };
-const GAP_X = 24;
-const GAP_Y = 32;
-const CARD_PAD = 50;
-const HEIGHT = Math.ceil(CARD_TOP + CARD.height * 2 + GAP_Y + 120);
-
-const TONE: Record<(typeof faq.items)[number]["tone"], string> = {
-  forest: "bg-forest",
-  clay: "bg-clay",
-  espresso: "bg-espresso",
-};
+const PAD_TOP = 300;
+const PAD_BOTTOM = 200;
+const LIST_W = 940;
+const GAP_DESC_LIST = 101;
 
 export function Faq() {
+  const [open, setOpen] = useState<string | null>(null);
+
   return (
-    <Canvas id="faq" height={HEIGHT} background="bg-porcelain">
+    <section id="faq" className="FAQ">
       <div
-        className="SECTION-COPY-STACK SECTION-COPY-STACK--left absolute"
-        style={{ left: `${GUTTER}px`, top: `${TAG_TOP}px` }}
+        className="FAQ-INNER"
+        style={{ paddingTop: PAD_TOP, paddingBottom: PAD_BOTTOM }}
       >
-        <p className="SECTION-TAG text-forest">
-          {faq.tag.before}
-          <em>{faq.tag.article}</em>
-          {faq.tag.after}
-        </p>
+        <div className="SECTION-COPY-STACK SECTION-COPY-STACK--center">
+          <p className="SECTION-TAG text-forest">
+            {faq.tag.before}
+            <em>{faq.tag.article}</em>
+            {faq.tag.after}
+          </p>
+          <h2 className="SECTION-COPY-TITLE text-kr">
+            <GlyphLines lines={faq.headline} />
+          </h2>
+          <p className="SECTION-COPY-DESC text-kr">
+            <GlyphLines lines={faq.body} />
+          </p>
+        </div>
 
-        <h2 className="SECTION-COPY-TITLE text-kr">
-          <GlyphLines lines={faq.headline} />
-        </h2>
-
-        <p className="SECTION-COPY-DESC text-kr">
-          <GlyphLines lines={faq.body} />
-        </p>
+        <div
+          className="FAQ-LIST"
+          style={{ width: LIST_W, marginTop: GAP_DESC_LIST }}
+        >
+          {faq.list.map((item) => {
+            const isOpen = open === item.category;
+            return (
+              <div
+                key={item.category}
+                className={isOpen ? "FAQ-ITEM is-open" : "FAQ-ITEM"}
+              >
+                <button
+                  type="button"
+                  className="FAQ-HIT"
+                  aria-expanded={isOpen}
+                  aria-label={item.question}
+                  onClick={() => setOpen(isOpen ? null : item.category)}
+                />
+                <span className="FAQ-CAT">({item.category})</span>
+                <span className="FAQ-Q">{item.question}</span>
+                <span className="FAQ-ICON" aria-hidden>
+                  {isOpen ? <MinusIcon /> : <PlusIcon />}
+                </span>
+                {isOpen ? (
+                  <div className="FAQ-A">
+                    {item.answer.map((block, i) => (
+                      <AnswerBlock
+                        key={`${item.category}-${i}`}
+                        block={block}
+                      />
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
       </div>
-
-      <div
-        className="absolute grid"
-        style={{
-          left: `${GUTTER}px`,
-          top: `${CARD_TOP}px`,
-          width: `${CARD.width * 3 + GAP_X * 2}px`,
-          height: `${CARD.height * 2 + GAP_Y}px`,
-          gridTemplateColumns: `repeat(3, ${CARD.width}px)`,
-          gridTemplateRows: `repeat(2, ${CARD.height}px)`,
-          columnGap: `${GAP_X}px`,
-          rowGap: `${GAP_Y}px`,
-        }}
-      >
-        {faq.items.map((item, i) => (
-          <FaqCard key={item.q} item={item} index={i} />
-        ))}
-      </div>
-    </Canvas>
+    </section>
   );
 }
 
-type Item = (typeof faq.items)[number];
+function AnswerBlock({ block }: { block: FaqAnswerBlock }) {
+  if (block.t === "h") {
+    return <p className="FAQ-A-H text-kr">{block.text}</p>;
+  }
+  if (block.t === "li") {
+    return <p className="FAQ-A-LI text-kr">{block.text}</p>;
+  }
+  if (block.t === "eq") {
+    return <p className="FAQ-A-EQ text-kr">{block.text}</p>;
+  }
+  if (block.t === "pg") {
+    return <p className="FAQ-A-PG text-kr">{block.text}</p>;
+  }
+  return <p className="FAQ-A-P text-kr">{block.text}</p>;
+}
 
-function FaqCard({ item, index }: { item: Item; index: number }) {
+function PlusIcon() {
   return (
-    <article
-      data-faq-card={index}
-      tabIndex={0}
-      className="faq-card group relative h-full w-full cursor-pointer outline-none [perspective:1200px]"
-    >
-      <div className="faq-card-inner relative h-full w-full transition-transform duration-[600ms] ease-[cubic-bezier(0.65,0,0.35,1)] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] group-focus-within:[transform:rotateY(180deg)]">
-        {/* 질문 면 — 시안 6-D */}
-        <div
-          className="rounded-ui absolute inset-0 flex flex-col [backface-visibility:hidden]"
-          style={{
-            padding: `${CARD_PAD}px`,
-            backgroundColor: "#EFEAE3",
-          }}
-        >
-          <p className="font-latin text-[34px] font-normal leading-none text-stone">
-            {item.q}
-          </p>
-          <p
-            className="text-kr text-[44px] font-bold text-ink"
-            style={{
-              marginTop: 45,
-              lineHeight: 1.41,
-              wordBreak: "keep-all",
-            }}
-          >
-            <GlyphLines lines={item.question} />
-          </p>
-          <div
-            className="mt-auto text-stone opacity-40"
-            style={{ width: 90, height: 35 }}
-          >
-            <Wordmark width={90} />
-          </div>
-        </div>
+    <svg width="16" height="16" viewBox="0 0 16 16">
+      <path
+        d="M8 3v10M3 8h10"
+        fill="none"
+        stroke="#1C1A19"
+        strokeWidth="1.2"
+      />
+    </svg>
+  );
+}
 
-        {/* 답변 면 */}
-        <div
-          className={`rounded-ui absolute inset-0 flex flex-col [backface-visibility:hidden] [transform:rotateY(180deg)] ${TONE[item.tone]}`}
-          style={{ padding: `${CARD_PAD}px` }}
-        >
-          <p className="text-kr text-[44px] font-bold leading-none tracking-[-0.01em] text-porcelain">
-            {item.answerTitle}
-          </p>
-          <p
-            className="text-kr text-[18px] font-normal tracking-[-0.01em] text-porcelain"
-            style={{ marginTop: 45, lineHeight: 2 }}
-          >
-            <GlyphLines lines={item.answer} />
-          </p>
-        </div>
-      </div>
-    </article>
+function MinusIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16">
+      <path d="M3 8h10" fill="none" stroke="#1C1A19" strokeWidth="1.2" />
+    </svg>
   );
 }
