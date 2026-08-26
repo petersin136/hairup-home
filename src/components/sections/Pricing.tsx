@@ -21,7 +21,8 @@ const CARD_PAD_Y = 65;
 
 const TAG_TOP = 300;
 const GAP_DESC_COMPARE = 150;
-const COMPARE_BLOCK = 24 + 23 + 50 + 36 + 60;
+/** 비교 블록 — 섹션 타이틀(40)보다 작게: 부제 18 · 타이틀 36 · 숫자 48 */
+const COMPARE_BLOCK = 18 + 23 + 36 + 36 + 48;
 /** copy 스택(2줄 타이틀·2줄 본문) + desc→비교 150 */
 const COMPARE_TOP = TAG_TOP + 255 + GAP_DESC_COMPARE;
 const CARD_TOP = COMPARE_TOP + COMPARE_BLOCK + 120;
@@ -282,11 +283,11 @@ export function Pricing() {
       >
         <div className="flex items-center justify-center gap-[80px]">
           <div className="flex w-[320px] flex-col items-center text-center">
-            <p className="text-kr text-[24px] font-normal leading-none text-stone">
+            <p className="text-kr text-[18px] font-normal leading-none text-stone">
               {pricing.compare.left.subtitle}
             </p>
             <p
-              className="text-kr text-[50px] font-bold leading-none text-stone"
+              className="text-kr text-[36px] font-bold leading-none text-stone"
               style={{ marginTop: 23 }}
             >
               {pricing.compare.left.title}
@@ -297,21 +298,21 @@ export function Pricing() {
               perSecond={110000}
               suffix="+α"
               format={formatFee}
-              className="inline-block w-[12ch] text-center font-latin text-[60px] font-bold leading-none text-stone tabular-nums"
+              className="inline-block w-[12ch] text-center font-latin text-[48px] font-bold leading-none text-stone tabular-nums"
               style={{ marginTop: 36 }}
             />
           </div>
 
-          <p className="font-latin shrink-0 text-[60px] font-bold leading-none text-mist">
+          <p className="font-latin shrink-0 text-[48px] font-bold leading-none text-mist">
             VS
           </p>
 
           <div className="flex w-[320px] flex-col items-center text-center">
-            <p className="text-kr text-[24px] font-normal leading-none text-stone">
+            <p className="text-kr text-[18px] font-normal leading-none text-stone">
               {pricing.compare.right.subtitle}
             </p>
             <p
-              className="text-kr text-[50px] font-bold leading-none text-ink"
+              className="text-kr text-[36px] font-bold leading-none text-ink"
               style={{ marginTop: 23 }}
             >
               {pricing.compare.right.title}
@@ -319,7 +320,7 @@ export function Pricing() {
             <CountUp
               to={pricing.compare.right.amount}
               durationMs={550}
-              className="inline-block w-[12ch] text-center font-latin text-[60px] font-bold leading-none text-ink tabular-nums"
+              className="inline-block w-[12ch] text-center font-latin text-[48px] font-bold leading-none text-ink tabular-nums"
               style={{ marginTop: 36 }}
             />
           </div>

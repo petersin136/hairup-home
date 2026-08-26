@@ -80,6 +80,29 @@ html.entry-scroll-lock body {
 }
 
 /*
+ * ============================================================================
+ * Glyph-edge spacing (시안 기준)
+ * --------------------------------------------------------------------------
+ * 시안 수치(42/36/85…)는 텍스트 박스가 아니라 글리프 외곽선 기준.
+ * line-height Half-leading + 폰트 메트릭 여백이 margin 에 더해지지 않게
+ * 모든 카피에 text-box-trim 을 겁니다. 수치 자체는 바꾸지 않습니다.
+ *
+ * 한글 (Noto Sans KR):
+ *   text-box-edge: cap alphabetic
+ *   — `text text` 는 폰트 박스만 맞춰 글리프 위에 ~0.3em 이 남음.
+ *   — `ideographic-ink` 미지원(Chrome/Safari)이므로 cap 이 최선의 근사.
+ * 라틴 / SECTION-TAG (Playfair 숫자):
+ *   text-box-edge: text alphabetic  (cap 금지 — lining nums 깨짐)
+ * ============================================================================
+ */
+
+/* 블록 카피 전역 — 낮은 특이도로 컴포넌트 규칙이 덮어쓸 수 있음 */
+:where(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, label, dt, dd, th, td) {
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/*
  * 시안은 데스크톱용 Noto Sans CJK KR 로 작업됐는데, 웹폰트 Noto Sans KR 은
  * 한글 자체 폭은 같지만 공백(U+0020) 폭이 0.057em 더 넓습니다.
  * 어절 위치가 시안과 어긋나므로 한글 텍스트에는 이 보정을 함께 겁니다.
@@ -87,13 +110,43 @@ html.entry-scroll-lock body {
 .text-kr {
   font-family: var(--font-kr);
   word-spacing: -0.057em;
-  /*
-   * 시안 상·하 간격은 텍스트 박스가 아니라 글리프 외곽선 기준.
-   * line-height Half-leading 이 margin/padding 에 더해지지 않게 trim.
-   * cap 금지 — Playfair 숫자가 sans처럼 깨짐. text / alphabetic 만 사용.
-   */
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
+}
+
+@supports (text-box-edge: ideographic-ink ideographic-ink) {
+  :where(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, label, dt, dd, th, td),
+  .text-kr,
+  .glyph-trim-kr,
+  h1 > span.block:first-child,
+  h2 > span.block:first-child,
+  h3 > span.block:first-child,
+  p > span.block:first-child,
+  div > span.block:first-child,
+  p > .rain-line:first-child,
+  .HERO-TITLE > span.block:first-child,
+  .HERO-DESC > span.block:first-child,
+  .popup-desc > span.block:first-child,
+  h1 > span.block:last-child,
+  h2 > span.block:last-child,
+  h3 > span.block:last-child,
+  p > span.block:last-child,
+  div > span.block:last-child,
+  p > .rain-line:last-child,
+  .HERO-TITLE > span.block:last-child,
+  .HERO-DESC > span.block:last-child,
+  .popup-desc > span.block:last-child,
+  h1 > span.block:only-child,
+  h2 > span.block:only-child,
+  h3 > span.block:only-child,
+  p > span.block:only-child,
+  div > span.block:only-child,
+  p > .rain-line:only-child,
+  .HERO-TITLE > span.block:only-child,
+  .HERO-DESC > span.block:only-child,
+  .popup-desc > span.block:only-child {
+    text-box-edge: ideographic-ink ideographic-ink;
+  }
 }
 
 /*
@@ -110,7 +163,7 @@ p > .rain-line:first-child,
 .HERO-DESC > span.block:first-child,
 .popup-desc > span.block:first-child {
   text-box-trim: trim-start;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 h1 > span.block:last-child,
@@ -123,7 +176,7 @@ p > .rain-line:last-child,
 .HERO-DESC > span.block:last-child,
 .popup-desc > span.block:last-child {
   text-box-trim: trim-end;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 h1 > span.block:only-child,
@@ -136,12 +189,17 @@ p > .rain-line:only-child,
 .HERO-DESC > span.block:only-child,
 .popup-desc > span.block:only-child {
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .glyph-trim-latin {
   text-box-trim: trim-both;
   text-box-edge: text alphabetic;
+}
+
+.glyph-trim-kr {
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
 }
 
 /*
@@ -868,7 +926,7 @@ html:not(.splash-seen) [data-site-header] {
   text-align: left;
   word-spacing: -0.057em;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .HERO-DESC {
@@ -881,7 +939,7 @@ html:not(.splash-seen) [data-site-header] {
   text-align: left;
   word-spacing: -0.057em;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .BTN-CREATE-BRAND {
@@ -1040,7 +1098,7 @@ html:not(.splash-seen) [data-site-header] {
 /* 한글 섹션 타이틀 — trim 후 margin으로 시안 42/36 간격 */
 .SECTION-HEADLINE {
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .CRM-TAG {
@@ -1053,14 +1111,14 @@ html:not(.splash-seen) [data-site-header] {
 .CRM-TITLE,
 .CRM-DESC {
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 /* Experience 서브카드 카피 — Key Benefits / CRM 과 동일 trim */
 .EXPERIENCE-TITLE,
 .EXPERIENCE-DESC {
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
   word-spacing: -0.057em;
   white-space: nowrap;
 }
@@ -1163,7 +1221,7 @@ html:not(.splash-seen) [data-site-header] {
   word-spacing: -0.057em;
   white-space: nowrap;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .CARD-INFO-DESC {
@@ -1178,7 +1236,7 @@ html:not(.splash-seen) [data-site-header] {
   text-align: left;
   word-spacing: -0.057em;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .CRM-SLIDER-BTN {
@@ -1230,8 +1288,8 @@ html:not(.splash-seen) [data-site-header] {
 
 /* ============================================================================
    Key Benefits — hu_KB_PC_01 · hu_KB_PC_02 · hu_KB_SPACING_PC
-   text-box-trim: line-height 반줄 여백을 걷어 시안 간격(200/42/36/85/28/18)을
-   글리프 박스 기준으로 맞춥니다.
+   text-box-trim + cap alphabetic: 시안 간격(200/42/36/85/28/18)을
+   글리프 외곽선 기준으로 맞춥니다. 수치는 그대로.
    ========================================================================== */
 
 .BENEFITS {
@@ -1277,7 +1335,7 @@ html:not(.splash-seen) [data-site-header] {
   color: #1c1a19;
   word-spacing: -0.057em;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .SECTION-COPY-DESC {
@@ -1290,7 +1348,7 @@ html:not(.splash-seen) [data-site-header] {
   color: rgba(28, 26, 25, 0.8);
   word-spacing: -0.057em;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .SECTION-COPY-STACK--center .SECTION-COPY-TITLE,
@@ -1303,7 +1361,7 @@ html:not(.splash-seen) [data-site-header] {
   text-align: left;
 }
 
-/* .BENEFITS-TITLE — 한글. ideographic 박스 기준 trim (시안 42/36 간격) */
+/* .BENEFITS-TITLE — 한글. cap alphabetic 으로 글리프에 핏 (시안 42/36) */
 .BENEFITS-TITLE {
   margin: var(--spacing-section-tag-title) 0 0;
   font-size: 40px;
@@ -1314,7 +1372,7 @@ html:not(.splash-seen) [data-site-header] {
   text-align: center;
   word-spacing: -0.057em;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 /* .BENEFITS-DESC */
@@ -1329,7 +1387,7 @@ html:not(.splash-seen) [data-site-header] {
   text-align: center;
   word-spacing: -0.057em;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .BENEFITS-GRID {
@@ -1366,7 +1424,7 @@ html:not(.splash-seen) [data-site-header] {
   line-height: 1;
   word-spacing: -0.057em;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 /* .BENEFIT-CARD-DESC */
@@ -1380,7 +1438,7 @@ html:not(.splash-seen) [data-site-header] {
   text-align: left;
   word-spacing: -0.057em;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 /* ============================================================================
@@ -1468,7 +1526,7 @@ html:not(.splash-seen) [data-site-header] {
   text-align: center;
   word-spacing: -0.057em;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
   margin: 0;
   flex-shrink: 0;
 }
@@ -1556,7 +1614,7 @@ html:not(.splash-seen) [data-site-header] {
   color: #faf8f5;
   text-align: center;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .BOTTOM-BANNER-DESC {
@@ -1569,7 +1627,7 @@ html:not(.splash-seen) [data-site-header] {
   color: rgba(250, 248, 245, 0.8);
   text-align: center;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .BOTTOM-BANNER-BTN {
@@ -1654,7 +1712,7 @@ html:not(.splash-seen) [data-site-header] {
   text-align: left;
   word-spacing: -0.057em;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .E_MAIL {
@@ -1710,7 +1768,7 @@ html:not(.splash-seen) [data-site-header] {
   word-spacing: -0.057em;
   line-height: 1;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .NOTICE_SUCCESS_TEXT {
@@ -1724,7 +1782,7 @@ html:not(.splash-seen) [data-site-header] {
   word-spacing: -0.057em;
   line-height: 1;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .INDEX,
@@ -1782,7 +1840,7 @@ html:not(.splash-seen) [data-site-header] {
   line-height: 1;
   white-space: nowrap;
   text-box-trim: trim-both;
-  text-box-edge: text text;
+  text-box-edge: cap alphabetic;
 }
 
 .COMPANY-INFO-BLOCK {
