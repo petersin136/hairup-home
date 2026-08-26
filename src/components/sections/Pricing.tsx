@@ -2,7 +2,6 @@
 
 import { GlyphLines } from "@/components/copy/GlyphLines";
 import { Canvas } from "@/components/layout/Canvas";
-import { CountUp } from "@/components/motion/CountUp";
 import { pricing } from "@/content/site";
 import { onHashClick } from "@/lib/scroll-to-hash";
 
@@ -10,11 +9,10 @@ import { onHashClick } from "@/lib/scroll-to-hash";
  * 05_Pricing Plan — 시안 2-D · 3-D · 4-D
  *
  * 카피 스택: Key Benefits(04) 와 동일 — SECTION-TAG + SECTION-COPY-TITLE/DESC
- * tag→title 42 · title→desc 36 · desc→비교 150 · 비교→카드 120
+ * tag→title 42 · title→desc 36 · desc→카드 150
  * 카드 584 × 2 · gap 32 · 좌우 거터 120
  */
 const GUTTER = 120;
-const CARD_W = 584;
 const CARD_GAP = 32;
 const CARD_PAD_X = 60;
 const CARD_PAD_Y = 65;
@@ -27,13 +25,10 @@ const GAP_TITLE_DESC = 36;
 const TITLE_H = 84.3;
 /** 17/400 · lh 1.588 · 2줄 · text-box trim(cap alphabetic) 실측 */
 const DESC_H = 39.4;
-const GAP_DESC_COMPARE = 150;
-/** 비교 블록 — 섹션 타이틀(40)보다 작게: 부제 18 · 타이틀 36 · 숫자 48 */
-const COMPARE_BLOCK = 18 + 23 + 36 + 36 + 48;
-/** tag→title 42 · title→desc 36 · desc→비교 150 (01–04 와 동일) */
+const GAP_DESC_CARDS = 150;
+/** tag→title 42 · title→desc 36 · desc→카드 150 */
 const COPY_STACK_H = TAG_H + GAP_TAG_TITLE + TITLE_H + GAP_TITLE_DESC + DESC_H;
-const COMPARE_TOP = TAG_TOP + COPY_STACK_H + GAP_DESC_COMPARE;
-const CARD_TOP = COMPARE_TOP + COMPARE_BLOCK + 120;
+const CARD_TOP = TAG_TOP + COPY_STACK_H + GAP_DESC_CARDS;
 
 const featureBlock = (count: number, extraLines = 0) =>
   count * (Math.ceil(22 * 1.64) + 8 + Math.ceil(17 * 1.45)) +
@@ -61,10 +56,6 @@ const CARD_H =
   CARD_PAD_Y;
 
 const HEIGHT = Math.ceil(CARD_TOP + CARD_H);
-
-function formatFee(n: number) {
-  return Math.max(0, Math.floor(n)).toLocaleString("en-US");
-}
 
 type PlanTone = "starter" | "branding";
 
@@ -283,56 +274,6 @@ export function Pricing() {
         <p className="SECTION-COPY-DESC text-kr">
           <GlyphLines lines={pricing.body} />
         </p>
-      </div>
-
-      <div
-        className="absolute inset-x-0 flex items-center justify-center"
-        style={{ top: `${COMPARE_TOP}px` }}
-      >
-        <div className="flex items-center justify-center gap-[80px]">
-          <div className="flex w-[320px] flex-col items-center text-center">
-            <p className="text-kr text-[18px] font-normal leading-none text-stone">
-              {pricing.compare.left.subtitle}
-            </p>
-            <p
-              className="text-kr text-[36px] font-bold leading-none text-stone"
-              style={{ marginTop: 23 }}
-            >
-              {pricing.compare.left.title}
-            </p>
-            <CountUp
-              to={pricing.compare.left.spinTo}
-              continuous
-              perSecond={110000}
-              suffix="+α"
-              format={formatFee}
-              className="inline-block w-[12ch] text-center font-latin text-[48px] font-bold leading-none text-stone tabular-nums"
-              style={{ marginTop: 36 }}
-            />
-          </div>
-
-          <p className="font-latin shrink-0 text-[48px] font-bold leading-none text-mist">
-            VS
-          </p>
-
-          <div className="flex w-[320px] flex-col items-center text-center">
-            <p className="text-kr text-[18px] font-normal leading-none text-stone">
-              {pricing.compare.right.subtitle}
-            </p>
-            <p
-              className="text-kr text-[36px] font-bold leading-none text-ink"
-              style={{ marginTop: 23 }}
-            >
-              {pricing.compare.right.title}
-            </p>
-            <CountUp
-              to={pricing.compare.right.amount}
-              durationMs={550}
-              className="inline-block w-[12ch] text-center font-latin text-[48px] font-bold leading-none text-ink tabular-nums"
-              style={{ marginTop: 36 }}
-            />
-          </div>
-        </div>
       </div>
 
       <div

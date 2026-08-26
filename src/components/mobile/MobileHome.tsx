@@ -8,7 +8,6 @@ import { GlyphLines } from "@/components/copy/GlyphLines";
 import { FooterNewsletter } from "@/components/sections/FooterNewsletter";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { TopBanner } from "@/components/layout/TopBanner";
-import { CountUp } from "@/components/motion/CountUp";
 import {
   DemoChat,
   type DemoChatHandle,
@@ -516,41 +515,6 @@ export function MobileHome() {
           <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
             <GlyphLines lines={pricing.body} />
           </p>
-
-          <div className="mt-10 grid grid-cols-1 gap-8">
-            <div className="text-center">
-              <p className="text-kr text-[14px] text-stone">
-                {pricing.compare.left.subtitle}
-              </p>
-              <p className="text-kr mt-2 text-[28px] font-bold text-stone">
-                {pricing.compare.left.title}
-              </p>
-              <CountUp
-                to={pricing.compare.left.spinTo}
-                continuous
-                perSecond={110000}
-                suffix="+α"
-                format={(n) => Math.floor(n).toLocaleString("en-US")}
-                className="mt-3 inline-block min-w-[10ch] font-latin text-[36px] font-bold text-stone tabular-nums"
-              />
-            </div>
-            <p className="text-center font-latin text-[28px] font-bold text-mist">
-              VS
-            </p>
-            <div className="text-center">
-              <p className="text-kr text-[14px] text-stone">
-                {pricing.compare.right.subtitle}
-              </p>
-              <p className="text-kr mt-2 text-[28px] font-bold text-ink">
-                {pricing.compare.right.title}
-              </p>
-              <CountUp
-                to={pricing.compare.right.amount}
-                durationMs={550}
-                className="mt-3 inline-block min-w-[10ch] font-latin text-[36px] font-bold text-ink tabular-nums"
-              />
-            </div>
-          </div>
 
           <div className="mt-12 flex flex-col gap-5">
             <MobilePlanCard tone="starter" plan={pricing.starter} />
