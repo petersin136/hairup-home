@@ -60,7 +60,7 @@ function PlanCard({
             }
           >
             {row.num}
-          </span>{" "}
+          </span>
           <span
             className={
               i === 0

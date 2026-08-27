@@ -102,7 +102,21 @@ function FaqPanel({
   useLayoutEffect(() => {
     const inner = innerRef.current;
     if (!inner) return;
-    setHeight(open ? Math.ceil(inner.scrollHeight) : 0);
+
+    if (!open) {
+      setHeight(0);
+      return;
+    }
+
+    const measure = () => {
+      setHeight(Math.ceil(inner.getBoundingClientRect().height));
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(inner);
+    return () => ro.disconnect();
+    /* 콘텐츠 높이 변화는 ResizeObserver가 처리 — children은 매 렌더 새 객체라 deps에 넣지 않음 */
   }, [open]);
 
   return (

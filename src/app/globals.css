@@ -540,8 +540,9 @@ p > .rain-line:only-child,
   line-height: 1;
   color: rgb(44, 58, 46);
   text-align: left;
+  /* Inter lining nums — cap 으로 숫자 잉크 위에 붙임 (text 는 ascent 여분 ~11px) */
   text-box-trim: trim-both;
-  text-box-edge: text alphabetic;
+  text-box-edge: cap alphabetic;
   vertical-align: baseline;
 }
 
@@ -558,6 +559,8 @@ p > .rain-line:only-child,
   line-height: 1;
   color: rgba(28, 26, 25, 0.8);
   text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
 }
 
 .PRICING-CARD-STARTER:has(.BTN-BRAND) .STARTER-PRICE-TEXT-SETTING,
@@ -566,21 +569,25 @@ p > .rain-line:only-child,
 }
 
 /*
- * 가격 줄 — 전역 p cap-trim 이 Inter 50 박스를 접어 margin 25가
- * 글리프 간격으로 안 먹힘. p trim 끄고, 숫자 span 이 높이 기준.
+ * 가격 줄 — 행 높이를 숫자 글리프에 맞춤.
+ * margin 25 가 글리프↔글리프 25 가 되도록 p 박스 여분을 없앰.
  */
 p:has(> .STARTER-PRICE-NUM-SETTING),
 p:has(> .STARTER-PRICE-NUM-MONTH) {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25em;
+  margin: 0;
   line-height: 1;
   text-box-trim: none;
 }
 
 p:has(> .STARTER-PRICE-NUM-SETTING) {
-  margin: 50px 0 0;
+  margin-top: 50px;
 }
 
 p:has(> .STARTER-PRICE-NUM-MONTH) {
-  margin: 25px 0 0;
+  margin-top: 25px;
 }
 
 .STARTER-DIVIDER {
@@ -1961,6 +1968,8 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .FAQ-PANEL-INNER {
+  /* margin 대신 padding — overflow:hidden 패널에서 scrollHeight 누락·받침 잘림 방지 */
+  padding-top: 36px;
   overflow: visible;
 }
 
@@ -1972,16 +1981,15 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .FAQ-ANSWER {
-  margin: 36px 0 0;
+  margin: 0;
   font-size: 17px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
   color: rgba(28, 26, 25, 0.8);
   line-height: 1.588;
   text-align: left;
-  /* 첫 줄만 trim — 마지막 줄 받침이 하단 26 패딩에서 잘리지 않게 */
-  text-box-trim: trim-start;
-  text-box-edge: cap alphabetic;
+  /* overflow:hidden 아코디언 안에서는 trim 금지 — 한글 받침이 잘림 */
+  text-box-trim: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2166,9 +2174,10 @@ html:not(.splash-seen) [data-site-header] {
   flex-shrink: 0;
 }
 
-/* .POPUP-BENEFIT-RATE */
+/* .POPUP-BENEFIT-RATE — desc↔CTA 사이 수직 중앙 */
 .popup-benefit-rate {
-  margin: 14px 0 0;
+  margin-top: auto;
+  margin-bottom: auto;
   font-family: var(--font-display);
   color: #2c3a2e;
   letter-spacing: 0;
@@ -2309,7 +2318,7 @@ html:not(.splash-seen) [data-site-header] {
 
 /* .POPUP-CTA-BTN */
 .popup-cta-btn {
-  margin-top: auto;
+  margin: 0;
   width: 390px;
   height: 50px;
   background-color: #2c3a2e;
