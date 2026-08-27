@@ -527,6 +527,7 @@ export const pricing = {
   },
   branding: {
     name: "BRAND PLAN",
+    badge: "/ RECOMMEND",
     tagline: [
       "매장의 브랜드 가치를 완성하는",
       "단독 웹 쇼룸과 통합 예약 시스템.",
