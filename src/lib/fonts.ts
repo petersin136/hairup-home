@@ -1,4 +1,10 @@
-import { Bodoni_Moda, Inter, Noto_Sans_KR, Playfair_Display } from "next/font/google";
+import {
+  Bodoni_Moda,
+  Inter,
+  Libre_Bodoni,
+  Noto_Sans_KR,
+  Playfair_Display,
+} from "next/font/google";
 
 /**
  * 프로젝트에서 쓰는 폰트는 전부 여기서만 정의합니다.
@@ -21,6 +27,15 @@ export const bodoniModa = Bodoni_Moda({
   weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
   variable: "--font-bodoni-moda",
+  display: "swap",
+});
+
+/** 요금 숫자 — Figma Didot에 가까운 고대비 Didone (Mac은 Didot 우선) */
+export const libreBodoni = Libre_Bodoni({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-libre-bodoni",
   display: "swap",
 });
 
@@ -47,6 +62,7 @@ export const notoSansKr = Noto_Sans_KR({
 export const fontVariables = [
   playfairDisplay.variable,
   bodoniModa.variable,
+  libreBodoni.variable,
   inter.variable,
   notoSansKr.variable,
 ].join(" ");

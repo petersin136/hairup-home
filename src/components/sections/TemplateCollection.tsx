@@ -14,10 +14,11 @@ import { templateCollection } from "@/content/site";
  * tag→title 42 · title→desc 36 · desc→카드 150 · 카드→마퀴 200
  * .TEMPLATE-CARD-LEFT/RIGHT  688 × 410 · radius 6 · 대기상태 overlay black/50%
  * 카드 간격 33 · 본문 아래 150 · 카드 아래 200
- * 마퀴→Pricing 여백 300 은 Pricing TAG_TOP 이 담당
+ * 마퀴 아래 200 (hu_MARQUEE_DETAIL_PC). Pricing 상단 여백은 마퀴가 담당
  *
- * 카드 줄은 가운데 한 장만 크고 좌우 이웃이 화면 밖으로 잘려 나갑니다.
- * 좌우 카드는 커서를 올리기만 해도 가운데로 미끄러져 옵니다.
+ * 카드 3장 고정 · 무한 루프 없음.
+ * 진입 시 2번 카드가 화면 정중앙, 1·3번은 좌우에 일부 걸쳐 대기.
+ * 1번·3번 선택 시 해당 방향 끝에서 더 이상 넘어가지 않음.
  */
 const TAG_TOP = 344;
 const TAG_H = 13;
@@ -29,6 +30,7 @@ const TITLE_H = 139.3;
 const DESC_H = 66.4;
 const GAP_DESC_CARDS = 150;
 const GAP_CARDS_MARQUEE = 200;
+const PAD_MARQUEE_BOTTOM = 200;
 
 const CARD = {
   activeW: 840,
@@ -55,16 +57,15 @@ const HOVER_REARM = 24;
 const VIEW_BTN = { width: 225, height: 45, gap: 13 };
 
 /*
- * 하단 마퀴 · 시안 14-D
- * .MARQUEE-TRACK SPAN  Playfair 33/400 · #2C3A2E · uppercase · flex-shrink 0
- * 문구 간격 65 · 기본 우→좌, 스크롤로 가속·역방향
+ * 하단 마퀴 · hu_MARQUEE_DETAIL_PC
+ * .MARQUEE-TRACK  flex · align-items center · gap 90 · nowrap
+ * .MARQUEE-TEXT   Playfair 24/400 · letter-spacing 0.035em · rgb(44,58,46)
+ * 카드→마퀴 200 · 마퀴→섹션 끝 200 · 기본 우→좌, 스크롤로 가속·역방향
+ * Playfair 24 trim-both / text alphabetic 박스 높이 실측 26
  */
-const MARQUEE = {
-  top: CARD_TOP + CARD.activeH + 200,
-  height: 43,
-  gap: 65,
-};
-const HEIGHT = Math.ceil(MARQUEE.top + MARQUEE.height);
+const MARQUEE_TEXT_H = 26;
+const MARQUEE_TOP = CARD_TOP + CARD.activeH + GAP_CARDS_MARQUEE;
+const HEIGHT = Math.ceil(MARQUEE_TOP + MARQUEE_TEXT_H + PAD_MARQUEE_BOTTOM);
 /** 시안은 첫 문구의 P 가 화면 왼쪽으로 잘린 지점에서 멈춰 있습니다. */
 const MARQUEE_START = 20;
 /** 한 벌(=1/3)을 밀어내는 데 걸리는 시간. 예전 CSS 42s 와 같습니다. */
@@ -77,17 +78,20 @@ const MARQUEE_SCROLL_HOLD_MS = 180;
 const MARQUEE_BOOST_DECAY = 0.92;
 
 const TEMPLATES = templateCollection.templates;
+const CARD_COUNT = TEMPLATES.length;
+/** 진입 시 2번 카드(인덱스 1)가 화면 정중앙 */
+const INITIAL_INDEX = 1;
 
-/*
- * 카드는 목록을 몇 벌 이어 붙인 유한한 줄이 아니라, 끝없이 뻗은 자리 번호 위에
- * 놓습니다. 자리 번호 i 는 음수로도 커지고 어떤 목록 항목인지는 나머지로 정하므로,
- * 몇 번을 넘겨도 되돌릴 일이 없습니다. 되돌리는 순간이 없으니 튀지도 않습니다.
- */
-const at = (i: number) =>
-  TEMPLATES[((i % TEMPLATES.length) + TEMPLATES.length) % TEMPLATES.length];
+const clampIndex = (i: number) =>
+  Math.max(0, Math.min(CARD_COUNT - 1, i));
 
-/** 가운데 자리 좌우로 몇 장까지 그려 둘지. 3 장이면 5300px 폭까지 빈자리가 없습니다. */
-const REACH = 3;
+/** 드래그 오프셋 — 1번·3번 끝에서 반대 방향으로는 넘어가지 않음 */
+const clampDragOffset = (offset: number, index: number) => {
+  let clamped = Math.max(-PITCH, Math.min(PITCH, offset));
+  if (index === 0 && clamped > 0) clamped = 0;
+  if (index === CARD_COUNT - 1 && clamped < 0) clamped = 0;
+  return clamped;
+};
 
 /**
  * 호버 빗장. 마지막으로 넘긴 시각과 그때 커서가 있던 자리를 들고 있습니다.
@@ -113,7 +117,7 @@ function tryOpenGate(gate: HoverGate, x: number, y: number) {
 const originFor = (i: number) => 720 - i * PITCH - CARD.activeW / 2;
 
 export function TemplateCollection() {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(INITIAL_INDEX);
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
   const startX = useRef(0);
@@ -142,7 +146,7 @@ export function TemplateCollection() {
     if (e.pointerType !== "mouse") return;
     if (dragging || seat === index || !gate.current.armed) return;
     closeGate(gate.current, e.clientX, e.clientY);
-    setIndex(seat);
+    setIndex(clampIndex(seat));
   };
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -160,7 +164,7 @@ export function TemplateCollection() {
     if (!dragging) return;
 
     const onMove = (e: PointerEvent) => {
-      offset.current = e.clientX - startX.current;
+      offset.current = clampDragOffset(e.clientX - startX.current, index);
       if (Math.abs(offset.current) > 3) moved.current = true;
       setDragX(offset.current);
     };
@@ -170,7 +174,7 @@ export function TemplateCollection() {
       /* 카드 한 장을 다 끌지 않아도 20% 만 넘기면 다음 장으로 넘어갑니다. */
       const raw = -offset.current / PITCH;
       const steps = Math.sign(raw) * Math.floor(Math.abs(raw) + 1 - SNAP);
-      setIndex((i) => i + steps);
+      setIndex((i) => clampIndex(i + steps));
       offset.current = 0;
       /* 손을 뗀 자리에 우연히 놓인 카드가 곧바로 또 넘어가지 않게 합니다. */
       closeGate(gate.current, e.clientX, e.clientY);
@@ -184,13 +188,9 @@ export function TemplateCollection() {
       window.removeEventListener("pointerup", onUp);
       window.removeEventListener("pointercancel", onUp);
     };
-  }, [dragging]);
+  }, [dragging, index]);
 
-  /* 가운데 자리를 중심으로 좌우 REACH 장씩만 실제로 그립니다. */
-  const seats = Array.from(
-    { length: REACH * 2 + 1 },
-    (_, n) => index - REACH + n,
-  );
+  const seats = TEMPLATES.map((_, seat) => seat);
 
   return (
     /*
@@ -245,14 +245,14 @@ export function TemplateCollection() {
           {seats.map((seat) => (
             <TemplateCard
               key={seat}
-              template={at(seat)}
+              template={TEMPLATES[seat]}
               left={seat * PITCH}
               seat={seat}
               activeIndex={index}
               centered={seat === index}
               onHover={onCardHover(seat)}
               onSelect={() => {
-                if (!moved.current) setIndex(seat);
+                if (!moved.current) setIndex(clampIndex(seat));
               }}
             />
           ))}
@@ -345,23 +345,16 @@ function TemplateMarquee() {
   return (
     <div
       className="absolute left-1/2 w-screen -translate-x-1/2 overflow-hidden"
-      style={{ top: `${MARQUEE.top}px`, height: `${MARQUEE.height}px` }}
+      style={{
+        top: `${MARQUEE_TOP}px`,
+        paddingBottom: PAD_MARQUEE_BOTTOM,
+      }}
       aria-hidden
     >
-      <div
-        ref={track}
-        className="flex w-max shrink-0 whitespace-pre font-display text-[33px] font-normal uppercase leading-none text-forest will-change-transform"
-        style={{
-          lineHeight: `${MARQUEE.height}px`,
-        }}
-      >
+      <div ref={track} className="MARQUEE-TRACK w-max will-change-transform">
         {[0, 1, 2].map((copy) =>
           templateCollection.marquee.map((phrase) => (
-            <span
-              key={`${copy}-${phrase}`}
-              className="shrink-0"
-              style={{ marginRight: `${MARQUEE.gap}px` }}
-            >
+            <span key={`${copy}-${phrase}`} className="MARQUEE-TEXT">
               {phrase}
             </span>
           )),
