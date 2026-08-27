@@ -11,7 +11,7 @@ import { faq, type FaqAnswerBlock } from "@/content/site";
  * 헤더: FAQ-CATEGORY 13/500 · FAQ-TITLE 40/600 · FAQ-DESC 17/400
  *   tag→title 42 · title→desc 36 · 상·하 200
  * 리스트: 폭 937 · desc→리스트 100 · 행 패딩 26 · cat→q 16 · q→icon 100
- * 답변: q→a 36(글리프) · 그룹 42 · 그룹 내 13
+ * 답변: q→a 36 · 단락 30 · 세부 줄 20
  */
 const PAD_TOP = 200;
 const PAD_BOTTOM = 200;

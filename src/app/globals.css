@@ -2031,17 +2031,17 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
-/* 그룹 간격 42 — 본문→소제목, 소제목 사이, 단락 */
+/* 단락 간격 30 — 본문→소제목, 소제목 사이 */
 .FAQ-A-P + .FAQ-A-H,
 .FAQ-A-PG + .FAQ-A-H,
 .FAQ-A-LI + .FAQ-A-H,
 .FAQ-A-EQ + .FAQ-A-H,
 .FAQ-A-H + .FAQ-A-H,
 .FAQ-A-P + .FAQ-A-PG {
-  margin-top: 42px;
+  margin-top: 30px;
 }
 
-/* 그룹 내 13 — 소제목 아래, 리스트, 같은 그룹 본문 */
+/* 세부 줄 20 — 소제목 아래, 리스트, 같은 그룹 본문 */
 .FAQ-A-H + .FAQ-A-LI,
 .FAQ-A-H + .FAQ-A-P,
 .FAQ-A-H + .FAQ-A-PG,
@@ -2050,7 +2050,7 @@ html:not(.splash-seen) [data-site-header] {
 .FAQ-A-P + .FAQ-A-LI,
 .FAQ-A-P + .FAQ-A-P,
 .FAQ-A-PG + .FAQ-A-P {
-  margin-top: 13px;
+  margin-top: 20px;
 }
 
 @media (prefers-reduced-motion: reduce) {
