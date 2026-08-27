@@ -1944,7 +1944,7 @@ html:not(.splash-seen) [data-site-header] {
 .FAQ-ICON-V {
   transform-box: fill-box;
   transform-origin: center;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .FAQ-ITEM-ACTIVE .FAQ-ICON-V {
@@ -1956,13 +1956,8 @@ html:not(.splash-seen) [data-site-header] {
   grid-row: 2;
   overflow: hidden;
   height: 0;
-  transition: height 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
-}
-
-.FAQ-PANEL.is-open {
-  overflow: visible;
-  height: auto;
 }
 
 .FAQ-PANEL-INNER {
@@ -1984,7 +1979,8 @@ html:not(.splash-seen) [data-site-header] {
   color: rgba(28, 26, 25, 0.8);
   line-height: 1.588;
   text-align: left;
-  text-box-trim: trim-both;
+  /* 첫 줄만 trim — 마지막 줄 받침이 하단 26 패딩에서 잘리지 않게 */
+  text-box-trim: trim-start;
   text-box-edge: cap alphabetic;
 }
 

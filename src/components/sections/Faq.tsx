@@ -97,36 +97,16 @@ function FaqPanel({
   children: ReactNode;
 }) {
   const innerRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState<number | "auto">(0);
+  const [height, setHeight] = useState(0);
 
   useLayoutEffect(() => {
     const inner = innerRef.current;
-    const panel = panelRef.current;
-    if (!inner || !panel) return;
-
-    if (open) {
-      setHeight(inner.scrollHeight);
-      const onEnd = (event: TransitionEvent) => {
-        if (event.propertyName !== "height") return;
-        setHeight("auto");
-      };
-      panel.addEventListener("transitionend", onEnd);
-      return () => panel.removeEventListener("transitionend", onEnd);
-    }
-
-    const current = panel.getBoundingClientRect().height;
-    setHeight(current);
-    const frame = requestAnimationFrame(() => setHeight(0));
-    return () => cancelAnimationFrame(frame);
+    if (!inner) return;
+    setHeight(open ? Math.ceil(inner.scrollHeight) : 0);
   }, [open]);
 
   return (
-    <div
-      ref={panelRef}
-      className={height === "auto" ? "FAQ-PANEL is-open" : "FAQ-PANEL"}
-      style={height === "auto" ? undefined : { height }}
-    >
+    <div className="FAQ-PANEL" style={{ height }}>
       <div className="FAQ-PANEL-INNER" ref={innerRef}>
         {children}
       </div>
