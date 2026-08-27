@@ -279,13 +279,11 @@ export const templateCollection = {
       image: "/templates/elevate-studio.webp",
     },
   ],
-  /* 시안 14-D 마퀴 전체 문구 */
+  /* hu_MARQUEE_DETAIL_PC */
   marquee: [
-    "PURE DESIGN FOCUS",
-    "UNINTERRUPTED CRAFT",
-    "AI SALON SUPPORT",
-    "EFFORTLESS FLOW",
-    "YOUR HANDS FREE",
+    "ALWAYS OPEN, ALWAYS READY",
+    "THE 24/7 AI SALON MANAGER",
+    "STAY IN YOUR FLOW",
   ],
 } as const;
 
@@ -488,8 +486,9 @@ export const faq = {
 
 /** 06_Pricing Plan — hu_PRICING_PC · GNB PRICING → #pricing */
 export const pricing = {
-  /** PC — 다른 섹션과 동일 SECTION-TAG · the 이탤릭 */
+  /** PC — hu_PRICING_DETAIL_PC_01 `( 06. PRICING Plan )` · 모바일은 before/article/after */
   tag: {
+    text: "( 06. PRICING Plan )",
     before: "( 06. ",
     article: "the",
     after: " PRICING PLAN )",
@@ -521,6 +520,7 @@ export const pricing = {
       },
     ],
     cta: {
+      labelEn: "GET STARTED",
       label: "스타터 플랜 시작하기",
       href: "https://pf.kakao.com/_xlfqiX/chat",
     },
@@ -571,6 +571,7 @@ export const pricing = {
       },
     ],
     cta: {
+      labelEn: "GET STARTED",
       label: "브랜드 플랜 시작하기",
       href: "https://pf.kakao.com/_xlfqiX/chat",
     },

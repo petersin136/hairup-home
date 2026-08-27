@@ -331,27 +331,21 @@ p > .rain-line:only-child,
 
 .PRICING-YEAR {
   box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 60px;
   overflow: hidden;
   border-radius: 12px;
   background-color: #4a3d35;
-  background-image:
-    radial-gradient(ellipse 80% 120% at 18% 0%, rgba(255, 255, 255, 0.06), transparent 55%),
-    radial-gradient(ellipse 70% 100% at 90% 100%, rgba(0, 0, 0, 0.25), transparent 50%);
+  background-image: url("/images/pricing-year-banner.webp");
+  background-image: image-set(
+    url("/images/pricing-year-banner.webp") 1x,
+    url("/images/pricing-year-banner@2x.webp") 2x
+  );
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .PRICING-YEAR::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.45;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  display: none;
 }
 
 .PRICING-YEAR-COPY,
@@ -412,7 +406,7 @@ p > .rain-line:only-child,
   width: 156px;
   height: 156px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.16);
+  background: transparent;
   color: #faf8f5;
   font-family: var(--font-didot), Didot, "Bodoni 72", serif;
   font-size: 22px;
@@ -434,7 +428,7 @@ p > .rain-line:only-child,
   height: 156px;
   flex-direction: column;
   gap: 10px;
-  background: rgba(176, 141, 87, 0.4);
+  background: transparent;
   font-style: normal;
 }
 
@@ -458,6 +452,279 @@ p > .rain-line:only-child,
   line-height: 1;
   text-box-trim: trim-both;
   text-box-edge: text alphabetic;
+}
+
+/* hu_PRICING_DETAIL_PC_01–10 */
+.PRICING-TAG {
+  margin: 0;
+  font-size: 13px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-weight: 500;
+  color: rgb(44, 58, 46);
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.PRICING-TITLE {
+  margin: 42px 0 0;
+  font-size: 40px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  color: rgb(28, 26, 25);
+  text-align: center;
+}
+
+.PRICING-DESC {
+  margin: 36px 0 0;
+  font-size: 17px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  color: rgba(28, 26, 25, 0.8);
+  line-height: 1.588;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.PRICING-CARD-STARTER {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 584px;
+  height: 923px;
+  padding: 60px;
+  background-color: rgb(244, 241, 237);
+  border-radius: 10px;
+}
+
+.PRICING-CARD-STARTER:has(.BTN-BRAND) {
+  background-color: rgb(44, 58, 46);
+}
+
+.STARTER-TITLE {
+  margin: 0;
+  font-size: 29px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-weight: 500;
+  color: rgb(44, 58, 46);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.PRICING-CARD-STARTER:has(.BTN-BRAND) .STARTER-TITLE {
+  color: rgb(250, 248, 245);
+}
+
+.STARTER-DESC {
+  margin: 25px 0 0;
+  font-size: 21px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  color: rgba(28, 26, 25, 0.8);
+  line-height: 1.476;
+  text-align: left;
+}
+
+.PRICING-CARD-STARTER:has(.BTN-BRAND) .STARTER-DESC {
+  color: rgba(250, 248, 245, 0.8);
+}
+
+.STARTER-PRICE-NUM-SETTING,
+.STARTER-PRICE-NUM-MONTH {
+  display: inline-block;
+  font-size: 50px;
+  font-family: var(--font-latin), "Inter", sans-serif;
+  font-weight: 600;
+  line-height: 1;
+  color: rgb(44, 58, 46);
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+  vertical-align: baseline;
+}
+
+.PRICING-CARD-STARTER:has(.BTN-BRAND) .STARTER-PRICE-NUM-SETTING,
+.PRICING-CARD-STARTER:has(.BTN-BRAND) .STARTER-PRICE-NUM-MONTH {
+  color: rgb(250, 248, 245);
+}
+
+.STARTER-PRICE-TEXT-SETTING,
+.STARTER-PRICE-TEXT-MONTH {
+  font-size: 17px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  line-height: 1;
+  color: rgba(28, 26, 25, 0.8);
+  text-align: left;
+}
+
+.PRICING-CARD-STARTER:has(.BTN-BRAND) .STARTER-PRICE-TEXT-SETTING,
+.PRICING-CARD-STARTER:has(.BTN-BRAND) .STARTER-PRICE-TEXT-MONTH {
+  color: rgba(250, 248, 245, 0.8);
+}
+
+/*
+ * 가격 줄 — 전역 p cap-trim 이 Inter 50 박스를 접어 margin 25가
+ * 글리프 간격으로 안 먹힘. p trim 끄고, 숫자 span 이 높이 기준.
+ */
+p:has(> .STARTER-PRICE-NUM-SETTING),
+p:has(> .STARTER-PRICE-NUM-MONTH) {
+  line-height: 1;
+  text-box-trim: none;
+}
+
+p:has(> .STARTER-PRICE-NUM-SETTING) {
+  margin: 50px 0 0;
+}
+
+p:has(> .STARTER-PRICE-NUM-MONTH) {
+  margin: 25px 0 0;
+}
+
+.STARTER-DIVIDER {
+  width: 471px;
+  margin: 50px 0;
+  border: 0;
+  border-top: 1px solid rgb(44, 58, 46);
+  opacity: 0.8;
+}
+
+.PRICING-CARD-STARTER:has(.BTN-BRAND) .STARTER-DIVIDER {
+  border-top-color: rgb(250, 248, 245);
+}
+
+.PRICING-CARD-STARTER ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+
+.PRICING-CARD-STARTER li {
+  display: flex;
+  align-items: flex-start;
+}
+
+.PRICING-ICON-CHECK {
+  flex-shrink: 0;
+  margin-right: 16px;
+  fill: none;
+  stroke: #2c3a2e;
+  stroke-width: 1px;
+}
+
+.PRICING-CARD-STARTER:has(.BTN-BRAND) .PRICING-ICON-CHECK {
+  stroke: rgb(250, 248, 245);
+}
+
+.PRICING-FEATURE-TITLE {
+  margin: 0;
+  font-size: 21px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  color: rgb(44, 58, 46);
+  text-align: left;
+}
+
+.PRICING-CARD-STARTER:has(.BTN-BRAND) .PRICING-FEATURE-TITLE {
+  color: rgb(250, 248, 245);
+}
+
+.PRICING-FEATURE-DESC {
+  margin: 15px 0 0;
+  font-size: 17px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  color: rgba(28, 26, 25, 0.8);
+  text-align: left;
+}
+
+.PRICING-CARD-STARTER:has(.BTN-BRAND) .PRICING-FEATURE-DESC {
+  color: rgba(250, 248, 245, 0.8);
+}
+
+.BTN-STARTER,
+.BTN-BRAND {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 463px;
+  height: 55px;
+  margin-top: auto;
+  align-self: center;
+  border-radius: 4px;
+  font-size: 17px;
+  font-family: var(--font-latin), "Inter", sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.BTN-STARTER {
+  background-color: rgb(44, 58, 46);
+  color: rgb(250, 248, 245);
+}
+
+.BTN-BRAND {
+  background-color: rgb(250, 248, 245);
+  color: rgb(44, 58, 46);
+}
+
+.BTN-STARTER > span:last-child,
+.BTN-BRAND > span:last-child {
+  display: none;
+}
+
+.BTN-STARTER:hover,
+.BTN-BRAND:hover {
+  font-size: 16px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 500;
+}
+
+.BTN-STARTER:hover {
+  color: rgb(250, 248, 245);
+}
+
+.BTN-BRAND:hover {
+  color: rgb(44, 58, 46);
+}
+
+.BTN-STARTER:hover > span:first-child,
+.BTN-BRAND:hover > span:first-child {
+  display: none;
+}
+
+.BTN-STARTER:hover > span:last-child,
+.BTN-BRAND:hover > span:last-child {
+  display: inline;
+}
+
+@media (hover: none) {
+  .BTN-STARTER,
+  .BTN-BRAND {
+    font-size: 16px;
+    font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+    font-weight: 500;
+    text-transform: none;
+  }
+
+  .BTN-STARTER > span:first-child,
+  .BTN-BRAND > span:first-child {
+    display: none;
+  }
+
+  .BTN-STARTER > span:last-child,
+  .BTN-BRAND > span:last-child {
+    display: inline;
+  }
 }
 
 /* 입력창 — 시안 다크 바 · 평시 노란띠 없음 */
@@ -1240,6 +1507,26 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
+/* hu_MARQUEE_DETAIL_PC — 수치는 글리프 외곽선 기준 */
+.MARQUEE-TRACK {
+  display: flex;
+  align-items: center;
+  gap: 90px;
+  white-space: nowrap;
+}
+
+.MARQUEE-TEXT {
+  font-size: 24px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-weight: 400;
+  letter-spacing: 0.035em;
+  color: rgb(44, 58, 46);
+  text-transform: uppercase;
+  flex-shrink: 0;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
 .CRM-TAG {
   width: 940px;
   margin-left: auto;
@@ -1501,7 +1788,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* ============================================================================
-   FAQ PC — hu_FAQ_PC 아코디언
+   FAQ PC — hu_FAQ_DETAIL_PC 아코디언
    ========================================================================== */
 .FAQ {
   width: 100%;
@@ -1515,31 +1802,76 @@ html:not(.splash-seen) [data-site-header] {
   margin-right: auto;
 }
 
+/* 헤더 태그 (07. FAQ) — Playfair 13/500 · lining nums */
+.FAQ-INNER > .FAQ-CATEGORY {
+  margin: 0;
+  font-size: 13px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-weight: 500;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  letter-spacing: 0.025em;
+  color: rgb(44, 58, 46);
+  text-transform: uppercase;
+  text-align: center;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+.FAQ-TITLE {
+  margin: 42px 0 0;
+  font-size: 40px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  line-height: 1.375;
+  color: rgb(28, 26, 25);
+  text-align: center;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.FAQ-DESC {
+  margin: 36px 0 0;
+  font-size: 17px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  line-height: 1.588;
+  letter-spacing: -0.01em;
+  color: rgba(28, 26, 25, 0.8);
+  text-align: center;
+  word-break: keep-all;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
 .FAQ-LIST {
   margin-left: auto;
   margin-right: auto;
 }
 
+.FAQ-LINE {
+  width: 937px;
+  height: 0;
+  border-style: solid;
+  border-width: 1px 0 0 0;
+  border-color: rgb(28, 26, 25);
+  opacity: 0.702;
+}
+
 .FAQ-ITEM {
   position: relative;
   display: grid;
-  grid-template-columns: max-content 1fr 16px;
-  column-gap: 10px;
-  align-items: center;
+  grid-template-columns: max-content 16px minmax(0, 1fr) 100px 20px;
+  align-items: start;
   box-sizing: border-box;
   width: 100%;
-  padding: 42px 0;
-  border-top: 1px solid #dad9d5;
+  /* 상 26 · 좌우 27 · 하 26은 FAQ-SPACER */
+  padding: 26px 27px 0;
 }
 
-.FAQ-ITEM:last-child {
-  border-bottom: 1px solid #dad9d5;
-}
-
-.FAQ-ITEM.is-open {
-  align-items: start;
-  background-color: #f5f2eb;
-  padding-bottom: 44px;
+.FAQ-ITEM-ACTIVE {
+  background-color: rgb(250, 248, 245);
+  mix-blend-mode: multiply;
 }
 
 .FAQ-HIT {
@@ -1553,105 +1885,114 @@ html:not(.splash-seen) [data-site-header] {
   cursor: pointer;
 }
 
-.FAQ-CAT {
+.FAQ-ITEM .FAQ-CATEGORY,
+.FAQ-CATEGORY-ACTIVE {
   grid-column: 1;
   grid-row: 1;
   align-self: center;
-  font-family: var(--font-latin), "Inter", sans-serif;
-  font-size: 13px;
+  font-size: 17px;
+  font-family: var(--font-display), "Playfair Display", serif;
   font-weight: 400;
-  line-height: 1;
-  color: #8c847a;
-  letter-spacing: 0.02em;
-  text-box-trim: trim-both;
-  text-box-edge: cap alphabetic;
-  pointer-events: none;
-}
-
-.FAQ-Q {
-  grid-column: 2;
-  grid-row: 1;
-  align-self: center;
-  margin: 0;
-  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 1;
-  color: #1c1a19;
+  color: rgba(28, 26, 25, 0.8);
+  text-transform: uppercase;
   text-align: left;
-  word-spacing: -0.057em;
   text-box-trim: trim-both;
-  text-box-edge: cap alphabetic;
+  text-box-edge: text alphabetic;
   pointer-events: none;
 }
 
-.FAQ-ICON {
+.FAQ-CATEGORY-ACTIVE {
+  color: rgba(44, 58, 46, 0.8);
+}
+
+.FAQ-QUESTION,
+.FAQ-QUESTION-ACTIVE {
   grid-column: 3;
   grid-row: 1;
   align-self: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  pointer-events: none;
-}
-
-.FAQ-A {
-  grid-column: 1 / 3;
-  grid-row: 2;
-  margin-top: 40px;
-  pointer-events: none;
-}
-
-.FAQ-A-P,
-.FAQ-A-PG,
-.FAQ-A-H,
-.FAQ-A-LI,
-.FAQ-A-EQ {
   margin: 0;
+  font-size: 21px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  color: rgba(28, 26, 25, 0.8);
+  font-weight: 500;
+  color: rgb(28, 26, 25);
+  letter-spacing: -0.01em;
   text-align: left;
-  word-spacing: -0.057em;
   text-box-trim: trim-both;
-  text-box-edge: text alphabetic;
+  text-box-edge: cap alphabetic;
+  pointer-events: none;
 }
 
-.FAQ-A-H {
-  font-weight: 600;
-  color: #1c1a19;
+.FAQ-QUESTION-ACTIVE {
+  color: rgb(44, 58, 46);
 }
 
-.FAQ-A-P,
-.FAQ-A-PG,
-.FAQ-A-LI,
-.FAQ-A-EQ {
+.FAQ-ICON {
+  grid-column: 5;
+  grid-row: 1;
+  align-self: center;
+  display: block;
+  width: 20px;
+  height: 20px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.FAQ-ICON path {
+  stroke: #000000;
+}
+
+.FAQ-ICON-V {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.FAQ-ITEM-ACTIVE .FAQ-ICON-V {
+  transform: scaleY(0);
+}
+
+.FAQ-PANEL {
+  grid-column: 1 / 4;
+  grid-row: 2;
+  overflow: hidden;
+  height: 0;
+  transition: height 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.FAQ-PANEL.is-open {
+  overflow: visible;
+  height: auto;
+}
+
+.FAQ-PANEL-INNER {
+  overflow: visible;
+}
+
+.FAQ-SPACER {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  height: 26px;
+  pointer-events: none;
+}
+
+.FAQ-ANSWER {
+  margin: 36px 0 0;
+  font-size: 17px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
+  color: rgba(28, 26, 25, 0.8);
+  line-height: 1.588;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
 }
 
-/* 그룹 간격 42 — 본문→소제목, 소제목 사이, INTEGRATION 단락 */
-.FAQ-A-P + .FAQ-A-H,
-.FAQ-A-PG + .FAQ-A-H,
-.FAQ-A-LI + .FAQ-A-H,
-.FAQ-A-EQ + .FAQ-A-H,
-.FAQ-A-H + .FAQ-A-H,
-.FAQ-A-P + .FAQ-A-PG {
-  margin-top: 42px;
-}
-
-/* 줄 간격 13 — 소제목 아래, 리스트, 같은 그룹 본문 */
-.FAQ-A-H + .FAQ-A-LI,
-.FAQ-A-H + .FAQ-A-P,
-.FAQ-A-H + .FAQ-A-PG,
-.FAQ-A-LI + .FAQ-A-LI,
-.FAQ-A-LI + .FAQ-A-EQ,
-.FAQ-A-P + .FAQ-A-LI,
-.FAQ-A-P + .FAQ-A-P,
-.FAQ-A-PG + .FAQ-A-P {
-  margin-top: 13px;
+@media (prefers-reduced-motion: reduce) {
+  .FAQ-PANEL,
+  .FAQ-ICON-V {
+    transition: none;
+  }
 }
 
 /* .BENEFITS-TITLE — 한글. cap alphabetic 으로 글리프에 핏 (시안 42/36) */
