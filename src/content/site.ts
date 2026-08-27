@@ -486,12 +486,11 @@ export const faq = {
 
 /** 06_Pricing Plan — hu_PRICING_PC · GNB PRICING → #pricing */
 export const pricing = {
-  /** PC — hu_PRICING_DETAIL_PC_01 `( 06. PRICING Plan )` · 모바일은 before/article/after */
+  /** PC — hu_PRICING_DETAIL_PC_01 `( 06. PRICING Plan )` · Plan 만 이탤릭 */
   tag: {
-    text: "( 06. PRICING Plan )",
-    before: "( 06. ",
-    article: "the",
-    after: " PRICING PLAN )",
+    before: "( 06. PRICING ",
+    article: "Plan",
+    after: " )",
   },
   headline: ["매출이 아무리 늘어도,", "비용은 변함없이."],
   body: [

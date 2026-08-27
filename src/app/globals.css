@@ -460,10 +460,22 @@ p > .rain-line:only-child,
   font-size: 13px;
   font-family: var(--font-display), "Playfair Display", serif;
   font-weight: 500;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
   color: rgb(44, 58, 46);
   letter-spacing: 0.025em;
   text-transform: uppercase;
   text-align: center;
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+/* `( 06. PRICING Plan )` — Plan 만 타이틀케이스 이탤릭 */
+.PRICING-TAG em {
+  font-style: italic;
+  font-weight: 500;
+  text-transform: none;
 }
 
 .PRICING-TITLE {
@@ -621,7 +633,9 @@ p:has(> .STARTER-PRICE-NUM-MONTH) {
   margin-right: 16px;
   fill: none;
   stroke: #2c3a2e;
-  stroke-width: 1px;
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .PRICING-CARD-STARTER:has(.BTN-BRAND) .PRICING-ICON-CHECK {

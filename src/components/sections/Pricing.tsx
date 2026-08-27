@@ -125,7 +125,11 @@ export function Pricing() {
         className="absolute inset-x-0"
         style={{ top: `${TAG_TOP}px` }}
       >
-        <p className="PRICING-TAG">{pricing.tag.text}</p>
+        <p className="PRICING-TAG">
+          {pricing.tag.before}
+          <em>{pricing.tag.article}</em>
+          {pricing.tag.after}
+        </p>
         <h2 className="PRICING-TITLE">
           <GlyphLines lines={pricing.headline} />
         </h2>
