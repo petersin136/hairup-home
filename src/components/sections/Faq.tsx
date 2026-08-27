@@ -97,36 +97,30 @@ function FaqPanel({
   children: ReactNode;
 }) {
   const innerRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState<number | "auto">(0);
+  const [height, setHeight] = useState(0);
 
   useLayoutEffect(() => {
     const inner = innerRef.current;
-    const panel = panelRef.current;
-    if (!inner || !panel) return;
+    if (!inner) return;
 
-    if (open) {
-      setHeight(inner.scrollHeight);
-      const onEnd = (event: TransitionEvent) => {
-        if (event.propertyName !== "height") return;
-        setHeight("auto");
-      };
-      panel.addEventListener("transitionend", onEnd);
-      return () => panel.removeEventListener("transitionend", onEnd);
+    if (!open) {
+      setHeight(0);
+      return;
     }
 
-    const current = panel.getBoundingClientRect().height;
-    setHeight(current);
-    const frame = requestAnimationFrame(() => setHeight(0));
-    return () => cancelAnimationFrame(frame);
+    const measure = () => {
+      setHeight(Math.ceil(inner.getBoundingClientRect().height));
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(inner);
+    return () => ro.disconnect();
+    /* 콘텐츠 높이 변화는 ResizeObserver가 처리 — children은 매 렌더 새 객체라 deps에 넣지 않음 */
   }, [open]);
 
   return (
-    <div
-      ref={panelRef}
-      className={height === "auto" ? "FAQ-PANEL is-open" : "FAQ-PANEL"}
-      style={height === "auto" ? undefined : { height }}
-    >
+    <div className="FAQ-PANEL" style={{ height }}>
       <div className="FAQ-PANEL-INNER" ref={innerRef}>
         {children}
       </div>
