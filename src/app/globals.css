@@ -1882,7 +1882,9 @@ html:not(.splash-seen) [data-site-header] {
 .FAQ-ITEM {
   position: relative;
   display: grid;
+  /* 시안 100(칸 간격) = 상 26 + 콘텐츠 48 + 하 26 */
   grid-template-columns: max-content 16px minmax(0, 1fr) 100px 20px;
+  grid-template-rows: 48px auto 26px;
   align-items: start;
   box-sizing: border-box;
   width: 100%;
@@ -1926,6 +1928,13 @@ html:not(.splash-seen) [data-site-header] {
   color: rgba(44, 58, 46, 0.8);
 }
 
+/* 열림: 질문 하단 = 콘텐츠 행 하단 → q→a 36이 글리프 실측 */
+.FAQ-ITEM-ACTIVE .FAQ-CATEGORY-ACTIVE,
+.FAQ-ITEM-ACTIVE .FAQ-QUESTION-ACTIVE,
+.FAQ-ITEM-ACTIVE .FAQ-ICON {
+  align-self: end;
+}
+
 .FAQ-QUESTION,
 .FAQ-QUESTION-ACTIVE {
   grid-column: 3;
@@ -1960,6 +1969,7 @@ html:not(.splash-seen) [data-site-header] {
 
 .FAQ-ICON path {
   stroke: #000000;
+  stroke-width: 2px;
 }
 
 .FAQ-ICON-V {
@@ -1981,8 +1991,14 @@ html:not(.splash-seen) [data-site-header] {
   pointer-events: none;
 }
 
+/* 열림 안정 후 overflow visible — trim 글리프 받침이 height 클립되지 않도록 */
+.FAQ-PANEL.is-open {
+  overflow: visible;
+  height: auto;
+}
+
 .FAQ-PANEL-INNER {
-  /* margin 대신 padding — overflow:hidden 패널에서 scrollHeight 누락·받침 잘림 방지 */
+  /* q→a 36: 질문(trim) 하단 ↔ 답변 첫 글리프(trim) 상단 */
   padding-top: 36px;
   overflow: visible;
 }
@@ -1994,7 +2010,16 @@ html:not(.splash-seen) [data-site-header] {
   pointer-events: none;
 }
 
-.FAQ-ANSWER {
+.FAQ-A {
+  margin: 0;
+  pointer-events: none;
+}
+
+.FAQ-A-P,
+.FAQ-A-PG,
+.FAQ-A-H,
+.FAQ-A-LI,
+.FAQ-A-EQ {
   margin: 0;
   font-size: 17px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
@@ -2002,8 +2027,30 @@ html:not(.splash-seen) [data-site-header] {
   color: rgba(28, 26, 25, 0.8);
   line-height: 1.588;
   text-align: left;
-  /* overflow:hidden 아코디언 안에서는 trim 금지 — 한글 받침이 잘림 */
-  text-box-trim: none;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 단락 간격 30 — 본문→소제목, 소제목 사이 */
+.FAQ-A-P + .FAQ-A-H,
+.FAQ-A-PG + .FAQ-A-H,
+.FAQ-A-LI + .FAQ-A-H,
+.FAQ-A-EQ + .FAQ-A-H,
+.FAQ-A-H + .FAQ-A-H,
+.FAQ-A-P + .FAQ-A-PG {
+  margin-top: 30px;
+}
+
+/* 세부 줄 20 — 소제목 아래, 리스트, 같은 그룹 본문 */
+.FAQ-A-H + .FAQ-A-LI,
+.FAQ-A-H + .FAQ-A-P,
+.FAQ-A-H + .FAQ-A-PG,
+.FAQ-A-LI + .FAQ-A-LI,
+.FAQ-A-LI + .FAQ-A-EQ,
+.FAQ-A-P + .FAQ-A-LI,
+.FAQ-A-P + .FAQ-A-P,
+.FAQ-A-PG + .FAQ-A-P {
+  margin-top: 20px;
 }
 
 @media (prefers-reduced-motion: reduce) {
