@@ -742,6 +742,12 @@ export const start = {
     "당신의 실력과 스타일에 집중할 수 있도록",
     "반복되는 상담과 예약 관리는 헤어업이 덜어드립니다.",
   ],
+  /** 모바일 CTA — hu_cta_banner_footer_m 3줄 본문 */
+  bodyMobile: [
+    "당신의 실력과 스타일에 집중할 수 있도록",
+    "반복되는 상담과 예약 관리는",
+    "헤어업이 덜어드립니다.",
+  ],
   cta: {
     label: "1:1 맞춤 세팅 상담하기",
     href: "https://pf.kakao.com/_xlfqiX/chat",

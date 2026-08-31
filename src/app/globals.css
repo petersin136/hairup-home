@@ -1602,6 +1602,355 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
+/* ==========================================================================
+   MOBILE CTA + FOOTER — 시안 hu_cta_banner_footer_m · 390 목업 실측
+   PC Start(.CTA-BANNER) · Footer(.NEED_MORE_DETAILS_ 등) 와 별개.
+   ========================================================================== */
+
+/* CTA 카드 좌우 20 · 상단 40 · 카드↔푸터 섹션 20(크림 여백) */
+.M-CTA {
+  box-sizing: border-box;
+  padding-top: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+
+/* 레퍼런스 대비 세로 여유 — 350×468(390×120%) · r 16 · PC cta-banner-bg */
+.M-CTA-CARD {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 468px;
+  border-radius: 16px;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  padding-top: 56px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 48px;
+}
+
+.M-CTA-CARD-BG {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.M-CTA-CARD-BG img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.M-CTA-TITLE,
+.M-CTA-DESC,
+.M-CTA-BTN {
+  position: relative;
+  z-index: 1;
+}
+
+/* 목업 실측 타이틀 2줄 · 28/700 · lh 1.375 */
+.M-CTA-TITLE {
+  margin: 0;
+  font-size: 28px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  line-height: 1.375;
+  color: #faf8f5;
+  text-align: center;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 타이틀→본문 ~31 · 15/400 · lh 1.6 · 80% */
+.M-CTA-DESC {
+  margin: 28px 0 0;
+  font-size: 15px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: rgba(250, 248, 245, 0.8);
+  text-align: center;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 본문→버튼 ~56 · PC .BOTTOM-BANNER-BTN 계열 · 풀폭 */
+.M-CTA-BTN {
+  margin: 56px 0 0;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  height: 50px;
+  border-radius: 4px;
+  border: 0;
+  background-color: #faf8f5;
+  color: #2c3a2e;
+  font-size: 16px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-CTA-BTN:hover,
+.M-CTA-BTN:focus-visible {
+  background-color: #212d23;
+  color: #faf8f5;
+}
+
+.M-FOOTER {
+  box-sizing: border-box;
+  scroll-margin-top: 94px;
+  padding-top: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 30px;
+}
+
+/* PC .NEED_MORE_DETAILS_ 와 동일 26 · title→desc 26 · desc→form 50 */
+.M-FOOTER-NEWS-TITLE {
+  margin: 0;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-size: 26px;
+  font-weight: 500;
+  color: #1c1a19;
+  line-height: 1;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+.M-FOOTER-NEWS-DESC {
+  margin: 26px 0 0;
+  font-size: 15px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  line-height: 1.625;
+  letter-spacing: -0.01em;
+  color: rgba(28, 26, 25, 0.8);
+  text-align: left;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-FOOTER-NEWS-FORM {
+  margin: 50px 0 0;
+}
+
+.M-FOOTER-NEWS-INPUT-ROW {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 26px;
+  margin-bottom: 16px;
+}
+
+.M-FOOTER-NEWS-INPUT {
+  min-width: 0;
+  flex: 1;
+  margin: 0;
+  padding: 0 108px 0 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font-size: 22px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-weight: 400;
+  color: #1c1a19;
+  line-height: 1;
+}
+
+.M-FOOTER-NEWS-INPUT::placeholder {
+  color: rgba(28, 26, 25, 0.4);
+  opacity: 1;
+}
+
+.M-FOOTER-NEWS-INPUT:disabled {
+  opacity: 0.6;
+}
+
+.M-FOOTER-NEWS-SUBMIT {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 16px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: rgba(28, 26, 25, 0.4);
+  cursor: default;
+  word-spacing: -0.057em;
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-FOOTER-NEWS-SUBMIT.is-filled {
+  color: #1c1a19;
+  cursor: pointer;
+}
+
+.M-FOOTER-NEWS-SUBMIT.is-busy {
+  opacity: 0.7;
+}
+
+.M-FOOTER-NEWS-LINE {
+  width: 100%;
+  height: 0;
+  border-bottom: 1px solid #1c1a19;
+  box-sizing: border-box;
+}
+
+.M-FOOTER-NEWS-NOTICE {
+  margin: 16px 0 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: rgba(28, 26, 25, 0.7);
+  text-align: left;
+  word-spacing: -0.057em;
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-FOOTER-NEWS-NOTICE.is-success {
+  color: #2c3a2e;
+}
+
+.M-FOOTER-NEWS-NOTICE.is-error {
+  color: rgb(185, 28, 28);
+}
+
+/* 뉴스레터→CONTACT 60 · CONTACT→CONNECT 60 */
+.M-FOOTER-COL {
+  margin-top: 60px;
+}
+
+.M-FOOTER-LABEL-CONTACT,
+.M-FOOTER-LABEL-CONNECT {
+  margin: 0;
+  font-size: 12px;
+  font-family: var(--font-latin), Inter, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: rgba(28, 26, 25, 0.7);
+  text-transform: uppercase;
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+.M-FOOTER-LINKS {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.M-FOOTER-LINKS li {
+  text-box-trim: none;
+  text-box-edge: initial;
+}
+
+.M-FOOTER-LINKS a {
+  font-size: 15px;
+  font-family: var(--font-latin), Inter, sans-serif;
+  font-weight: 600;
+  line-height: 1.65;
+  color: #1c1a19;
+  text-decoration: none;
+}
+
+.M-FOOTER-LINKS--inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 20px;
+}
+
+/* 회사정보 → COPYRIGHT 18 · COPYRIGHT → 약관 12 · 약관 → 로고 82 */
+.M-FOOTER-COMPANY {
+  margin: 60px 0 0;
+  font-size: 12px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  color: rgba(28, 26, 25, 0.6);
+  line-height: 1.55;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-FOOTER-COPY {
+  margin: 18px 0 0;
+  font-family: var(--font-latin), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: rgba(28, 26, 25, 0.6);
+  text-transform: uppercase;
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+.M-FOOTER-LEGAL {
+  margin: 12px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 20px;
+}
+
+.M-FOOTER-LEGAL a {
+  font-family: var(--font-latin), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: #1c1a19;
+  text-transform: uppercase;
+  line-height: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+.M-FOOTER-LOGO {
+  margin-top: 82px;
+  display: block;
+  width: 100%;
+  color: #1c1a19;
+}
+
 /* --- GNB Mobile 열림 패널 (hu_gnb_m · hu_gnb_detail_m) --------------------
  * 시안 메모: "GNB 열릴 때 레이아웃 영역은 모바일 전체를 덮는 풀스크린 형태."
  * 여백 33 / 50 / 50 은 글리프 외곽선 기준이라 .MGNB_MENU 에 trim 을 건다.

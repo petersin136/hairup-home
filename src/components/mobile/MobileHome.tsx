@@ -473,66 +473,68 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* Start CTA — 모바일 시안 hu_m_CTA / hu_m_CTA_HOVER · 390 기준 */}
-        <section
-          id="start"
-          className="relative flex min-h-[620px] flex-col justify-end overflow-hidden px-4 pb-[81px] text-porcelain"
-        >
-          <Image
-            src="/images/cta-bg.jpg"
-            alt=""
-            fill
-            className="object-cover"
-            sizes={`${MOBILE_ARTBOARD_PX}px`}
-            quality={90}
-            priority={false}
-          />
-          <div className="relative">
-            <h2 className="text-kr text-[32px] font-bold leading-[1.37] tracking-[-0.01em]">
+        {/* Start CTA — 시안 hu_cta_banner_footer_m · 390 카드형 */}
+        <section id="start" className="M-CTA bg-porcelain">
+          <div className="M-CTA-CARD">
+            <picture className="M-CTA-CARD-BG">
+              <source
+                type="image/webp"
+                srcSet="/images/cta-banner-bg-1x.webp 1x, /images/cta-banner-bg-2x.webp 2x"
+              />
+              <img
+                src="/images/cta-banner-bg-1x.png"
+                srcSet="/images/cta-banner-bg-1x.png 1x, /images/cta-banner-bg-2x.png 2x"
+                alt=""
+                width={1380}
+                height={650}
+                decoding="async"
+                draggable={false}
+              />
+            </picture>
+            <h2 className="M-CTA-TITLE">
               <GlyphLines lines={start.headline} />
             </h2>
-            <p
-              className="text-kr mt-[31px] text-[15px] font-normal leading-[24px] tracking-[-0.01em]"
-              style={{ color: "rgba(250, 248, 245, 0.7)" }}
-            >
-              <span className="block">{start.body[0]}</span>
-              <span className="block">
-                이제 그 실력이 온전히 빛나도록 나머지는
-              </span>
-              <span className="block">헤어업이 하겠습니다.</span>
+            <p className="M-CTA-DESC">
+              <GlyphLines lines={start.bodyMobile} />
             </p>
             <a
               href={start.cta.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-kr mt-[61px] flex h-[57px] w-full items-center justify-center rounded-btn border border-porcelain bg-transparent text-[16px] font-medium tracking-[-0.01em] text-porcelain transition-colors duration-200 ease-in-out hover:bg-porcelain hover:text-ink active:bg-porcelain active:text-ink"
+              className="M-CTA-BTN"
             >
               {start.cta.label}
             </a>
           </div>
         </section>
 
-        {/* Footer — 모바일 시안 hu_m_FOOTER */}
-        <footer id="footer" className="scroll-mt-[94px] bg-linen px-4 pt-[80px] pb-[30px]">
-          <FooterNewsletter compact />
+        {/* Footer — 시안 hu_cta_banner_footer_m · 390 */}
+        <footer id="footer" className="M-FOOTER bg-linen">
+          <FooterNewsletter mobile />
 
           {footer.columns
             .filter((column) => column.title !== "INDEX")
             .map((column) => (
-              <div key={column.title} className="mt-[93px]">
-                <p className="font-latin text-[12px] font-bold uppercase leading-none tracking-[0.06em] text-ink">
+              <div key={column.title} className="M-FOOTER-COL">
+                <p
+                  className={
+                    column.title === "CONTACT" ? "M-FOOTER-LABEL-CONTACT" : "M-FOOTER-LABEL-CONNECT"
+                  }
+                >
                   {column.title}
                 </p>
-                <ul className="mt-[14px]">
+                <ul
+                  className={
+                    column.title === "CONNECT"
+                      ? "M-FOOTER-LINKS M-FOOTER-LINKS--inline"
+                      : "M-FOOTER-LINKS"
+                  }
+                >
                   {column.links.map((item) => (
-                    <li
-                      key={item.label}
-                      className="font-latin text-[15px] font-semibold leading-[1.65] text-ink"
-                    >
+                    <li key={item.label}>
                       <Link
                         href={item.href}
                         onClick={(e) => onHashClick(e, item.href)}
-                        className="transition-colors duration-200 hover:underline hover:underline-offset-[3px]"
                       >
                         {item.label}
                       </Link>
@@ -542,43 +544,25 @@ export function MobileHome() {
               </div>
             ))}
 
-          <div className="text-kr mt-[93px] text-[12px] font-normal leading-[1.55] text-ink/65">
-            {footer.company.flat().map((part) => (
-              <p key={part.label}>
-                {part.label}
-                <span className="mx-[0.35em] text-ink/35" aria-hidden>
-                  |
-                </span>
-                {part.value}
-              </p>
-            ))}
-          </div>
-
-          <p className="font-latin mt-[30px] text-[12px] font-normal uppercase leading-none tracking-[0.01em] text-ink/65">
-            {footer.copyright}
+          <p className="M-FOOTER-COMPANY">
+            <GlyphLines lines={footer.companyPc} />
           </p>
 
-          <nav
-            className="mt-[12px] flex items-center gap-[20px]"
-            aria-label="약관"
-          >
+          <p className="M-FOOTER-COPY">{footer.copyright}</p>
+
+          <nav className="M-FOOTER-LEGAL" aria-label="약관">
             {footer.legal.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
                 onClick={saveReturnScroll}
-                className="font-latin text-[12px] font-normal uppercase leading-none text-ink underline decoration-ink underline-offset-[3px]"
               >
                 {item.label}
               </Link>
             ))}
           </nav>
 
-          <Link
-            href="/"
-            className="mt-[82px] block w-full text-ink"
-            aria-label="hair up"
-          >
+          <Link href="/" className="M-FOOTER-LOGO" aria-label="hair up">
             <Wordmark width={MOBILE_CONTENT_PX} className="h-auto w-full" />
           </Link>
         </footer>

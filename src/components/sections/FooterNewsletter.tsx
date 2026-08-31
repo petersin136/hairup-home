@@ -7,13 +7,18 @@ import { footer } from "@/content/site";
 import { GUIDEBOOK_EMAIL_SUBJECT } from "@/lib/guidebook-email";
 
 /**
- * Footer 뉴스레터 — hu_FOOTER PC
+ * Footer 뉴스레터 — hu_FOOTER PC · hu_cta_banner_footer_m
  * title→desc 26 · desc→input 50 · line→notice 16
- * 모바일(compact)은 기존 수치 유지
  */
 type Status = "idle" | "sending" | "success" | "error";
 
-export function FooterNewsletter({ compact = false }: { compact?: boolean }) {
+export function FooterNewsletter({
+  compact = false,
+  mobile = false,
+}: {
+  compact?: boolean;
+  mobile?: boolean;
+}) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
@@ -57,6 +62,74 @@ export function FooterNewsletter({ compact = false }: { compact?: boolean }) {
       );
     }
   };
+
+  if (mobile) {
+    return (
+      <div className="M-FOOTER-NEWS">
+        <h2 className="M-FOOTER-NEWS-TITLE">{footer.newsletter.title}</h2>
+        <p className="M-FOOTER-NEWS-DESC">
+          <GlyphLines lines={footer.newsletter.body} />
+        </p>
+        <form onSubmit={onSubmit} className="M-FOOTER-NEWS-FORM" noValidate>
+          <div className="M-FOOTER-NEWS-INPUT-ROW">
+            <label className="sr-only" htmlFor="footer-email-mobile">
+              이메일
+            </label>
+            <input
+              id="footer-email-mobile"
+              type="email"
+              name="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (status === "success" || status === "error") {
+                  setStatus("idle");
+                  setMessage("");
+                }
+              }}
+              placeholder={footer.newsletter.placeholder}
+              autoComplete="email"
+              disabled={busy}
+              className="M-FOOTER-NEWS-INPUT"
+            />
+            <button
+              type="submit"
+              disabled={!canSubmit}
+              aria-busy={busy}
+              className={[
+                "M-FOOTER-NEWS-SUBMIT",
+                canSubmit ? "is-filled" : "",
+                busy ? "is-busy" : "",
+              ].join(" ")}
+            >
+              {busy ? "Sending…" : footer.newsletter.submit}
+            </button>
+          </div>
+          <div className="M-FOOTER-NEWS-LINE" />
+          <p
+            className={[
+              "M-FOOTER-NEWS-NOTICE",
+              status === "success"
+                ? "is-success"
+                : status === "error"
+                  ? "is-error"
+                  : "",
+            ].join(" ")}
+            role={
+              status === "error"
+                ? "alert"
+                : status === "success"
+                  ? "status"
+                  : undefined
+            }
+            aria-live="polite"
+          >
+            {message || footer.newsletter.notice.replace(/^\*\s*/, "• ")}
+          </p>
+        </form>
+      </div>
+    );
+  }
 
   if (compact) {
     return (
