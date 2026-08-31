@@ -80,13 +80,14 @@ export function MobileHome() {
   };
 
   return (
-    <div
-      className="[&_.text-kr]:break-keep mx-auto min-h-dvh w-full bg-porcelain"
-      style={{ maxWidth: MOBILE_ARTBOARD_PX }}
-    >
-      {/* 띠배너 — hu_TOP_BANNER__M */}
+    <div className="[&_.text-kr]:break-keep min-h-dvh w-full bg-porcelain">
+      {/* 띠배너 — hu_TOP_BANNER__M · 콘텐츠 max-width 밖 full-bleed */}
       <TopBanner mobile />
 
+      <div
+        className="mx-auto w-full"
+        style={{ maxWidth: MOBILE_ARTBOARD_PX }}
+      >
       {/* 헤더 — 시안 hu_hero_detail_1_m */}
       <header
         data-site-header
@@ -117,68 +118,6 @@ export function MobileHome() {
           </button>
         </div>
       </header>
-
-      {menuOpen ? (
-        <div className="MGNB_PANEL">
-          <div className="MGNB_ARTBOARD">
-            <TopBanner mobile />
-
-            <div className="MGNB_BODY">
-              <div className="MGNB_HEAD">
-                <Link
-                  href="/"
-                  className="MGNB_LOGO"
-                  aria-label="hair up"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  <Wordmark width={91} />
-                </Link>
-                <button
-                  type="button"
-                  className="MGNB_CLOSE"
-                  aria-label="메뉴 닫기"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
-                    <path
-                      d="M0 0L18 18M18 0L0 18"
-                      fill="none"
-                      stroke="#1C1A19"
-                      strokeWidth="1.5"
-                    />
-                  </svg>
-                </button>
-              </div>
-
-              <nav className="MGNB_MENU" aria-label="주요 메뉴">
-                {MGNB_ITEMS.map((item, i) => (
-                  <Fragment key={item.href}>
-                    {i > 0 ? <br /> : null}
-                    <Link
-                      href={item.href}
-                      className="GNB_TITLE"
-                      onClick={(e) => goHashFromMenu(e, item.href)}
-                    >
-                      {item.label}
-                    </Link>
-                  </Fragment>
-                ))}
-              </nav>
-
-              <a
-                href={experience.kakaoDemo.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="KAKAO-DEMO-BTN"
-              >
-                <span className="KAKAO-DEMO-TEXT">
-                  {experience.kakaoDemo.label}
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
-      ) : null}
 
       <main className="[&_section]:scroll-mt-[94px]">
         {/* Hero — 모바일 시안 hu_m_Main · 390 기준 */}
@@ -567,6 +506,68 @@ export function MobileHome() {
           </Link>
         </footer>
       </main>
+      </div>
+
+      {menuOpen ? (
+        <div className="MGNB_PANEL">
+          <TopBanner mobile />
+          <div className="MGNB_ARTBOARD">
+            <div className="MGNB_BODY">
+              <div className="MGNB_HEAD">
+                <Link
+                  href="/"
+                  className="MGNB_LOGO"
+                  aria-label="hair up"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <Wordmark width={91} />
+                </Link>
+                <button
+                  type="button"
+                  className="MGNB_CLOSE"
+                  aria-label="메뉴 닫기"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
+                    <path
+                      d="M0 0L18 18M18 0L0 18"
+                      fill="none"
+                      stroke="#1C1A19"
+                      strokeWidth="1.5"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <nav className="MGNB_MENU" aria-label="주요 메뉴">
+                {MGNB_ITEMS.map((item, i) => (
+                  <Fragment key={item.href}>
+                    {i > 0 ? <br /> : null}
+                    <Link
+                      href={item.href}
+                      className="GNB_TITLE"
+                      onClick={(e) => goHashFromMenu(e, item.href)}
+                    >
+                      {item.label}
+                    </Link>
+                  </Fragment>
+                ))}
+              </nav>
+
+              <a
+                href={experience.kakaoDemo.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="KAKAO-DEMO-BTN"
+              >
+                <span className="KAKAO-DEMO-TEXT">
+                  {experience.kakaoDemo.label}
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

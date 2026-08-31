@@ -1187,10 +1187,12 @@ html:not(.splash-seen) [data-site-header] {
 
 /* --- Top Banner Mobile (hu_TOP_BANNER__M · .RECTANGLE_18) ---------------- */
 .TOP_BANNER.is-mobile {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
   height: 40px;
-  /* 시안에 없음 — 390 미만 화면에서 nowrap 텍스트가 잘리지 않게 유지 */
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .TOP_BANNER.is-mobile .BANNER_TEXT {
