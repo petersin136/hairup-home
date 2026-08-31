@@ -155,7 +155,9 @@ export function MobileHome() {
                 <path
                   d="M0 6.14H14.5M9.37 0.5L14.5 6.14L9.37 11.78"
                   stroke="#FFFFFF"
-                  strokeWidth="1.5"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             </a>

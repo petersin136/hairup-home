@@ -1310,7 +1310,7 @@ html:not(.splash-seen) [data-site-header] {
   width: 100%;
   /* 350 폭에서 정확히 500. 카드가 줄어도 시안 비율 유지 */
   aspect-ratio: 350 / 500;
-  /* 하단 곡선 경계 — 그린 버튼이 코너로 비침 (일직선 금지) */
+  /* 하단 곡선 경계 — 카드 r 12 와 동일 (과한 곡률 방지) */
   border-radius: 0 0 12px 12px;
   overflow: hidden;
 }
@@ -1369,7 +1369,8 @@ html:not(.splash-seen) [data-site-header] {
   box-sizing: border-box;
   padding-bottom: 18px;
   margin-bottom: -18px;
-  border-radius: 0 0 12px 12px;
+  /* 상단도 라운드 — 미디어 하단 곡선과 맞물림 (카드 r 12) */
+  border-radius: 12px;
   background-color: rgb(44, 58, 46);
   display: flex;
   align-items: center;
@@ -1390,7 +1391,7 @@ html:not(.splash-seen) [data-site-header] {
   transform: translateY(-2px);
 }
 
-/* 화살표 — 가로 너비 15PX (높이 비율 고정) / STROKE 1.5PX #FFFFFF */
+/* 화살표 — 가로 15 · stroke 2 · 텍스트와 세로 정중앙 */
 .M-HERO .CREATE-BRAND-ARROW {
   display: block;
   flex: none;
@@ -1398,8 +1399,8 @@ html:not(.splash-seen) [data-site-header] {
   height: 12.27px;
   /* 시안에 없음 — 목업 실측 텍스트 ↔ 화살표 18 */
   margin-left: 18px;
-  transform: translateY(-2px);
-  /* stroke 1.5 가 viewBox 가장자리에서 잘리지 않게 */
+  /* 텍스트(-2)보다 2px 아래 — 굵은 대문자 옆 광학 정중앙 */
+  transform: translateY(0);
   overflow: visible;
 }
 
