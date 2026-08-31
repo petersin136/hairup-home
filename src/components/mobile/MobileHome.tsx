@@ -2,21 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import {
+  Fragment,
+  useEffect,
+  useState,
+  type MouseEvent,
+} from "react";
 
 import { GlyphLines } from "@/components/copy/GlyphLines";
 import { FooterNewsletter } from "@/components/sections/FooterNewsletter";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { TopBanner } from "@/components/layout/TopBanner";
 import {
-  DemoChat,
-  type DemoChatHandle,
-  IPHONE_MOCKUP,
-  IPHONE_MOCKUP_COMPACT,
-} from "@/components/sections/DemoChat";
-import {
-  automatedCrm,
-  banner,
   cta,
   dilemma,
   experience,
@@ -24,7 +21,6 @@ import {
   footer,
   hero,
   keyBenefits,
-  nav,
   pricing,
   start,
   templateCollection,
@@ -32,19 +28,30 @@ import {
 import { onHashClick, scrollToHash } from "@/lib/scroll-to-hash";
 import { saveReturnScroll } from "@/lib/entry-chrome";
 import { libreBodoni } from "@/lib/fonts";
+import {
+  MOBILE_ARTBOARD_PX,
+  MOBILE_CONTENT_PX,
+} from "@/lib/mobile-artboard";
 
 /**
  * 모바일 전용 홈. HomeShell 이 1440px 미만일 때만 마운트합니다.
+ * 레이아웃 기준 폭 390px (기존 375). 2x 이미지는 1x CSS 크기로 표시.
  */
 
-const MENU_ROLL = "duration-500 ease-[cubic-bezier(0.65,0,0.35,1)]";
+/**
+ * 열림 GNB 메뉴 — 시안 hu_gnb_m.
+ * href 는 PC(nav)와 같지만 세 번째 라벨이 PRICING 이 아니라 MEMBERSHIP 이라 따로 둔다.
+ */
+const MGNB_ITEMS = [
+  { label: "AI MANAGER", href: "#ai-manager" },
+  { label: "TEMPLATES", href: "#template" },
+  { label: "MEMBERSHIP", href: "#pricing" },
+  { label: "FAQ", href: "#faq" },
+] as const;
 
 export function MobileHome() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [menuTop, setMenuTop] = useState(94);
   const [openFaq, setOpenFaq] = useState<string | null>(null);
-  const headerRef = useRef<HTMLElement>(null);
-  const chatRef = useRef<DemoChatHandle>(null);
 
   const unlockPageScroll = () => {
     document.body.style.overflow = "";
@@ -72,356 +79,268 @@ export function MobileHome() {
     if (scrollToHash(href)) event.preventDefault();
   };
 
-  useEffect(() => {
-    if (!menuOpen) return;
-    const update = () => {
-      const bottom = headerRef.current?.getBoundingClientRect().bottom;
-      if (bottom != null) setMenuTop(bottom);
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, [menuOpen]);
-
   return (
-    <div className="[&_.text-kr]:break-keep">
+    <div
+      className="[&_.text-kr]:break-keep mx-auto min-h-dvh w-full bg-porcelain"
+      style={{ maxWidth: MOBILE_ARTBOARD_PX }}
+    >
       {/* 띠배너 — hu_TOP_BANNER__M */}
       <TopBanner mobile />
 
-      {/* 헤더 + 메뉴 — 시안 hu_m_Menu_open */}
+      {/* 헤더 — 시안 hu_hero_detail_1_m */}
       <header
-        ref={headerRef}
         data-site-header
         className="relative sticky top-0 z-50 bg-porcelain"
       >
-        <div className="flex h-[56px] items-center justify-between px-4">
+        <div className="M-HEAD-M">
           <Link
             href="/"
-            className="text-ink"
+            className="M-LOGO-M"
             aria-label="hair up"
             onClick={() => setMenuOpen(false)}
           >
-            <Wordmark width={101} />
+            <Wordmark width={91} />
           </Link>
           <button
             type="button"
+            className="M-BURGER-M"
             aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
             aria-expanded={menuOpen}
-            onClick={() => {
-              if (!menuOpen) {
-                const bottom = headerRef.current?.getBoundingClientRect().bottom;
-                if (bottom != null) setMenuTop(bottom);
-              }
-              setMenuOpen((v) => !v);
-            }}
-            className="flex size-10 items-center justify-center text-ink"
+            onClick={() => setMenuOpen((v) => !v)}
           >
-            <span className="sr-only">메뉴</span>
-            <span className="flex w-[22px] flex-col gap-[8px]" aria-hidden>
-              <span
-                className={`block h-[2px] w-full bg-ink transition ${menuOpen ? "translate-y-[10px] rotate-45" : ""}`}
-              />
-              <span
-                className={`block h-[2px] w-full bg-ink transition ${menuOpen ? "opacity-0" : ""}`}
-              />
-              <span
-                className={`block h-[2px] w-full bg-ink transition ${menuOpen ? "-translate-y-[10px] -rotate-45" : ""}`}
-              />
-            </span>
+            {/* 간격 8 은 정수라 세 줄이 기기 픽셀 격자에 똑같이 떨어진다 */}
+            <svg viewBox="0 0 18 18" fill="currentColor" aria-hidden>
+              <rect x="0" y="0" width="18" height="1.5" />
+              <rect x="0" y="8" width="18" height="1.5" />
+              <rect x="0" y="16" width="18" height="1.5" />
+            </svg>
           </button>
         </div>
       </header>
 
       {menuOpen ? (
-        <nav
-          className="fixed inset-x-0 bottom-0 z-40 bg-porcelain px-4"
-          style={{ top: menuTop }}
-          aria-label="주요 메뉴"
-        >
-          <ul className="flex flex-col gap-[33px] pt-[44px]">
-            {nav.map((item, i) => (
-              <li key={item.href}>
+        <div className="MGNB_PANEL">
+          <div className="MGNB_ARTBOARD">
+            <TopBanner mobile />
+
+            <div className="MGNB_BODY">
+              <div className="MGNB_HEAD">
                 <Link
-                  href={item.href}
-                  onClick={(e) => goHashFromMenu(e, item.href)}
-                  className={
-                    i === 0
-                      ? "text-kr flex h-[32px] items-center text-[32px] font-normal leading-none text-ink"
-                      : "group grid h-[32px] overflow-hidden text-left text-[#909090] transition-colors duration-300 hover:text-ink focus-visible:text-ink"
-                  }
+                  href="/"
+                  className="MGNB_LOGO"
+                  aria-label="hair up"
+                  onClick={() => setMenuOpen(false)}
                 >
-                  {i === 0 ? (
-                    item.ko
-                  ) : (
-                    <MobileMenuRoll en={item.en} ko={item.ko} />
-                  )}
+                  <Wordmark width={91} />
                 </Link>
-              </li>
-            ))}
-          </ul>
-          <Link
-            href={cta.href}
-            onClick={(e) => goHashFromMenu(e, cta.href)}
-            className="rounded-btn group mt-[52px] flex h-[56px] w-full items-center justify-between bg-forest px-[25px] text-porcelain no-underline transition-colors duration-300 hover:bg-forest-deep focus-visible:bg-forest-deep active:bg-forest-deep"
-          >
-            <span className="grid h-6 overflow-hidden">
-              <MobileMenuRoll
-                en={cta.en}
-                ko={cta.ko}
-                enClassName="font-latin text-[17px] font-normal uppercase"
-                koClassName="text-kr text-[17px] font-normal"
-              />
-            </span>
-            <svg
-              aria-hidden
-              width="7"
-              height="11"
-              viewBox="0 0 7 11"
-              fill="none"
-              className="shrink-0"
-            >
-              <path
-                d="M1 1L5.5 5.5L1 10"
-                stroke="currentColor"
-                strokeWidth="1.3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
-        </nav>
+                <button
+                  type="button"
+                  className="MGNB_CLOSE"
+                  aria-label="메뉴 닫기"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
+                    <path
+                      d="M0 0L18 18M18 0L0 18"
+                      fill="none"
+                      stroke="#1C1A19"
+                      strokeWidth="1.5"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <nav className="MGNB_MENU" aria-label="주요 메뉴">
+                {MGNB_ITEMS.map((item, i) => (
+                  <Fragment key={item.href}>
+                    {i > 0 ? <br /> : null}
+                    <Link
+                      href={item.href}
+                      className="GNB_TITLE"
+                      onClick={(e) => goHashFromMenu(e, item.href)}
+                    >
+                      {item.label}
+                    </Link>
+                  </Fragment>
+                ))}
+              </nav>
+
+              <a
+                href={experience.kakaoDemo.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="KAKAO-DEMO-BTN"
+              >
+                <span className="KAKAO-DEMO-TEXT">
+                  {experience.kakaoDemo.label}
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
       ) : null}
 
       <main className="[&_section]:scroll-mt-[94px]">
-        {/* Hero — 모바일 시안 hu_m_Main · 375 × 691 */}
-        <section id="hero" className="bg-porcelain">
-          <div className="px-4 pt-[80px]">
-            <p className="font-display text-[13px] font-medium uppercase leading-none tracking-[0.02em] text-forest">
-              {hero.eyebrow}
-            </p>
-            <h1 className="text-kr mt-[18px] text-[32px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
-              <GlyphLines lines={hero.headline} />
-            </h1>
-            <p className="text-kr mt-[31px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
-              <GlyphLines lines={hero.body} />
-            </p>
-          </div>
-          <div
-            className="relative mt-[42px] h-[280px] w-full overflow-hidden bg-black"
-            aria-label="비주얼 영상 영역"
-          >
-            <video
-              className="absolute inset-0 h-full w-full object-cover"
-              src="/videos/hero-visual.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-            />
+        {/* Hero — 모바일 시안 hu_m_Main · 390 기준 */}
+        <section id="hero" className="M-HERO bg-porcelain">
+          <div className="CARD-CONTAINER">
+            <div className="CARD-MEDIA">
+              <Image
+                src={hero.media.src}
+                alt={hero.media.alt}
+                width={hero.media.width}
+                height={hero.media.height}
+                sizes="350px"
+                priority
+              />
+              <div className="CARD-COPY">
+                <h1 className="CARD-TITLE">
+                  <GlyphLines lines={hero.headline} />
+                </h1>
+                <p className="CARD-DESCRIPTION">
+                  <GlyphLines lines={hero.bodyMobile} />
+                </p>
+              </div>
+            </div>
+            <a
+              className="CREATE-BRAND-BTN"
+              href={cta.href}
+              onClick={(e) => onHashClick(e, cta.href)}
+            >
+              <span className="CREATE-BRAND-TEXT">{cta.en}</span>
+              <svg
+                className="CREATE-BRAND-ARROW"
+                viewBox="0 0 15 12.27"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M0 6.14H14.5M9.37 0.5L14.5 6.14L9.37 11.78"
+                  stroke="#FFFFFF"
+                  strokeWidth="1.5"
+                />
+              </svg>
+            </a>
           </div>
         </section>
 
-        {/* Dilemma — 모바일 시안 hu_m_Dilemma · 375 × 946 */}
-        <section
-          id="dilemma"
-          className="bg-porcelain px-4 pt-[80px] pb-[80px] text-center"
-        >
-          <p className="glyph-trim-latin flex items-center justify-center leading-none text-forest">
-            <span className="section-eyebrow-index mr-[6px] text-[12px] font-medium tracking-normal uppercase">
-              {dilemma.eyebrow.index}
-            </span>
-            <span className="font-display text-[13px] font-medium uppercase">
-              {dilemma.eyebrow.label}
-            </span>
+        {/* Dilemma — 모바일 시안 hu_dilemma_m · 390 기준 */}
+        <section id="dilemma" className="DILEMMA-M bg-porcelain">
+          <p className="__01__THE_DILEMMA__">
+            {dilemma.tag.before}
+            <em>{dilemma.tag.article}</em>
+            {dilemma.tag.after}
           </p>
-          <h2 className="text-kr mt-[19px] text-[32px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
+
+          <h2 className="DILEMMA-M-TITLE">
             <GlyphLines lines={dilemma.headline} />
           </h2>
 
-          <div className="relative mt-[40px] aspect-[343/210] overflow-hidden rounded-[6px] bg-black">
+          <p className="DILEMMA-M-DESC">
+            <GlyphLines lines={dilemma.bodyMobile} />
+          </p>
+
+          <div className="DILEMMA-M-FIGURES">
+            {/* PC버전에서 머리자르고 있는 사진 */}
+            <div className="RECTANGLE_1">
+              <Image
+                src={dilemma.images[0]}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="210px"
+                unoptimized
+              />
+            </div>
+            {/* PC버전에서 손과 핸드폰 있는 사진 */}
+            <div className="RECTANGLE_2">
+              <Image
+                src={dilemma.images[1]}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="240px"
+                unoptimized
+              />
+            </div>
+          </div>
+
+          <p className="DILEMMA-M-EMPHASIS">
+            <GlyphLines lines={dilemma.emphasisMobile} />
+          </p>
+        </section>
+
+        {/* Experience — 시안 hu_experience_m · PC 에셋(ex-right-pc-bg) */}
+        <section id="ai-manager" className="M-EXPERIENCE bg-porcelain">
+          {/* .DASHBOARD-SUB-CARD — PC 노란 카드 배경 PNG */}
+          <div className="M-EX-SUB">
             <Image
-              src={dilemma.images[2]}
+              src="/experience/ex-right-pc-bg.png"
               alt=""
-              fill
-              className="object-cover"
-              sizes="343px"
+              width={476}
+              height={600}
               unoptimized
+              quality={100}
+              sizes="350px"
+              className="M-EX-SUB-BG"
+              priority={false}
             />
-          </div>
-
-          <p className="text-kr mt-[26px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
-            <GlyphLines lines={dilemma.body} />
-          </p>
-
-          <div className="mt-[50px] flex gap-[11px]">
-            {dilemma.images.slice(0, 2).map((src) => (
-              <div
-                key={src}
-                className="relative aspect-[166/210] min-w-0 flex-1 overflow-hidden rounded-[6px] bg-black"
-              >
-                <Image
-                  src={src}
-                  alt=""
-                  fill
-                  className="object-cover"
-                  sizes="166px"
-                  unoptimized
-                />
-              </div>
-            ))}
-          </div>
-
-          <p className="text-kr mt-[26px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
-            <GlyphLines lines={dilemma.bodyAside} />
-          </p>
-        </section>
-
-        {/* Experience — iPhone 데모 (시안 HU_TEST) */}
-        <section id="ai-manager" className="bg-porcelain px-5 py-14">
-          <p className="glyph-trim-latin font-display text-[13px] font-medium uppercase text-forest">
-            <span className="section-eyebrow-index mr-1.5 text-[12px] font-medium">
-              {experience.eyebrow.index}
-            </span>
-            {experience.eyebrow.label}
-          </p>
-          <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
-            <GlyphLines lines={experience.headline} />
-          </h2>
-          <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
-            <GlyphLines lines={experience.body} />
-          </p>
-
-          <MobileDemoPhone chatRef={chatRef} />
-
-          <div className="mt-8 w-full min-w-0">
-            <p className="font-display text-[28px] font-medium leading-none text-forest uppercase">
-              {experience.tryAsking.title}
-            </p>
-            <p className="text-kr mt-4 text-[15px] font-normal leading-[1.64] text-body">
-              <GlyphLines lines={experience.tryAsking.body} />
-            </p>
-            <ul className="mt-5 w-full">
-              {experience.examples.map((q, i) => (
-                <li key={q} className="w-full">
-                  {i === 0 ? (
-                    <div
-                      className="h-px w-full"
-                      style={{ background: "rgba(108, 104, 100, 0.7)" }}
-                      aria-hidden
-                    />
-                  ) : null}
-                  <button
-                    type="button"
-                    onClick={() => chatRef.current?.ask(q)}
-                    className="text-kr group flex w-full items-center gap-2.5 py-[18px] text-left text-[15px] font-normal leading-none text-[rgba(102,102,102,0.7)] active:text-forest"
-                  >
-                    <span
-                      className="flex size-[22px] shrink-0 items-center justify-center rounded-full bg-[#FEE500]"
-                      aria-hidden
-                    >
-                      <svg
-                        width="10"
-                        height="12"
-                        viewBox="0 0 10 12"
-                        fill="none"
-                      >
-                        <path
-                          d="M5 10.5V2.2M5 2.2L1.6 5.6M5 2.2l3.4 3.4"
-                          stroke="#191919"
-                          strokeWidth="1.6"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
-                    <span className="min-w-0 flex-1">{q}</span>
-                  </button>
-                  <div
-                    className="h-px w-full"
-                    style={{ background: "rgba(108, 104, 100, 0.7)" }}
-                    aria-hidden
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* Automated CRM — 가로 스냅 캐러셀 (세로 길이 ↓) */}
-        <section id="automated-crm" className="bg-linen py-14">
-          <div className="px-5">
-            <p className="font-display text-[13px] font-medium uppercase tracking-[0.025em] text-forest">
-              {automatedCrm.tag}
-            </p>
-            <h2 className="text-kr mt-5 text-[30px] font-bold leading-[1.25] text-ink">
-              <GlyphLines lines={automatedCrm.headline} />
-            </h2>
-            <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
-              <GlyphLines lines={automatedCrm.body} />
-            </p>
-          </div>
-          <MobileCrmCarousel />
-        </section>
-
-        {/* Banner strip */}
-        <section className="bg-black px-5 py-16 text-porcelain">
-          <div className="flex flex-col gap-8">
-            {banner.lines.map((line) => (
-              <p
-                key={line}
-                className="font-display text-[22px] font-normal uppercase leading-none"
-              >
-                {line}
+            <div className="M-EX-COPY">
+              <p className="SECTION-TAG text-left text-forest">
+                {experience.tag.before}
+                <em>{experience.tag.article}</em>
+                {experience.tag.after}
               </p>
-            ))}
-          </div>
-          <div className="mt-12 text-porcelain">
-            <Wordmark width={200} />
+              <h2 className="M-EX-TITLE">
+                <GlyphLines lines={experience.headlinePc} />
+              </h2>
+              <p className="M-EX-DESC">
+                <GlyphLines lines={experience.bodyMobile} />
+              </p>
+              <a
+                href={experience.kakaoDemo.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="M-EX-BTN"
+              >
+                {experience.kakaoDemo.label}
+              </a>
+            </div>
           </div>
         </section>
 
-        {/* Key benefits — 모바일 시안 hu_m_Key_Benefits · 375 × 757 */}
-        <section id="key-benefits" className="bg-porcelain pt-[80px] pb-[81px]">
-          <div className="px-4">
-            <p className="font-display text-[13px] font-medium uppercase leading-none tracking-[0.025em] text-forest">
-              {keyBenefits.tag.before}
-              <em className="italic normal-case">{keyBenefits.tag.article}</em>
-              {keyBenefits.tag.after}
+        {/* Key Benefits — 시안 hu_key_benefits_m · 390 세로 스택 (가로 스와이프 없음) */}
+        <section id="key-benefits" className="M-KEY-BENEFITS bg-porcelain">
+          <header className="M-KB-HEAD">
+            <p className="SECTION-TAG M-KB-TAG">
+              {keyBenefits.tagMobile.before}
+              <em>{keyBenefits.tagMobile.article}</em>
+              {keyBenefits.tagMobile.after}
             </p>
-            <h2 className="text-kr mt-[21px] text-[32px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
+            <h2 className="M-KB-TITLE">
               <GlyphLines lines={keyBenefits.headline} />
             </h2>
-            <p className="text-kr mt-[29px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
+            <p className="M-KB-DESC">
               <GlyphLines lines={keyBenefits.body} />
             </p>
-          </div>
-          <div
-            className="mt-[51px] overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            style={{ touchAction: "pan-x pan-y" }}
-          >
-            <div className="flex w-max gap-3 px-4">
-              {keyBenefits.cards.map((card) => (
-                <article key={card.title} className="w-[290px] shrink-0">
-                  <div className="relative h-[195px] overflow-hidden rounded-[6px] bg-black">
-                    <Image
-                      src={card.image}
-                      alt=""
-                      fill
-                      sizes="290px"
-                      className="object-cover"
-                      unoptimized
-                    />
-                  </div>
-                  <h3 className="text-kr mt-[26px] text-[22px] font-semibold leading-[30px] tracking-[-0.01em] text-forest">
-                    {card.title}
-                  </h3>
-                  <p className="text-kr mt-[20px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
-                    <GlyphLines lines={card.body} />
-                  </p>
-                </article>
-              ))}
-            </div>
+          </header>
+          <div className="M-KB-LIST">
+            {keyBenefits.cards.map((card) => (
+              <article key={card.title} className="M-KB-CARD">
+                <div className="M-KB-THUMB">
+                  <Image
+                    src={card.image}
+                    alt=""
+                    fill
+                    sizes={`${MOBILE_CONTENT_PX}px`}
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+                <h3 className="M-KB-CARD-TITLE">{card.title}</h3>
+                <p className="M-KB-CARD-DESC">{card.body.join("")}</p>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -429,9 +348,9 @@ export function MobileHome() {
         <section id="template" className="bg-porcelain py-14">
           <div className="px-5">
             <p className="SECTION-TAG text-forest">
-              {templateCollection.tag.before}
-              <em>{templateCollection.tag.article}</em>
-              {templateCollection.tag.after}
+              {templateCollection.tagMobile.before}
+              <em>{templateCollection.tagMobile.article}</em>
+              {templateCollection.tagMobile.after}
             </p>
             <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
               <GlyphLines lines={templateCollection.headline} />
@@ -506,9 +425,9 @@ export function MobileHome() {
         {/* Pricing */}
         <section id="pricing" className="bg-porcelain px-5 py-14">
           <p className="SECTION-TAG text-forest">
-            {pricing.tag.before}
-            <em>{pricing.tag.article}</em>
-            {pricing.tag.after}
+            {pricing.tagMobile.before}
+            <em>{pricing.tagMobile.article}</em>
+            {pricing.tagMobile.after}
           </p>
           <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
             <GlyphLines lines={pricing.headline} />
@@ -523,12 +442,12 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* FAQ — 모바일 시안 hu_m_FAQ · 375 환산 */}
+        {/* FAQ — 모바일 시안 hu_m_FAQ · 390 기준 */}
         <section id="faq" className="bg-porcelain px-4 pt-[80px] pb-[81px] text-center">
           <p className="SECTION-TAG text-center text-forest">
-            {faq.tag.before}
-            <em>{faq.tag.article}</em>
-            {faq.tag.after}
+            {faq.tagMobile.before}
+            <em>{faq.tagMobile.article}</em>
+            {faq.tagMobile.after}
           </p>
           <h2 className="text-kr mt-[22px] text-[32px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
             <GlyphLines lines={faq.headline} />
@@ -554,7 +473,7 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* Start CTA — 모바일 시안 hu_m_CTA / hu_m_CTA_HOVER · 375 × 620 */}
+        {/* Start CTA — 모바일 시안 hu_m_CTA / hu_m_CTA_HOVER · 390 기준 */}
         <section
           id="start"
           className="relative flex min-h-[620px] flex-col justify-end overflow-hidden px-4 pb-[81px] text-porcelain"
@@ -564,7 +483,7 @@ export function MobileHome() {
             alt=""
             fill
             className="object-cover"
-            sizes="100vw"
+            sizes={`${MOBILE_ARTBOARD_PX}px`}
             quality={90}
             priority={false}
           />
@@ -660,7 +579,7 @@ export function MobileHome() {
             className="mt-[82px] block w-full text-ink"
             aria-label="hair up"
           >
-            <Wordmark width={343} className="h-auto w-full" />
+            <Wordmark width={MOBILE_CONTENT_PX} className="h-auto w-full" />
           </Link>
         </footer>
       </main>
@@ -675,34 +594,6 @@ const FAQ_TONE: Record<FaqItem["tone"], string> = {
   clay: "bg-clay",
   espresso: "bg-espresso",
 };
-
-function MobileMenuRoll({
-  en,
-  ko,
-  enClassName = "font-latin text-[32px] font-normal uppercase leading-none",
-  koClassName = "text-kr text-[32px] font-normal leading-none",
-}: {
-  en: string;
-  ko: string;
-  enClassName?: string;
-  koClassName?: string;
-}) {
-  return (
-    <>
-      <span
-        className={`relative flex items-center whitespace-nowrap [grid-area:1/1] transition-transform ${MENU_ROLL} group-hover:-translate-y-full group-focus-visible:-translate-y-full ${enClassName}`}
-      >
-        {en}
-      </span>
-      <span
-        aria-hidden
-        className={`relative flex translate-y-full items-center whitespace-nowrap [grid-area:1/1] transition-transform ${MENU_ROLL} group-hover:translate-y-0 group-focus-visible:translate-y-0 ${koClassName}`}
-      >
-        {ko}
-      </span>
-    </>
-  );
-}
 
 function MobileFaqCard({
   item,
@@ -762,226 +653,6 @@ function MobileFaqCard({
     </button>
   );
 }
-
-function MobileDemoPhone({
-  chatRef,
-}: {
-  chatRef: React.RefObject<DemoChatHandle | null>;
-}) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-  const frameHeight = IPHONE_MOCKUP_COMPACT.height;
-  const visibleHeight = frameHeight - IPHONE_MOCKUP_COMPACT.cropBottom;
-
-  useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    const sync = () => {
-      // 가로는 컨테이너 폭에 맞춰 크게 유지
-      setScale(el.clientWidth / IPHONE_MOCKUP.width);
-    };
-    sync();
-    const ro = new ResizeObserver(sync);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
-  return (
-    <div
-      ref={wrapRef}
-      className="mobile-demo-chat mx-auto mt-8 w-full overflow-hidden"
-      style={{ height: visibleHeight * scale }}
-    >
-      <div
-        style={{
-          width: IPHONE_MOCKUP.width,
-          height: frameHeight,
-          transform: `scale(${scale})`,
-          transformOrigin: "top left",
-        }}
-      >
-        <DemoChat ref={chatRef} compact />
-      </div>
-    </div>
-  );
-}
-
-/** SYSTEM 01–04 가로 스냅 + 자동 전환. 세로 스크롤은 건드리지 않습니다. */
-function MobileCrmCarousel() {
-  const systems = automatedCrm.systems;
-  const rootRef = useRef<HTMLDivElement>(null);
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const [inView, setInView] = useState(false);
-  const activeRef = useRef(0);
-  const pauseUntilRef = useRef(0);
-
-  activeRef.current = active;
-
-  const scrollToIndex = (index: number, smooth: boolean) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    const card = el.querySelectorAll<HTMLElement>("[data-crm-card]")[index];
-    if (!card) return;
-    /* scrollIntoView 금지 — 모바일에서 페이지 세로 스크롤까지 끌어당김 */
-    const left = card.offsetLeft - (el.clientWidth - card.offsetWidth) / 2;
-    el.scrollTo({
-      left: Math.max(0, left),
-      behavior: smooth ? "smooth" : "auto",
-    });
-  };
-
-  const bumpPause = (ms = 6000) => {
-    pauseUntilRef.current = Date.now() + ms;
-  };
-
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const io = new IntersectionObserver(
-      ([entry]) => setInView(Boolean(entry?.isIntersecting)),
-      { threshold: 0.25 },
-    );
-    io.observe(root);
-    return () => io.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const el = scrollerRef.current;
-    if (!el) return;
-
-    let raf = 0;
-    const onScroll = () => {
-      if (raf) return;
-      raf = window.requestAnimationFrame(() => {
-        raf = 0;
-        const cards = Array.from(
-          el.querySelectorAll<HTMLElement>("[data-crm-card]"),
-        );
-        if (!cards.length) return;
-        const mid = el.scrollLeft + el.clientWidth / 2;
-        let best = 0;
-        let bestDist = Infinity;
-        cards.forEach((card, i) => {
-          const c = card.offsetLeft + card.offsetWidth / 2;
-          const d = Math.abs(c - mid);
-          if (d < bestDist) {
-            bestDist = d;
-            best = i;
-          }
-        });
-        setActive(best);
-      });
-    };
-
-    el.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => {
-      el.removeEventListener("scroll", onScroll);
-      if (raf) window.cancelAnimationFrame(raf);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (paused || !inView) return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) return;
-
-    const id = window.setInterval(() => {
-      if (Date.now() < pauseUntilRef.current) return;
-      if (!scrollerRef.current) return;
-      const next = (activeRef.current + 1) % systems.length;
-      scrollToIndex(next, true);
-    }, 3800);
-
-    return () => window.clearInterval(id);
-  }, [paused, inView, systems.length]);
-
-  const goTo = (i: number) => {
-    bumpPause();
-    setActive(i);
-    scrollToIndex(i, true);
-  };
-
-  return (
-    <div
-      ref={rootRef}
-      className="mt-8"
-      onPointerDown={() => {
-        setPaused(true);
-        bumpPause();
-      }}
-      onPointerUp={() => setPaused(false)}
-      onPointerCancel={() => setPaused(false)}
-    >
-      <div
-        ref={scrollerRef}
-        className="flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-5 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-x pan-y" }}
-      >
-        {systems.map((s, i) => (
-          <article
-            key={s.index}
-            data-crm-card
-            className="w-[82%] shrink-0 snap-center"
-            aria-current={i === active ? "true" : undefined}
-          >
-            <div className="relative aspect-[4/3] w-full overflow-hidden bg-black">
-              <div
-                className="absolute inset-0 bg-gradient-to-br from-white/12 to-transparent transition-opacity duration-500"
-                style={{ opacity: i === active ? 1 : 0.3 }}
-                aria-hidden
-              />
-              <span className="font-latin absolute left-3 top-3 text-[11px] font-medium tracking-[0.12em] text-porcelain/45">
-                {s.index}
-              </span>
-            </div>
-            <div
-              className="mt-4 transition-all duration-500 ease-out"
-              style={{
-                opacity: i === active ? 1 : 0.4,
-                transform: i === active ? "translateY(0)" : "translateY(6px)",
-              }}
-            >
-              <p className="text-kr text-[14px] font-semibold leading-[1.45] text-ink/85">
-                <span className="font-latin mr-1.5 tracking-[0.02em]">
-                  {s.index}
-                </span>
-                {s.title.join(" ")}
-              </p>
-              <p className="text-kr mt-2 text-[13px] leading-[1.55] text-body">
-                {s.body.join(" ")}
-              </p>
-            </div>
-          </article>
-        ))}
-        <div className="w-[8%] shrink-0" aria-hidden />
-      </div>
-
-      <div className="mt-6 flex items-center justify-center gap-2 px-5">
-        {systems.map((s, i) => (
-          <button
-            key={s.index}
-            type="button"
-            aria-label={`${s.index}로 이동`}
-            onClick={() => goTo(i)}
-            className="relative h-1.5 overflow-hidden rounded-full bg-ink/15 transition-all duration-300"
-            style={{ width: i === active ? 28 : 8 }}
-          >
-            {i === active && !paused && inView ? (
-              <span
-                key={`prog-${active}`}
-                className="crm-dot-fill absolute inset-y-0 left-0 bg-ink"
-              />
-            ) : null}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 
 function MobilePlanCard({
   tone,

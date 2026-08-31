@@ -1,5 +1,5 @@
 type WordmarkProps = {
-  /** 시안 기준 폭(px). 헤더 144 / 스플래시 모바일 151 · PC 240 */
+  /** 시안 기준 폭(px). 헤더 144 / 스플래시 모바일 151 · PC 240 / 푸터 모바일 358 */
   width: number;
   className?: string;
 };

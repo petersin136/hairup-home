@@ -45,9 +45,11 @@
   /* --- 레이아웃 ------------------------------------------------------------ */
   --spacing-gutter: 120px; /* 1440 기준 좌우 여백 */
   --container-shell: 1200px; /* 1440 - 120*2 */
+  --mobile-artboard: 390px; /* 모바일 시안 폭 (기존 375) */
 }
 
 /* 데스크톱 시안은 1440px 고정 폭 아트보드 기준.
+   모바일 시안은 390px (기존 375). 소스 이미지는 2x 추출 → CSS는 1x 표시 크기.
    화면이 넓어져도 요소는 확대하지 않고, 좌우 빈 여백만 늘어납니다. */
 html {
   -webkit-font-smoothing: antialiased;
@@ -1183,27 +1185,533 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
-/* --- Top Banner Mobile (hu_TOP_BANNER__M) -------------------------------- */
+/* --- Top Banner Mobile (hu_TOP_BANNER__M · .RECTANGLE_18) ---------------- */
 .TOP_BANNER.is-mobile {
-  height: 38px;
+  height: 40px;
+  /* 시안에 없음 — 390 미만 화면에서 nowrap 텍스트가 잘리지 않게 유지 */
   padding-left: 16px;
   padding-right: 16px;
 }
 
 .TOP_BANNER.is-mobile .BANNER_TEXT {
-  font-size: 11px;
+  font-size: 12px;
 }
 
+/* .ONBOARDING_OFFER */
 .TOP_BANNER.is-mobile .BANNER_TEXT .EN {
   font-weight: 500;
 }
 
+/*
+ * .1:1 맞춤 세팅비
+ * PC 의 text alphabetic 은 ascent 까지 박스에 넣어 40px 안에서 캡이 2px 아래로
+ * 밀립니다. 한글은 cap alphabetic 으로 잘라야 시안처럼 정중앙에 옵니다.
+ */
 .TOP_BANNER.is-mobile .BANNER_TEXT .KR {
-  font-weight: 400;
+  font-weight: 500;
+  text-box-edge: cap alphabetic;
+  transform: none;
 }
 
+/* .최대 40% 지원 — 어절 간격은 krMobileRegular 끝의 NBSP 가 만듭니다 */
+.TOP_BANNER.is-mobile .BANNER_TEXT .KR-STRONG {
+  font-weight: 700;
+}
+
+/* 시안에 없음 — 목업 실측 글리프 간격 좌 7 / 우 9 */
 .TOP_BANNER.is-mobile .BANNER_TEXT .BAR {
+  margin-left: 5px;
+  margin-right: 6px;
+}
+
+/* ==========================================================================
+   MOBILE HERO — 시안 hu_top_banner_hero_m / hu_hero_detail_1~3_m
+   전부 .M-HEAD-M · .M-HERO 아래로 스코프해 PC 규칙과 격리합니다.
+   ========================================================================== */
+
+/* --- 헤더 (hu_hero_detail_1_m) ------------------------------------------- */
+.M-HEAD-M {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 33px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* 좌측 로고 — WIDTH 91PX / COLOR #1C1A19 */
+.M-HEAD-M .M-LOGO-M {
+  display: block;
+  color: #1c1a19;
+}
+
+/* inline SVG 의 baseline 여백이 로고 → 카드 40 에 더해지지 않게 block */
+.M-HEAD-M .M-LOGO-M svg {
+  display: block;
+}
+
+/* 우측 햄버거 메뉴 — 열림 상태의 닫기 X 와 같은 18×18 / COLOR #1C1A19 */
+.M-HEAD-M .M-BURGER-M {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #1c1a19;
+}
+
+.M-HEAD-M .M-BURGER-M svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+/* 18×18 을 유지하면서 탭 영역만 44×44 로 — .MGNB_CLOSE 와 동일 */
+.M-HEAD-M .M-BURGER-M::after {
+  content: "";
+  position: absolute;
+  inset: -13px;
+}
+
+/* --- 히어로 카드 (hu_hero_detail_2_m) ----------------------------------- */
+/* 로고 → 카드 40 */
+.M-HERO {
+  padding-top: 40px;
+}
+
+.M-HERO .CARD-CONTAINER {
+  width: 350px;
+  /* 390 미만(320 등)에서만 줄어듭니다. 390 이상은 항상 시안값 350 */
+  max-width: calc(100% - 40px);
+  /* 뷰포트 → 카드 좌 20 / 카드 → 뷰포트 우 20 */
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgb(255, 255, 255);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  /* CREATE-BRAND-BTN 의 70 → 52 클리핑 + 하단 모서리 라운드 */
+  overflow: hidden;
+}
+
+/* hero_visual_img 700×1000 → 350×500, 비율 0.7 동일해 왜곡 없음 */
+.M-HERO .CARD-MEDIA {
+  position: relative;
+  width: 100%;
+  /* 350 폭에서 정확히 500. 카드가 줄어도 시안 비율 유지 */
+  aspect-ratio: 350 / 500;
+}
+
+/*
+ * absolute 로 흐름에서 빼야 합니다. 흐름 안이면 flex item 의 min-height:auto 가
+ * img 콘텐츠 높이(500.391)를 강제해 aspect-ratio 의 500 을 덮습니다.
+ */
+.M-HERO .CARD-MEDIA img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 카드 → 텍스트 좌 20 / 우 20, 본문 → 버튼 26 */
+.M-HERO .CARD-COPY {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 26px;
+}
+
+.M-HERO .CARD-TITLE {
   margin: 0;
+  font-size: 30px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  color: rgb(28, 26, 25);
+  font-weight: 700;
+  line-height: 1.333;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 타이틀 → 본문 28 */
+.M-HERO .CARD-DESCRIPTION {
+  margin: 28px 0 0;
+  font-size: 15px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  color: rgba(28, 26, 25, 0.8);
+  line-height: 1.467;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* --- CREATE BRAND 버튼 (hu_hero_detail_3_m) ----------------------------- */
+.M-HERO .CREATE-BRAND-BTN {
+  width: 100%;
+  height: 70px;
+  /* 카드 하단 모서리 렌더링 빈틈 커버용 확장 값 (시각적 버튼 높이 52PX 유지) */
+  box-sizing: border-box;
+  padding-bottom: 18px;
+  margin-bottom: -18px;
+  border-radius: 0 0 12px 12px;
+  background-color: rgb(44, 58, 46);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.M-HERO .CREATE-BRAND-TEXT {
+  font-size: 15px;
+  font-family: var(--font-latin), "Inter", sans-serif;
+  font-weight: 600;
+  color: rgb(255, 255, 255);
+  text-transform: uppercase;
+  text-align: center;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+  /* 광학 정중앙 — 대문자 Inter 가 박스 중앙보다 살짝 아래로 보임 */
+  transform: translateY(-2px);
+}
+
+/* 화살표 — 가로 너비 15PX (높이 비율 고정) / STROKE 1.5PX #FFFFFF */
+.M-HERO .CREATE-BRAND-ARROW {
+  display: block;
+  flex: none;
+  width: 15px;
+  height: 12.27px;
+  /* 시안에 없음 — 목업 실측 텍스트 ↔ 화살표 18 */
+  margin-left: 18px;
+  transform: translateY(-2px);
+  /* stroke 1.5 가 viewBox 가장자리에서 잘리지 않게 */
+  overflow: visible;
+}
+
+/* ==========================================================================
+   MOBILE EXPERIENCE — 시안 hu_experience_m
+   PC Experience 와 동일 에셋(ex-right-pc-bg.png) · DemoChat fill 을 세로 스택.
+   수치: 390 목업 실측 + PC 서브카드 스펙(radius 10 · tag/title/desc/btn).
+   ========================================================================== */
+.M-EXPERIENCE {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* 시안에 없음 — 카드 좌우 20 유지용 */
+  padding-left: 20px;
+  padding-right: 20px;
+  /* 시안에 없음 — 딜레마 뒤 / 키베네핏 앞 여백. PC PAD_TOP 80 과 맞춤 */
+  padding-top: 80px;
+  padding-bottom: 0;
+  gap: 14px;
+}
+
+/* .DASHBOARD-SUB-CARD — 350×330 · r 10 · PC 노란 PNG */
+.M-EXPERIENCE .M-EX-SUB {
+  position: relative;
+  width: 350px;
+  max-width: 100%;
+  height: 330px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.M-EXPERIENCE .M-EX-SUB-BG {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+/* 카피 — 좌 35 · 상 36 (목업 글리프 실측) */
+.M-EXPERIENCE .M-EX-COPY {
+  position: absolute;
+  z-index: 10;
+  top: 36px;
+  left: 35px;
+  right: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* PC EXPERIENCE-TITLE 과 동일 계열. 모바일 카드 폭에 맞춰 30 */
+.M-EXPERIENCE .M-EX-TITLE {
+  margin: 25px 0 0;
+  font-size: 30px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  color: rgb(28, 26, 25);
+  line-height: 1.375;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+  word-spacing: -0.057em;
+}
+
+.M-EXPERIENCE .M-EX-DESC {
+  margin: 30px 0 0;
+  /* 280px(좌우 35) 안에 레퍼런스 줄(응답하는지 / 확인해 보세요.) 각 1줄 — 17px 는 첫 줄이 다시 줄바꿈됨 */
+  font-size: 15px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: rgba(28, 26, 25, 0.8);
+  line-height: 1.588;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+  word-spacing: -0.057em;
+}
+
+/* 레퍼런스 카카오 브라운 rgb(53, 41, 35) · 흰 글자 */
+.M-EXPERIENCE .M-EX-BTN {
+  margin: 46px 0 0;
+  box-sizing: border-box;
+  width: 280px;
+  max-width: 100%;
+  height: 50px;
+  border-radius: 4px;
+  border: 0;
+  background-color: rgb(53, 41, 35);
+  color: rgb(250, 248, 245);
+  font-size: 15px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-EXPERIENCE .M-EX-BTN:hover,
+.M-EXPERIENCE .M-EX-BTN:focus-visible {
+  background-color: rgb(44, 34, 29);
+  color: rgb(250, 248, 245);
+}
+
+/* ==========================================================================
+   MOBILE KEY BENEFITS — 시안 hu_key_benefits_m · 390 목업 실측
+   PC Key Benefits(.BENEFITS / .BENEFIT-CARD) 와 별개. 가로 스와이프 없음.
+   ========================================================================== */
+.M-KEY-BENEFITS {
+  box-sizing: border-box;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.M-KEY-BENEFITS .M-KB-HEAD {
+  text-align: center;
+}
+
+.M-KEY-BENEFITS .M-KB-TAG {
+  text-align: center;
+}
+
+/* 목록 실측 tag→title 26 · title→desc 12 · desc→카드1 55 */
+.M-KEY-BENEFITS .M-KB-TITLE {
+  margin: 26px 0 0;
+  font-size: 32px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  line-height: 1.375;
+  letter-spacing: -0.01em;
+  color: rgb(28, 26, 25);
+  text-align: center;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-KEY-BENEFITS .M-KB-DESC {
+  margin: 12px 0 0;
+  font-size: 15px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: rgba(28, 26, 25, 0.8);
+  text-align: center;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-KEY-BENEFITS .M-KB-LIST {
+  margin: 55px 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 카드 간 desc→다음 썸네일 ~60–67 · 평균 60 */
+.M-KEY-BENEFITS .M-KB-CARD + .M-KB-CARD {
+  margin-top: 60px;
+}
+
+/* 목록 실측 347×208 @390 → 콘텐츠 350 · r 8 */
+.M-KEY-BENEFITS .M-KB-THUMB {
+  position: relative;
+  width: 100%;
+  height: 210px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #e3ddd3;
+}
+
+/* 썸네일→타이틀 ~30 · 타이틀→본문 ~18 */
+.M-KEY-BENEFITS .M-KB-CARD-TITLE {
+  margin: 30px 0 0;
+  font-size: 20px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: rgb(28, 26, 25);
+  text-align: left;
+  line-height: 1;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-KEY-BENEFITS .M-KB-CARD-DESC {
+  margin: 18px 0 0;
+  font-size: 15px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: rgb(108, 104, 100);
+  text-align: left;
+  word-spacing: -0.057em;
+  text-box-trim: trim-start;
+  text-box-edge: cap alphabetic;
+}
+
+/* --- GNB Mobile 열림 패널 (hu_gnb_m · hu_gnb_detail_m) --------------------
+ * 시안 메모: "GNB 열릴 때 레이아웃 영역은 모바일 전체를 덮는 풀스크린 형태."
+ * 여백 33 / 50 / 50 은 글리프 외곽선 기준이라 .MGNB_MENU 에 trim 을 건다.
+ */
+.MGNB_PANEL {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  overflow-y: auto;
+  background-color: #faf8f5;
+}
+
+.MGNB_ARTBOARD {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 390px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.MGNB_BODY {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* 배너 하단 → 로고 글리프 상단 33 / FAQ 앞의 로고 하단 → 첫 메뉴 cap 상단 50 */
+.MGNB_HEAD {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 33px;
+  margin-bottom: 50px;
+}
+
+/* 워드마크 viewBox 가 글리프에 딱 맞아 SVG 박스 = 잉크 박스 */
+.MGNB_LOGO {
+  display: flex;
+  color: #1c1a19;
+}
+
+.MGNB_CLOSE {
+  position: relative;
+  display: flex;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #1c1a19;
+  cursor: pointer;
+}
+
+/* 시안 18×18 을 그대로 두고 탭 영역만 44×44 로 넓힘 */
+.MGNB_CLOSE::after {
+  content: "";
+  position: absolute;
+  inset: -13px;
+}
+
+.MGNB_MENU {
+  /* 시안 .GNB_TITLE 의 font-size 21px + transform: scale(1.04) 를 곱해 둔 값.
+   * transform 은 레이아웃에 반영되지 않아 다음 요소의 50 이 어긋난다. */
+  font-size: calc(21px * 1.04);
+  /* strut 이 한글 폰트면 line box 와 trim 기준이 Inter 와 어긋난다 */
+  font-family: var(--font-latin), "Inter", sans-serif;
+  line-height: 2.955;
+  /* line-height 2.955 의 half-leading 이 위아래 50 에 더해지지 않게 */
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.MGNB_PANEL .GNB_TITLE {
+  font-size: calc(21px * 1.04);
+  font-family: var(--font-latin), "Inter", sans-serif;
+  font-weight: 400;
+  color: rgb(28, 26, 25);
+  text-transform: uppercase;
+  line-height: 2.955;
+  text-align: left;
+  text-decoration: none;
+  /* 인라인 세로 패딩은 line box 를 늘리지 않으면서 탭 영역만 넓힌다 */
+  padding: 16px 0;
+}
+
+.MGNB_PANEL .KAKAO-DEMO-BTN {
+  margin-top: 50px;
+  width: 350px;
+  /* 시안 350 은 390 아트보드 기준. 375·360 에서 좌우 20 거터를 넘지 않게 */
+  max-width: 100%;
+  height: 50px;
+  border-radius: 8px;
+  background-color: rgb(44, 58, 46);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.MGNB_PANEL .KAKAO-DEMO-TEXT {
+  font-size: 15px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  color: rgb(250, 248, 245);
+  text-transform: uppercase;
+  text-align: center;
 }
 
 /* --- GNB PC (hu_GNB_PC · hu_MAIN_SPACING_PC) ----------------------------- */
@@ -1873,6 +2381,115 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* ============================================================================
+   DILEMMA 모바일 — hu_dilemma_m · hu_dilemma_detail_1_m · hu_dilemma_detail_2_m
+   390 아트보드 기준. PC(.DILEMMA-*) 와는 별개 클래스입니다.
+   ========================================================================== */
+
+/* 섹션 상단 → 태그 100 · 강조 문구 → 섹션 끝 80 */
+.DILEMMA-M {
+  padding-top: 100px;
+  padding-bottom: 80px;
+}
+
+/* detail_1_m · .__01__THE_DILEMMA__ */
+.__01__THE_DILEMMA__ {
+  margin: 0;
+  font-size: 12px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  color: rgb(44, 58, 46);
+  font-weight: 500;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 0.025em;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+/* "the" 만 소문자 이탤릭 */
+.__01__THE_DILEMMA__ em {
+  font-style: italic;
+  font-weight: 500;
+  text-transform: none;
+}
+
+/* detail_1_m · .MAIN TEXT — 태그 → 타이틀 22 */
+.DILEMMA-M-TITLE {
+  margin: 22px 0 0;
+  font-size: 30px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  color: rgb(28, 26, 25);
+  font-weight: 700;
+  line-height: 1.333;
+  text-align: center;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* detail_1_m · .SUB TEXT — 타이틀 → 설명 28 */
+.DILEMMA-M-DESC {
+  margin: 28px 0 0;
+  font-size: 15px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  color: rgba(28, 26, 25, 0.8);
+  font-weight: 400;
+  line-height: 1.467;
+  text-align: center;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/*
+ * detail_2_m — 설명 → RECTANGLE_1 50.
+ * 두 사각형이 position: absolute 라 담는 상자에 높이를 줍니다(280 + 35 + 200).
+ */
+.DILEMMA-M-FIGURES {
+  position: relative;
+  margin-top: 50px;
+  height: 515px;
+}
+
+/* detail_2_m · .RECTANGLE_1 — 좌측 여백 20 */
+.RECTANGLE_1 {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  width: 210px;
+  height: 280px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* detail_2_m · .RECTANGLE_2 — RECTANGLE_1 아래 35 · 우측 여백 20 */
+.RECTANGLE_2 {
+  position: absolute;
+  top: 315px;
+  right: 20px;
+  width: 240px;
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* detail_2_m · 강조 문구 — RECTANGLE_2 → 강조 문구 80 */
+.DILEMMA-M-EMPHASIS {
+  margin: 80px 0 0;
+  font-size: 18px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  color: rgb(28, 26, 25);
+  line-height: 1.389;
+  text-align: center;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* ============================================================================
    TEMPLATE COLLECTION PC — hu_TEMPLATE PC 01–06
    ========================================================================== */
 
@@ -2037,7 +2654,7 @@ html:not(.splash-seen) [data-site-header] {
   transition: opacity 600ms cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-/* hu_TEMPLATE PC 04 · 1. 라인 고스트 버튼 */
+/* hu_TEMPLATE PC 04 · 1. 라인 고스트 버튼 — 기본 한글 */
 .BTN-VIEW-DEMO {
   box-sizing: border-box;
   display: flex;
@@ -2047,16 +2664,15 @@ html:not(.splash-seen) [data-site-header] {
   height: 40px;
   border: 1px solid rgb(44, 58, 46);
   border-radius: 4px;
-  font-size: 14px;
-  font-family: var(--font-latin), "Inter", sans-serif;
+  font-size: 13px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 500;
   color: rgb(44, 58, 46);
-  text-transform: uppercase;
   text-align: center;
   text-decoration: none;
 }
 
-/* hu_TEMPLATE PC 04 · 2. 다크 솔리드 버튼 · 버튼 사이 12 */
+/* hu_TEMPLATE PC 04 · 2. 다크 솔리드 버튼 · 버튼 사이 12 — 기본 한글 */
 .BTN-GET-STARTED {
   box-sizing: border-box;
   display: flex;
@@ -2067,68 +2683,12 @@ html:not(.splash-seen) [data-site-header] {
   margin-top: 12px;
   background-color: rgb(44, 58, 46);
   border-radius: 4px;
-  font-size: 14px;
-  font-family: var(--font-latin), "Inter", sans-serif;
+  font-size: 13px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 500;
   color: rgb(250, 248, 245);
-  text-transform: uppercase;
   text-align: center;
   text-decoration: none;
-}
-
-.BTN-VIEW-DEMO > span:last-child,
-.BTN-GET-STARTED > span:last-child {
-  display: none;
-  font-size: 13px;
-  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-  font-weight: 500;
-  text-transform: none;
-}
-
-/* hover — 배경 컬러 유지, 텍스트만 한글로 */
-.BTN-VIEW-DEMO:hover,
-.BTN-GET-STARTED:hover {
-  font-size: 13px;
-  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-  font-weight: 500;
-}
-
-.BTN-VIEW-DEMO:hover {
-  color: rgb(44, 58, 46);
-}
-
-.BTN-GET-STARTED:hover {
-  color: rgb(250, 248, 245);
-}
-
-.BTN-VIEW-DEMO:hover > span:first-child,
-.BTN-GET-STARTED:hover > span:first-child {
-  display: none;
-}
-
-.BTN-VIEW-DEMO:hover > span:last-child,
-.BTN-GET-STARTED:hover > span:last-child {
-  display: inline;
-}
-
-@media (hover: none) {
-  .BTN-VIEW-DEMO,
-  .BTN-GET-STARTED {
-    font-size: 13px;
-    font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-    font-weight: 500;
-    text-transform: none;
-  }
-
-  .BTN-VIEW-DEMO > span:first-child,
-  .BTN-GET-STARTED > span:first-child {
-    display: none;
-  }
-
-  .BTN-VIEW-DEMO > span:last-child,
-  .BTN-GET-STARTED > span:last-child {
-    display: inline;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2309,14 +2869,7 @@ html:not(.splash-seen) [data-site-header] {
   stroke-width: 2px;
 }
 
-/* 시안 .FAQ-ICON-MINUS — 열림 상태의 '−' */
-.FAQ-ITEM-ACTIVE .FAQ-ICON-MINUS {
-  stroke: #1c1a19;
-  stroke-width: 1px;
-  opacity: 0.65;
-  fill: none;
-}
-
+/* 열림 상태 '−' — 닫힘 '+' 와 동일 색·굵기 (#000 / 2px) */
 .FAQ-ICON-V {
   transform-box: fill-box;
   transform-origin: center;
@@ -2325,7 +2878,6 @@ html:not(.splash-seen) [data-site-header] {
 
 .FAQ-ITEM-ACTIVE .FAQ-ICON-V {
   transform: scaleY(0);
-  opacity: 0.65;
 }
 
 .FAQ-PANEL {

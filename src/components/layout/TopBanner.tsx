@@ -16,7 +16,15 @@ export function TopBanner({ mobile = false }: { mobile?: boolean }) {
         <span className="BAR" aria-hidden>
           {mobile ? " | " : "|"}
         </span>
-        <span className="KR">{mobile ? topBanner.krMobile : topBanner.kr}</span>
+        {mobile ? (
+          /* 중첩 span 은 부모 trim 을 깨므로 두 weight 를 형제 flex 아이템으로 둡니다 */
+          <>
+            <span className="KR">{topBanner.krMobileRegular}</span>
+            <span className="KR KR-STRONG">{topBanner.krMobileBold}</span>
+          </>
+        ) : (
+          <span className="KR">{topBanner.kr}</span>
+        )}
       </p>
     </div>
   );
