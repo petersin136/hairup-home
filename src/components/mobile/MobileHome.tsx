@@ -109,11 +109,10 @@ export function MobileHome() {
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((v) => !v)}
           >
-            {/* 간격 8 은 정수라 세 줄이 기기 픽셀 격자에 똑같이 떨어진다 */}
-            <svg viewBox="0 0 18 18" fill="currentColor" aria-hidden>
-              <rect x="0" y="0" width="18" height="1.5" />
-              <rect x="0" y="8" width="18" height="1.5" />
-              <rect x="0" y="16" width="18" height="1.5" />
+            {/* 시안 hamburger_menu · 37×10 · 긴 위 / 짧은 아래 · 우측 정렬 */}
+            <svg viewBox="0 0 37 10" fill="currentColor" aria-hidden>
+              <rect x="0" y="0" width="37" height="1.5" />
+              <rect x="12.33" y="8.5" width="24.67" height="1.5" />
             </svg>
           </button>
         </div>
