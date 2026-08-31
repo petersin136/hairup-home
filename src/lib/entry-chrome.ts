@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-import { SPLASH_DONE_EVENT, SPLASH_SESSION_KEY } from "@/components/splash/SplashScreen";
+import { SPLASH_DONE_EVENT, SPLASH_SESSION_KEY } from "@/lib/splash-keys";
 
 /**
  * 런치 팝업 — 닫기/CTA 후에만 저장.

@@ -483,8 +483,11 @@ p > .rain-line:only-child,
   font-size: 40px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 600;
+  line-height: 55px;
   color: rgb(28, 26, 25);
   text-align: center;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
 }
 
 .PRICING-DESC {
@@ -698,9 +701,21 @@ p:has(> .STARTER-PRICE-NUM-MONTH) {
   color: rgb(44, 58, 46);
 }
 
+.BTN-STARTER > span:first-child,
+.BTN-BRAND > span:first-child {
+  font-size: 17px;
+  font-family: var(--font-latin), "Inter", sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
 .BTN-STARTER > span:last-child,
 .BTN-BRAND > span:last-child {
   display: none;
+  font-size: 16px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  text-transform: none;
 }
 
 .BTN-STARTER:hover,
@@ -726,6 +741,7 @@ p:has(> .STARTER-PRICE-NUM-MONTH) {
 .BTN-STARTER:hover > span:last-child,
 .BTN-BRAND:hover > span:last-child {
   display: inline;
+  font-size: 16px;
 }
 
 @media (hover: none) {
@@ -984,6 +1000,9 @@ p:has(> .STARTER-PRICE-NUM-MONTH) {
 
 .mobile-marquee-track {
   animation: mobile-marquee 28s linear infinite;
+  /* PC MARQUEE-TEXT 와 동일 — 24/7 을 대문자 높이에 맞춤 */
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
 }
 
 @keyframes crm-dot-fill {
@@ -1516,9 +1535,18 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
+/* hu_DILEMMA_SPACING_PC — 카피 스택 간격. 인라인 style 금지(@supports 가 못 덮음) */
+.DILEMMA-TITLE {
+  margin: 42px 0 0;
+}
+
+.DILEMMA-DESC {
+  margin: 36px 0 0;
+}
+
 /* Dilemma 하단 카피 — Noto 24/500 · lh 1.5 · center↔bottom 170 대칭 */
 .DILEMMA-BOTTOM-TEXT {
-  margin: 0;
+  margin: 170px 0 0;
   font-size: 24px;
   font-weight: 500;
   line-height: 1.5;
@@ -1526,6 +1554,39 @@ html:not(.splash-seen) [data-site-header] {
   text-align: center;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
+}
+
+/*
+ * Firefox 는 text-box-trim 을 구현하지 않아 trim 선언이 통째로 무시됩니다.
+ * 그러면 카피가 글리프 박스가 아니라 라인박스로 잡혀 간격이 벌어집니다.
+ * 실제로 센터 카드↔하단 카피 170 이 178.6 으로, 섹션 높이가 1189 → 1247 이 됩니다.
+ * 디자이너가 반복 반려한 원인이 이것입니다.
+ *
+ * 시안 수치(42/36/170)는 그대로 두고, trim 이 걷어낼 양만 직접 상쇄합니다.
+ * 아래 오버슈트는 Chromium(trim 적용) 과 Firefox(미적용) 에서 각 카피의
+ * 베이스라인 위치를 프로브로 재서 뽑은 차이값입니다. 결과 기하는 Chromium 과 동일합니다.
+ */
+@supports not (text-box-trim: trim-both) {
+  /* Playfair 태그는 text/alphabetic trim — 이쪽만 Chromium 박스가 라인박스보다 큼 */
+  #dilemma .DILEMMA-TAG {
+    margin-top: 2px;
+    margin-bottom: -1px;
+  }
+
+  #dilemma .DILEMMA-TITLE {
+    margin-top: calc(42px - 15.687px);
+    margin-bottom: -10px;
+  }
+
+  #dilemma .DILEMMA-DESC {
+    margin-top: calc(36px - 8.531px);
+    margin-bottom: -6px;
+  }
+
+  #dilemma .DILEMMA-BOTTOM-TEXT {
+    margin-top: calc(170px - 10.906px);
+    margin-bottom: -7.5px;
+  }
 }
 
 /* hu_MARQUEE_DETAIL_PC — 수치는 글리프 외곽선 기준 */
@@ -1540,6 +1601,9 @@ html:not(.splash-seen) [data-site-header] {
   font-size: 24px;
   font-family: var(--font-display), "Playfair Display", serif;
   font-weight: 400;
+  /* 24/7 이 올드스타일로 떨어지지 않도록 — 대문자 높이에 맞춘 lining nums */
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
   letter-spacing: 0.035em;
   color: rgb(44, 58, 46);
   text-transform: uppercase;
@@ -1809,6 +1873,274 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* ============================================================================
+   TEMPLATE COLLECTION PC — hu_TEMPLATE PC 01–06
+   ========================================================================== */
+
+/* hu_TEMPLATE PC 01 · 1. 섹션 인덱스 태그 */
+.TEMPLATE-TAG {
+  margin: 0;
+  font-size: 13px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-weight: 500;
+  color: rgb(44, 58, 46);
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  text-align: center;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+/* "Collection" 만 이탤릭 — 대문자 변환에서 제외 */
+.TEMPLATE-TAG em {
+  font-style: italic;
+  font-weight: 500;
+  text-transform: none;
+}
+
+/* hu_TEMPLATE PC 01 · 2. 섹션 타이틀 · 태그 → 타이틀 42 */
+.TEMPLATE-TITLE {
+  margin: 42px 0 0;
+  font-size: 40px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  color: rgb(28, 26, 25);
+  line-height: 1.375;
+  text-align: center;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* hu_TEMPLATE PC 01 · 3. 섹션 서브 설명 · 타이틀 → 설명 36 */
+.TEMPLATE-DESC {
+  margin: 36px 0 0;
+  font-size: 17px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  color: rgba(28, 26, 25, 0.8);
+  line-height: 1.588;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 카드 공통 — 자리 이동·확대·불투명도가 한 번에 바뀝니다 */
+.TEMPLATE-CARD {
+  position: absolute;
+  top: 50%;
+  box-sizing: border-box;
+  overflow: hidden;
+  transform: translateY(-50%);
+  transition:
+    left 600ms cubic-bezier(0.65, 0, 0.35, 1),
+    width 600ms cubic-bezier(0.65, 0, 0.35, 1),
+    height 600ms cubic-bezier(0.65, 0, 0.35, 1),
+    opacity 600ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* hu_TEMPLATE PC 02 · 1. 중앙 활성 카드 프레임 */
+.TEMPLATE-CARD-ACTIVE {
+  width: 840px;
+  height: 650px;
+  border-radius: 10px;
+  background-color: rgb(255, 255, 255);
+}
+
+/*
+ * hu_TEMPLATE PC 05 · 양옆 대기 카드 공통 규격.
+ * 시안 CSS 는 height 410 이지만 지정 소스 hus_TEMPLATE(688)_*.png 와 시안 목업
+ * 실측이 모두 532 라, 확인 후 소스 원본 비율(688×532)로 맞췄습니다.
+ */
+.TEMPLATE-CARD-WAITING {
+  width: 688px;
+  height: 532px;
+  border-radius: 10px;
+  background-color: rgb(255, 255, 255);
+  opacity: 0.3;
+}
+
+/* 활성/대기 전용 PNG 는 겹쳐 두고 불투명도로 바꿔 끼웁니다 */
+.TEMPLATE-CARD-IMG {
+  position: absolute;
+  inset: 0;
+  transition: opacity 600ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* 활성 PNG 는 840×650 중 위 500 이 화면, 아래 150 은 카드 흰 배경 */
+.TEMPLATE-CARD-IMG--active {
+  bottom: auto;
+  height: 76.923%;
+}
+
+/* hu_TEMPLATE PC 03 — 하단 정보 · 이미지 하단 → 태그 33 · 좌측 30 */
+.TEMPLATE-CARD-INFO {
+  position: absolute;
+  left: 30px;
+  top: calc(76.923% + 33px);
+  transition: opacity 600ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* hu_TEMPLATE PC 03 · 1. 하단 인덱스 태그 */
+.CARD-TAG {
+  margin: 0;
+  font-size: 13px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-weight: 500;
+  color: rgb(44, 58, 46);
+  text-transform: uppercase;
+  text-align: left;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+/*
+ * hu_TEMPLATE PC 03 · 2. 하단 템플릿 타이틀 · 태그 → 타이틀 26
+ * 숫자가 없는 전대문자라 cap 으로 잘라야 시안의 26/33 이 눈으로도 맞습니다.
+ */
+.CARD-TITLE {
+  margin: 26px 0 0;
+  font-size: 24px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-weight: 500;
+  color: rgb(28, 26, 25);
+  text-transform: uppercase;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* hu_TEMPLATE PC 03 · 3. 하단 서브 설명 · 타이틀 → 설명 17 */
+.CARD-DESC {
+  margin: 17px 0 0;
+  font-size: 17px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  color: rgba(28, 26, 25, 0.8);
+  letter-spacing: -0.01em;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* hu_TEMPLATE PC 04 — 듀얼 버튼 · 이미지 하단 29 · 우측 30 (하단도 29 로 떨어짐) */
+.TEMPLATE-CARD-BTNS {
+  position: absolute;
+  right: 30px;
+  top: calc(76.923% + 29px);
+  display: flex;
+  flex-direction: column;
+  transition: opacity 600ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* hu_TEMPLATE PC 04 · 1. 라인 고스트 버튼 */
+.BTN-VIEW-DEMO {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 190px;
+  height: 40px;
+  border: 1px solid rgb(44, 58, 46);
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: var(--font-latin), "Inter", sans-serif;
+  font-weight: 500;
+  color: rgb(44, 58, 46);
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+}
+
+/* hu_TEMPLATE PC 04 · 2. 다크 솔리드 버튼 · 버튼 사이 12 */
+.BTN-GET-STARTED {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 190px;
+  height: 40px;
+  margin-top: 12px;
+  background-color: rgb(44, 58, 46);
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: var(--font-latin), "Inter", sans-serif;
+  font-weight: 500;
+  color: rgb(250, 248, 245);
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+}
+
+.BTN-VIEW-DEMO > span:last-child,
+.BTN-GET-STARTED > span:last-child {
+  display: none;
+  font-size: 13px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  text-transform: none;
+}
+
+/* hover — 배경 컬러 유지, 텍스트만 한글로 */
+.BTN-VIEW-DEMO:hover,
+.BTN-GET-STARTED:hover {
+  font-size: 13px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 500;
+}
+
+.BTN-VIEW-DEMO:hover {
+  color: rgb(44, 58, 46);
+}
+
+.BTN-GET-STARTED:hover {
+  color: rgb(250, 248, 245);
+}
+
+.BTN-VIEW-DEMO:hover > span:first-child,
+.BTN-GET-STARTED:hover > span:first-child {
+  display: none;
+}
+
+.BTN-VIEW-DEMO:hover > span:last-child,
+.BTN-GET-STARTED:hover > span:last-child {
+  display: inline;
+}
+
+@media (hover: none) {
+  .BTN-VIEW-DEMO,
+  .BTN-GET-STARTED {
+    font-size: 13px;
+    font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+    font-weight: 500;
+    text-transform: none;
+  }
+
+  .BTN-VIEW-DEMO > span:first-child,
+  .BTN-GET-STARTED > span:first-child {
+    display: none;
+  }
+
+  .BTN-VIEW-DEMO > span:last-child,
+  .BTN-GET-STARTED > span:last-child {
+    display: inline;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .TEMPLATE-CARD,
+  .TEMPLATE-CARD-IMG,
+  .TEMPLATE-CARD-INFO,
+  .TEMPLATE-CARD-BTNS {
+    transition: none;
+  }
+}
+
+/* ============================================================================
    FAQ PC — hu_FAQ_DETAIL_PC 아코디언
    ========================================================================== */
 .FAQ {
@@ -1884,12 +2216,17 @@ html:not(.splash-seen) [data-site-header] {
   display: grid;
   /* 시안 100(칸 간격) = 상 26 + 콘텐츠 48 + 하 26 */
   grid-template-columns: max-content 16px minmax(0, 1fr) 100px 20px;
-  grid-template-rows: 48px auto 26px;
+  grid-template-rows: 48px minmax(0, auto) auto;
+  grid-template-areas:
+    "cat gap q gap2 icon"
+    "panel panel panel panel panel"
+    "spacer spacer spacer spacer spacer";
   align-items: start;
   box-sizing: border-box;
   width: 100%;
   /* 상 26 · 좌우 27 · 하 26은 FAQ-SPACER */
   padding: 26px 27px 0;
+  overflow-anchor: none;
 }
 
 .FAQ-ITEM-ACTIVE {
@@ -1899,7 +2236,11 @@ html:not(.splash-seen) [data-site-header] {
 
 .FAQ-HIT {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* 닫힘: 상 26 + 헤더 48 + 하 26. 열림 때도 이 높이 유지 — 버튼이 답변과 함께 커지면 질문이 밀림 */
+  height: calc(26px + 48px + 26px);
   z-index: 1;
   margin: 0;
   padding: 0;
@@ -1910,17 +2251,19 @@ html:not(.splash-seen) [data-site-header] {
 
 .FAQ-ITEM .FAQ-CATEGORY,
 .FAQ-CATEGORY-ACTIVE {
-  grid-column: 1;
-  grid-row: 1;
-  align-self: center;
+  grid-area: cat;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  min-height: 48px;
   font-size: 17px;
   font-family: var(--font-display), "Playfair Display", serif;
   font-weight: 400;
   color: rgba(28, 26, 25, 0.8);
   text-transform: uppercase;
   text-align: left;
-  text-box-trim: trim-both;
-  text-box-edge: text alphabetic;
+  line-height: 1;
+  text-box-trim: none;
   pointer-events: none;
 }
 
@@ -1928,18 +2271,13 @@ html:not(.splash-seen) [data-site-header] {
   color: rgba(44, 58, 46, 0.8);
 }
 
-/* 열림: 질문 하단 = 콘텐츠 행 하단 → q→a 36이 글리프 실측 */
-.FAQ-ITEM-ACTIVE .FAQ-CATEGORY-ACTIVE,
-.FAQ-ITEM-ACTIVE .FAQ-QUESTION-ACTIVE,
-.FAQ-ITEM-ACTIVE .FAQ-ICON {
-  align-self: end;
-}
-
 .FAQ-QUESTION,
 .FAQ-QUESTION-ACTIVE {
-  grid-column: 3;
-  grid-row: 1;
-  align-self: center;
+  grid-area: q;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  min-height: 48px;
   margin: 0;
   font-size: 21px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
@@ -1947,8 +2285,8 @@ html:not(.splash-seen) [data-site-header] {
   color: rgb(28, 26, 25);
   letter-spacing: -0.01em;
   text-align: left;
-  text-box-trim: trim-both;
-  text-box-edge: cap alphabetic;
+  line-height: 1;
+  text-box-trim: none;
   pointer-events: none;
 }
 
@@ -1957,8 +2295,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .FAQ-ICON {
-  grid-column: 5;
-  grid-row: 1;
+  grid-area: icon;
   align-self: center;
   display: block;
   width: 20px;
@@ -1972,6 +2309,14 @@ html:not(.splash-seen) [data-site-header] {
   stroke-width: 2px;
 }
 
+/* 시안 .FAQ-ICON-MINUS — 열림 상태의 '−' */
+.FAQ-ITEM-ACTIVE .FAQ-ICON-MINUS {
+  stroke: #1c1a19;
+  stroke-width: 1px;
+  opacity: 0.65;
+  fill: none;
+}
+
 .FAQ-ICON-V {
   transform-box: fill-box;
   transform-origin: center;
@@ -1980,15 +2325,17 @@ html:not(.splash-seen) [data-site-header] {
 
 .FAQ-ITEM-ACTIVE .FAQ-ICON-V {
   transform: scaleY(0);
+  opacity: 0.65;
 }
 
 .FAQ-PANEL {
-  grid-column: 1 / 4;
-  grid-row: 2;
+  grid-area: panel;
+  min-height: 0;
   overflow: hidden;
   height: 0;
   transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
+  overflow-anchor: none;
 }
 
 /* 열림 안정 후 overflow visible — trim 글리프 받침이 height 클립되지 않도록 */
@@ -1998,28 +2345,27 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .FAQ-PANEL-INNER {
-  /* q→a 36: 질문(trim) 하단 ↔ 답변 첫 글리프(trim) 상단 */
-  padding-top: 36px;
+  /* 시안 36은 글리프 기준. 질문은 48px 행에 21px 라인박스가 중앙 정렬이라
+   * 글리프 하단과 행 바닥 사이 빈칸(약 12)이 남는다. 그만큼 빼야 실측이 36. */
+  padding-top: 24px;
   overflow: visible;
 }
 
 .FAQ-SPACER {
-  grid-column: 1 / -1;
-  grid-row: 3;
+  grid-area: spacer;
   height: 26px;
   pointer-events: none;
 }
 
-.FAQ-A {
-  margin: 0;
-  pointer-events: none;
+/* 열림: 답 하단 여백 = 질문 위 여백
+ * 질문 위 = pad 26 + 48px 행에서 21px 글리프가 수직 중앙일 때 윗공백
+ */
+.FAQ-ITEM-ACTIVE .FAQ-SPACER {
+  height: calc(26px + (48px - 21px) / 2);
 }
 
-.FAQ-A-P,
-.FAQ-A-PG,
-.FAQ-A-H,
-.FAQ-A-LI,
-.FAQ-A-EQ {
+/* 줄 27 = line-height 1.588 그대로 · 단락 54 = 빈 줄 1개(<br><br>) */
+.FAQ-ANSWER {
   margin: 0;
   font-size: 17px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
@@ -2029,28 +2375,11 @@ html:not(.splash-seen) [data-site-header] {
   text-align: left;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
+  pointer-events: none;
 }
 
-/* 단락 간격 30 — 본문→소제목, 소제목 사이 */
-.FAQ-A-P + .FAQ-A-H,
-.FAQ-A-PG + .FAQ-A-H,
-.FAQ-A-LI + .FAQ-A-H,
-.FAQ-A-EQ + .FAQ-A-H,
-.FAQ-A-H + .FAQ-A-H,
-.FAQ-A-P + .FAQ-A-PG {
-  margin-top: 30px;
-}
-
-/* 세부 줄 20 — 소제목 아래, 리스트, 같은 그룹 본문 */
-.FAQ-A-H + .FAQ-A-LI,
-.FAQ-A-H + .FAQ-A-P,
-.FAQ-A-H + .FAQ-A-PG,
-.FAQ-A-LI + .FAQ-A-LI,
-.FAQ-A-LI + .FAQ-A-EQ,
-.FAQ-A-P + .FAQ-A-LI,
-.FAQ-A-P + .FAQ-A-P,
-.FAQ-A-PG + .FAQ-A-P {
-  margin-top: 20px;
+.FAQ-ANSWER strong {
+  font-weight: 600;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2126,7 +2455,7 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
-/* .BENEFIT-CARD-DESC */
+/* .BENEFIT-CARD-DESC — 2줄 br; trim-end 가 한글 하단 잉크를 잘라 trim-start 만 */
 .BENEFIT-CARD-DESC {
   margin: 18px 0 0;
   font-size: 17px;
@@ -2136,7 +2465,7 @@ html:not(.splash-seen) [data-site-header] {
   color: #6c6864;
   text-align: left;
   word-spacing: -0.057em;
-  text-box-trim: trim-both;
+  text-box-trim: trim-start;
   text-box-edge: cap alphabetic;
 }
 
@@ -2313,11 +2642,12 @@ html:not(.splash-seen) [data-site-header] {
   inset: 0;
   z-index: 0;
   display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
+  width: 1380px;
+  height: 650px;
+  /* 에셋이 컨테이너와 동일 비율(2.1231)이라 균일 배율 — 가로/세로 왜곡 없음 */
+  object-fit: cover;
+  object-position: center;
   pointer-events: none;
-  /* 업스케일 시 브라우저 기본 보간 */
   image-rendering: auto;
 }
 

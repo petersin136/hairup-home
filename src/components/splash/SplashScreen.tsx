@@ -5,12 +5,11 @@ import { createPortal } from "react-dom";
 
 import { Wordmark } from "@/components/brand/Wordmark";
 import { splash } from "@/content/site";
-
-export const SPLASH_SESSION_KEY = "hairup:splash-played";
-/** 커튼이 올라가기 시작하는 순간. 히어로 본문 rain-in 이 이때 맞춰 재생됩니다. */
-export const SPLASH_REVEAL_EVENT = "hairup:splash-reveal";
-/** 스플래시가 완전히 끝난 뒤 — 런치 팝업은 이 신호 + 400ms 후 표시 */
-export const SPLASH_DONE_EVENT = "hairup:splash-done";
+import {
+  SPLASH_DONE_EVENT,
+  SPLASH_REVEAL_EVENT,
+  SPLASH_SESSION_KEY,
+} from "@/lib/splash-keys";
 
 /**
  * SPLASH SCREEN — 배경 #2c3a2e

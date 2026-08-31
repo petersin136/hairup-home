@@ -8,35 +8,38 @@ import { Canvas } from "@/components/layout/Canvas";
 import { templateCollection } from "@/content/site";
 
 /**
- * 07_Template Collection — 시안 12-D 지시사항
+ * 07_Template Collection — 시안 hu_TEMPLATE PC 01–06
  *
- * 카피 스택: Key Benefits(04) 와 동일 — SECTION-TAG + SECTION-COPY-TITLE/DESC
- * tag→title 42 · title→desc 36 · desc→카드 150 · 카드→마퀴 200
- * .TEMPLATE-CARD-LEFT/RIGHT  688 × 410 · radius 6 · 대기상태 overlay black/50%
- * 카드 간격 33 · 본문 아래 150 · 카드 아래 200
- * 마퀴 아래 200 (hu_MARQUEE_DETAIL_PC). Pricing 상단 여백은 마퀴가 담당
+ * 01  섹션 상단 200 · tag→title 42 · title→desc 36 (.TEMPLATE-TAG/-TITLE/-DESC)
+ * 02  중앙 활성 .TEMPLATE-CARD-ACTIVE 840 × 650 · radius 10 · 배경 흰색
+ *     desc→카드 85 · 카드 좌우 간격 33
+ * 03  카드 하단 정보 (.CARD-TAG/-TITLE/-DESC) · 이미지→태그 33 · 26 · 17 · 33 · 좌측 30
+ * 04  듀얼 버튼 (.BTN-VIEW-DEMO / .BTN-GET-STARTED) · 29 · 12 · 29 · 우측 30
+ * 05  대기 .TEMPLATE-CARD-WAITING 688 · radius 10 · opacity 0.3
+ * 06  카드→마퀴 200 · 마퀴→섹션 끝 200
  *
  * 카드 3장 고정 · 무한 루프 없음.
  * 진입 시 2번 카드가 화면 정중앙, 1·3번은 좌우에 일부 걸쳐 대기.
- * 1번·3번 선택 시 해당 방향 끝에서 더 이상 넘어가지 않음.
+ * 전환은 대기 카드를 눌렀을 때만 일어납니다(호버 전환 없음).
  */
-const TAG_TOP = 344;
-const TAG_H = 13;
+const TAG_TOP = 200;
+/** Playfair 13 · text-box trim(text alphabetic) 실측 */
+const TAG_H = 14;
 const GAP_TAG_TITLE = 42;
 const GAP_TITLE_DESC = 36;
 /** 40/600 · lh 1.375 · 3줄 · text-box trim(cap alphabetic) 실측 */
-const TITLE_H = 139.3;
+const TITLE_H = 139.31;
 /** 17/400 · lh 1.588 · 3줄 · text-box trim(cap alphabetic) 실측 */
-const DESC_H = 66.4;
-const GAP_DESC_CARDS = 150;
+const DESC_H = 66.44;
+const GAP_DESC_CARDS = 85;
 const GAP_CARDS_MARQUEE = 200;
 const PAD_MARQUEE_BOTTOM = 200;
 
 const CARD = {
   activeW: 840,
-  activeH: 500,
+  activeH: 650,
   inactiveW: 688,
-  inactiveH: 410,
+  inactiveH: 532,
   gap: 33,
 };
 /** 자리 간격은 활성 카드 폭 + 거터. 비활성은 슬롯 안에서 가운데 쪽으로 붙입니다. */
@@ -47,14 +50,6 @@ const CARD_TOP = TAG_TOP + COPY_STACK_H + GAP_DESC_CARDS;
 const ROW_CENTER = CARD_TOP + CARD.activeH / 2;
 /** 카드 폭의 몇 할을 끌어야 다음 장으로 넘어가는지 */
 const SNAP = 0.2;
-
-/** 줄이 미끄러지는 시간(ms). 아래 transition 값과 같아야 합니다. */
-const GLIDE = 600;
-/** 호버로 한 장 넘긴 뒤, 커서가 이만큼(px) 움직여야 다음 호버를 받습니다. */
-const HOVER_REARM = 24;
-
-/** 카드 호버 오버레이 · 시안 13-D */
-const VIEW_BTN = { width: 225, height: 45, gap: 13 };
 
 /*
  * 하단 마퀴 · hu_MARQUEE_DETAIL_PC
@@ -93,26 +88,6 @@ const clampDragOffset = (offset: number, index: number) => {
   return clamped;
 };
 
-/**
- * 호버 빗장. 마지막으로 넘긴 시각과 그때 커서가 있던 자리를 들고 있습니다.
- * 렌더 중에 시계를 읽으면 안 되므로 여닫는 일은 컴포넌트 밖에서 합니다.
- */
-type HoverGate = { armed: boolean; x: number; y: number; at: number };
-
-function closeGate(gate: HoverGate, x: number, y: number) {
-  gate.armed = false;
-  gate.x = x;
-  gate.y = y;
-  gate.at = performance.now();
-}
-
-function tryOpenGate(gate: HoverGate, x: number, y: number) {
-  if (gate.armed) return;
-  /* 미끄러지는 중에는 어차피 자리가 확정되지 않았으니 세지 않습니다. */
-  if (performance.now() - gate.at < GLIDE) return;
-  if (Math.hypot(x - gate.x, y - gate.y) > HOVER_REARM) gate.armed = true;
-}
-
 /** i 번 자리를 화면 가운데(x 720)에 놓기 위한 줄 전체의 이동 거리 */
 const originFor = (i: number) => 720 - i * PITCH - CARD.activeW / 2;
 
@@ -124,30 +99,6 @@ export function TemplateCollection() {
   const offset = useRef(0);
   /** 드래그로 끝난 동작이 옆 카드 클릭까지 발동시키지 않도록 남겨 둡니다. */
   const moved = useRef(false);
-
-  /*
-   * 호버로 한 장 넘기면 방금 하던 카드가 가운데로 빠지고 그 자리에 다음 카드가
-   * 들어옵니다. 커서는 가만히 있어도 새 카드 위에 놓이게 되므로, 그걸 또 호버로
-   * 세면 줄이 저 혼자 끝없이 돌아갑니다. 그래서 한 번 받은 뒤에는 빗장을 걸고,
-   * 커서가 실제로 움직였을 때만 다시 엽니다.
-   */
-  const gate = useRef<HoverGate>({ armed: true, x: 0, y: 0, at: 0 });
-
-  useEffect(() => {
-    const onMove = (e: PointerEvent) =>
-      tryOpenGate(gate.current, e.clientX, e.clientY);
-
-    window.addEventListener("pointermove", onMove);
-    return () => window.removeEventListener("pointermove", onMove);
-  }, []);
-
-  const onCardHover = (seat: number) => (e: React.PointerEvent) => {
-    /* 손가락으로 짚는 것은 호버가 아니라 탭이므로 클릭 쪽에 맡깁니다. */
-    if (e.pointerType !== "mouse") return;
-    if (dragging || seat === index || !gate.current.armed) return;
-    closeGate(gate.current, e.clientX, e.clientY);
-    setIndex(clampIndex(seat));
-  };
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     startX.current = e.clientX;
@@ -168,7 +119,7 @@ export function TemplateCollection() {
       if (Math.abs(offset.current) > 3) moved.current = true;
       setDragX(offset.current);
     };
-    const onUp = (e: PointerEvent) => {
+    const onUp = () => {
       setDragging(false);
       setDragX(0);
       /* 카드 한 장을 다 끌지 않아도 20% 만 넘기면 다음 장으로 넘어갑니다. */
@@ -176,8 +127,6 @@ export function TemplateCollection() {
       const steps = Math.sign(raw) * Math.floor(Math.abs(raw) + 1 - SNAP);
       setIndex((i) => clampIndex(i + steps));
       offset.current = 0;
-      /* 손을 뗀 자리에 우연히 놓인 카드가 곧바로 또 넘어가지 않게 합니다. */
-      closeGate(gate.current, e.clientX, e.clientY);
     };
 
     window.addEventListener("pointermove", onMove);
@@ -204,22 +153,19 @@ export function TemplateCollection() {
       background="bg-porcelain"
       className="overflow-hidden"
     >
-      {/* 카피 — Key Benefits 와 동일 margin stack */}
-      <div
-        className="SECTION-COPY-STACK SECTION-COPY-STACK--center absolute inset-x-0"
-        style={{ top: `${TAG_TOP}px` }}
-      >
-        <p className="SECTION-TAG text-forest">
+      {/* 카피 — hu_TEMPLATE PC 01 */}
+      <div className="absolute inset-x-0" style={{ top: `${TAG_TOP}px` }}>
+        <p className="TEMPLATE-TAG">
           {templateCollection.tag.before}
           <em>{templateCollection.tag.article}</em>
           {templateCollection.tag.after}
         </p>
 
-        <h2 className="SECTION-COPY-TITLE text-kr">
+        <h2 className="TEMPLATE-TITLE">
           <GlyphLines lines={templateCollection.headline} />
         </h2>
 
-        <p className="SECTION-COPY-DESC text-kr">
+        <p className="TEMPLATE-DESC">
           <GlyphLines lines={templateCollection.body} />
         </p>
       </div>
@@ -250,7 +196,6 @@ export function TemplateCollection() {
               seat={seat}
               activeIndex={index}
               centered={seat === index}
-              onHover={onCardHover(seat)}
               onSelect={() => {
                 if (!moved.current) setIndex(clampIndex(seat));
               }}
@@ -371,8 +316,7 @@ type CardProps = {
   seat: number;
   activeIndex: number;
   centered: boolean;
-  /** 좌우 카드에 커서가 들어온 순간. 가운데 카드로 끌어옵니다. */
-  onHover: (e: React.PointerEvent) => void;
+  /** 대기 카드를 눌렀을 때만 가운데로 끌어옵니다. */
   onSelect: () => void;
 };
 
@@ -382,11 +326,8 @@ function TemplateCard({
   seat,
   activeIndex,
   centered,
-  onHover,
   onSelect,
 }: CardProps) {
-  const width = centered ? CARD.activeW : CARD.inactiveW;
-  const height = centered ? CARD.activeH : CARD.inactiveH;
   /* 비활성(왼쪽)은 슬롯 안에서 오른쪽으로 붙여 가운데와의 간격 33 을 맞춥니다. */
   const inset =
     !centered && seat < activeIndex ? CARD.activeW - CARD.inactiveW : 0;
@@ -394,85 +335,93 @@ function TemplateCard({
   return (
     <article
       data-centered={centered}
-      onPointerEnter={onHover}
-      className="rounded-ui group absolute top-1/2 -translate-y-1/2 overflow-hidden bg-black transition-[left,width,height] duration-600 ease-[cubic-bezier(0.65,0,0.35,1)]"
-      style={{
-        left: `${left + inset}px`,
-        width: `${width}px`,
-        height: `${height}px`,
-      }}
+      className={
+        centered
+          ? "TEMPLATE-CARD TEMPLATE-CARD-ACTIVE"
+          : "TEMPLATE-CARD TEMPLATE-CARD-WAITING"
+      }
+      style={{ left: `${left + inset}px` }}
     >
-      <Image
-        src={template.image}
-        alt={`${template.name} 템플릿 미리보기`}
-        fill
-        sizes={`${CARD.activeW}px`}
-        data-cover
-        draggable={false}
-        className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-      />
+      {/* 대기 전용 PNG — 688 × 532 를 카드 전면에 */}
+      <div className="TEMPLATE-CARD-IMG" style={{ opacity: centered ? 0 : 1 }}>
+        <Image
+          src={template.imageWaiting}
+          alt={centered ? "" : `${template.name} 템플릿 미리보기`}
+          fill
+          sizes={`${CARD.inactiveW}px`}
+          draggable={false}
+          className="object-cover"
+        />
+      </div>
 
-      {centered ? (
-        <>
-          {/* .TEMPLATE-CARD-CENTER-HOVER — black/50% · blur 7px */}
-          <div className="absolute inset-0 bg-black/50 opacity-0 backdrop-blur-[7px] transition-opacity duration-500 group-hover:opacity-100" />
+      {/* 활성 전용 PNG — 840 × 650 중 위 500 만 쓰고 아래 150 은 카드 흰 배경 */}
+      <div
+        className="TEMPLATE-CARD-IMG TEMPLATE-CARD-IMG--active"
+        style={{ opacity: centered ? 1 : 0 }}
+      >
+        <Image
+          src={template.imageActive}
+          alt={centered ? `${template.name} 템플릿 미리보기` : ""}
+          fill
+          sizes={`${CARD.activeW}px`}
+          draggable={false}
+          priority={seat === INITIAL_INDEX}
+          className="object-cover object-top"
+        />
+      </div>
 
-          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-            {/* .TITLE-STUDIO-SIGNATURE */}
-            <p className="flex items-start justify-center font-display text-[25px] font-medium uppercase leading-none text-porcelain">
-              {/* .TITLE-STUDIO-SIGNATURE .SUB.01/ */}
-              <span className="section-eyebrow-index mr-[6px] text-[14px] font-medium leading-none tracking-normal">
-                {template.index} /
-              </span>
-              {template.name}
-            </p>
+      {/* hu_TEMPLATE PC 03 — 하단 정보 */}
+      <div
+        className="TEMPLATE-CARD-INFO"
+        style={{ opacity: centered ? 1 : 0 }}
+        aria-hidden={!centered}
+      >
+        <p className="CARD-TAG">{template.cardTag}</p>
+        <p className="CARD-TITLE">{template.name}</p>
+        {template.cardDesc ? (
+          <p className="CARD-DESC text-kr">{template.cardDesc}</p>
+        ) : null}
+      </div>
 
-            {/* .BTN-VIEW · gap 45 / 13 */}
-            <div
-              className="pointer-events-auto flex"
-              style={{
-                marginTop: "45px",
-                gap: `${VIEW_BTN.gap}px`,
-              }}
-            >
-              <a
-                href={template.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-btn inline-flex items-center justify-center border border-porcelain bg-transparent font-latin text-[16px] font-normal uppercase text-porcelain no-underline transition-all duration-200 ease-in-out hover:border-porcelain hover:bg-porcelain hover:text-ink"
-                style={{
-                  width: `${VIEW_BTN.width}px`,
-                  height: `${VIEW_BTN.height}px`,
-                }}
-              >
-                {templateCollection.ctas.pc}
-              </a>
-              <a
-                href={template.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-btn inline-flex items-center justify-center border border-porcelain bg-transparent font-latin text-[16px] font-normal uppercase text-porcelain no-underline transition-all duration-200 ease-in-out hover:border-porcelain hover:bg-porcelain hover:text-ink"
-                style={{
-                  width: `${VIEW_BTN.width}px`,
-                  height: `${VIEW_BTN.height}px`,
-                }}
-              >
-                {templateCollection.ctas.mobile}
-              </a>
-            </div>
-          </div>
-        </>
-      ) : (
-        <>
-          {/* 대기상태 — black / opacity 50% */}
-          <div className="pointer-events-none absolute inset-0 bg-black/50" />
-          <button
-            type="button"
-            onClick={onSelect}
-            className="absolute inset-0 cursor-pointer"
-            aria-label={`${template.name} 템플릿 보기`}
-          />
-        </>
+      {/* hu_TEMPLATE PC 04 — 듀얼 버튼 */}
+      <div
+        className="TEMPLATE-CARD-BTNS"
+        style={{
+          opacity: centered ? 1 : 0,
+          pointerEvents: centered ? "auto" : "none",
+        }}
+        aria-hidden={!centered}
+      >
+        <a
+          className="BTN-VIEW-DEMO"
+          href={template.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          tabIndex={centered ? undefined : -1}
+        >
+          <span>{templateCollection.cardCtas.demo.label}</span>
+          <span>{templateCollection.cardCtas.demo.labelKr}</span>
+        </a>
+        <a
+          className="BTN-GET-STARTED"
+          href={templateCollection.cardCtas.start.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          tabIndex={centered ? undefined : -1}
+        >
+          <span>{templateCollection.cardCtas.start.label}</span>
+          <span>{templateCollection.cardCtas.start.labelKr}</span>
+        </a>
+      </div>
+
+      {/* 대기 카드는 눌렀을 때만 가운데로 옵니다 */}
+      {centered ? null : (
+        <button
+          type="button"
+          onClick={onSelect}
+          className="absolute inset-0 cursor-pointer"
+          aria-label={`${template.name} 템플릿 보기`}
+        />
       )}
     </article>
   );

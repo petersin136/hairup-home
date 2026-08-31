@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { fontVariables } from "@/lib/fonts";
-import { SPLASH_SESSION_KEY } from "@/components/splash/SplashScreen";
+import { SPLASH_SESSION_KEY } from "@/lib/splash-keys";
 import "./globals.css";
 
 const SITE_URL = "https://www.hair-up.kr";
@@ -49,8 +49,8 @@ export const metadata: Metadata = {
   },
 };
 
-/* 같은 세션에서 이미 스플래시를 봤다면 첫 페인트부터 감춰 깜빡임을 없앱니다. */
-const splashGuard = `try{if(sessionStorage.getItem('${SPLASH_SESSION_KEY}')==='1')document.documentElement.classList.add('splash-seen')}catch(e){}`;
+/* splash-guard: 같은 세션 재방문 시 첫 페인트 전 splash-seen — html class hydration 불일치는 suppressHydrationWarning */
+const splashGuard = `try{if(sessionStorage.getItem(${JSON.stringify(SPLASH_SESSION_KEY)})==='1')document.documentElement.classList.add('splash-seen')}catch(e){}`;
 
 export default function RootLayout({
   children,
@@ -58,7 +58,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={`${fontVariables} h-full`}>
+    <html
+      lang="ko"
+      className={`${fontVariables} h-full`}
+      suppressHydrationWarning
+    >
       <head>
         {/* next/script children 은 React 19에서 <script> 중첩 경고·오류를 냄 */}
         <script

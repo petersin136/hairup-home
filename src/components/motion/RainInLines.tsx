@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 
-import { SPLASH_REVEAL_EVENT } from "@/components/splash/SplashScreen";
+import { SPLASH_REVEAL_EVENT } from "@/lib/splash-keys";
 
 type RainInLinesProps = {
   lines: readonly string[];
