@@ -29,6 +29,12 @@ export const topBanner = {
   en: "ONBOARDING OFFER",
   kr: "1:1 맞춤 세팅비 최대 40% 지원 (선착순)",
   krMobile: "1:1 맞춤 세팅비 최대 40% 지원",
+  /**
+   * 모바일 시안 hu_TOP_BANNER__M — 앞 구절 500, 뒤 구절 700.
+   * flex 아이템 사이 일반 공백은 collapse 되므로 낭독·복사가 깨지지 않게 NBSP 로 둡니다.
+   */
+  krMobileRegular: "1:1 맞춤 세팅비\u00A0",
+  krMobileBold: "최대 40% 지원",
 } as const;
 
 /** 런치 오퍼 팝업 — 시안 POPUP · 440 × 600 */
@@ -62,6 +68,17 @@ export const hero = {
     "헤어업 AI 매니저가 감각적으로 처리합니다.",
     "당신은 그저, 오늘 최고의 헤어 스타일링에만 집중하세요.",
   ],
+  /** 모바일 시안 hu_HERO__M — 카드 안 2줄 */
+  bodyMobile: [
+    "고객 응대부터 예약, 장부 정리까지.",
+    "헤어업 AI 매니저가 감각적으로 처리합니다.",
+  ],
+  media: {
+    src: "/images/hero-visual-m.png",
+    width: 700,
+    height: 1000,
+    alt: "라운드 브러시로 머리를 손질하는 헤어 디자이너",
+  },
 } as const;
 
 export const dilemma = {
@@ -88,6 +105,18 @@ export const dilemma = {
   bodyAside: [
     "여러분의 소중한 작업시간이",
     "온갖 응대 스트레스에 깎여나가고 있진 않나요?",
+  ],
+  /* 모바일 시안 hu_dilemma_detail_1_m .SUB TEXT — PC 카피와 별개 */
+  bodyMobile: [
+    "약제 묻은 장갑으로 답장할 수도,",
+    "시술 중 전화를 받을 수도 없는 순간.",
+    "가격만 묻고 사라지는 문의와 반복되는 노쇼까지.",
+  ],
+  /* 모바일 시안 hu_dilemma_detail_2_m 강조 문구 — PC bodyAside 와 별개 */
+  emphasisMobile: [
+    "여러분의 소중한 작업시간이",
+    "온갖 응대 스트레스에",
+    "깎여나가고 있진 않나요?",
   ],
   /* 위→아래(우상 · 좌중 · 우하) 순서 */
   images: [
@@ -121,6 +150,11 @@ export const experience = {
   bodyPc: [
     "고객의 문의에 AI 매니저가 어떻게 응답하는지",
     "실제 헤어업 데모 채널에서 바로 확인해 보세요.",
+  ],
+  /** 모바일 시안 hu_experience_m — 레퍼런스 줄바꿈(응답하는지 / 확인해 보세요.) */
+  bodyMobile: [
+    "고객의 문의에 AI 매니저가 어떻게 응답하는지",
+    "실제 헤어업 데모 채널에서 확인해 보세요.",
   ],
   kakaoDemo: {
     label: "카카오톡 데모 체험하기",
@@ -196,6 +230,12 @@ export const keyBenefits = {
     article: "Key",
     after: " BENEFITS )",
   },
+  /** 모바일은 03. AUTOMATED CRM 섹션이 없어 번호가 하나씩 앞당겨집니다. */
+  tagMobile: {
+    before: "( 03. ",
+    article: "Key",
+    after: " BENEFITS )",
+  },
   headline: ["고객은 기다리지 않고,", "당신은 끊기지 않도록."],
   body: [
     "24시간 언제든 이어지는 응대.",
@@ -245,6 +285,12 @@ export const templateCollection = {
     article: "Collection",
     after: " )",
   },
+  /** 모바일은 03. AUTOMATED CRM 섹션이 없어 번호가 하나씩 앞당겨집니다. */
+  tagMobile: {
+    before: "( 04. TEMPLATE ",
+    article: "Collection",
+    after: " )",
+  },
   headline: ["수많은 디자이너 중", "하나가 아닌,", "단 하나의 브랜드로."],
   body: [
     "같은 디자이너라도 보여주는 방식은 다릅니다.",
@@ -255,7 +301,7 @@ export const templateCollection = {
     pc: "VIEW ON PC",
     mobile: "VIEW ON MOBILE",
   },
-  /* PC hu_TEMPLATE PC 04 — 기본 라틴, hover 시 한글로 바뀝니다 */
+  /* PC hu_TEMPLATE PC 04 — 기본 한글 */
   cardCtas: {
     demo: { label: "VIEW DEMO", labelKr: "웹 미리보기" },
     start: {
@@ -322,6 +368,12 @@ export const faq = {
   /** PC — Pricing / Template 과 동일 SECTION-TAG · the 이탤릭 */
   tag: {
     before: "( 07. ",
+    article: "the",
+    after: " FAQ )",
+  },
+  /** 모바일은 03. AUTOMATED CRM 섹션이 없어 번호가 하나씩 앞당겨집니다. */
+  tagMobile: {
+    before: "( 06. ",
     article: "the",
     after: " FAQ )",
   },
@@ -550,6 +602,12 @@ export const pricing = {
     article: "Plan",
     after: " )",
   },
+  /** 모바일은 03. AUTOMATED CRM 섹션이 없어 번호가 하나씩 앞당겨집니다. */
+  tagMobile: {
+    before: "( 05. PRICING ",
+    article: "Plan",
+    after: " )",
+  },
   headline: ["매출이 아무리 늘어도,", "비용은 변함없이."],
   body: [
     "예약 건수나 매출에 따른 추가 수수료는 없습니다.",
@@ -683,6 +741,12 @@ export const start = {
   body: [
     "당신의 실력과 스타일에 집중할 수 있도록",
     "반복되는 상담과 예약 관리는 헤어업이 덜어드립니다.",
+  ],
+  /** 모바일 CTA — hu_cta_banner_footer_m 3줄 본문 */
+  bodyMobile: [
+    "당신의 실력과 스타일에 집중할 수 있도록",
+    "반복되는 상담과 예약 관리는",
+    "헤어업이 덜어드립니다.",
   ],
   cta: {
     label: "1:1 맞춤 세팅 상담하기",

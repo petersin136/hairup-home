@@ -393,24 +393,22 @@ function TemplateCard({
         aria-hidden={!centered}
       >
         <a
-          className="BTN-VIEW-DEMO"
+          className="BTN-VIEW-DEMO text-kr"
           href={template.href}
           target="_blank"
           rel="noopener noreferrer"
           tabIndex={centered ? undefined : -1}
         >
-          <span>{templateCollection.cardCtas.demo.label}</span>
-          <span>{templateCollection.cardCtas.demo.labelKr}</span>
+          {templateCollection.cardCtas.demo.labelKr}
         </a>
         <a
-          className="BTN-GET-STARTED"
+          className="BTN-GET-STARTED text-kr"
           href={templateCollection.cardCtas.start.href}
           target="_blank"
           rel="noopener noreferrer"
           tabIndex={centered ? undefined : -1}
         >
-          <span>{templateCollection.cardCtas.start.label}</span>
-          <span>{templateCollection.cardCtas.start.labelKr}</span>
+          {templateCollection.cardCtas.start.labelKr}
         </a>
       </div>
 

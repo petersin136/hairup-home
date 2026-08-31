@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { fontVariables } from "@/lib/fonts";
 import { SPLASH_SESSION_KEY } from "@/lib/splash-keys";
 import "./globals.css";
@@ -47,6 +47,11 @@ export const metadata: Metadata = {
       { url: "/brand/apple-icon.png", type: "image/png", sizes: "180x180" },
     ],
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 /* splash-guard: 같은 세션 재방문 시 첫 페인트 전 splash-seen — html class hydration 불일치는 suppressHydrationWarning */

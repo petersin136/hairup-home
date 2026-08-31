@@ -21,6 +21,7 @@ const DESKTOP_MQ = "(min-width: 1440px)";
 /**
  * 모바일/데스크톱을 동시에 마운트하지 않습니다.
  * 둘 다 두면 id 중복 + 숨겨진 sticky/스크롤 리스너가 터치 스크롤을 튕깁니다.
+ * 모바일 시안 폭 390px · 데스크톱 시안 폭 1440px.
  */
 export function HomeShell() {
   const [mode, setMode] = useState<"mobile" | "desktop" | null>(null);
