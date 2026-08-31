@@ -1,19 +1,25 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import {
+  Fragment,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
 import { GlyphLines } from "@/components/copy/GlyphLines";
-import { faq, type FaqAnswerBlock } from "@/content/site";
+import { faq, type FaqAnswerGroup } from "@/content/site";
 
 /**
  * 07 / FAQ — hu_FAQ_DETAIL_PC
  *
  * 헤더: FAQ-CATEGORY 13/500 · FAQ-TITLE 40/600 · FAQ-DESC 17/400
- *   tag→title 42 · title→desc 36 · 상·하 200
+ *   tag→title 42 · title→desc 36 · 상 0 (Pricing 하 200) · 하 200
  * 리스트: 폭 937 · desc→리스트 100 · 행 패딩 26 · cat→q 16 · q→icon 100
- * 답변: q→a 36 · 단락 30 · 세부 줄 20
+ * 답변: q→a 36 · 줄 27(lh 1.588) · 단락 54(빈 줄 1개) · 강조 600
  */
-const PAD_TOP = 200;
+const PAD_TOP = 0;
 const PAD_BOTTOM = 200;
 const LIST_W = 937;
 const GAP_DESC_LIST = 100;
@@ -72,14 +78,7 @@ export function Faq() {
                   </span>
                   <FaqIcon />
                   <FaqPanel open={isOpen}>
-                    <div className="FAQ-A">
-                      {item.answer.map((block, i) => (
-                        <AnswerBlock
-                          key={`${item.category}-${i}`}
-                          block={block}
-                        />
-                      ))}
-                    </div>
+                    <FaqAnswer groups={item.answer} />
                   </FaqPanel>
                   <div className="FAQ-SPACER" />
                 </div>
@@ -93,20 +92,32 @@ export function Faq() {
   );
 }
 
-function AnswerBlock({ block }: { block: FaqAnswerBlock }) {
-  if (block.t === "h") {
-    return <p className="FAQ-A-H text-kr">{block.text}</p>;
-  }
-  if (block.t === "li") {
-    return <p className="FAQ-A-LI text-kr">{block.text}</p>;
-  }
-  if (block.t === "eq") {
-    return <p className="FAQ-A-EQ text-kr">{block.text}</p>;
-  }
-  if (block.t === "pg") {
-    return <p className="FAQ-A-PG text-kr">{block.text}</p>;
-  }
-  return <p className="FAQ-A-P text-kr">{block.text}</p>;
+/**
+ * 시안은 빈 줄로 단락을 나눈 하나의 텍스트 블록이다.
+ * 단일 <p> + <br />로 두어야 줄 27 / 단락 54가 line box 그대로 나오고,
+ * text-box-trim 이 첫 줄 위·끝 줄 아래에만 적용된다.
+ */
+function FaqAnswer({ groups }: { groups: readonly FaqAnswerGroup[] }) {
+  return (
+    <p className="FAQ-ANSWER text-kr">
+      {groups.map((group, gi) => (
+        <Fragment key={gi}>
+          {gi > 0 ? (
+            <>
+              <br />
+              <br />
+            </>
+          ) : null}
+          {group.map((line, li) => (
+            <Fragment key={li}>
+              {li > 0 ? <br /> : null}
+              {line.bold ? <strong>{line.text}</strong> : line.text}
+            </Fragment>
+          ))}
+        </Fragment>
+      ))}
+    </p>
+  );
 }
 
 function FaqPanel({
@@ -187,6 +198,7 @@ function FaqIcon() {
       aria-hidden
     >
       <path
+        className="FAQ-ICON-MINUS"
         d="M1 10H19"
         fill="none"
         stroke="#000000"

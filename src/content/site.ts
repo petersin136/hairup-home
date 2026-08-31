@@ -239,44 +239,66 @@ export const keyBenefits = {
 } as const;
 
 export const templateCollection = {
-  /** PC — Dilemma 와 동일 SECTION-TAG · the 이탤릭 */
+  /** PC hu_TEMPLATE PC 01 — ( 05. TEMPLATE Collection ) · Collection 만 이탤릭 */
   tag: {
-    before: "( 05. ",
-    article: "the",
-    after: " TEMPLATE COLLECTION )",
+    before: "( 05. TEMPLATE ",
+    article: "Collection",
+    after: " )",
   },
-  headline: ["수많은 디자이너 중", "하나가 아닌", "단 하나의 브랜드로."],
+  headline: ["수많은 디자이너 중", "하나가 아닌,", "단 하나의 브랜드로."],
   body: [
-    "플랫폼의 획일화된 목록 속에서는 당신의 미학을 온전히 보여줄 수 없습니다.",
-    "당신의 작업, 당신의 색, 당신의 이야기를 담은",
-    "독점 페이지로 고객에게 깊은 인상을 남기세요.",
+    "같은 디자이너라도 보여주는 방식은 다릅니다.",
+    "작업 사진과 시술 메뉴, 당신의 이야기에 딱 맞는",
+    "웹 쇼룸 템플릿을 선택해보세요.",
   ],
   ctas: {
     pc: "VIEW ON PC",
     mobile: "VIEW ON MOBILE",
   },
+  /* PC hu_TEMPLATE PC 04 — 기본 라틴, hover 시 한글로 바뀝니다 */
+  cardCtas: {
+    demo: { label: "VIEW DEMO", labelKr: "웹 미리보기" },
+    start: {
+      label: "GET STARTED",
+      labelKr: "브랜드 플랜 시작하기",
+      href: "https://pf.kakao.com/_xlfqiX/chat",
+    },
+  },
   /*
-   * 대문 이미지는 scripts/capture-templates.mjs 로 각 데모 사이트의 첫 화면을
+   * image (모바일) 는 scripts/capture-templates.mjs 로 각 데모 사이트의 첫 화면을
    * 1600 × 1000 으로 찍어 둔 것입니다. 사이트가 바뀌면 다시 돌리면 됩니다.
+   * imageActive / imageWaiting 은 시안이 지정한 840×650 · 688×532 전용 소스입니다.
    */
   templates: [
     {
       index: "01",
+      cardTag: "TEMPLATE 01",
       name: "Studio Signature",
+      cardDesc: "",
       href: "https://maranathahomepage.vercel.app/",
       image: "/templates/studio-signature.webp",
+      imageActive: "/templates/hus_TEMPLATE(840)_01.png",
+      imageWaiting: "/templates/hus_TEMPLATE(688)_01.png",
     },
     {
       index: "02",
-      name: "Studio Lookbook",
-      href: "https://hair-up-template-2.vercel.app/",
-      image: "/templates/editorial-portrait.webp",
+      cardTag: "TEMPLATE 02",
+      name: "Studio Neutral",
+      cardDesc: "브랜드 풀패키지 쇼룸 · 프리미엄 살롱 추천",
+      href: "https://hairup-template3.vercel.app/",
+      image: "/templates/elevate-studio.webp",
+      imageActive: "/templates/hus_TEMPLATE(840)_02.png",
+      imageWaiting: "/templates/hus_TEMPLATE(688)_02.png",
     },
     {
       index: "03",
-      name: "Studio Neutral",
-      href: "https://hairup-template3.vercel.app/",
-      image: "/templates/elevate-studio.webp",
+      cardTag: "TEMPLATE 03",
+      name: "Studio Lookbook",
+      cardDesc: "",
+      href: "https://hair-up-template-2.vercel.app/",
+      image: "/templates/editorial-portrait.webp",
+      imageActive: "/templates/hus_TEMPLATE(840)_03.png",
+      imageWaiting: "/templates/hus_TEMPLATE(688)_03.png",
     },
   ],
   /* hu_MARQUEE_DETAIL_PC */
@@ -291,12 +313,10 @@ export const templateCollection = {
  * 10_FAQ — PC 시안 hu_FAQ_PC (아코디언) · 모바일은 items 카드.
  * 섹션 번호는 사이트 순서 07. 카피·리스트는 시안.
  */
-export type FaqAnswerBlock =
-  | { t: "p"; text: string }
-  | { t: "pg"; text: string }
-  | { t: "h"; text: string }
-  | { t: "li"; text: string }
-  | { t: "eq"; text: string };
+/** 시안의 한 줄. bold = font-weight 600 강조 구간. */
+export type FaqAnswerLine = { text: string; bold?: boolean };
+/** 시안에서 빈 줄로 구분되는 단락. 단락 사이 = 빈 줄 1개. */
+export type FaqAnswerGroup = FaqAnswerLine[];
 
 export const faq = {
   /** PC — Pricing / Template 과 동일 SECTION-TAG · the 이탤릭 */
@@ -316,90 +336,128 @@ export const faq = {
       category: "SETUP",
       question: "세팅 절차와 제작 소요 기간은 어떻게 되나요?",
       answer: [
-        { t: "p", text: "모든 플랜은 기초 문진을 통해 헤어샵의 시술 체계와 운영 방식을 파악한 후 세팅됩니다." },
-        { t: "h", text: "• 스타터 플랜 (영업일 기준 5~7일 소요)" },
-        { t: "li", text: "- 스타터 플랜 선택 및 결제" },
-        { t: "li", text: "- 운영 체계 파악을 위한 세팅 인터뷰 진행" },
-        { t: "li", text: "- 카카오톡 채널 내 AI 살롱 매니저 세팅" },
-        { t: "h", text: "• 브랜딩 플랜 (자료 수급 완료 후 영업일 기준 7~10일 소요)" },
-        { t: "li", text: "- 브랜딩 플랜 및 웹 쇼룸 템플릿 선택" },
-        { t: "li", text: "- 온라인 약관 동의 및 결제" },
-        { t: "li", text: "- 운영 체계 파악을 위한 세팅 인터뷰 진행" },
-        { t: "li", text: "- 템플릿에 필요한 정보와 자료 사양 안내(이미지 수량, 문구 등)" },
-        { t: "li", text: "- 자료 접수 완료 후 단독 웹 쇼룸 구축 및 카카오톡 AI 매니저 연동" },
-      ] satisfies FaqAnswerBlock[],
+        [
+          { text: "모든 플랜은 기초 문진을 통해 헤어샵의 시술 체계와 운영 방식을 파악한 후 세팅됩니다." },
+        ],
+        [
+          { text: "• 스타터 플랜 (영업일 기준 5~7일 소요)", bold: true },
+          { text: "- 스타터 플랜 선택 및 결제" },
+          { text: "- 운영 체계 파악을 위한 세팅 인터뷰 진행" },
+          { text: "- 카카오톡 채널 내 AI 살롱 매니저 세팅" },
+        ],
+        [
+          { text: "• 브랜딩 플랜 (자료 수급 완료 후 영업일 기준 7~10일 소요)", bold: true },
+          { text: "- 브랜딩 플랜 및 웹 쇼룸 템플릿 선택" },
+          { text: "- 온라인 약관 동의 및 결제" },
+          { text: "- 운영 체계 파악을 위한 세팅 인터뷰 진행" },
+          { text: "- 템플릿에 필요한 정보와 자료 사양 안내(이미지 수량, 문구 등)" },
+          { text: "- 자료 접수 완료 후 단독 웹 쇼룸 구축 및 카카오톡 AI 매니저 연동" },
+        ],
+      ] satisfies FaqAnswerGroup[],
     },
     {
       category: "INTEGRATION",
       question: "AI 연동 방식과 직접 응대 방법은 어떻게 되나요?",
       answer: [
-        { t: "p", text: "헤어업 AI 살롱 매니저는 카카오톡 채널 기반으로 작동하며, 브랜딩 플랜의 단독 웹 쇼룸에는 카카오톡 위젯이 기본으로 탑재됩니다." },
-        { t: "pg", text: "직접 소통이나 사진 확인이 필요할 때는 별도의 모드 변경 없이 관리자 카카오톡 채널 채팅방에 참여하여 고객과 직접 대화할 수 있습니다." },
-      ] satisfies FaqAnswerBlock[],
+        [
+          { text: "헤어업 AI 살롱 매니저는 카카오톡 채널 기반으로 작동하며," },
+          { text: "브랜딩 플랜의 단독 웹 쇼룸에는 카카오톡 위젯이 기본으로 탑재됩니다." },
+        ],
+        [
+          { text: "직접 소통이나 사진 확인이 필요할 때는 별도의 모드 변경 없이" },
+          { text: "관리자 카카오톡 채널 채팅방에 참여하여 고객과 직접 대화할 수 있습니다." },
+        ],
+      ] satisfies FaqAnswerGroup[],
     },
     {
       category: "CONNECT",
       question: "네이버 플레이스 및 인스타그램 연동이 가능한가요?",
       answer: [
-        { t: "p", text: "네, 가능합니다." },
-        { t: "p", text: "네이버 플레이스 예약 링크나 인스타그램 프로필 링크에 헤어업 단독 웹 쇼룸 주소 또는 AI 살롱 매니저 카카오톡 채널 링크를 연결할 수 있습니다." },
-        { t: "p", text: "타사 예약 플랫폼과 직접 연동되는 방식이 아닌, 외부 링크를 연결하는 방식입니다." },
-      ] satisfies FaqAnswerBlock[],
+        [
+          { text: "네, 가능합니다." },
+          { text: "네이버 플레이스 예약 링크나 인스타그램 프로필 링크에 헤어업 단독 웹 쇼룸 주소" },
+          { text: "또는 AI 살롱 매니저 카카오톡 채널 링크를 연결할 수 있습니다." },
+          { text: "타사 예약 플랫폼과 직접 연동되는 방식이 아닌, 외부 링크를 연결하는 방식입니다." },
+        ],
+      ] satisfies FaqAnswerGroup[],
     },
     {
       category: "PAYMENT",
       question: "예약금 결제와 노쇼 / 환불 처리는 어떻게 되나요?",
       answer: [
-        { t: "p", text: "헤어샵에서 설정한 환불 및 노쇼 규정에 따라 AI 매니저가 예약금 안내부터 결제 확인, 취소 정책 안내까지 처리합니다. 시술 중에도 별도로 계좌를 확인하거나 예약금을 안내하지 않아도 예약금 관련 안내와 확인이 가능합니다." },
-      ] satisfies FaqAnswerBlock[],
+        [
+          { text: "헤어샵에서 설정한 환불 및 노쇼 규정에 따라 AI 매니저가 예약금 안내부터 결제 확인, 취소 정책 안내까지 처리합니다." },
+          { text: "시술 중에도 별도로 계좌를 확인하거나 예약금을 안내하지 않아도 예약금 관련 안내와 확인이 가능합니다." },
+        ],
+      ] satisfies FaqAnswerGroup[],
     },
     {
       category: "OPERATION",
       question: "디지털 기기 조작에 서툴러도 직접 운영할 수 있나요?",
       answer: [
-        { t: "p", text: "가능합니다. 초기 구축부터 시나리오 설정까지 헤어업에서 진행한 후 전달해 드립니다." },
-        { t: "p", text: "이후 예약 확인 및 관리는 스마트폰의 카카오톡 채널 관리자 앱에서 직접 하실 수 있습니다." },
-      ] satisfies FaqAnswerBlock[],
+        [
+          { text: "가능합니다. 초기 구축부터 시나리오 설정까지 헤어업에서 진행한 후 전달해 드립니다." },
+          { text: "이후 예약 확인 및 관리는 스마트폰의 카카오톡 채널 관리자 앱에서 직접 하실 수 있습니다." },
+        ],
+      ] satisfies FaqAnswerGroup[],
     },
     {
       category: "UPDATE",
       question: "매장 정보나 사진 변경 시 유지보수 기준은 어떻게 되나요?",
       answer: [
-        { t: "p", text: "브랜딩 플랜은 구독 기간 동안 아래 기준에 따라 무상 수정이 제공됩니다." },
-        { t: "h", text: "• 상시 무상 수정 (구독 기간 내 무제한)" },
-        { t: "li", text: "- 시술 가격표 / 메뉴명 / 푸터 정보 등 단순 텍스트 변경" },
-        { t: "li", text: "- 퇴사 디자이너 비활성화" },
-        { t: "li", text: "- 기존 템플릿 내 특정 섹션 삭제 (타 템플릿 섹션 이식 및 교차 혼합 불가)" },
-        { t: "h", text: "• 연 5회 무상 수정 (서비스 개시일 기준 1년 단위 / 미사용분 이월 불가)" },
-        { t: "li", text: "- 매장 인테리어, 시술 사진, 디자이너 프로필 사진 교체" },
-        { t: "li", text: "- 브랜드 소개 및 BOOKING 섹션 안내 문구 변경" },
-        { t: "li", text: "- 띠배너 공지 수정, 리뷰 업데이트, 신규 디자이너 추가" },
-        { t: "eq", text: "= 단위 작업 1건당 1회 차감" },
-        { t: "h", text: "• 유상 수정" },
-        { t: "li", text: "- 연 5회 소진 후 추가 작업 시 건당 3만원(VAT 별도)" },
-      ] satisfies FaqAnswerBlock[],
+        [
+          { text: "브랜딩 플랜은 구독 기간 동안 아래 기준에 따라 무상 수정이 제공됩니다." },
+        ],
+        [
+          { text: "• 상시 무상 수정 (구독 기간 내 무제한)", bold: true },
+          { text: "- 시술 가격표 / 메뉴명 / 푸터 정보 등 단순 텍스트 변경" },
+          { text: "- 퇴사 디자이너 비활성화" },
+          { text: "- 기존 템플릿 내 특정 섹션 삭제 (타 템플릿 섹션 이식 및 교차 혼합 불가)" },
+        ],
+        [
+          { text: "• 연 5회 무상 수정 (서비스 개시일 기준 1년 단위 / 미사용분 이월 불가)", bold: true },
+          { text: "- 매장 인테리어, 시술 사진, 디자이너 프로필 사진 교체" },
+          { text: "- 브랜드 소개 및 BOOKING 섹션 안내 문구 변경" },
+          { text: "- 띠배너 공지 수정, 리뷰 업데이트, 신규 디자이너 추가" },
+          { text: "= 단위 작업 1건당 1회 차감" },
+        ],
+        [
+          { text: "• 유상 수정", bold: true },
+          { text: "- 연 5회 소진 후 추가 작업 시 건당 3만원(VAT 별도)" },
+        ],
+      ] satisfies FaqAnswerGroup[],
     },
     {
       category: "SWITCH",
       question: "이용 중 플랜 전환이나 템플릿 교체가 가능한가요?",
       answer: [
-        { t: "p", text: "네, 언제든지 전환 및 변경이 가능합니다." },
-        { t: "h", text: "• 브랜딩 플랜으로 전환" },
-        { t: "p", text: "단독 웹 쇼룸 구축 및 1:1 맞춤 디렉팅을 위한 추가 세팅비 150만원(VAT 별도) 결제 후 진행됩니다." },
-        { t: "h", text: "• 브랜딩 템플릿 전체 변경" },
-        { t: "p", text: "다른 디자인 템플릿으로 전체 리뉴얼을 원하실 경우 50만원(VAT 별도)의 추가 세팅비가 적용됩니다." },
-      ] satisfies FaqAnswerBlock[],
+        [
+          { text: "네, 언제든지 전환 및 변경이 가능합니다." },
+        ],
+        [
+          { text: "• 브랜딩 플랜으로 전환", bold: true },
+          { text: "단독 웹 쇼룸 구축 및 1:1 맞춤 디렉팅을 위한 추가 세팅비 150만원(VAT 별도) 결제 후 진행됩니다." },
+        ],
+        [
+          { text: "• 브랜딩 템플릿 전체 변경", bold: true },
+          { text: "다른 디자인 템플릿으로 전체 리뉴얼을 원하실 경우 50만원(VAT 별도)의 추가 세팅비가 적용됩니다." },
+        ],
+      ] satisfies FaqAnswerGroup[],
     },
     {
       category: "BILLING",
       question: "연간 결제 혜택과 세금계산서 발행 기준은 어떻게 되나요?",
       answer: [
-        { t: "h", text: "• 연간 결제 혜택" },
-        { t: "p", text: "1년 구독 결제 시 연 79만원(VAT 별도)으로 이용할 수 있습니다." },
-        { t: "p", text: "매월 결제 시 연 948,000원으로, 연간 결제 시 158,000원이 절감됩니다." },
-        { t: "h", text: "• 증빙 안내" },
-        { t: "p", text: "모든 세팅비와 구독료는 부가세(VAT) 별도이며, 결제 시 사업자등록증을 전달해 주시면 전자세금계산서가 발행됩니다." },
-      ] satisfies FaqAnswerBlock[],
+        [
+          { text: "• 연간 결제 혜택", bold: true },
+          { text: "1년 구독 결제 시 연 79만원(VAT 별도)으로 이용할 수 있습니다." },
+          { text: "매월 결제 시 연 948,000원으로, 연간 결제 시 158,000원이 절감됩니다." },
+        ],
+        [
+          { text: "• 증빙 안내", bold: true },
+          { text: "모든 세팅비와 구독료는 부가세(VAT) 별도이며, 결제 시 사업자등록증을 전달해 주시면 전자세금계산서가 발행됩니다." },
+        ],
+      ] satisfies FaqAnswerGroup[],
     },
   ],
 
@@ -501,8 +559,8 @@ export const pricing = {
     name: "STARTER PLAN",
     tagline: ["24시간 쉬지 않고,", "손님을 맞이하는 전담 예약 매니저."],
     prices: [
-      { num: "100", unit: "만원", label: "초기 세팅비 1회" },
-      { num: "7.9", unit: "만원", label: "월 구독료" },
+      { num: "100", unit: "만 원", label: "초기 세팅비 1회" },
+      { num: "7.9", unit: "만 원", label: "월 구독료" },
     ],
     features: [
       {
@@ -532,8 +590,8 @@ export const pricing = {
       "단독 웹 쇼룸과 통합 예약 시스템.",
     ],
     prices: [
-      { num: "200", unit: "만원", label: "초기 세팅비 1회" },
-      { num: "7.9", unit: "만원", label: "월 구독료" },
+      { num: "200", unit: "만 원", label: "초기 세팅비 1회" },
+      { num: "7.9", unit: "만 원", label: "월 구독료" },
     ],
     features: [
       {
@@ -562,7 +620,10 @@ export const pricing = {
       },
       {
         title: "웹 전용 카카오 AI 연동 위젯",
-        desc: ["클릭 한 번으로 매장 카카오 채널에 연결되어 AI 매니저와 상담·예약"],
+        desc: [
+          "클릭 한 번으로 매장 카카오 채널에 연결되어 AI 매니저와",
+          "상담·예약",
+        ],
         descMobile: [
           "클릭 한 번으로 매장 카카오 채널에 연결되어",
           "AI 매니저와 상담·예약",

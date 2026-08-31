@@ -5,7 +5,7 @@ import { useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { GlyphLines } from "@/components/copy/GlyphLines";
-import { SPLASH_DONE_EVENT } from "@/components/splash/SplashScreen";
+import { SPLASH_DONE_EVENT } from "@/lib/splash-keys";
 import { launchPopup } from "@/content/site";
 import {
   hasSeenLaunchPopup,

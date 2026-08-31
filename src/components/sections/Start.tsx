@@ -13,14 +13,16 @@ import { start } from "@/content/site";
  *                       본문 글리프 ↔ 버튼 55
  *                       hover bg #212D23 · color #FAF8F5
  *
- * 배경: 디자이너 JPG(1024) → deblock + Lanczos @2x (2760×1300) PNG/WebP
- * CSS background 업스케일보다 <img> 1:1 레티나가 덜 깨짐
+ * 배경: 컨테이너 1380×650 과 1:1 인 1× / 2× 무손실 에셋 (scripts/build-cta-banner.mjs)
+ * srcset 으로 DPR 에 맞는 장을 그대로 받아 브라우저 재샘플링을 없앰
+ * 인코딩은 WebP lossless — 손실 압축이 노이즈 텍스처를 뭉개던 문제 제거
  */
+const BANNER_W = 1380;
 const BANNER_H = 650;
 const EDGE = 30;
 const HEIGHT = BANNER_H + EDGE;
 /** cache-bust — 배포 CDN이 옛 JPG 붙잡는 것 방지 */
-const BG_VER = "20260826b";
+const BG_VER = "20260831";
 
 export function Start() {
   return (
@@ -29,14 +31,15 @@ export function Start() {
         <picture>
           <source
             type="image/webp"
-            srcSet={`/images/cta-banner-bg.webp?v=${BG_VER}`}
+            srcSet={`/images/cta-banner-bg-1x.webp?v=${BG_VER} 1x, /images/cta-banner-bg-2x.webp?v=${BG_VER} 2x`}
           />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+          {/* next/image 최적화는 재인코딩이라 무손실이 깨짐 — 원본 그대로 전달 */}
           <img
-            src={`/images/cta-banner-bg.png?v=${BG_VER}`}
+            src={`/images/cta-banner-bg-1x.png?v=${BG_VER}`}
+            srcSet={`/images/cta-banner-bg-1x.png?v=${BG_VER} 1x, /images/cta-banner-bg-2x.png?v=${BG_VER} 2x`}
             alt=""
-            width={2760}
-            height={1300}
+            width={BANNER_W}
+            height={BANNER_H}
             decoding="async"
             fetchPriority="high"
             draggable={false}

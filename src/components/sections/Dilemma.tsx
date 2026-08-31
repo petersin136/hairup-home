@@ -22,10 +22,12 @@ import { dilemma } from "@/content/site";
  */
 const PAD_TOP = 200;
 const PAD_BOTTOM = 170;
-const GAP_TAG_TITLE = 42;
-const GAP_TITLE_DESC = 36;
 const GAP_DESC_CENTER = 93;
-const GAP_CENTER_BOTTOM = 170;
+/**
+ * tag→title 42 · title→desc 36 · center→bottom 170 은 globals.css 로 옮겼습니다.
+ * Firefox 는 text-box-trim 을 구현하지 않아 @supports 로 라인박스 오버슈트를
+ * 상쇄해야 하는데, 인라인 style 은 @supports 가 덮을 수 없습니다.
+ */
 const TITLE_LEADING = 1.375;
 const DESC_LEADING = 1.588;
 
@@ -67,7 +69,7 @@ export function Dilemma() {
         }}
       >
         {/* .DILEMMA-TAG — the 만 소문자 이탤릭 */}
-        <p className="SECTION-TAG text-center text-forest">
+        <p className="DILEMMA-TAG SECTION-TAG text-center text-forest">
           {dilemma.tag.before}
           <em>{dilemma.tag.article}</em>
           {dilemma.tag.after}
@@ -75,11 +77,8 @@ export function Dilemma() {
 
         {/* .DILEMMA-TITLE */}
         <h2
-          className="SECTION-HEADLINE text-kr text-center text-[40px] font-semibold text-ink"
-          style={{
-            marginTop: GAP_TAG_TITLE,
-            lineHeight: TITLE_LEADING,
-          }}
+          className="DILEMMA-TITLE SECTION-HEADLINE text-kr text-center text-[40px] font-semibold text-ink"
+          style={{ lineHeight: TITLE_LEADING }}
         >
           <GlyphLines lines={dilemma.headline} />
         </h2>
@@ -87,9 +86,8 @@ export function Dilemma() {
         {/* .DILEMMA-DESC */}
         <RainInLines
           lines={dilemma.bodyPc}
-          className="text-kr text-center text-[17px] font-normal tracking-[-0.01em]"
+          className="DILEMMA-DESC text-kr text-center text-[17px] font-normal tracking-[-0.01em]"
           style={{
-            marginTop: GAP_TITLE_DESC,
             lineHeight: DESC_LEADING,
             color: "rgba(28, 26, 25, 0.8)",
           }}
@@ -126,10 +124,7 @@ export function Dilemma() {
         </div>
 
         {/* .DILEMMA-BOTTOM-TEXT — br 한 요소 + trim (rain-line block 금지) */}
-        <p
-          className="DILEMMA-BOTTOM-TEXT text-kr"
-          style={{ marginTop: GAP_CENTER_BOTTOM }}
-        >
+        <p className="DILEMMA-BOTTOM-TEXT text-kr">
           <GlyphLines lines={dilemma.bodyAside} />
         </p>
       </div>
