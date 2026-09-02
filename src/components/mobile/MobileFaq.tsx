@@ -129,27 +129,10 @@ function MobileFaqPanel({
     const panel = panelRef.current;
     if (!inner || !panel) return;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
     if (!open) {
       setSettled(false);
-      /* height:auto → 0 은 트랜지션이 안 먹으므로, 현재 px 높이를 한 프레임 고정한 뒤 0으로 */
-      const from = Math.ceil(panel.getBoundingClientRect().height);
-      setHeight(from > 0 ? from : 0);
-      if (reduced || from <= 0) {
-        setHeight(0);
-        return;
-      }
-      let raf2 = 0;
-      const raf1 = requestAnimationFrame(() => {
-        raf2 = requestAnimationFrame(() => {
-          setHeight(0);
-        });
-      });
-      return () => {
-        cancelAnimationFrame(raf1);
-        cancelAnimationFrame(raf2);
-      };
+      setHeight(0);
+      return;
     }
 
     const measure = () => {
@@ -160,6 +143,7 @@ function MobileFaqPanel({
     setSettled(false);
 
     const settle = () => setSettled(true);
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
       settle();
     }
