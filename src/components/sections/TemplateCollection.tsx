@@ -332,7 +332,8 @@ function TemplateCard({
   const inset =
     !centered && seat < activeIndex ? CARD.activeW - CARD.inactiveW : 0;
 
-  const isDark = centered && template.cardTheme === "dark";
+  const isDark =
+    centered && "cardTheme" in template && template.cardTheme === "dark";
 
   return (
     <article
