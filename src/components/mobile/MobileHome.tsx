@@ -289,17 +289,17 @@ export function MobileHome() {
         </section>
 
         {/* Template collection */}
-        <section id="template" className="bg-porcelain pt-14 pb-0">
+        <section id="template" className="bg-porcelain pt-[100px] pb-0">
           <div className="px-5">
             <p className="SECTION-TAG text-forest">
               {templateCollection.tagMobile.before}
               <em>{templateCollection.tagMobile.article}</em>
               {templateCollection.tagMobile.after}
             </p>
-            <h2 className="text-kr mt-4 text-[30px] font-bold leading-[1.3] text-ink">
+            <h2 className="text-kr mt-[22px] text-[30px] font-bold leading-[1.3] text-ink">
               <GlyphLines lines={templateCollection.headline} />
             </h2>
-            <p className="text-kr mt-5 text-[15px] leading-[1.65] text-body">
+            <p className="text-kr mt-[28px] text-[15px] leading-[1.65] text-body">
               <GlyphLines lines={templateCollection.body} />
             </p>
           </div>

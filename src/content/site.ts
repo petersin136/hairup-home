@@ -232,9 +232,9 @@ export const keyBenefits = {
     article: "Key",
     after: " BENEFITS )",
   },
-  /** 모바일 시안 hu_key_benefits_m — ( 04. Key BENEFITS ) */
+  /** 모바일은 03. AUTOMATED CRM 섹션이 없어 번호가 하나씩 앞당겨집니다. — ( 03. Key BENEFITS ) */
   tagMobile: {
-    before: "( 04. ",
+    before: "( 03. ",
     article: "Key",
     after: " BENEFITS )",
   },
