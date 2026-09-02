@@ -1055,22 +1055,19 @@ p:has(> .STARTER-PRICE-NUM-MONTH) {
   }
 }
 
-/* 모바일 Experience 목업 — 입력바 높이 80%, 글·커서 위아래 잘림 방지 */
-.M-EXPERIENCE .demo-chat-input-shell {
-  height: 54px;
-  border-radius: 27px;
+/* 입력 필드 — text-box-trim / 타이트한 line-height 가 글리프 위·아래를 잘라냄 */
+.demo-chat-input-field,
+.demo-chat-input-hint {
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  text-box-trim: none;
+  text-box-edge: initial;
 }
 
-.M-EXPERIENCE .demo-chat-input-field {
-  box-sizing: border-box;
-  height: 36px;
-  padding-top: 0;
-  padding-bottom: 0;
-  font-size: 16px;
-  line-height: 36px;
-  overflow: visible;
+.demo-chat-input-field {
+  line-height: 1.5;
 }
 
+/* 모바일 Experience 목업 — 힌트·커서만 조정 (바 높이는 원본 68 유지: 글자 잘림 방지) */
 .M-EXPERIENCE .demo-chat-input-hint,
 .mobile-demo-chat .demo-chat-input-hint {
   font-size: 16px;
@@ -1082,7 +1079,7 @@ p:has(> .STARTER-PRICE-NUM-MONTH) {
 .M-EXPERIENCE .demo-chat-caret,
 .M-EXPERIENCE .demo-chat-caret-light,
 .mobile-demo-chat .demo-chat-caret-light {
-  height: 22px;
+  height: 26px;
 }
 
 .splash-root {

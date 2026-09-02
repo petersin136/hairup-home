@@ -431,7 +431,7 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
                     {idle ? (
                       <>
                         <span className="demo-chat-caret demo-chat-caret-light" aria-hidden />
-                        <span className="demo-chat-input-hint text-kr">
+                        <span className="demo-chat-input-hint">
                           메세지 입력
                         </span>
                       </>
@@ -446,7 +446,7 @@ export const DemoChat = forwardRef<DemoChatHandle, DemoChatProps>(
                       maxLength={500}
                       placeholder={limited ? "오늘 체험이 끝났어요" : ""}
                       aria-label="메세지 입력"
-                      className="demo-chat-input-field text-kr w-full border-0 bg-transparent py-2 pr-1 text-[18px] font-normal leading-snug text-[#EBEBEB] caret-[#007AFF] outline-none placeholder:text-[rgba(235,235,235,0.25)] disabled:opacity-60"
+                      className="demo-chat-input-field w-full border-0 bg-transparent py-2 pr-1 text-[18px] font-normal leading-[1.5] text-[#EBEBEB] caret-[#007AFF] outline-none placeholder:text-[rgba(235,235,235,0.25)] disabled:opacity-60"
                       autoComplete="off"
                     />
                   </div>
