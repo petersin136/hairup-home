@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import { Wordmark } from "@/components/brand/Wordmark";
-import { nav } from "@/content/site";
+import { contact, nav } from "@/content/site";
 import { onHashClick } from "@/lib/scroll-to-hash";
 
 /**
@@ -13,6 +13,7 @@ import { onHashClick } from "@/lib/scroll-to-hash";
  * .GNB-MENU-LIST          flex · align-items center · gap 65
  * .GNB-ITEM A             Inter 15/500 · #1C1A19 · center
  * .TXT-KR                 Noto Sans KR 15/400 · 기본 숨김, 호버 시 영문 숨기고 한글만
+ * CONTACT                 메뉴와 동일 스타일 · 호버 시 문의하기 · 카카오 채널
  * padding                 상 45 · 좌우 30 · 하 75
  */
 export function SiteHeader() {
@@ -38,6 +39,18 @@ export function SiteHeader() {
             </span>
           ))}
         </nav>
+
+        <a
+          href={contact.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="GNB-LOGIN"
+        >
+          <span className="TXT-EN">{contact.en}</span>
+          <span className="TXT-KR" aria-hidden>
+            {contact.ko}
+          </span>
+        </a>
       </div>
     </header>
   );

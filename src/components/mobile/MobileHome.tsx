@@ -10,6 +10,7 @@ import {
 } from "react";
 
 import { GlyphLines } from "@/components/copy/GlyphLines";
+import { DemoChat } from "@/components/sections/DemoChat";
 import { FooterNewsletter } from "@/components/sections/FooterNewsletter";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { TopBanner } from "@/components/layout/TopBanner";
@@ -28,10 +29,7 @@ import {
 import { onHashClick, scrollToHash } from "@/lib/scroll-to-hash";
 import { saveReturnScroll } from "@/lib/entry-chrome";
 import { libreBodoni } from "@/lib/fonts";
-import {
-  MOBILE_ARTBOARD_PX,
-  MOBILE_CONTENT_PX,
-} from "@/lib/mobile-artboard";
+import { MOBILE_ARTBOARD_PX } from "@/lib/mobile-artboard";
 
 /**
  * 모바일 전용 홈. HomeShell 이 1440px 미만일 때만 마운트합니다.
@@ -130,6 +128,7 @@ export function MobileHome() {
                 height={hero.media.height}
                 sizes="350px"
                 priority
+                unoptimized
               />
               <div className="CARD-COPY">
                 <h1 className="CARD-TITLE">
@@ -210,23 +209,23 @@ export function MobileHome() {
           </p>
         </section>
 
-        {/* Experience — 시안 hu_experience_m · PC 에셋(ex-right-pc-bg) */}
+        {/* Experience — 모바일 시안 hu_experience_m · 390 기준 */}
         <section id="ai-manager" className="M-EXPERIENCE bg-porcelain">
-          {/* .DASHBOARD-SUB-CARD — PC 노란 카드 배경 PNG */}
-          <div className="M-EX-SUB">
+          {/* detail_1_m · .RECTANGLE_1 — SOURCE: HU_EX_BG.PNG (2x 700×660 → 350×330) */}
+          <div className="RECTANGLE_1">
             <Image
-              src="/experience/ex-right-pc-bg.png"
+              src={experience.mobileBg}
               alt=""
-              width={476}
-              height={600}
+              width={350}
+              height={330}
               unoptimized
               quality={100}
               sizes="350px"
-              className="M-EX-SUB-BG"
+              className="RECTANGLE_1-BG"
               priority={false}
             />
             <div className="M-EX-COPY">
-              <p className="SECTION-TAG text-left text-forest">
+              <p className="__02__THE_EXPERIENCE__">
                 {experience.tag.before}
                 <em>{experience.tag.article}</em>
                 {experience.tag.after}
@@ -247,12 +246,17 @@ export function MobileHome() {
               </a>
             </div>
           </div>
+
+          {/* detail_1_m · .RECTANGLE_19_COPY — DemoChat fill */}
+          <div className="RECTANGLE_19_COPY">
+            <DemoChat fill />
+          </div>
         </section>
 
         {/* Key Benefits — 시안 hu_key_benefits_m · 390 세로 스택 (가로 스와이프 없음) */}
         <section id="key-benefits" className="M-KEY-BENEFITS bg-porcelain">
           <header className="M-KB-HEAD">
-            <p className="SECTION-TAG M-KB-TAG">
+            <p className="M-KB-TAG">
               {keyBenefits.tagMobile.before}
               <em>{keyBenefits.tagMobile.article}</em>
               {keyBenefits.tagMobile.after}
@@ -272,20 +276,22 @@ export function MobileHome() {
                     src={card.image}
                     alt=""
                     fill
-                    sizes={`${MOBILE_CONTENT_PX}px`}
+                    sizes="350px"
                     className="object-cover"
                     unoptimized
                   />
                 </div>
                 <h3 className="M-KB-CARD-TITLE">{card.title}</h3>
-                <p className="M-KB-CARD-DESC">{card.body.join("")}</p>
+                <p className="M-KB-CARD-DESC">
+                  <GlyphLines lines={card.bodyMobile} />
+                </p>
               </article>
             ))}
           </div>
         </section>
 
         {/* Template collection */}
-        <section id="template" className="bg-porcelain py-14">
+        <section id="template" className="bg-porcelain pt-14 pb-0">
           <div className="px-5">
             <p className="SECTION-TAG text-forest">
               {templateCollection.tagMobile.before}
@@ -316,6 +322,7 @@ export function MobileHome() {
                     fill
                     sizes="280px"
                     className="object-cover"
+                    unoptimized
                   />
                   <div className="absolute inset-0 bg-black/45" aria-hidden />
                   <div className="absolute inset-0 flex flex-col items-center justify-end px-4 pb-5">
@@ -349,21 +356,21 @@ export function MobileHome() {
             </div>
           </div>
 
-          <div className="mt-8 overflow-hidden" aria-hidden>
-            <p className="mobile-marquee-track font-display flex w-max whitespace-nowrap text-[14px] font-medium tracking-[0.12em] text-forest uppercase">
+          <div className="M-MARQUEE" aria-hidden>
+            <div className="MARQUEE-TRACK mobile-marquee-track">
               {Array.from({ length: 2 }, (_, loop) =>
                 templateCollection.marquee.map((phrase) => (
-                  <span key={`${loop}-${phrase}`} className="mx-4 shrink-0">
+                  <span key={`${loop}-${phrase}`} className="MARQUEE">
                     {phrase}
                   </span>
                 )),
               )}
-            </p>
+            </div>
           </div>
         </section>
 
         {/* Pricing */}
-        <section id="pricing" className="bg-porcelain px-5 py-14">
+        <section id="pricing" className="bg-porcelain px-5 pb-14 pt-0">
           <p className="SECTION-TAG text-forest">
             {pricing.tagMobile.before}
             <em>{pricing.tagMobile.article}</em>
@@ -413,20 +420,15 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* Start CTA — 시안 hu_cta_banner_footer_m · 390 카드형 */}
-        <section id="start" className="M-CTA bg-porcelain">
+        {/* Start CTA — 시안 hu_cta_banner_footer_m · 390 · HU_CTA_BG 2x→350×480 */}
+        <section id="start" className="M-CTA">
           <div className="M-CTA-CARD">
             <picture className="M-CTA-CARD-BG">
-              <source
-                type="image/webp"
-                srcSet="/images/cta-banner-bg-1x.webp 1x, /images/cta-banner-bg-2x.webp 2x"
-              />
               <img
-                src="/images/cta-banner-bg-1x.png"
-                srcSet="/images/cta-banner-bg-1x.png 1x, /images/cta-banner-bg-2x.png 2x"
+                src="/images/hu_cta_bg.png"
                 alt=""
-                width={1380}
-                height={650}
+                width={350}
+                height={480}
                 decoding="async"
                 draggable={false}
               />
@@ -448,8 +450,8 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* Footer — 시안 hu_cta_banner_footer_m · 390 */}
-        <footer id="footer" className="M-FOOTER bg-linen">
+        {/* Footer — 시안 hu_cta_banner_footer_m · 390×1030 */}
+        <footer id="footer" className="M-FOOTER">
           <FooterNewsletter mobile />
 
           {footer.columns
@@ -485,10 +487,8 @@ export function MobileHome() {
             ))}
 
           <p className="M-FOOTER-COMPANY">
-            <GlyphLines lines={footer.companyPc} />
+            <GlyphLines lines={[...footer.companyPc, footer.copyright]} />
           </p>
-
-          <p className="M-FOOTER-COPY">{footer.copyright}</p>
 
           <nav className="M-FOOTER-LEGAL" aria-label="약관">
             {footer.legal.map((item) => (
@@ -503,7 +503,7 @@ export function MobileHome() {
           </nav>
 
           <Link href="/" className="M-FOOTER-LOGO" aria-label="hair up">
-            <Wordmark width={MOBILE_CONTENT_PX} className="h-auto w-full" />
+            <Wordmark width={350} className="h-auto w-full" />
           </Link>
         </footer>
       </main>

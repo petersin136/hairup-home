@@ -17,11 +17,11 @@ export const cta = {
   href: "#pricing",
 } as const;
 
-/** GNB 우측 — hu_GNB_PC · LOGIN 도 메뉴와 동일 스타일, 호버 시 한글 */
-export const login = {
-  en: "LOGIN",
-  ko: "로그인",
-  href: "#",
+/** GNB 우측 — hu_GNB_PC · CONTACT, 호버 시 문의하기 · 카카오 채널 */
+export const contact = {
+  en: "CONTACT",
+  ko: "문의하기",
+  href: "http://pf.kakao.com/_xlfqiX/chat",
 } as const;
 
 /** 헤더 위 띠배너 — hu_TOP_BANNER__PC / hu_TOP_BANNER__M */
@@ -158,8 +158,10 @@ export const experience = {
   ],
   kakaoDemo: {
     label: "카카오톡 데모 체험하기",
-    href: "https://pf.kakao.com/_xlfqiX/chat",
+    href: "http://pf.kakao.com/_xeWxdSx/chat",
   },
+  /** 모바일 시안 hu_experience_detail_1_m · 2x(700×660) → 표시 350×330 */
+  mobileBg: "/experience/hu_ex_bg.png",
   tryAsking: {
     title: "TRY ASKING.",
     body: [
@@ -230,9 +232,9 @@ export const keyBenefits = {
     article: "Key",
     after: " BENEFITS )",
   },
-  /** 모바일은 03. AUTOMATED CRM 섹션이 없어 번호가 하나씩 앞당겨집니다. */
+  /** 모바일 시안 hu_key_benefits_m — ( 04. Key BENEFITS ) */
   tagMobile: {
-    before: "( 03. ",
+    before: "( 04. ",
     article: "Key",
     after: " BENEFITS )",
   },
@@ -249,12 +251,22 @@ export const keyBenefits = {
         "‘요즘 이 드라마 여주인공 머리 하고 싶은데 저한테 어울릴까요?’ 같은",
         "사소한 질문에도 AI가 자연스럽게 제안하고 추천합니다.",
       ],
+      bodyMobile: [
+        "‘요즘 이 드라마 여주인공 머리 하고 싶은데 저한테",
+        "어울릴까요?’ 같은 사소한 질문에도 AI가 자연스럽게",
+        "제안하고 추천합니다.",
+      ],
       image: "/key-benefits/01-consult.png",
     },
     {
       title: "대화를 통한 자동 예약",
       body: [
         "시술 소요 시간과 실시간 예약을 정교하게 계산해 가능한 시간을 안내합니다.",
+        "고객이 “그럼 그때로 할게요” 한마디면 끝납니다.",
+      ],
+      bodyMobile: [
+        "시술 소요 시간과 실시간 예약을 정교하게 계산해",
+        "가능한 시간을 안내합니다.",
         "고객이 “그럼 그때로 할게요” 한마디면 끝납니다.",
       ],
       image: "/key-benefits/02-booking.png",
@@ -265,11 +277,20 @@ export const keyBenefits = {
         "예약이 확정되는 순간, 관리자 화면에 차곡차곡 정리됩니다.",
         "손으로 옮겨 적는 번거로운 과정은 이제 완전히 사라집니다.",
       ],
+      bodyMobile: [
+        "예약이 확정되는 순간, 관리자 화면에 차곡차곡",
+        "정리됩니다. 손으로 옮겨 적는 번거로운 과정은",
+        "이제 완전히 사라집니다.",
+      ],
       image: "/key-benefits/03-ledger.png",
     },
     {
       title: "노쇼 방지 안심 예약금",
       body: [
+        "진짜 방문할 고객만 예약금을 걸고 확정됩니다.",
+        "오지 않을 문의로 낭비하던 시간과 감정을 되찾으세요.",
+      ],
+      bodyMobile: [
         "진짜 방문할 고객만 예약금을 걸고 확정됩니다.",
         "오지 않을 문의로 낭비하던 시간과 감정을 되찾으세요.",
       ],
@@ -301,7 +322,7 @@ export const templateCollection = {
     pc: "VIEW ON PC",
     mobile: "VIEW ON MOBILE",
   },
-  /* PC hu_TEMPLATE PC 04 — 기본 한글 */
+  /* PC hu_TEMPLATE PC 04 — 기본 영문, 호버 시 한글 */
   cardCtas: {
     demo: { label: "VIEW DEMO", labelKr: "웹 미리보기" },
     start: {
@@ -311,8 +332,7 @@ export const templateCollection = {
     },
   },
   /*
-   * image (모바일) 는 scripts/capture-templates.mjs 로 각 데모 사이트의 첫 화면을
-   * 1600 × 1000 으로 찍어 둔 것입니다. 사이트가 바뀌면 다시 돌리면 됩니다.
+   * image (모바일) — PC 활성 카드와 동일한 840×650 PNG 원본.
    * imageActive / imageWaiting 은 시안이 지정한 840×650 · 688×532 전용 소스입니다.
    */
   templates: [
@@ -320,9 +340,9 @@ export const templateCollection = {
       index: "01",
       cardTag: "TEMPLATE 01",
       name: "Studio Signature",
-      cardDesc: "",
+      cardDesc: "올인원 스탠다드 · 로컬 헤어숍 예약 최적화",
       href: "https://maranathahomepage.vercel.app/",
-      image: "/templates/studio-signature.webp",
+      image: "/templates/hus_TEMPLATE(840)_01.png",
       imageActive: "/templates/hus_TEMPLATE(840)_01.png",
       imageWaiting: "/templates/hus_TEMPLATE(688)_01.png",
     },
@@ -332,7 +352,7 @@ export const templateCollection = {
       name: "Studio Neutral",
       cardDesc: "브랜드 풀패키지 쇼룸 · 프리미엄 살롱 추천",
       href: "https://hairup-template3.vercel.app/",
-      image: "/templates/elevate-studio.webp",
+      image: "/templates/hus_TEMPLATE(840)_02.png",
       imageActive: "/templates/hus_TEMPLATE(840)_02.png",
       imageWaiting: "/templates/hus_TEMPLATE(688)_02.png",
     },
@@ -340,9 +360,10 @@ export const templateCollection = {
       index: "03",
       cardTag: "TEMPLATE 03",
       name: "Studio Lookbook",
-      cardDesc: "",
+      cardDesc: "매거진 아카이브 · 하이엔드 1인 헤어샵 추천",
+      cardTheme: "dark",
       href: "https://hair-up-template-2.vercel.app/",
-      image: "/templates/editorial-portrait.webp",
+      image: "/templates/hus_TEMPLATE(840)_03.png",
       imageActive: "/templates/hus_TEMPLATE(840)_03.png",
       imageWaiting: "/templates/hus_TEMPLATE(688)_03.png",
     },

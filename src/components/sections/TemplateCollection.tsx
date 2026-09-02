@@ -332,12 +332,15 @@ function TemplateCard({
   const inset =
     !centered && seat < activeIndex ? CARD.activeW - CARD.inactiveW : 0;
 
+  const isDark = centered && template.cardTheme === "dark";
+
   return (
     <article
       data-centered={centered}
+      data-theme={isDark ? "dark" : undefined}
       className={
         centered
-          ? "TEMPLATE-CARD TEMPLATE-CARD-ACTIVE"
+          ? `TEMPLATE-CARD TEMPLATE-CARD-ACTIVE${isDark ? " TEMPLATE-CARD--DARK" : ""}`
           : "TEMPLATE-CARD TEMPLATE-CARD-WAITING"
       }
       style={{ left: `${left + inset}px` }}
@@ -351,6 +354,7 @@ function TemplateCard({
           sizes={`${CARD.inactiveW}px`}
           draggable={false}
           className="object-cover"
+          unoptimized
         />
       </div>
 
@@ -367,6 +371,7 @@ function TemplateCard({
           draggable={false}
           priority={seat === INITIAL_INDEX}
           className="object-cover object-top"
+          unoptimized
         />
       </div>
 
@@ -393,22 +398,32 @@ function TemplateCard({
         aria-hidden={!centered}
       >
         <a
-          className="BTN-VIEW-DEMO text-kr"
+          className="BTN-VIEW-DEMO"
           href={template.href}
           target="_blank"
           rel="noopener noreferrer"
           tabIndex={centered ? undefined : -1}
         >
-          {templateCollection.cardCtas.demo.labelKr}
+          <span className="TEMPLATE-BTN-ROLL">
+            <span className="TXT-EN">{templateCollection.cardCtas.demo.label}</span>
+            <span className="TXT-KR" aria-hidden>
+              {templateCollection.cardCtas.demo.labelKr}
+            </span>
+          </span>
         </a>
         <a
-          className="BTN-GET-STARTED text-kr"
+          className="BTN-GET-STARTED"
           href={templateCollection.cardCtas.start.href}
           target="_blank"
           rel="noopener noreferrer"
           tabIndex={centered ? undefined : -1}
         >
-          {templateCollection.cardCtas.start.labelKr}
+          <span className="TEMPLATE-BTN-ROLL">
+            <span className="TXT-EN">{templateCollection.cardCtas.start.label}</span>
+            <span className="TXT-KR" aria-hidden>
+              {templateCollection.cardCtas.start.labelKr}
+            </span>
+          </span>
         </a>
       </div>
 

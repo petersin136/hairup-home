@@ -124,7 +124,20 @@ export function FooterNewsletter({
             }
             aria-live="polite"
           >
-            {message || footer.newsletter.notice.replace(/^\*\s*/, "• ")}
+            {status === "success" ? (
+              message.replace(/^[•*]\s*/, "")
+            ) : status === "error" ? (
+              message
+            ) : (
+              <>
+                <span className="M-FOOTER-NEWS-NOTICE-BULLET" aria-hidden>
+                  •
+                </span>
+                <span className="M-FOOTER-NEWS-NOTICE-BODY">
+                  {footer.newsletter.notice.replace(/^[•*]\s*/, "")}
+                </span>
+              </>
+            )}
           </p>
         </form>
       </div>

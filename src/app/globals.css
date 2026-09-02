@@ -1002,9 +1002,37 @@ p:has(> .STARTER-PRICE-NUM-MONTH) {
 
 .mobile-marquee-track {
   animation: mobile-marquee 28s linear infinite;
-  /* PC MARQUEE-TEXT 와 동일 — 24/7 을 대문자 높이에 맞춤 */
+}
+
+/* hu_marquee_detail_m — 390 · padding 100/100 · gap 40 · .MARQUEE 18px Playfair */
+.M-MARQUEE {
+  padding-top: 100px;
+  padding-bottom: 100px;
+  overflow: hidden;
+}
+
+.M-MARQUEE .MARQUEE-TRACK {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  white-space: nowrap;
+  width: max-content;
+}
+
+.M-MARQUEE .MARQUEE {
+  font-size: 18px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-weight: 400;
+  color: rgb(44, 58, 46);
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  flex-shrink: 0;
   font-variant-numeric: lining-nums;
   font-feature-settings: "lnum" 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
 }
 
 @keyframes crm-dot-fill {
@@ -1405,34 +1433,29 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* ==========================================================================
-   MOBILE EXPERIENCE — 시안 hu_experience_m
-   PC Experience 와 동일 에셋(ex-right-pc-bg.png) · DemoChat fill 을 세로 스택.
-   수치: 390 목업 실측 + PC 서브카드 스펙(radius 10 · tag/title/desc/btn).
+   MOBILE EXPERIENCE — hu_experience_m · hu_experience_detail_1–4_m
+   390 아트보드 · PC Experience 와 별개. 2x hu_ex_bg → 표시 350×330.
    ========================================================================== */
 .M-EXPERIENCE {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* 시안에 없음 — 카드 좌우 20 유지용 */
-  padding-left: 20px;
-  padding-right: 20px;
-  /* 시안에 없음 — 딜레마 뒤 / 키베네핏 앞 여백. PC PAD_TOP 80 과 맞춤 */
-  padding-top: 80px;
-  padding-bottom: 0;
-  gap: 14px;
+  /* detail_1_m · RECTANGLE 좌우 여백 20 = (390−350)/2 */
+  gap: 15px;
 }
 
-/* .DASHBOARD-SUB-CARD — 350×330 · r 10 · PC 노란 PNG */
-.M-EXPERIENCE .M-EX-SUB {
+/* detail_1_m · .RECTANGLE_1 — SOURCE: HU_EX_BG.PNG */
+.M-EXPERIENCE .RECTANGLE_1 {
   position: relative;
+  left: auto;
   width: 350px;
   max-width: 100%;
   height: 330px;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
-.M-EXPERIENCE .M-EX-SUB-BG {
+.M-EXPERIENCE .RECTANGLE_1-BG {
   pointer-events: none;
   position: absolute;
   inset: 0;
@@ -1442,11 +1465,11 @@ html:not(.splash-seen) [data-site-header] {
   object-fit: fill;
 }
 
-/* 카피 — 좌 35 · 상 36 (목업 글리프 실측) */
+/* detail_4_m — 상·좌·우·하 35 */
 .M-EXPERIENCE .M-EX-COPY {
   position: absolute;
   z-index: 10;
-  top: 36px;
+  top: 35px;
   left: 35px;
   right: 35px;
   display: flex;
@@ -1454,43 +1477,66 @@ html:not(.splash-seen) [data-site-header] {
   align-items: flex-start;
 }
 
-/* PC EXPERIENCE-TITLE 과 동일 계열. 모바일 카드 폭에 맞춰 30 */
-.M-EXPERIENCE .M-EX-TITLE {
-  margin: 25px 0 0;
-  font-size: 30px;
-  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-  font-weight: 600;
-  color: rgb(28, 26, 25);
-  line-height: 1.375;
+/* detail_2_m · 태그(12px Playfair) — detail_4 목업은 좌측 정렬 */
+.M-EXPERIENCE .__02__THE_EXPERIENCE__ {
+  margin: 0;
+  font-size: 12px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  color: rgb(44, 58, 46);
+  font-weight: 500;
+  text-transform: uppercase;
   text-align: left;
+  letter-spacing: 0.025em;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  line-height: 1;
   text-box-trim: trim-both;
-  text-box-edge: cap alphabetic;
-  word-spacing: -0.057em;
+  text-box-edge: text alphabetic;
 }
 
+.M-EXPERIENCE .__02__THE_EXPERIENCE__ em {
+  font-style: italic;
+  font-weight: 500;
+  text-transform: none;
+}
+
+/* detail_2_m · .MAIN TEXT — 태그 → 타이틀 22 */
+.M-EXPERIENCE .M-EX-TITLE {
+  margin: 22px 0 0;
+  font-size: 30px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  color: rgb(28, 26, 25);
+  line-height: 1.333;
+  text-align: left;
+  word-spacing: -0.057em;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* detail_2_m · .SUB TEXT — 타이틀 → 설명 28 */
 .M-EXPERIENCE .M-EX-DESC {
-  margin: 30px 0 0;
-  /* 280px(좌우 35) 안에 레퍼런스 줄(응답하는지 / 확인해 보세요.) 각 1줄 — 17px 는 첫 줄이 다시 줄바꿈됨 */
+  margin: 28px 0 0;
   font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
   letter-spacing: -0.01em;
   color: rgba(28, 26, 25, 0.8);
-  line-height: 1.588;
+  line-height: 1.467;
   text-align: left;
+  word-spacing: -0.057em;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
-  word-spacing: -0.057em;
 }
 
-/* 레퍼런스 카카오 브라운 rgb(53, 41, 35) · 흰 글자 */
+/* detail_3_m · .RECTANGLE + .카카오톡_데모_체험하기 — 설명 → 버튼 45 */
 .M-EXPERIENCE .M-EX-BTN {
-  margin: 46px 0 0;
+  margin: 45px 0 0;
   box-sizing: border-box;
   width: 280px;
   max-width: 100%;
   height: 50px;
-  border-radius: 4px;
+  border-radius: 8px;
   border: 0;
   background-color: rgb(53, 41, 35);
   color: rgb(250, 248, 245);
@@ -1500,7 +1546,7 @@ html:not(.splash-seen) [data-site-header] {
   line-height: 1;
   text-align: center;
   text-decoration: none;
-  text-transform: none;
+  text-transform: uppercase;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1515,14 +1561,24 @@ html:not(.splash-seen) [data-site-header] {
   color: rgb(250, 248, 245);
 }
 
+/* detail_1_m · .RECTANGLE_19_COPY */
+.M-EXPERIENCE .RECTANGLE_19_COPY {
+  position: relative;
+  width: 350px;
+  max-width: 100%;
+  height: 550px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: rgb(198, 212, 223);
+}
+
 /* ==========================================================================
-   MOBILE KEY BENEFITS — 시안 hu_key_benefits_m · 390 목업 실측
+   MOBILE KEY BENEFITS — 시안 hu_key_benefits_m · hu_key_benefits_detail_*_m
    PC Key Benefits(.BENEFITS / .BENEFIT-CARD) 와 별개. 가로 스와이프 없음.
    ========================================================================== */
 .M-KEY-BENEFITS {
   box-sizing: border-box;
-  padding-top: 80px;
-  padding-bottom: 80px;
+  padding-top: 100px;
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -1531,119 +1587,136 @@ html:not(.splash-seen) [data-site-header] {
   text-align: center;
 }
 
+/* .__04__KEY_BENEFITS__ */
 .M-KEY-BENEFITS .M-KB-TAG {
+  margin: 0;
+  font-size: 12px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-weight: 500;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  color: rgb(44, 58, 46);
+  text-transform: uppercase;
   text-align: center;
+  letter-spacing: 0.025em;
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
 }
 
-/* 목록 실측 tag→title 26 · title→desc 12 · desc→카드1 55 */
+.M-KEY-BENEFITS .M-KB-TAG em {
+  font-style: italic;
+  font-weight: 500;
+  text-transform: none;
+}
+
+/* .MAIN TEXT — tag→title 22 */
 .M-KEY-BENEFITS .M-KB-TITLE {
-  margin: 26px 0 0;
-  font-size: 32px;
+  margin: 22px 0 0;
+  font-size: 30px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 700;
-  line-height: 1.375;
-  letter-spacing: -0.01em;
+  line-height: 1.333;
   color: rgb(28, 26, 25);
   text-align: center;
-  word-spacing: -0.057em;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
 
+/* .SUB TEXT — title→desc 28 · desc→카드1 50 */
 .M-KEY-BENEFITS .M-KB-DESC {
-  margin: 12px 0 0;
+  margin: 28px 0 0;
   font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.467;
   letter-spacing: -0.01em;
   color: rgba(28, 26, 25, 0.8);
   text-align: center;
-  word-spacing: -0.057em;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
 
 .M-KEY-BENEFITS .M-KB-LIST {
-  margin: 55px 0 0;
+  margin: 50px 0 0;
   display: flex;
   flex-direction: column;
 }
 
-/* 카드 간 desc→다음 썸네일 ~60–67 · 평균 60 */
+/* desc→다음 썸네일 45 */
 .M-KEY-BENEFITS .M-KB-CARD + .M-KB-CARD {
-  margin-top: 60px;
+  margin-top: 45px;
 }
 
-/* 목록 실측 347×208 @390 → 콘텐츠 350 · r 8 */
+/* .RECTANGLE — 350×220 · r 8 · 좌우 20(섹션 패딩) */
 .M-KEY-BENEFITS .M-KB-THUMB {
   position: relative;
   width: 100%;
-  height: 210px;
+  height: 220px;
   border-radius: 8px;
   overflow: hidden;
   background-color: #e3ddd3;
 }
 
-/* 썸네일→타이틀 ~30 · 타이틀→본문 ~18 */
+/* 썸네일→소타이틀 25 */
 .M-KEY-BENEFITS .M-KB-CARD-TITLE {
-  margin: 30px 0 0;
-  font-size: 20px;
+  margin: 25px 0 0;
+  font-size: 18px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.01em;
-  color: rgb(28, 26, 25);
+  color: rgb(44, 58, 46);
   text-align: left;
   line-height: 1;
-  word-spacing: -0.057em;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
 
+/* 소타이틀→내용 17 */
 .M-KEY-BENEFITS .M-KB-CARD-DESC {
-  margin: 18px 0 0;
+  margin: 17px 0 0;
   font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.467;
   letter-spacing: -0.01em;
-  color: rgb(108, 104, 100);
+  color: rgba(28, 26, 25, 0.8);
   text-align: left;
-  word-spacing: -0.057em;
-  text-box-trim: trim-start;
+  text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
 
 /* ==========================================================================
-   MOBILE CTA + FOOTER — 시안 hu_cta_banner_footer_m · 390 목업 실측
-   PC Start(.CTA-BANNER) · Footer(.NEED_MORE_DETAILS_ 등) 와 별개.
+   MOBILE CTA + FOOTER — hu_cta_banner_footer_m · 390
+   소스 이미지 HU_CTA_BG.PNG 는 2x(700×960) → CSS 350×480.
    ========================================================================== */
 
-/* CTA 카드 좌우 20 · 상단 40 · 카드↔푸터 섹션 20(크림 여백) */
+/* 카드 좌우·하단 20. 배경 .RECTANGLE rgb(239, 234, 227) */
 .M-CTA {
   box-sizing: border-box;
-  padding-top: 40px;
+  background-color: rgb(239, 234, 227);
+  padding-top: 0;
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;
 }
 
-/* 레퍼런스 대비 세로 여유 — 350×468(390×120%) · r 16 · PC cta-banner-bg */
+/* .RECTANGLE — 350×480 · r 10 · HU_CTA_BG.PNG */
 .M-CTA-CARD {
   position: relative;
   box-sizing: border-box;
-  width: 100%;
-  height: 468px;
-  border-radius: 16px;
+  width: 350px;
+  max-width: 100%;
+  height: 480px;
+  border-radius: 10px;
   overflow: hidden;
   isolation: isolate;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* 타이틀 글리프 상단 — 시안 프리뷰 실측 110 (파란 숫자 없음) */
+  padding-top: 110px;
   text-align: center;
-  padding-left: 24px;
-  padding-right: 24px;
 }
 
 .M-CTA-CARD-BG {
@@ -1655,11 +1728,10 @@ html:not(.splash-seen) [data-site-header] {
 
 .M-CTA-CARD-BG img {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 350px;
+  height: 480px;
   object-fit: cover;
-  /* 왼쪽 하단 앰버 보케 — center 크롭 시 잘림 */
-  object-position: left bottom;
+  object-position: center top;
 }
 
 .M-CTA-TITLE,
@@ -1669,51 +1741,49 @@ html:not(.splash-seen) [data-site-header] {
   z-index: 1;
 }
 
-/* 목업 실측 타이틀 2줄 · 28/700 · lh 1.375 */
+/* .MAIN TEXT — Noto 30/700 · lh 1.333 · #FAF8F5 */
 .M-CTA-TITLE {
   margin: 0;
-  font-size: 28px;
+  font-size: 30px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 700;
-  line-height: 1.375;
-  color: #faf8f5;
+  line-height: 1.333;
+  color: rgb(250, 248, 245);
   text-align: center;
-  word-spacing: -0.057em;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
 
-/* 타이틀→본문 ~31 · 15/400 · lh 1.6 · 80% */
+/* .SUB TEXT — title→desc 28 · Noto 15/400 · lh 1.467 · ls -0.01em */
 .M-CTA-DESC {
   margin: 28px 0 0;
   font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.467;
   letter-spacing: -0.01em;
   color: rgba(250, 248, 245, 0.8);
   text-align: center;
-  word-spacing: -0.057em;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
 
-/* 본문→버튼 ~56 · PC .BOTTOM-BANNER-BTN 계열 · 풀폭 */
+/* desc→btn 55 · 버튼 .RECTANGLE 280×50 · r 8 · #FAF8F5 */
 .M-CTA-BTN {
-  margin: 56px 0 0;
+  margin: 55px 0 0;
   box-sizing: border-box;
-  width: 100%;
-  max-width: 100%;
+  width: 280px;
   height: 50px;
-  border-radius: 4px;
+  border-radius: 8px;
   border: 0;
-  background-color: #faf8f5;
-  color: #2c3a2e;
-  font-size: 16px;
+  background-color: rgb(250, 248, 245);
+  color: rgb(44, 58, 46);
+  font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 500;
   line-height: 1;
   text-align: center;
+  text-transform: uppercase;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -1729,54 +1799,59 @@ html:not(.splash-seen) [data-site-header] {
   color: #faf8f5;
 }
 
+/* .RECTANGLE 푸터 — 390×1030 · rgb(239, 234, 227) · 좌우 20 · 상단 80 · 하단 20 */
 .M-FOOTER {
   box-sizing: border-box;
   scroll-margin-top: 94px;
-  padding-top: 40px;
+  background-color: rgb(239, 234, 227);
+  min-height: 1030px;
+  padding-top: 80px;
   padding-left: 20px;
   padding-right: 20px;
-  padding-bottom: 30px;
+  padding-bottom: 20px;
 }
 
-/* PC .NEED_MORE_DETAILS_ 와 동일 26 · title→desc 26 · desc→form 50 */
+/* .NEED_MORE_DETAILS_ — Playfair 24/500 · ls -0.01em */
 .M-FOOTER-NEWS-TITLE {
   margin: 0;
   font-family: var(--font-display), "Playfair Display", serif;
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 500;
-  color: #1c1a19;
+  color: rgb(28, 26, 25);
+  letter-spacing: -0.01em;
   line-height: 1;
   text-align: left;
   text-box-trim: trim-both;
   text-box-edge: text alphabetic;
 }
 
+/* title→desc 20 */
 .M-FOOTER-NEWS-DESC {
-  margin: 26px 0 0;
+  margin: 20px 0 0;
   font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
-  line-height: 1.625;
+  line-height: 1.467;
   letter-spacing: -0.01em;
   color: rgba(28, 26, 25, 0.8);
   text-align: left;
-  word-spacing: -0.057em;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
 
+/* desc→input 45 */
 .M-FOOTER-NEWS-FORM {
-  margin: 50px 0 0;
+  margin: 45px 0 0;
 }
 
 .M-FOOTER-NEWS-INPUT-ROW {
   position: relative;
   display: flex;
-  align-items: center;
-  height: 26px;
-  margin-bottom: 16px;
+  align-items: flex-end;
+  padding-bottom: 10px;
 }
 
+/* .E_MAIL — Playfair 20/400 · ls 0.01em · 40% */
 .M-FOOTER-NEWS-INPUT {
   min-width: 0;
   flex: 1;
@@ -1785,11 +1860,14 @@ html:not(.splash-seen) [data-site-header] {
   border: 0;
   background: transparent;
   outline: none;
-  font-size: 22px;
+  height: 20px;
+  font-size: 20px;
   font-family: var(--font-display), "Playfair Display", serif;
   font-weight: 400;
-  color: #1c1a19;
-  line-height: 1;
+  letter-spacing: 0.01em;
+  color: rgb(28, 26, 25);
+  line-height: 20px;
+  text-align: left;
 }
 
 .M-FOOTER-NEWS-INPUT::placeholder {
@@ -1801,29 +1879,28 @@ html:not(.splash-seen) [data-site-header] {
   opacity: 0.6;
 }
 
+/* .가이드북_받기 — Noto 12/500 · 40% */
 .M-FOOTER-NEWS-SUBMIT {
   position: absolute;
-  top: 50%;
   right: 0;
-  transform: translateY(-50%);
+  bottom: 10px;
   margin: 0;
   padding: 0;
   border: 0;
   background: transparent;
-  font-size: 16px;
+  font-size: 12px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 500;
-  letter-spacing: -0.01em;
   color: rgba(28, 26, 25, 0.4);
+  text-align: right;
   cursor: default;
-  word-spacing: -0.057em;
   line-height: 1;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
 
 .M-FOOTER-NEWS-SUBMIT.is-filled {
-  color: #1c1a19;
+  color: rgb(28, 26, 25);
   cursor: pointer;
 }
 
@@ -1831,56 +1908,83 @@ html:not(.splash-seen) [data-site-header] {
   opacity: 0.7;
 }
 
+/* .SHAPE_2 — 1px #1C1A19 · 350 */
 .M-FOOTER-NEWS-LINE {
-  width: 100%;
+  width: 350px;
+  max-width: 100%;
   height: 0;
-  border-bottom: 1px solid #1c1a19;
+  border-width: 1px;
+  border-color: rgb(28, 26, 25);
+  border-style: solid;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
   box-sizing: border-box;
 }
 
+/* line→notice 15 · 불릿 행잉 인덴트(2줄은 점 뒤 본문과 좌측 정렬) */
 .M-FOOTER-NEWS-NOTICE {
-  margin: 16px 0 0;
+  margin: 15px 0 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-size: 12px;
   font-weight: 400;
-  letter-spacing: -0.01em;
   color: rgba(28, 26, 25, 0.7);
+  line-height: 1.56;
   text-align: left;
-  word-spacing: -0.057em;
-  line-height: 1;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
 
+.M-FOOTER-NEWS-NOTICE-BULLET {
+  flex: none;
+  line-height: 1.56;
+}
+
+.M-FOOTER-NEWS-NOTICE-BODY {
+  flex: 1;
+  min-width: 0;
+}
+
+.M-FOOTER-NEWS-NOTICE.is-success,
+.M-FOOTER-NEWS-NOTICE.is-error {
+  display: block;
+}
+
+/* 성공 문구 rgb(44, 58, 46) */
 .M-FOOTER-NEWS-NOTICE.is-success {
-  color: #2c3a2e;
+  color: rgb(44, 58, 46);
 }
 
 .M-FOOTER-NEWS-NOTICE.is-error {
   color: rgb(185, 28, 28);
 }
 
-/* 뉴스레터→CONTACT 60 · CONTACT→CONNECT 60 */
+/* 뉴스레터→CONTACT 80 · CONTACT→CONNECT 80(시안 프리뷰 실측) */
 .M-FOOTER-COL {
-  margin-top: 60px;
+  margin-top: 80px;
 }
 
+/* .CONTACT / .CONNECT — Inter 12/400 · 70% */
 .M-FOOTER-LABEL-CONTACT,
 .M-FOOTER-LABEL-CONNECT {
   margin: 0;
   font-size: 12px;
   font-family: var(--font-latin), Inter, sans-serif;
   font-weight: 400;
-  letter-spacing: 0.02em;
   color: rgba(28, 26, 25, 0.7);
+  text-align: left;
   text-transform: uppercase;
   line-height: 1;
   text-box-trim: trim-both;
   text-box-edge: text alphabetic;
 }
 
+/* 라벨→링크 26 */
 .M-FOOTER-LINKS {
-  margin: 14px 0 0;
+  margin: 26px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -1890,76 +1994,74 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: initial;
 }
 
+/* CONTACT 값 — Inter 15/500 · lh 1.733 · ls 0.01em · 90% */
 .M-FOOTER-LINKS a {
   font-size: 15px;
   font-family: var(--font-latin), Inter, sans-serif;
-  font-weight: 600;
-  line-height: 1.65;
-  color: #1c1a19;
+  font-weight: 500;
+  line-height: 1.733;
+  letter-spacing: 0.01em;
+  color: rgba(28, 26, 25, 0.9);
+  text-align: left;
   text-decoration: none;
 }
 
+/* .INS&KAKAO — 가로 50 */
 .M-FOOTER-LINKS--inline {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0 20px;
+  gap: 0 50px;
 }
 
-/* 회사정보 → COPYRIGHT 18 · COPYRIGHT → 약관 12 · 약관 → 로고 82 */
+.M-FOOTER-LINKS--inline a {
+  line-height: 1;
+}
+
+/* .법적정보 — CONNECT→회사 80 · Noto 12/400 · 60% · lh 1.583 */
 .M-FOOTER-COMPANY {
-  margin: 60px 0 0;
+  margin: 80px 0 0;
   font-size: 12px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
-  letter-spacing: 0.005em;
   color: rgba(28, 26, 25, 0.6);
-  line-height: 1.55;
-  word-spacing: -0.057em;
+  line-height: 1.583;
+  text-align: left;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
 
-.M-FOOTER-COPY {
-  margin: 18px 0 0;
-  font-family: var(--font-latin), Inter, sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  color: rgba(28, 26, 25, 0.6);
-  text-transform: uppercase;
-  line-height: 1;
-  text-box-trim: trim-both;
-  text-box-edge: text alphabetic;
-}
-
+/* copyright→약관 27 · 약관 간격 28 */
 .M-FOOTER-LEGAL {
-  margin: 12px 0 0;
+  margin: 27px 0 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0 20px;
+  gap: 0 28px;
 }
 
+/* .PRIVACY_POLICY/TERMS_OF_SERVICE */
 .M-FOOTER-LEGAL a {
   font-family: var(--font-latin), Inter, sans-serif;
   font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0;
-  color: #1c1a19;
-  text-transform: uppercase;
-  line-height: 1;
+  font-weight: 500;
+  color: rgb(28, 26, 25);
   text-decoration: underline;
-  text-underline-offset: 3px;
+  text-transform: uppercase;
+  text-align: left;
+  line-height: 1;
   text-box-trim: trim-both;
   text-box-edge: text alphabetic;
 }
 
+/* .LOGO — 350 · auto · fill #1C1A19 · 약관→로고 100 */
 .M-FOOTER-LOGO {
-  margin-top: 82px;
+  margin-top: 100px;
   display: block;
-  width: 100%;
-  color: #1c1a19;
+  width: 350px;
+  max-width: 100%;
+  height: auto;
+  color: rgb(28, 26, 25);
 }
 
 /* --- GNB Mobile 열림 패널 (hu_gnb_m · hu_gnb_detail_m) --------------------
@@ -2322,13 +2424,16 @@ html:not(.splash-seen) [data-site-header] {
   .GNB-ITEM A .TXT-KR,
   .GNB-LOGIN .TXT-KR,
   .BTN-CREATE-BRAND-ROLL .TXT-EN,
-  .BTN-CREATE-BRAND-ROLL .TXT-KR {
+  .BTN-CREATE-BRAND-ROLL .TXT-KR,
+  .TEMPLATE-BTN-ROLL .TXT-EN,
+  .TEMPLATE-BTN-ROLL .TXT-KR {
     transition: none;
   }
 
   .GNB-ITEM A .TXT-KR,
   .GNB-LOGIN .TXT-KR,
-  .BTN-CREATE-BRAND-ROLL .TXT-KR {
+  .BTN-CREATE-BRAND-ROLL .TXT-KR,
+  .TEMPLATE-BTN-ROLL .TXT-KR {
     transform: none;
     visibility: hidden;
   }
@@ -2338,7 +2443,11 @@ html:not(.splash-seen) [data-site-header] {
   .GNB-LOGIN:hover .TXT-EN,
   .GNB-LOGIN:focus-visible .TXT-EN,
   .BTN-CREATE-BRAND:hover .TXT-EN,
-  .BTN-CREATE-BRAND:focus-visible .TXT-EN {
+  .BTN-CREATE-BRAND:focus-visible .TXT-EN,
+  .BTN-VIEW-DEMO:hover .TXT-EN,
+  .BTN-VIEW-DEMO:focus-visible .TXT-EN,
+  .BTN-GET-STARTED:hover .TXT-EN,
+  .BTN-GET-STARTED:focus-visible .TXT-EN {
     transform: none;
     visibility: hidden;
   }
@@ -2348,7 +2457,11 @@ html:not(.splash-seen) [data-site-header] {
   .GNB-LOGIN:hover .TXT-KR,
   .GNB-LOGIN:focus-visible .TXT-KR,
   .BTN-CREATE-BRAND:hover .TXT-KR,
-  .BTN-CREATE-BRAND:focus-visible .TXT-KR {
+  .BTN-CREATE-BRAND:focus-visible .TXT-KR,
+  .BTN-VIEW-DEMO:hover .TXT-KR,
+  .BTN-VIEW-DEMO:focus-visible .TXT-KR,
+  .BTN-GET-STARTED:hover .TXT-KR,
+  .BTN-GET-STARTED:focus-visible .TXT-KR {
     transform: none;
     visibility: visible;
   }
@@ -2814,7 +2927,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* detail_2_m · .RECTANGLE_1 — 좌측 여백 20 */
-.RECTANGLE_1 {
+.DILEMMA-M-FIGURES .RECTANGLE_1 {
   position: absolute;
   top: 0;
   left: 20px;
@@ -2825,7 +2938,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* detail_2_m · .RECTANGLE_2 — RECTANGLE_1 아래 35 · 우측 여백 20 */
-.RECTANGLE_2 {
+.DILEMMA-M-FIGURES .RECTANGLE_2 {
   position: absolute;
   top: 315px;
   right: 20px;
@@ -2926,6 +3039,38 @@ html:not(.splash-seen) [data-site-header] {
   background-color: rgb(255, 255, 255);
 }
 
+/* TEMPLATE 03 — PNG 하단 블랙(#111111)과 카드 배경 일치 · 이미지 전체 노출 */
+.TEMPLATE-CARD-ACTIVE.TEMPLATE-CARD--DARK {
+  background-color: rgb(17, 17, 17);
+}
+
+.TEMPLATE-CARD--DARK .TEMPLATE-CARD-IMG--active {
+  height: 100%;
+  bottom: 0;
+}
+
+.TEMPLATE-CARD--DARK .CARD-TAG {
+  color: rgb(250, 248, 245);
+}
+
+.TEMPLATE-CARD--DARK .CARD-TITLE {
+  color: rgb(250, 248, 245);
+}
+
+.TEMPLATE-CARD--DARK .CARD-DESC {
+  color: rgba(250, 248, 245, 0.8);
+}
+
+.TEMPLATE-CARD--DARK .BTN-VIEW-DEMO {
+  border-color: rgb(250, 248, 245);
+  color: rgb(250, 248, 245);
+}
+
+.TEMPLATE-CARD--DARK .BTN-GET-STARTED {
+  background-color: rgb(250, 248, 245);
+  color: rgb(28, 26, 25);
+}
+
 /*
  * hu_TEMPLATE PC 05 · 양옆 대기 카드 공통 규격.
  * 시안 CSS 는 height 410 이지만 지정 소스 hus_TEMPLATE(688)_*.png 와 시안 목업
@@ -3014,41 +3159,89 @@ html:not(.splash-seen) [data-site-header] {
   transition: opacity 600ms cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-/* hu_TEMPLATE PC 04 · 1. 라인 고스트 버튼 — 기본 한글 */
+/* hu_TEMPLATE PC 04 · 1. 라인 고스트 버튼 — 기본 영문, 호버 한글 */
 .BTN-VIEW-DEMO {
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   width: 190px;
   height: 40px;
   border: 1px solid rgb(44, 58, 46);
   border-radius: 4px;
   font-size: 13px;
-  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 500;
   color: rgb(44, 58, 46);
   text-align: center;
   text-decoration: none;
 }
 
-/* hu_TEMPLATE PC 04 · 2. 다크 솔리드 버튼 · 버튼 사이 12 — 기본 한글 */
+/* hu_TEMPLATE PC 04 · 2. 다크 솔리드 버튼 · 버튼 사이 12 — 기본 영문, 호버 한글 */
 .BTN-GET-STARTED {
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   width: 190px;
   height: 40px;
   margin-top: 12px;
   background-color: rgb(44, 58, 46);
   border-radius: 4px;
   font-size: 13px;
-  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 500;
   color: rgb(250, 248, 245);
   text-align: center;
   text-decoration: none;
+}
+
+/* 한 줄 높이만 보이게 — 영·한 겹침 롤 */
+.TEMPLATE-BTN-ROLL {
+  display: grid;
+  overflow: hidden;
+  height: 13px;
+  line-height: 1;
+}
+
+.TEMPLATE-BTN-ROLL .TXT-EN,
+.TEMPLATE-BTN-ROLL .TXT-KR {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.TEMPLATE-BTN-ROLL .TXT-EN {
+  font-family: var(--font-latin), "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.TEMPLATE-BTN-ROLL .TXT-KR {
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: none;
+  word-spacing: -0.057em;
+  transform: translateY(100%);
+}
+
+.BTN-VIEW-DEMO:hover .TXT-EN,
+.BTN-VIEW-DEMO:focus-visible .TXT-EN,
+.BTN-GET-STARTED:hover .TXT-EN,
+.BTN-GET-STARTED:focus-visible .TXT-EN {
+  transform: translateY(-100%);
+}
+
+.BTN-VIEW-DEMO:hover .TXT-KR,
+.BTN-VIEW-DEMO:focus-visible .TXT-KR,
+.BTN-GET-STARTED:hover .TXT-KR,
+.BTN-GET-STARTED:focus-visible .TXT-KR {
+  transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
     ],
   },
   images: {
+    /* Next.js 기본 최적화(WebP/AVIF 재인코딩) 비활성 — 디자이너 제공 PNG 원본 그대로 전달 */
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
