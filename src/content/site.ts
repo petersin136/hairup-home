@@ -158,7 +158,7 @@ export const experience = {
   ],
   kakaoDemo: {
     label: "카카오톡 데모 체험하기",
-    href: "http://pf.kakao.com/_xeWxdSx/chat",
+    href: "http://pf.kakao.com/_xeWxdSX/chat",
   },
   /** 모바일 시안 hu_experience_detail_1_m · 2x(700×660) → 표시 350×330 */
   mobileBg: "/experience/hu_ex_bg.png",
