@@ -1055,13 +1055,20 @@ p:has(> .STARTER-PRICE-NUM-MONTH) {
   }
 }
 
-/* 모바일 Experience 목업 — 입력 힌트 */
+/* 모바일 Experience 목업 — 입력바 높이만 80% (폭은 PC·기존과 동일) */
+.M-EXPERIENCE .demo-chat-input-shell {
+  height: 54px;
+  border-radius: 27px;
+}
+
+.M-EXPERIENCE .demo-chat-input-hint,
 .mobile-demo-chat .demo-chat-input-hint {
   font-size: 14px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.5);
 }
 
+.M-EXPERIENCE .demo-chat-caret-light,
 .mobile-demo-chat .demo-chat-caret-light {
   height: 16px;
 }
