@@ -551,62 +551,50 @@ function MobilePlanCard({
   tone: "starter" | "branding";
   plan: typeof pricing.starter | typeof pricing.branding;
 }) {
-  const dark = tone === "branding";
+  const brand = tone === "branding";
   return (
-    <article
-      className={`rounded-[6px] px-5 py-7 ${dark ? "bg-forest text-porcelain" : "bg-linen text-ink"}`}
-    >
-      <p
-        className={`font-display text-[28px] font-normal ${dark ? "text-porcelain" : "text-forest"}`}
-      >
-        {plan.name}
-      </p>
+    <article className={brand ? "M-PRICE is-brand" : "M-PRICE"}>
+      <p className="M-PRICE-NAME">{plan.name}</p>
       {"badge" in plan && plan.badge ? (
-        <p className="font-latin mt-1 text-[13px] text-porcelain/80">
-          {plan.badge}
-        </p>
+        <p className="M-PRICE-BADGE">{plan.badge}</p>
       ) : null}
-      <p
-        className={`text-kr mt-3 text-[15px] leading-[1.5] ${dark ? "text-porcelain/85" : "text-stone"}`}
-      >
+      <p className="M-PRICE-DESC text-kr">
         <GlyphLines lines={plan.tagline} />
       </p>
-      <div className="mt-6 flex flex-col gap-3">
-        {plan.prices.map((p) => (
-          <div key={p.label}>
-            <p
-              className={`text-kr text-[13px] ${dark ? "text-porcelain/70" : "text-stone"}`}
-            >
-              {p.label}
-            </p>
-            <p className="mt-1 flex items-baseline gap-1">
-              <span
-                className={`font-didot-num ${libreBodoni.className} text-[40px] font-bold leading-none tabular-nums ${dark ? "text-porcelain" : "text-forest"}`}
-              >
-                {p.num}
+      <div className="M-PRICE-PRICES">
+        {plan.prices.map((row) => (
+          <div key={row.label}>
+            <p className="M-PRICE-LABEL text-kr">{row.label}</p>
+            <p className="M-PRICE-AMOUNT">
+              <span className={`M-PRICE-NUM font-didot-num ${libreBodoni.className}`}>
+                {row.num}
               </span>
-              <span
-                className={`text-kr text-[16px] ${dark ? "text-porcelain/80" : "text-stone"}`}
-              >
-                {p.unit}
-              </span>
+              <span className="M-PRICE-UNIT text-kr">{row.unit}</span>
             </p>
           </div>
         ))}
       </div>
-      <ul className="mt-6 flex flex-col gap-4">
-        {plan.features.map((f) => (
-          <li key={f.title}>
-            <p
-              className={`text-kr text-[16px] font-medium ${dark ? "text-porcelain" : "text-forest"}`}
+      <hr className="M-PRICE-RULE" />
+      <ul className="M-PRICE-LIST">
+        {plan.features.map((feature) => (
+          <li key={feature.title}>
+            <svg
+              className="M-PRICE-CHECK"
+              width="18"
+              height="16"
+              viewBox="0 0 18 16"
+              aria-hidden
             >
-              {f.title}
-            </p>
-            <p
-              className={`text-kr mt-1 text-[14px] leading-[1.5] ${dark ? "text-porcelain/75" : "text-stone"}`}
-            >
-              <GlyphLines lines={("descMobile" in f ? f.descMobile : f.desc)} />
-            </p>
+              <path d="M1.6 8.4L6.4 13.4L16.4 2.2" />
+            </svg>
+            <div>
+              <p className="M-PRICE-FEAT-T text-kr">{feature.title}</p>
+              <p className="M-PRICE-FEAT-D text-kr">
+                <GlyphLines
+                  lines={"descMobile" in feature ? feature.descMobile : feature.desc}
+                />
+              </p>
+            </div>
           </li>
         ))}
       </ul>
@@ -616,11 +604,7 @@ function MobilePlanCard({
         {...(plan.cta.href.startsWith("http")
           ? { target: "_blank", rel: "noopener noreferrer" }
           : {})}
-        className={`rounded-btn mt-8 flex h-12 items-center justify-center text-[15px] no-underline ${
-          dark
-            ? "bg-porcelain text-forest"
-            : "bg-forest text-porcelain"
-        }`}
+        className="M-PRICE-BTN"
       >
         {plan.cta.label}
       </a>
