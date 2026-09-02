@@ -1055,22 +1055,34 @@ p:has(> .STARTER-PRICE-NUM-MONTH) {
   }
 }
 
-/* 모바일 Experience 목업 — 입력바 높이만 80% (폭은 PC·기존과 동일) */
+/* 모바일 Experience 목업 — 입력바 높이 80%, 글·커서 위아래 잘림 방지 */
 .M-EXPERIENCE .demo-chat-input-shell {
   height: 54px;
   border-radius: 27px;
 }
 
+.M-EXPERIENCE .demo-chat-input-field {
+  box-sizing: border-box;
+  height: 36px;
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: 16px;
+  line-height: 36px;
+  overflow: visible;
+}
+
 .M-EXPERIENCE .demo-chat-input-hint,
 .mobile-demo-chat .demo-chat-input-hint {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
+  line-height: 1;
   color: rgba(255, 255, 255, 0.5);
 }
 
+.M-EXPERIENCE .demo-chat-caret,
 .M-EXPERIENCE .demo-chat-caret-light,
 .mobile-demo-chat .demo-chat-caret-light {
-  height: 16px;
+  height: 22px;
 }
 
 .splash-root {
