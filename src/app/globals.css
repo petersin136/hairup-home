@@ -1741,19 +1741,24 @@ html:not(.splash-seen) [data-site-header] {
   color: rgba(28, 26, 25, 0.8);
   text-align: center;
   word-break: keep-all;
+  overflow-wrap: normal;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
 
 .M-FAQ-LIST {
-  margin: 50px 0 0;
-  width: 100%;
+  margin: 50px -20px 0;
+  width: auto;
   text-align: left;
 }
 
 .M-FAQ-LINE {
+  display: block;
+  box-sizing: border-box;
   width: 100%;
   height: 0;
+  margin: 0;
+  padding: 0;
   border-style: solid;
   border-width: 1px 0 0 0;
   border-color: rgb(28, 26, 25);
@@ -1764,6 +1769,8 @@ html:not(.splash-seen) [data-site-header] {
   position: relative;
   box-sizing: border-box;
   width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
   overflow-anchor: none;
 }
 
@@ -1773,14 +1780,19 @@ html:not(.splash-seen) [data-site-header] {
 
 .M-FAQ-HIT {
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr) 20px;
-  column-gap: 8px;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr) 20px;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "cat ."
+    "q icon";
+  column-gap: 12px;
+  row-gap: 8px;
+  align-items: start;
   box-sizing: border-box;
   width: 100%;
   min-height: 52px;
   margin: 0;
-  padding: 18px 0;
+  padding: 28px 0;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -1789,6 +1801,8 @@ html:not(.splash-seen) [data-site-header] {
   -webkit-tap-highlight-color: transparent;
   appearance: none;
   color: inherit;
+  --faq-q-size: 16px;
+  --faq-q-lh: 1.5;
 }
 
 .M-FAQ-ITEM.is-open .M-FAQ-HIT {
@@ -1797,6 +1811,9 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-FAQ-CATEGORY {
+  grid-area: cat;
+  display: block;
+  margin: 0;
   font-size: 13px;
   font-family: var(--font-display), "Playfair Display", serif;
   font-weight: 400;
@@ -1805,7 +1822,8 @@ html:not(.splash-seen) [data-site-header] {
   text-align: left;
   line-height: 1;
   white-space: nowrap;
-  text-box-trim: none;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
 }
 
 .M-FAQ-ITEM.is-open .M-FAQ-CATEGORY {
@@ -1813,14 +1831,15 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-FAQ-QUESTION {
+  grid-area: q;
   margin: 0;
-  font-size: 16px;
+  font-size: var(--faq-q-size);
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 500;
   color: rgb(28, 26, 25);
   letter-spacing: -0.01em;
   text-align: left;
-  line-height: 1.4;
+  line-height: var(--faq-q-lh);
   word-break: keep-all;
   text-box-trim: none;
 }
@@ -1829,13 +1848,24 @@ html:not(.splash-seen) [data-site-header] {
   color: rgb(44, 58, 46);
 }
 
+.M-FAQ-ICON-SLOT {
+  grid-area: icon;
+  align-self: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 20px;
+  height: calc(var(--faq-q-size) * var(--faq-q-lh));
+  pointer-events: none;
+}
+
 .M-FAQ-ICON {
   display: block;
   width: 20px;
   height: 20px;
   flex-shrink: 0;
   overflow: visible;
-  pointer-events: none;
 }
 
 .M-FAQ-ICON path {
@@ -1867,8 +1897,8 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-FAQ-PANEL-INNER {
-  padding-top: 16px;
-  padding-bottom: 20px;
+  padding-top: 28px;
+  padding-bottom: 40px;
   overflow: visible;
 }
 
@@ -1878,16 +1908,49 @@ html:not(.splash-seen) [data-site-header] {
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
   color: rgba(28, 26, 25, 0.8);
-  line-height: 1.6;
+  line-height: 1.7;
   letter-spacing: -0.01em;
   text-align: left;
   word-break: keep-all;
+  overflow-wrap: normal;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
 
 .M-FAQ-ANSWER strong {
   font-weight: 600;
+}
+
+.M-FAQ-GROUP + .M-FAQ-GROUP {
+  margin-top: 28px;
+}
+
+.M-FAQ-LI,
+.M-FAQ-SUB {
+  display: block;
+  box-sizing: border-box;
+}
+
+.M-FAQ-LI {
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+
+.M-FAQ-LI + .M-FAQ-LI {
+  margin-top: 12px;
+}
+
+.M-FAQ-LI + .M-FAQ-SUB {
+  margin-top: 8px;
+}
+
+.M-FAQ-SUB {
+  padding-left: 2.35em;
+  text-indent: -0.95em;
+}
+
+.M-FAQ-SUB + .M-FAQ-SUB {
+  margin-top: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1902,11 +1965,11 @@ html:not(.splash-seen) [data-site-header] {
    소스 이미지 HU_CTA_BG.PNG 는 2x(700×960) → CSS 350×480.
    ========================================================================== */
 
-/* 카드 좌우·하단 20. 배경 .RECTANGLE rgb(239, 234, 227) */
+/* 카드 상·좌·우·하 20. 배경 .RECTANGLE rgb(239, 234, 227) */
 .M-CTA {
   box-sizing: border-box;
   background-color: rgb(239, 234, 227);
-  padding-top: 0;
+  padding-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;

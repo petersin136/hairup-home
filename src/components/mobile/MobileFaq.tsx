@@ -29,7 +29,7 @@ export function MobileFaq() {
         <GlyphLines lines={faq.headline} />
       </h2>
       <p className="M-FAQ-DESC text-kr">
-        <GlyphLines lines={faq.body} />
+        <GlyphLines lines={faq.bodyMobile} />
       </p>
 
       <div className="M-FAQ-LIST">
@@ -48,7 +48,9 @@ export function MobileFaq() {
                 >
                   <span className="M-FAQ-CATEGORY">({item.category})</span>
                   <span className="M-FAQ-QUESTION text-kr">{item.question}</span>
-                  <MobileFaqIcon />
+                  <span className="M-FAQ-ICON-SLOT">
+                    <MobileFaqIcon />
+                  </span>
                 </button>
                 <MobileFaqPanel open={isOpen}>
                   <MobileFaqAnswer groups={item.answer} />
@@ -63,26 +65,44 @@ export function MobileFaq() {
   );
 }
 
+function answerLineKind(text: string): "bullet" | "sub" | "plain" {
+  if (text.startsWith("•")) return "bullet";
+  if (text.startsWith("-") || text.startsWith("=")) return "sub";
+  return "plain";
+}
+
 function MobileFaqAnswer({ groups }: { groups: readonly FaqAnswerGroup[] }) {
   return (
-    <p className="M-FAQ-ANSWER text-kr">
+    <div className="M-FAQ-ANSWER text-kr">
       {groups.map((group, gi) => (
-        <Fragment key={gi}>
-          {gi > 0 ? (
-            <>
-              <br />
-              <br />
-            </>
-          ) : null}
-          {group.map((line, li) => (
-            <Fragment key={li}>
-              {li > 0 ? <br /> : null}
-              {line.bold ? <strong>{line.text}</strong> : line.text}
-            </Fragment>
-          ))}
-        </Fragment>
+        <div key={gi} className="M-FAQ-GROUP">
+          {group.map((line, li) => {
+            const kind = answerLineKind(line.text);
+            const content = line.bold ? (
+              <strong>{line.text}</strong>
+            ) : (
+              line.text
+            );
+            if (kind === "plain") {
+              return (
+                <Fragment key={li}>
+                  {li > 0 ? <br /> : null}
+                  {content}
+                </Fragment>
+              );
+            }
+            return (
+              <span
+                key={li}
+                className={kind === "bullet" ? "M-FAQ-LI" : "M-FAQ-SUB"}
+              >
+                {content}
+              </span>
+            );
+          })}
+        </div>
       ))}
-    </p>
+    </div>
   );
 }
 
