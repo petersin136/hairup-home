@@ -38,13 +38,19 @@ export function MobileFaq() {
           return (
             <div key={item.category}>
               <div className="M-FAQ-LINE" />
-              <div className={isOpen ? "M-FAQ-ITEM is-open" : "M-FAQ-ITEM"}>
+              <div
+                className={isOpen ? "M-FAQ-ITEM is-open" : "M-FAQ-ITEM"}
+                onClick={isOpen ? () => setOpen(null) : undefined}
+              >
                 <button
                   type="button"
                   className="M-FAQ-HIT"
                   aria-expanded={isOpen}
                   aria-label={item.question}
-                  onClick={() => setOpen(isOpen ? null : item.category)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpen(isOpen ? null : item.category);
+                  }}
                 >
                   <span className="M-FAQ-CATEGORY">({item.category})</span>
                   <span className="M-FAQ-QUESTION text-kr">{item.question}</span>

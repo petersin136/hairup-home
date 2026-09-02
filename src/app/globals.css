@@ -2046,6 +2046,7 @@ html:not(.splash-seen) [data-site-header] {
 
 .M-FAQ-ITEM.is-open {
   background-color: rgb(239, 234, 227);
+  cursor: pointer;
 }
 
 .M-FAQ-HIT {
