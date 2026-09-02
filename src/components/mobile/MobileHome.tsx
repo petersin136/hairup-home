@@ -10,6 +10,7 @@ import {
 } from "react";
 
 import { GlyphLines } from "@/components/copy/GlyphLines";
+import { MobileFaq } from "@/components/mobile/MobileFaq";
 import { DemoChat } from "@/components/sections/DemoChat";
 import { FooterNewsletter } from "@/components/sections/FooterNewsletter";
 import { Wordmark } from "@/components/brand/Wordmark";
@@ -18,7 +19,6 @@ import {
   cta,
   dilemma,
   experience,
-  faq,
   footer,
   hero,
   keyBenefits,
@@ -49,7 +49,6 @@ const MGNB_ITEMS = [
 
 export function MobileHome() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [openFaq, setOpenFaq] = useState<string | null>(null);
 
   const unlockPageScroll = () => {
     document.body.style.overflow = "";
@@ -389,36 +388,8 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* FAQ — 모바일 시안 hu_m_FAQ · 390 기준 */}
-        <section id="faq" className="bg-porcelain px-4 pt-[80px] pb-[81px] text-center">
-          <p className="SECTION-TAG text-center text-forest">
-            {faq.tagMobile.before}
-            <em>{faq.tagMobile.article}</em>
-            {faq.tagMobile.after}
-          </p>
-          <h2 className="text-kr mt-[22px] text-[32px] font-bold leading-[1.37] tracking-[-0.01em] text-ink">
-            <GlyphLines lines={faq.headline} />
-          </h2>
-          <p className="text-kr mt-[30px] text-[15px] font-normal leading-[24px] tracking-[-0.01em] text-body">
-            <span className="block">{faq.body[0]}</span>
-            <span className="block">헤어업은 사용하기 쉽고,</span>
-            <span className="block">
-              몇 가지 설정만으로 간단하게 시작할 수 있습니다.
-            </span>
-          </p>
-          <div className="mt-[51px] flex flex-col gap-4">
-            {faq.items.map((item) => (
-              <MobileFaqCard
-                key={item.q}
-                item={item}
-                open={openFaq === item.q}
-                onToggle={() =>
-                  setOpenFaq((cur) => (cur === item.q ? null : item.q))
-                }
-              />
-            ))}
-          </div>
-        </section>
+        {/* FAQ — PC 아코디언을 390 · 좌우 20 에 축소 */}
+        <MobileFaq />
 
         {/* Start CTA — 시안 hu_cta_banner_footer_m · 390 · HU_CTA_BG 2x→350×480 */}
         <section id="start" className="M-CTA">
@@ -570,73 +541,6 @@ export function MobileHome() {
         </div>
       ) : null}
     </div>
-  );
-}
-
-type FaqItem = (typeof faq.items)[number];
-
-const FAQ_TONE: Record<FaqItem["tone"], string> = {
-  forest: "bg-forest",
-  clay: "bg-clay",
-  espresso: "bg-espresso",
-};
-
-function MobileFaqCard({
-  item,
-  open,
-  onToggle,
-}: {
-  item: FaqItem;
-  open: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      aria-pressed={open}
-      aria-label={
-        open
-          ? `${item.question.join(" ")} 답변 닫기`
-          : `${item.question.join(" ")} 답변 보기`
-      }
-      onClick={onToggle}
-      className="relative h-[191px] w-full cursor-pointer text-left [perspective:1200px]"
-    >
-      <div
-        className="relative h-full w-full transition-transform duration-[600ms] ease-[cubic-bezier(0.65,0,0.35,1)] [transform-style:preserve-3d]"
-        style={{
-          transform: open ? "rotateY(180deg)" : "rotateY(0deg)",
-        }}
-      >
-        <div
-          className="absolute inset-0 flex flex-col rounded-[6px] [backface-visibility:hidden]"
-          style={{
-            padding: "25px 16px 16px",
-            backgroundColor: "#EFEAE3",
-          }}
-        >
-          <p className="text-kr text-[18px] font-bold leading-[1.4] tracking-[-0.01em] text-ink [word-break:keep-all]">
-            <span className="font-latin font-normal text-stone">{item.q}</span>{" "}
-            {item.question.join(" ")}
-          </p>
-          <div className="mt-auto self-end text-stone opacity-40">
-            <Wordmark width={64} />
-          </div>
-        </div>
-
-        <div
-          className={`absolute inset-0 flex flex-col rounded-[6px] text-porcelain [backface-visibility:hidden] [transform:rotateY(180deg)] ${FAQ_TONE[item.tone]}`}
-          style={{ padding: "25px 16px 16px" }}
-        >
-          <p className="text-kr text-[20px] font-bold leading-none tracking-[-0.01em]">
-            {item.answerTitle}
-          </p>
-          <p className="text-kr mt-[16px] text-[13px] font-normal leading-[1.65] tracking-[-0.01em] text-porcelain/90 [word-break:keep-all]">
-            {item.answer.join(" ")}
-          </p>
-        </div>
-      </div>
-    </button>
   );
 }
 
