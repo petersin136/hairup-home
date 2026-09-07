@@ -18,10 +18,10 @@ export function MobilePricing() {
         <em>{pricing.tagMobile.article}</em>
         {pricing.tagMobile.after}
       </p>
-      <h2 className="text-kr mt-[22px] text-[30px] font-bold leading-[1.3] text-ink">
+      <h2 className="text-kr mt-[28px] text-[30px] font-bold leading-[1.3] text-ink">
         <GlyphLines lines={pricing.headline} />
       </h2>
-      <p className="text-kr mt-[28px] text-[15px] leading-[1.65] text-body">
+      <p className="text-kr mt-[34px] text-[15px] leading-[1.65] text-body">
         <GlyphLines lines={pricing.body} />
       </p>
 

@@ -1321,59 +1321,50 @@ html:not(.splash-seen) [data-site-header] {
   transform: translate(-50%, -50%);
 }
 
-/* --- 히어로 카드 (hu_hero_detail_2_m) ----------------------------------- */
+/* --- 히어로 카드 (hu_main detail · 390) --------------------------------- */
 /* 로고 → 카드 40 */
 .M-HERO {
   padding-top: 40px;
 }
 
+/* .CARD-CONTAINER — 350×552 · r 12 · 폴백 그린 */
 .M-HERO .CARD-CONTAINER {
+  position: relative;
   width: 350px;
+  height: 552px;
   /* 390 미만(320 등)에서만 줄어듭니다. 390 이상은 항상 시안값 350 */
   max-width: calc(100% - 40px);
   /* 뷰포트 → 카드 좌 20 / 카드 → 뷰포트 우 20 */
   margin-left: auto;
   margin-right: auto;
-  /* 미디어 하단 라운드 코너로 비치는 CREATE BRAND 그린 */
+  /* 이미지 로딩 실패·지연 폴백 */
   background-color: rgb(44, 58, 46);
   border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  /* CREATE-BRAND-BTN 의 70 → 52 클리핑 + 하단 모서리 라운드 */
   overflow: hidden;
 }
 
-/* hero_visual_img 700×1000 → 350×500, 비율 0.7 동일해 왜곡 없음 */
-.M-HERO .CARD-MEDIA {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  /* 350 폭에서 정확히 500. 카드가 줄어도 시안 비율 유지 */
-  aspect-ratio: 350 / 500;
-  /* 하단 곡선 경계 — 카드 r 12 와 동일 (과한 곡률 방지) */
-  border-radius: 0 0 12px 12px;
-  overflow: hidden;
-}
-
-/*
- * absolute 로 흐름에서 빼야 합니다. 흐름 안이면 flex item 의 min-height:auto 가
- * img 콘텐츠 높이(500.391)를 강제해 aspect-ratio 의 500 을 덮습니다.
- */
-.M-HERO .CARD-MEDIA img {
+/* 카드 전체 배경 이미지 — cover + top */
+.M-HERO .CARD-BG {
   position: absolute;
   inset: 0;
+  z-index: 0;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top;
 }
 
-/* 카드 → 텍스트 좌 20 / 우 20, 본문 → 버튼 26 */
+/*
+ * 카피 — 좌우 20 유지 · 본문→버튼 33 · 버튼 56 · 하단 15
+ * bottom = 15 + 56 + 33 = 104
+ */
 .M-HERO .CARD-COPY {
   position: absolute;
+  z-index: 1;
   left: 20px;
   right: 20px;
-  bottom: 26px;
+  bottom: 104px;
 }
 
 .M-HERO .CARD-TITLE {
@@ -1401,15 +1392,16 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
-/* --- CREATE BRAND 버튼 (hu_hero_detail_3_m) ----------------------------- */
+/* --- CREATE BRAND 버튼 (카드 내부 하단 · 320×56) ------------------------ */
 .M-HERO .CREATE-BRAND-BTN {
-  width: 100%;
-  height: 70px;
-  /* 카드 하단 모서리 렌더링 빈틈 커버용 확장 값 (시각적 버튼 높이 52PX 유지) */
+  position: absolute;
+  z-index: 1;
+  left: 15px;
+  bottom: 15px;
   box-sizing: border-box;
-  padding-bottom: 18px;
-  margin-bottom: -18px;
-  /* 상단도 라운드 — 미디어 하단 곡선과 맞물림 (카드 r 12) */
+  width: 320px;
+  max-width: calc(100% - 30px);
+  height: 56px;
   border-radius: 12px;
   background-color: rgb(44, 58, 46);
   display: flex;
@@ -1445,8 +1437,8 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* ==========================================================================
-   MOBILE EXPERIENCE — hu_experience_m · hu_experience_detail_1–4_m
-   390 아트보드 · PC Experience 와 별개. 2x hu_ex_bg → 표시 350×330.
+   MOBILE EXPERIENCE — hu_experience_m · hu_ex_detail
+   390 아트보드 · PC Experience 와 별개. 2x hu_ex_bg 700×760 → 표시 350×380.
    ========================================================================== */
 .M-EXPERIENCE {
   display: flex;
@@ -1456,13 +1448,13 @@ html:not(.splash-seen) [data-site-header] {
   gap: 15px;
 }
 
-/* detail_1_m · .RECTANGLE_1 — SOURCE: HU_EX_BG.PNG */
+/* .RECTANGLE_1 — SOURCE: HU_EX_BG.PNG · 350×380 · r 8 */
 .M-EXPERIENCE .RECTANGLE_1 {
   position: relative;
   left: auto;
   width: 350px;
   max-width: 100%;
-  height: 330px;
+  height: 380px;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -1477,19 +1469,18 @@ html:not(.splash-seen) [data-site-header] {
   object-fit: fill;
 }
 
-/* detail_4_m — 상·좌·우·하 35 */
+/* 좌·우 35 · 내부 스택을 카드 높이 정중앙 */
 .M-EXPERIENCE .M-EX-COPY {
   position: absolute;
   z-index: 10;
-  top: 35px;
-  left: 35px;
-  right: 35px;
+  inset: 0 35px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
 }
 
-/* detail_2_m · 태그(12px Playfair) — detail_4 목업은 좌측 정렬 */
+/* 태그(12px Playfair) — 좌측 정렬 */
 .M-EXPERIENCE .__02__THE_EXPERIENCE__ {
   margin: 0;
   font-size: 12px;
@@ -1512,9 +1503,9 @@ html:not(.splash-seen) [data-site-header] {
   text-transform: none;
 }
 
-/* detail_2_m · .MAIN TEXT — 태그 → 타이틀 22 */
+/* 태그 → 타이틀 28 */
 .M-EXPERIENCE .M-EX-TITLE {
-  margin: 22px 0 0;
+  margin: 28px 0 0;
   font-size: 30px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 700;
@@ -1526,9 +1517,9 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
-/* detail_2_m · .SUB TEXT — 타이틀 → 설명 28 */
+/* 타이틀 → 설명 34 */
 .M-EXPERIENCE .M-EX-DESC {
-  margin: 28px 0 0;
+  margin: 34px 0 0;
   font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
@@ -1541,13 +1532,13 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
-/* detail_3_m · .RECTANGLE + .카카오톡_데모_체험하기 — 설명 → 버튼 45 */
+/* .RECTANGLE + 버튼 텍스트 — 설명 → 버튼 50 · 280×52 */
 .M-EXPERIENCE .M-EX-BTN {
-  margin: 45px 0 0;
+  margin: 50px 0 0;
   box-sizing: border-box;
   width: 280px;
   max-width: 100%;
-  height: 50px;
+  height: 52px;
   border-radius: 8px;
   border: 0;
   background-color: rgb(53, 41, 35);
@@ -1622,9 +1613,9 @@ html:not(.splash-seen) [data-site-header] {
   text-transform: none;
 }
 
-/* .MAIN TEXT — tag→title 22 */
+/* .MAIN TEXT — tag→title 28 */
 .M-KEY-BENEFITS .M-KB-TITLE {
-  margin: 22px 0 0;
+  margin: 28px 0 0;
   font-size: 30px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 700;
@@ -1635,9 +1626,9 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
-/* .SUB TEXT — title→desc 28 · desc→카드1 50 */
+/* .SUB TEXT — title→desc 34 · desc→카드1 50 */
 .M-KEY-BENEFITS .M-KB-DESC {
-  margin: 28px 0 0;
+  margin: 34px 0 0;
   font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
@@ -1990,7 +1981,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-FAQ-TITLE {
-  margin: 22px 0 0;
+  margin: 28px 0 0;
   font-size: 30px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 600;
@@ -2002,7 +1993,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-FAQ-DESC {
-  margin: 28px 0 0;
+  margin: 34px 0 0;
   font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
@@ -2347,7 +2338,6 @@ html:not(.splash-seen) [data-site-header] {
 /* .RECTANGLE 푸터 — 390×1030 · rgb(239, 234, 227) · 좌우 20 · 상단 80 · 하단 20 */
 .M-FOOTER {
   box-sizing: border-box;
-  scroll-margin-top: 94px;
   background-color: rgb(239, 234, 227);
   min-height: 1030px;
   padding-top: 80px;
@@ -3435,7 +3425,7 @@ html:not(.splash-seen) [data-site-header] {
 
 /* detail_1_m · .MAIN TEXT — 태그 → 타이틀 22 */
 .DILEMMA-M-TITLE {
-  margin: 22px 0 0;
+  margin: 28px 0 0;
   font-size: 30px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   color: rgb(28, 26, 25);
@@ -3449,7 +3439,7 @@ html:not(.splash-seen) [data-site-header] {
 
 /* detail_1_m · .SUB TEXT — 타이틀 → 설명 28 */
 .DILEMMA-M-DESC {
-  margin: 28px 0 0;
+  margin: 34px 0 0;
   font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   color: rgba(28, 26, 25, 0.8);

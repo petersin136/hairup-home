@@ -37,12 +37,12 @@ import { MOBILE_ARTBOARD_PX } from "@/lib/mobile-artboard";
 
 /**
  * 열림 GNB 메뉴 — 시안 hu_gnb_m.
- * href 는 PC(nav)와 같지만 세 번째 라벨이 PRICING 이 아니라 MEMBERSHIP 이라 따로 둔다.
+ * href 는 PC(nav)와 동일. 세 번째 라벨 PRICING → #pricing.
  */
 const MGNB_ITEMS = [
   { label: "AI MANAGER", href: "#ai-manager" },
   { label: "TEMPLATES", href: "#template" },
-  { label: "MEMBERSHIP", href: "#pricing" },
+  { label: "PRICING", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
 ] as const;
 
@@ -84,11 +84,8 @@ export function MobileHome() {
         className="mx-auto w-full"
         style={{ maxWidth: MOBILE_ARTBOARD_PX }}
       >
-      {/* 헤더 — 시안 hu_hero_detail_1_m */}
-      <header
-        data-site-header
-        className="relative sticky top-0 z-50 bg-porcelain"
-      >
+      {/* 헤더 — 시안 hu_hero_detail_1_m · 스크롤 다운 시 sticky 없이 상단으로 퇴장 */}
+      <header data-site-header className="relative z-50 bg-porcelain">
         <div className="M-HEAD-M">
           <Link
             href="/"
@@ -114,28 +111,27 @@ export function MobileHome() {
         </div>
       </header>
 
-      <main className="[&_section]:scroll-mt-[94px]">
-        {/* Hero — 모바일 시안 hu_m_Main · 390 기준 */}
+      <main>
+        {/* Hero — 모바일 시안 hu_main · 390 기준 · 카드 350×552 */}
         <section id="hero" className="M-HERO bg-porcelain">
           <div className="CARD-CONTAINER">
-            <div className="CARD-MEDIA">
-              <Image
-                src={hero.media.src}
-                alt={hero.media.alt}
-                width={hero.media.width}
-                height={hero.media.height}
-                sizes="350px"
-                priority
-                unoptimized
-              />
-              <div className="CARD-COPY">
-                <h1 className="CARD-TITLE">
-                  <GlyphLines lines={hero.headline} />
-                </h1>
-                <p className="CARD-DESCRIPTION">
-                  <GlyphLines lines={hero.bodyMobile} />
-                </p>
-              </div>
+            <Image
+              className="CARD-BG"
+              src={hero.media.src}
+              alt={hero.media.alt}
+              width={hero.media.width}
+              height={hero.media.height}
+              sizes="350px"
+              priority
+              unoptimized
+            />
+            <div className="CARD-COPY">
+              <h1 className="CARD-TITLE">
+                <GlyphLines lines={hero.headline} />
+              </h1>
+              <p className="CARD-DESCRIPTION">
+                <GlyphLines lines={hero.bodyMobile} />
+              </p>
             </div>
             <a
               className="CREATE-BRAND-BTN"
@@ -209,13 +205,13 @@ export function MobileHome() {
 
         {/* Experience — 모바일 시안 hu_experience_m · 390 기준 */}
         <section id="ai-manager" className="M-EXPERIENCE bg-porcelain">
-          {/* detail_1_m · .RECTANGLE_1 — SOURCE: HU_EX_BG.PNG (2x 700×660 → 350×330) */}
+          {/* .RECTANGLE_1 — HU_EX_BG.PNG 2x 700×760 → 표시 350×380 */}
           <div className="RECTANGLE_1">
             <Image
               src={experience.mobileBg}
               alt=""
-              width={350}
-              height={330}
+              width={700}
+              height={760}
               unoptimized
               quality={100}
               sizes="350px"
@@ -296,10 +292,10 @@ export function MobileHome() {
               <em>{templateCollection.tagMobile.article}</em>
               {templateCollection.tagMobile.after}
             </p>
-            <h2 className="text-kr mt-[22px] text-[30px] font-bold leading-[1.3] text-ink">
+            <h2 className="text-kr mt-[28px] text-[30px] font-bold leading-[1.3] text-ink">
               <GlyphLines lines={templateCollection.headline} />
             </h2>
-            <p className="text-kr mt-[28px] text-[15px] leading-[1.65] text-body">
+            <p className="text-kr mt-[34px] text-[15px] leading-[1.65] text-body">
               <GlyphLines lines={templateCollection.body} />
             </p>
           </div>

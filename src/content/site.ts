@@ -73,10 +73,11 @@ export const hero = {
     "고객 응대부터 예약, 장부 정리까지.",
     "헤어업 AI 매니저가 감각적으로 처리합니다.",
   ],
+  /** 모바일 MAIN — hu_main vi_mobile · 표시 350×552 (소스 2x 계열) */
   media: {
     src: "/images/hero-visual-m.png",
-    width: 700,
-    height: 1000,
+    width: 649,
+    height: 1024,
     alt: "라운드 브러시로 머리를 손질하는 헤어 디자이너",
   },
 } as const;
@@ -160,7 +161,7 @@ export const experience = {
     label: "카카오톡 데모 체험하기",
     href: "http://pf.kakao.com/_xeWxdSX/chat",
   },
-  /** 모바일 시안 hu_experience_detail_1_m · 2x(700×660) → 표시 350×330 */
+  /** 모바일 시안 hu_ex_detail · 2x(700×760) → 표시 350×380 */
   mobileBg: "/experience/hu_ex_bg.png",
   tryAsking: {
     title: "TRY ASKING.",
