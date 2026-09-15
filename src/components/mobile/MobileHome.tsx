@@ -33,7 +33,7 @@ import { MOBILE_ARTBOARD_PX } from "@/lib/mobile-artboard";
 
 /**
  * 모바일 전용 홈. HomeShell 이 1440px 미만일 때만 마운트합니다.
- * 레이아웃 기준 폭 390px (기존 375). 2x 이미지는 1x CSS 크기로 표시.
+ * 레이아웃 기준 폭 390px. 2x 이미지는 1x CSS 표시 크기로 사용.
  */
 
 /**
@@ -211,8 +211,8 @@ export function MobileHome() {
             <Image
               src={experience.mobileBg}
               alt=""
-              width={700}
-              height={760}
+              width={350}
+              height={380}
               unoptimized
               quality={100}
               sizes="350px"

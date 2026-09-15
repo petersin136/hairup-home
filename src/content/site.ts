@@ -73,11 +73,11 @@ export const hero = {
     "고객 응대부터 예약, 장부 정리까지.",
     "헤어업 AI 매니저가 감각적으로 처리합니다.",
   ],
-  /** 모바일 MAIN — hu_main vi_mobile · 표시 350×552 (소스 2x 계열) */
+  /** 모바일 MAIN — hu_main · 표시 350×552 (소스 2x → img 는 1x 표시 크기) */
   media: {
     src: "/images/hero-visual-m.png",
-    width: 649,
-    height: 1024,
+    width: 350,
+    height: 552,
     alt: "라운드 브러시로 머리를 손질하는 헤어 디자이너",
   },
 } as const;
@@ -161,7 +161,7 @@ export const experience = {
     label: "카카오톡 데모 체험하기",
     href: "http://pf.kakao.com/_xeWxdSX/chat",
   },
-  /** 모바일 시안 hu_ex_detail · 2x(700×760) → 표시 350×380 */
+  /** 모바일 시안 hu_ex_detail · 소스 2x(700×760) → img 표시 350×380 */
   mobileBg: "/experience/hu_ex_bg.png",
   tryAsking: {
     title: "TRY ASKING.",
@@ -419,21 +419,16 @@ export const faq = {
     article: "the",
     after: " FAQ )",
   },
-  /** 모바일 — PC 와 동일 ( 07. the FAQ ) */
-  tagMobile: {
-    before: "( 07. ",
-    article: "the",
-    after: " FAQ )",
-  },
+  /** 모바일 시안 hu_faq_01_m — ( 07. FAQ ) · the 없음 */
+  tagMobile: "( 07. FAQ )",
   headline: ["시작은 간단하게.", "운영은 편리하게."],
   body: [
     "처음 사용하는 경우에도 복잡한 준비는 필요하지 않습니다.",
     "몇 가지 기본 정보와 운영 방식을 전달해주시면",
     "헤어샵에 맞춰 필요한 설정을 진행합니다.",
   ],
-  /** 모바일 — 350 폭에서 단어가 갈리지 않도록 4줄 고정 */
+  /** 모바일 시안 hu_faq_01_m — 3줄 */
   bodyMobile: [
-    "처음 사용하는 경우에도",
     "복잡한 준비는 필요하지 않습니다.",
     "몇 가지 기본 정보와 운영 방식을 전달해주시면",
     "헤어샵에 맞춰 필요한 설정을 진행합니다.",
@@ -501,6 +496,8 @@ export const faq = {
     {
       category: "OPERATION",
       question: "디지털 기기 조작에 서툴러도 직접 운영할 수 있나요?",
+      /** 모바일 시안 hu_faq_02_m */
+      questionMobile: ["기기 조작에 서툴러도 직접 운영할 수 있나요?"],
       answer: [
         [
           { text: "가능합니다. 초기 구축부터 시나리오 설정까지 헤어업에서 진행한 후 전달해 드립니다." },
@@ -511,6 +508,11 @@ export const faq = {
     {
       category: "UPDATE",
       question: "매장 정보나 사진 변경 시 유지보수 기준은 어떻게 되나요?",
+      /** 모바일 시안 hu_faq_03_m — 2줄 */
+      questionMobile: [
+        "매장 정보나 사진 변경 시 유지보수 기준은",
+        "어떻게 되나요?",
+      ],
       answer: [
         [
           { text: "브랜딩 플랜은 구독 기간 동안 아래 기준에 따라 무상 수정이 제공됩니다." },
@@ -554,6 +556,11 @@ export const faq = {
     {
       category: "BILLING",
       question: "연간 결제 혜택과 세금계산서 발행 기준은 어떻게 되나요?",
+      /** 모바일 시안 hu_faq_02_m — 2줄 */
+      questionMobile: [
+        "연간 결제 혜택과 세금계산서 발행 기준은",
+        "어떻게 되나요?",
+      ],
       answer: [
         [
           { text: "• 연간 결제 혜택", bold: true },

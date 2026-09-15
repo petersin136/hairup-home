@@ -12,51 +12,44 @@ import { GlyphLines } from "@/components/copy/GlyphLines";
 import { faq, type FaqAnswerGroup } from "@/content/site";
 
 /**
- * 모바일 FAQ — PC hu_FAQ_DETAIL_PC 아코디언을 390 폭에 축소.
- * 카드 flip 없음. PC Faq.tsx 는 건드리지 않습니다.
+ * 모바일 FAQ — hu_faq_01~03_m · 390
+ * PC Faq.tsx 는 건드리지 않습니다.
  */
 export function MobileFaq() {
   const [open, setOpen] = useState<string | null>(null);
 
   return (
     <section id="faq" className="M-FAQ">
-      <p className="M-FAQ-TAG">
-        {faq.tagMobile.before}
-        <em>{faq.tagMobile.article}</em>
-        {faq.tagMobile.after}
-      </p>
-      <h2 className="M-FAQ-TITLE text-kr">
+      <p className="__07__FAQ__">{faq.tagMobile}</p>
+      <h2 className="시작은_간단하게.__운영은_편리하게_">
         <GlyphLines lines={faq.headline} />
       </h2>
-      <p className="M-FAQ-DESC text-kr">
+      <p className="복잡한_준비는_필요하지_않습니다">
         <GlyphLines lines={faq.bodyMobile} />
       </p>
 
       <div className="M-FAQ-LIST">
         {faq.list.map((item) => {
           const isOpen = open === item.category;
+          const question =
+            "questionMobile" in item && item.questionMobile
+              ? item.questionMobile
+              : [item.question];
           return (
             <div key={item.category}>
-              <div className="M-FAQ-LINE" />
-              <div
-                className={isOpen ? "M-FAQ-ITEM is-open" : "M-FAQ-ITEM"}
-                onClick={isOpen ? () => setOpen(null) : undefined}
-              >
+              <div className="LINE" />
+              <div className={isOpen ? "M-FAQ-ITEM is-open" : "M-FAQ-ITEM"}>
                 <button
                   type="button"
                   className="M-FAQ-HIT"
                   aria-expanded={isOpen}
                   aria-label={item.question}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setOpen(isOpen ? null : item.category);
-                  }}
+                  onClick={() => setOpen(isOpen ? null : item.category)}
                 >
-                  <span className="M-FAQ-CATEGORY">({item.category})</span>
-                  <span className="M-FAQ-QUESTION text-kr">{item.question}</span>
-                  <span className="M-FAQ-ICON-SLOT">
-                    <MobileFaqIcon />
+                  <span className="QUESTION">
+                    <GlyphLines lines={question} />
                   </span>
+                  {isOpen ? <IcoMinus /> : <IcoPlus />}
                 </button>
                 <MobileFaqPanel open={isOpen}>
                   <MobileFaqAnswer groups={item.answer} />
@@ -65,7 +58,7 @@ export function MobileFaq() {
             </div>
           );
         })}
-        <div className="M-FAQ-LINE" />
+        <div className="LINE" />
       </div>
     </section>
   );
@@ -79,7 +72,7 @@ function answerLineKind(text: string): "bullet" | "sub" | "plain" {
 
 function MobileFaqAnswer({ groups }: { groups: readonly FaqAnswerGroup[] }) {
   return (
-    <div className="M-FAQ-ANSWER text-kr">
+    <div className="M-FAQ-ANSWER">
       {groups.map((group, gi) => (
         <div key={gi} className="M-FAQ-GROUP">
           {group.map((line, li) => {
@@ -136,7 +129,8 @@ function MobileFaqPanel({
     }
 
     const measure = () => {
-      setHeight(Math.ceil(inner.getBoundingClientRect().height));
+      /* scrollHeight — trim 글리프가 rect 밖으로 넘쳐도 클립되지 않게 */
+      setHeight(Math.ceil(inner.scrollHeight));
     };
 
     measure();
@@ -180,30 +174,32 @@ function MobileFaqPanel({
   );
 }
 
-function MobileFaqIcon() {
+/** hu_faq_02_m · .ICO-PLUS */
+function IcoPlus() {
   return (
     <svg
-      className="M-FAQ-ICON"
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
+      className="ICO-PLUS"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
       aria-hidden
     >
-      <path
-        d="M1 10H19"
-        fill="none"
-        stroke="#000000"
-        strokeWidth="2"
-        strokeLinecap="square"
-      />
-      <path
-        className="M-FAQ-ICON-V"
-        d="M10 1V19"
-        fill="none"
-        stroke="#000000"
-        strokeWidth="2"
-        strokeLinecap="square"
-      />
+      <path d="M1 8H15" />
+      <path d="M8 1V15" />
+    </svg>
+  );
+}
+
+function IcoMinus() {
+  return (
+    <svg
+      className="ICO-PLUS"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      aria-hidden
+    >
+      <path d="M1 8H15" />
     </svg>
   );
 }
