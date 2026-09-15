@@ -19,6 +19,8 @@ export const playfairDisplay = Playfair_Display({
   style: ["normal", "italic"],
   variable: "--font-playfair",
   display: "swap",
+  preload: true,
+  adjustFontFallback: true,
 });
 
 /** 팝업 할인 숫자 — 시안 Didot/Bodoni 계열 (고대비 볼 터미널) */

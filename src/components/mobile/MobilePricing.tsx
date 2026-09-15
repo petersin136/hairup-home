@@ -2,6 +2,7 @@
 
 import { GlyphLines } from "@/components/copy/GlyphLines";
 import { pricing } from "@/content/site";
+import { playfairDisplay } from "@/lib/fonts";
 import { onHashClick } from "@/lib/scroll-to-hash";
 
 const PLANS = [
@@ -12,7 +13,7 @@ const PLANS = [
 export function MobilePricing() {
   return (
     <section id="pricing" className="M-PRICE-SEC">
-      <p className="M-PRICE-TAG">
+      <p className={`M-PRICE-TAG ${playfairDisplay.className}`}>
         {pricing.tagMobile.before}
         <em>{pricing.tagMobile.article}</em>
         {pricing.tagMobile.after}
@@ -34,13 +35,13 @@ export function MobilePricing() {
         className="M-PRICE-YEAR"
         aria-label={`${pricing.year.headlineBefore}${pricing.year.headlineEm} ${pricing.year.bodyMobile}. ${pricing.year.savedNum} ${pricing.year.savedLabel}`}
       >
-        <p className="M-PRICE-YEAR-H">
+        <p className={`M-PRICE-YEAR-H ${playfairDisplay.className}`}>
           A whole year,
           <br />
           <em>{pricing.year.headlineEm}</em>
         </p>
         <p className="M-PRICE-YEAR-D text-kr">{pricing.year.bodyMobile}</p>
-        <p className="M-PRICE-YEAR-SAVED">
+        <p className={`M-PRICE-YEAR-SAVED ${playfairDisplay.className}`}>
           {pricing.year.savedNum} {pricing.year.savedLabel}
         </p>
       </div>
@@ -58,7 +59,7 @@ function MobilePlanCard({
   const brand = tone === "branding";
   return (
     <article className={brand ? "M-PRICE is-brand" : "M-PRICE"}>
-      <p className="M-PRICE-NAME">{plan.name}</p>
+      <p className={`M-PRICE-NAME ${playfairDisplay.className}`}>{plan.name}</p>
       <p className="M-PRICE-DESC text-kr">
         <GlyphLines lines={plan.tagline} />
       </p>
