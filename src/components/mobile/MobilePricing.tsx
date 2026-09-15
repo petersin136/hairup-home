@@ -94,9 +94,7 @@ function MobilePlanCard({
             <div>
               <p className="M-PRICE-FEAT-T text-kr">{feature.title}</p>
               <p className="M-PRICE-FEAT-D text-kr">
-                {(
-                  "descMobile" in feature ? feature.descMobile : feature.desc
-                ).map((line, i) => (
+                {feature.descMobile.map((line, i) => (
                   <span key={`${feature.title}-${i}`}>
                     {i > 0 ? <br /> : null}
                     {line}
