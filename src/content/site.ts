@@ -190,19 +190,35 @@ export const automatedCrm = {
     "상담했던 모든 문의가 대시보드에 즉시 데이터로 쌓입니다.",
     "누락 없이 깔끔한 자동화로 매장 관리의 피로도를 줄여드립니다.",
   ],
+  /** 모바일 시안 — 대시보드에 뒤 줄바꿈 */
+  bodyMobile: [
+    "상담했던 모든 문의가 대시보드에",
+    "즉시 데이터로 쌓입니다.",
+  ],
   systems: [
     {
       index: "SYSTEM 01",
       title: ["대화가 끝나면", "알아서 쌓이는 데이터"],
+      /** 모바일 시안 hu_automated_03_m · 한 줄 */
+      titleMobile: ["대화가 끝나면 알아서 쌓이는 데이터"],
       body: [
         "고객과의 채팅 상담이 완료되는 순간, 수기 입력 없이 대기 목록에 실시간으로",
         "자동 기록됩니다. 날짜, 시간, 담당 디자이너, 시술 메뉴까지 AI 실장이 스스로 정리합니다.",
+      ],
+      bodyMobile: [
+        "채팅이 끝나면 필요한 데이터가 자동 기록됩니다.",
+        "날짜, 시간, 담당자, 시술메뉴를 알아서 정리합니다.",
       ],
     },
     {
       index: "SYSTEM 02",
       title: ["입금 확인부터", "노쇼 관리까지 한곳에"],
+      titleMobile: ["입금 확인부터 노쇼 관리까지 한곳에"],
       body: [
+        "예약금 입금이 확인되면 '확정' 상태로 즉시 전환됩니다.",
+        "시술 완료 내역은 물론 취소·노쇼 내역까지 한눈에 분류하여 매장 관리의 피로도를 낮춥니다.",
+      ],
+      bodyMobile: [
         "예약금 입금이 확인되면 '확정' 상태로 즉시 전환됩니다.",
         "시술 완료 내역은 물론 취소·노쇼 내역까지 한눈에 분류하여 매장 관리의 피로도를 낮춥니다.",
       ],
@@ -210,7 +226,12 @@ export const automatedCrm = {
     {
       index: "SYSTEM 03",
       title: ["직관적으로 파악하는", "매장 전체 스케줄"],
+      titleMobile: ["직관적으로 파악하는 매장 전체 스케줄"],
       body: [
+        "월간 및 주간 단위의 시각적 스케줄 확인은 물론, 디자이너별 개인 휴무와 예약 현황을",
+        "필터링하여 우측 상세 패널에서 한눈에 확인합니다.",
+      ],
+      bodyMobile: [
         "월간 및 주간 단위의 시각적 스케줄 확인은 물론, 디자이너별 개인 휴무와 예약 현황을",
         "필터링하여 우측 상세 패널에서 한눈에 확인합니다.",
       ],
@@ -218,7 +239,12 @@ export const automatedCrm = {
     {
       index: "SYSTEM 04",
       title: ["디자이너 직급에 맞춘", "유연한 단가 제어"],
+      titleMobile: ["디자이너 직급에 맞춘 유연한 단가 제어"],
       body: [
+        "시술별 소요 시간과 예약금 설정은 기본, 디자이너의 경력과 직급에 맞춘 개별 차등",
+        "단가를 자유롭게 지정하고 사이트에 실시간으로 반영합니다.",
+      ],
+      bodyMobile: [
         "시술별 소요 시간과 예약금 설정은 기본, 디자이너의 경력과 직급에 맞춘 개별 차등",
         "단가를 자유롭게 지정하고 사이트에 실시간으로 반영합니다.",
       ],
@@ -233,9 +259,9 @@ export const keyBenefits = {
     article: "Key",
     after: " BENEFITS )",
   },
-  /** 모바일은 03. AUTOMATED CRM 섹션이 없어 번호가 하나씩 앞당겨집니다. — ( 03. Key BENEFITS ) */
+  /** 모바일 — PC 와 동일 ( 04. Key BENEFITS ) */
   tagMobile: {
-    before: "( 03. ",
+    before: "( 04. ",
     article: "Key",
     after: " BENEFITS )",
   },
@@ -307,9 +333,9 @@ export const templateCollection = {
     article: "Collection",
     after: " )",
   },
-  /** 모바일은 03. AUTOMATED CRM 섹션이 없어 번호가 하나씩 앞당겨집니다. */
+  /** 모바일 — PC 와 동일 ( 05. TEMPLATE Collection ) */
   tagMobile: {
-    before: "( 04. TEMPLATE ",
+    before: "( 05. TEMPLATE ",
     article: "Collection",
     after: " )",
   },
@@ -393,9 +419,9 @@ export const faq = {
     article: "the",
     after: " FAQ )",
   },
-  /** 모바일은 03. AUTOMATED CRM 섹션이 없어 번호가 하나씩 앞당겨집니다. */
+  /** 모바일 — PC 와 동일 ( 07. the FAQ ) */
   tagMobile: {
-    before: "( 06. ",
+    before: "( 07. ",
     article: "the",
     after: " FAQ )",
   },
@@ -551,9 +577,9 @@ export const pricing = {
     article: "Plan",
     after: " )",
   },
-  /** 모바일은 03. AUTOMATED CRM 섹션이 없어 번호가 하나씩 앞당겨집니다. */
+  /** 모바일 — PC 와 동일 ( 06. PRICING Plan ) */
   tagMobile: {
-    before: "( 05. PRICING ",
+    before: "( 06. PRICING ",
     article: "Plan",
     after: " )",
   },
@@ -566,21 +592,43 @@ export const pricing = {
     name: "STARTER PLAN",
     tagline: ["24시간 쉬지 않고,", "손님을 맞이하는 전담 예약 매니저."],
     prices: [
-      { num: "100", unit: "만 원", label: "초기 세팅비 1회" },
-      { num: "7.9", unit: "만 원", label: "월 구독료" },
+      {
+        num: "100",
+        unit: "만 원",
+        unitMobile: "만원",
+        label: "초기 세팅비 1회",
+      },
+      {
+        num: "7.9",
+        unit: "만 원",
+        unitMobile: "만원",
+        label: "월 구독료",
+      },
     ],
     features: [
       {
         title: "자율형 AI 카카오 상담",
         desc: ["문맥을 스스로 이해하고 예약을 확정하는 지능형 AI"],
+        descMobile: [
+          "문맥을 스스로 이해하고 예약을 확정하는",
+          "지능형 AI",
+        ],
       },
       {
         title: "실시간 자동 연동 CRM",
         desc: ["상담 내역, 예약 일정, 손님 정보를 수기 없이 자동 정리"],
+        descMobile: [
+          "상담 내역, 예약 일정, 손님 정보를 수기 없이",
+          "자동 정리",
+        ],
       },
       {
         title: "스마트 고객 케어",
         desc: ["예약 확정 및 방문 전 유의사항 안내 메시지 자동 발송"],
+        descMobile: [
+          "예약 확정 및 방문 전 유의사항 안내 메시지",
+          "자동 발송",
+        ],
       },
     ],
     cta: {
@@ -597,8 +645,18 @@ export const pricing = {
       "단독 웹 쇼룸과 통합 예약 시스템.",
     ],
     prices: [
-      { num: "200", unit: "만 원", label: "초기 세팅비 1회" },
-      { num: "7.9", unit: "만 원", label: "월 구독료" },
+      {
+        num: "200",
+        unit: "만 원",
+        unitMobile: "만 원",
+        label: "초기 세팅비 1회",
+      },
+      {
+        num: "7.9",
+        unit: "만 원",
+        unitMobile: "만 원",
+        label: "월 구독료",
+      },
     ],
     features: [
       {
@@ -621,8 +679,8 @@ export const pricing = {
         title: "검색엔진 최적화(SEO)",
         desc: ["네이버 · 구글 포털 검색 시 매장 브랜드 안정적 노출"],
         descMobile: [
-          "네이버 · 구글 포털 검색 시",
-          "매장 브랜드 안정적 노출",
+          "네이버/구글 포털 검색 시 매장 브랜드",
+          "안정적 노출",
         ],
       },
       {
@@ -632,8 +690,8 @@ export const pricing = {
           "상담·예약",
         ],
         descMobile: [
-          "클릭 한 번으로 매장 카카오 채널에 연결되어",
-          "AI 매니저와 상담·예약",
+          "클릭 한 번으로 매장 카카오 채널에",
+          "연결되어 AI 매니저와 상담 예약",
         ],
       },
     ],
@@ -647,6 +705,7 @@ export const pricing = {
     headlineBefore: "A whole year, ",
     headlineEm: "Together.",
     body: "연간 결제 시 10개월 요금으로 1년 이용",
+    bodyMobile: "연간 결제 시, 10개월 요금으로 1년 이용",
     badgeLeft: "12 for 10",
     savedNum: "158,000",
     savedLabel: "SAVED",

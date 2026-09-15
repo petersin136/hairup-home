@@ -3,7 +3,6 @@
 import { GlyphLines } from "@/components/copy/GlyphLines";
 import { pricing } from "@/content/site";
 import { onHashClick } from "@/lib/scroll-to-hash";
-import { libreBodoni } from "@/lib/fonts";
 
 const PLANS = [
   { tone: "starter" as const, plan: pricing.starter },
@@ -13,24 +12,37 @@ const PLANS = [
 export function MobilePricing() {
   return (
     <section id="pricing" className="M-PRICE-SEC">
-      <p className="SECTION-TAG text-forest">
+      <p className="M-PRICE-TAG">
         {pricing.tagMobile.before}
         <em>{pricing.tagMobile.article}</em>
         {pricing.tagMobile.after}
       </p>
-      <h2 className="text-kr mt-[28px] text-[30px] font-bold leading-[1.3] text-ink">
+      <h2 className="M-PRICE-HEAD text-kr">
         <GlyphLines lines={pricing.headline} />
       </h2>
-      <p className="text-kr mt-[34px] text-[15px] leading-[1.65] text-body">
+      <p className="M-PRICE-BODY text-kr">
         <GlyphLines lines={pricing.body} />
       </p>
 
       <div className="M-PRICE-TRACK" aria-label="요금제 카드">
         {PLANS.map(({ tone, plan }) => (
-          <div key={tone} className="M-PRICE-SLIDE">
-            <MobilePlanCard tone={tone} plan={plan} />
-          </div>
+          <MobilePlanCard key={tone} tone={tone} plan={plan} />
         ))}
+      </div>
+
+      <div
+        className="M-PRICE-YEAR"
+        aria-label={`${pricing.year.headlineBefore}${pricing.year.headlineEm} ${pricing.year.bodyMobile}. ${pricing.year.savedNum} ${pricing.year.savedLabel}`}
+      >
+        <p className="M-PRICE-YEAR-H">
+          A whole year,
+          <br />
+          <em>{pricing.year.headlineEm}</em>
+        </p>
+        <p className="M-PRICE-YEAR-D text-kr">{pricing.year.bodyMobile}</p>
+        <p className="M-PRICE-YEAR-SAVED">
+          {pricing.year.savedNum} {pricing.year.savedLabel}
+        </p>
       </div>
     </section>
   );
@@ -47,29 +59,17 @@ function MobilePlanCard({
   return (
     <article className={brand ? "M-PRICE is-brand" : "M-PRICE"}>
       <p className="M-PRICE-NAME">{plan.name}</p>
-      {"badge" in plan && plan.badge ? (
-        <p className="M-PRICE-BADGE">{plan.badge}</p>
-      ) : (
-        <p className="M-PRICE-BADGE is-slot" aria-hidden="true">
-          / RECOMMEND
-        </p>
-      )}
       <p className="M-PRICE-DESC text-kr">
         <GlyphLines lines={plan.tagline} />
       </p>
       <div className="M-PRICE-PRICES">
         {plan.prices.map((row) => (
-          <div key={row.label}>
-            <p className="M-PRICE-LABEL text-kr">{row.label}</p>
-            <p className="M-PRICE-AMOUNT">
-              <span
-                className={`M-PRICE-NUM font-didot-num ${libreBodoni.className}`}
-              >
-                {row.num}
-              </span>
-              <span className="M-PRICE-UNIT text-kr">{row.unit}</span>
-            </p>
-          </div>
+          <p key={row.label} className="M-PRICE-AMOUNT">
+            <span className="M-PRICE-NUM font-latin">{row.num}</span>
+            <span className="M-PRICE-UNIT text-kr">
+              {row.unitMobile} / {row.label}
+            </span>
+          </p>
         ))}
       </div>
       <hr className="M-PRICE-RULE" />
@@ -78,21 +78,30 @@ function MobilePlanCard({
           <li key={feature.title}>
             <svg
               className="M-PRICE-CHECK"
-              width="18"
-              height="16"
-              viewBox="0 0 18 16"
+              width="14"
+              height="11"
+              viewBox="0 0 14 11"
               aria-hidden
             >
-              <path d="M1.6 8.4L6.4 13.4L16.4 2.2" />
+              <path
+                d="M1.2 5.6L5.1 9.4L12.8 1.4"
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
             <div>
               <p className="M-PRICE-FEAT-T text-kr">{feature.title}</p>
               <p className="M-PRICE-FEAT-D text-kr">
-                <GlyphLines
-                  lines={
-                    "descMobile" in feature ? feature.descMobile : feature.desc
-                  }
-                />
+                {(
+                  "descMobile" in feature ? feature.descMobile : feature.desc
+                ).map((line, i) => (
+                  <span key={`${feature.title}-${i}`}>
+                    {i > 0 ? <br /> : null}
+                    {line}
+                  </span>
+                ))}
               </p>
             </div>
           </li>

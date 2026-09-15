@@ -1000,10 +1000,10 @@ p:has(> .STARTER-PRICE-NUM-MONTH) {
   animation: mobile-marquee 28s linear infinite;
 }
 
-/* hu_marquee_detail_m — 390 · padding 100/100 · gap 40 · .MARQUEE 18px Playfair */
+/* hu_marquee_detail_m — 390 · padding 140/140 · gap 40 · .MARQUEE 18px Playfair */
 .M-MARQUEE {
-  padding-top: 100px;
-  padding-bottom: 100px;
+  padding-top: 140px;
+  padding-bottom: 140px;
   overflow: hidden;
 }
 
@@ -1576,6 +1576,135 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* ==========================================================================
+   MOBILE AUTOMATED CRM — hu_automated_01~04_m · 390
+   PC(.CRM) 와 별개. 가로 스냅 · MAIN 1 / NEXT 0.4
+   ========================================================================== */
+.M-CRM {
+  box-sizing: border-box;
+  padding-top: 140px;
+  padding-bottom: 140px;
+  background-color: #faf8f5;
+}
+
+/* hu_automated_01_m · .__03__AUTOMATED_CRM__ */
+.M-CRM .__03__AUTOMATED_CRM__ {
+  margin: 0 0 0 26px;
+  font-size: 12px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-weight: 500;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  text-align: left;
+  color: rgb(44, 58, 46);
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+/* 태그 → 타이틀 28 · 좌측 26 */
+.M-CRM .M-CRM-HEADLINE {
+  margin: 28px 26px 0;
+  font-size: 30px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  line-height: 1.333;
+  letter-spacing: 0;
+  text-align: left;
+  color: rgb(28, 26, 25);
+  word-spacing: -0.057em;
+  word-break: keep-all;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 타이틀 → 설명 34 · 좌측 26 · ls 0 (시안) */
+.M-CRM .M-CRM-DESC {
+  margin: 34px 26px 0;
+  font-size: 15px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  line-height: 1.467;
+  letter-spacing: 0;
+  text-align: left;
+  color: rgba(28, 26, 25, 0.8);
+  word-spacing: -0.057em;
+  word-break: keep-all;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 설명 → 카드 50 · 좌측 20 · 간격 12 */
+.M-CRM .M-CRM-TRACK {
+  display: flex;
+  gap: 12px;
+  margin: 50px 0 0;
+  padding-left: 20px;
+  /* 390 − 20 − 320 = 50 — 마지막 카드도 좌측 20 스냅 */
+  padding-right: 50px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.M-CRM .M-CRM-TRACK::-webkit-scrollbar {
+  display: none;
+}
+
+.M-CRM .RECTANGLE__MAIN_,
+.M-CRM .RECTANGLE__NEXT_ {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  width: 320px;
+  height: 320px;
+  border-radius: 8px;
+  background-color: #ebebeb;
+  scroll-snap-align: start;
+}
+
+.M-CRM .RECTANGLE__MAIN_ {
+  opacity: 1;
+}
+
+.M-CRM .RECTANGLE__NEXT_ {
+  opacity: 0.4;
+}
+
+/* 카드 → 하단 타이틀 27 · 좌측 26 · hu_automated_03_m .TITLE */
+.M-CRM .TITLE {
+  margin: 27px 26px 0;
+  font-size: 18px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-align: left;
+  color: rgb(44, 58, 46);
+  word-spacing: -0.057em;
+  word-break: keep-all;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 타이틀 → 본문 17 · 좌측 26 · hu_automated_03_m .TEXT */
+.M-CRM .TEXT {
+  margin: 17px 26px 0;
+  font-size: 15px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  line-height: 1.467;
+  letter-spacing: -0.01em;
+  text-align: left;
+  color: rgb(108, 104, 100);
+  word-spacing: -0.057em;
+  word-break: keep-all;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* ==========================================================================
    MOBILE KEY BENEFITS — 시안 hu_key_benefits_m · hu_key_benefits_detail_*_m
    PC Key Benefits(.BENEFITS / .BENEFIT-CARD) 와 별개. 가로 스와이프 없음.
    ========================================================================== */
@@ -1690,48 +1819,91 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* ==========================================================================
-   MOBILE PRICING — PC 카드 리듬을 390 · 좌우 20 에 축소
-   두 카드(STARTER / BRAND) 동일 간격. 색만 is-brand 로 분기.
-   padding 24 · title→desc 16 · desc→price 28 · 가격블록 16
-   라벨→숫자 6 · 구분선 상하 24 · 혜택 항목 20 · 제목→설명 8 · CTA 32
+   MOBILE PRICING — hu_pricing_*_m
+   헤더: tag→title 28 · title→body 34 · body→card 55
+   카드: 350 · pad 45/35 · radius 10 · bg #F4F1ED
+   내부: name→desc 20 · desc→price 35 · price gap 25 · price→bar 35
+         bar→feat 25 · feat title→desc 12 · feat gap 40 · feat→btn 60
+   카드 간격 25 · 연간 배너 350×229 · pad 42/35
    ========================================================================== */
 .M-PRICE-SEC {
   box-sizing: border-box;
   background-color: #faf8f5;
   padding: 0 20px 56px;
+  text-align: center;
+}
+
+.M-PRICE-TAG {
+  margin: 0;
+  font-size: 12px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-weight: 500;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  text-align: center;
+  color: rgb(44, 58, 46);
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+.M-PRICE-TAG em {
+  font-style: italic;
+  font-weight: 500;
+  text-transform: none;
+}
+
+.M-PRICE-HEAD {
+  margin: 28px 0 0;
+  font-size: 30px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  line-height: 1.333;
+  letter-spacing: 0;
+  text-align: center;
+  color: rgb(28, 26, 25);
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-PRICE-BODY {
+  margin: 34px 0 0;
+  font-size: 15px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  line-height: 1.467;
+  letter-spacing: -0.01em;
+  text-align: center;
+  color: rgba(28, 26, 25, 0.8);
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
 }
 
 .M-PRICE-TRACK {
-  --m-price-gap: 20px;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: var(--m-price-gap);
+  align-items: center;
+  gap: 25px;
   box-sizing: border-box;
-  margin: 48px 0 0;
-}
-
-.M-PRICE-SLIDE {
-  flex: 0 0 auto;
-  width: 100%;
-  min-width: 0;
-}
-
-.M-PRICE-SLIDE .M-PRICE {
-  height: auto;
+  margin: 55px 0 0;
 }
 
 .M-PRICE {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 350px;
+  max-width: 100%;
   height: auto;
-  padding: 24px;
-  border-radius: 6px;
-  background-color: rgb(239, 234, 227);
+  padding: 45px 35px;
+  border-radius: 10px;
+  background-color: rgb(244, 241, 237);
   color: rgb(28, 26, 25);
   text-align: left;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
 }
 
 .M-PRICE.is-brand {
@@ -1744,7 +1916,7 @@ html:not(.splash-seen) [data-site-header] {
   font-size: 28px;
   font-family: var(--font-display), "Playfair Display", serif;
   font-weight: 500;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
   text-transform: uppercase;
   line-height: 1;
   color: rgb(44, 58, 46);
@@ -1756,27 +1928,13 @@ html:not(.splash-seen) [data-site-header] {
   color: rgb(250, 248, 245);
 }
 
-.M-PRICE-BADGE {
-  margin: 6px 0 0;
-  font-size: 13px;
-  font-family: var(--font-latin), "Inter", sans-serif;
-  font-weight: 400;
-  color: rgba(250, 248, 245, 0.8);
-  line-height: 1;
-  text-box-trim: trim-both;
-  text-box-edge: text alphabetic;
-}
-
-.M-PRICE-BADGE.is-slot {
-  visibility: hidden;
-}
-
 .M-PRICE-DESC {
-  margin: 16px 0 0;
-  font-size: 15px;
+  margin: 20px 0 0;
+  font-size: 18px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.5;
+  letter-spacing: 0;
   color: rgba(28, 26, 25, 0.8);
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
@@ -1789,43 +1947,32 @@ html:not(.splash-seen) [data-site-header] {
 .M-PRICE-PRICES {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin: 28px 0 0;
-}
-
-.M-PRICE-LABEL {
-  margin: 0;
-  font-size: 13px;
-  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-  font-weight: 400;
-  line-height: 1;
-  color: rgba(28, 26, 25, 0.7);
-  text-box-trim: trim-both;
-  text-box-edge: cap alphabetic;
-}
-
-.M-PRICE.is-brand .M-PRICE-LABEL {
-  color: rgba(250, 248, 245, 0.7);
+  gap: 25px;
+  margin: 35px 0 0;
 }
 
 .M-PRICE-AMOUNT {
   display: flex;
   align-items: baseline;
+  flex-wrap: nowrap;
   gap: 4px;
-  margin: 6px 0 0;
+  margin: 0;
   line-height: 1;
   text-box-trim: none;
 }
 
 .M-PRICE-NUM {
-  font-family: var(--font-didot);
-  font-size: 40px;
+  font-family: var(--font-latin), "Inter", sans-serif;
+  font-size: 38px;
   font-weight: 700;
+  letter-spacing: 0;
   line-height: 1;
   color: rgb(44, 58, 46);
   font-variant-numeric: lining-nums;
   font-feature-settings: "lnum" 1;
   font-synthesis: none;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
 }
 
 .M-PRICE.is-brand .M-PRICE-NUM {
@@ -1833,11 +1980,16 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-PRICE-UNIT {
-  font-size: 16px;
+  font-size: 13px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
+  letter-spacing: -0.025em;
   line-height: 1;
+  text-align: left;
   color: rgba(28, 26, 25, 0.8);
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+  white-space: nowrap;
 }
 
 .M-PRICE.is-brand .M-PRICE-UNIT {
@@ -1846,9 +1998,10 @@ html:not(.splash-seen) [data-site-header] {
 
 .M-PRICE-RULE {
   display: block;
-  width: 100%;
+  width: 278px;
+  max-width: 100%;
   height: 0;
-  margin: 24px 0;
+  margin: 35px 0 25px;
   padding: 0;
   border: 0;
   border-top: 1px solid rgb(44, 58, 46);
@@ -1865,8 +2018,7 @@ html:not(.splash-seen) [data-site-header] {
   list-style: none;
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
-  gap: 20px;
+  gap: 40px;
 }
 
 .M-PRICE-LIST li {
@@ -1874,31 +2026,40 @@ html:not(.splash-seen) [data-site-header] {
   align-items: flex-start;
 }
 
+.M-PRICE-LIST li > div {
+  flex: 1 1 auto;
+}
+
 .M-PRICE-CHECK {
   flex-shrink: 0;
-  margin-top: 2px;
+  width: 14px;
+  height: 11px;
+  margin-top: 3px;
   margin-right: 12px;
-  fill: none;
-  stroke: #2c3a2e;
-  stroke-width: 2.5px;
+  overflow: visible;
+  color: #2c3a2e;
+  stroke: currentColor;
+  stroke-width: 2.8px;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .M-PRICE.is-brand .M-PRICE-CHECK {
-  stroke: rgb(250, 248, 245);
+  color: rgb(250, 248, 245);
 }
 
 .M-PRICE-FEAT-T {
   margin: 0;
-  font-size: 16px;
+  font-size: 18px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0;
   color: rgb(44, 58, 46);
-  line-height: 1.3;
+  line-height: 1;
   text-align: left;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
+  font-synthesis: none;
 }
 
 .M-PRICE.is-brand .M-PRICE-FEAT-T {
@@ -1906,15 +2067,17 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-PRICE-FEAT-D {
-  margin: 8px 0 0;
-  font-size: 14px;
+  margin: 12px 0 0;
+  font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-  font-weight: 400;
-  line-height: 1.5;
+  font-weight: 500;
+  line-height: 1.467;
+  letter-spacing: -0.02em;
   color: rgba(28, 26, 25, 0.8);
   text-align: left;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
+  white-space: nowrap;
 }
 
 .M-PRICE.is-brand .M-PRICE-FEAT-D {
@@ -1926,21 +2089,102 @@ html:not(.splash-seen) [data-site-header] {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 48px;
-  margin: 32px 0 0;
-  border-radius: 4px;
+  width: 280px;
+  max-width: 100%;
+  height: 50px;
+  margin: 60px 0 0;
+  border-radius: 8px;
   font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-  font-weight: 500;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  text-align: center;
   text-decoration: none;
   background-color: rgb(44, 58, 46);
   color: rgb(250, 248, 245);
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+  font-synthesis: none;
 }
 
 .M-PRICE.is-brand .M-PRICE-BTN {
   background-color: rgb(250, 248, 245);
   color: rgb(44, 58, 46);
+}
+
+.M-PRICE-YEAR {
+  box-sizing: border-box;
+  width: 350px;
+  max-width: 100%;
+  min-height: 229px;
+  margin: 25px auto 0;
+  padding: 42px 20px 42px 35px;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: left;
+  background-color: rgb(95, 81, 73);
+  background-image: url("/images/pricing-year-banner-m.png");
+  background-image: -webkit-image-set(
+    url("/images/pricing-year-banner-m.png") 1x,
+    url("/images/pricing-year-banner-m@2x.png") 2x,
+    url("/images/pricing-year-banner-m@3x.png") 3x
+  );
+  background-image: image-set(
+    url("/images/pricing-year-banner-m.png") 1x,
+    url("/images/pricing-year-banner-m@2x.png") 2x,
+    url("/images/pricing-year-banner-m@3x.png") 3x
+  );
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.M-PRICE-YEAR-H {
+  margin: 0;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.333;
+  letter-spacing: -0.01em;
+  text-align: left;
+  color: rgb(250, 248, 245);
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+.M-PRICE-YEAR-H em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.M-PRICE-YEAR-D {
+  margin: 15px 0 0;
+  font-size: 16px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+  text-align: left;
+  color: rgba(250, 248, 245, 0.8);
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-PRICE-YEAR-SAVED {
+  margin: 25px 0 0;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-align: left;
+  line-height: 1;
+  color: rgb(241, 202, 144);
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
 }
 
 /* ==========================================================================

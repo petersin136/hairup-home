@@ -10,6 +10,7 @@ import {
 } from "react";
 
 import { GlyphLines } from "@/components/copy/GlyphLines";
+import { MobileAutomatedCrm } from "@/components/mobile/MobileAutomatedCrm";
 import { MobileFaq } from "@/components/mobile/MobileFaq";
 import { MobilePricing } from "@/components/mobile/MobilePricing";
 import { DemoChat } from "@/components/sections/DemoChat";
@@ -246,6 +247,9 @@ export function MobileHome() {
             <DemoChat fill />
           </div>
         </section>
+
+        {/* Automated CRM — 시안 hu_automated_01~04_m · 390 */}
+        <MobileAutomatedCrm />
 
         {/* Key Benefits — 시안 hu_key_benefits_m · 390 세로 스택 (가로 스와이프 없음) */}
         <section id="key-benefits" className="M-KEY-BENEFITS bg-porcelain">
