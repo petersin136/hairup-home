@@ -2119,7 +2119,7 @@ html:not(.splash-seen) [data-site-header] {
   box-sizing: border-box;
   width: 350px;
   max-width: 100%;
-  min-height: 229px;
+  height: auto;
   margin: 25px auto 0;
   padding: 42px 20px 42px 35px;
   border-radius: 8px;
