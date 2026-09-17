@@ -2066,10 +2066,11 @@ html:not(.splash-seen) [data-site-header] {
          bar→feat 25 · feat title→desc 12 · feat gap 40 · feat→btn 60
    카드 간격 25 · 연간 배너 350×229 · pad 42/35
    ========================================================================== */
+/* 하단 0 — 다음 FAQ 상단 140 과 합쳐 섹션 간격 140 (템플릿→마퀴와 동일) */
 .M-PRICE-SEC {
   box-sizing: border-box;
   background-color: #faf8f5;
-  padding: 0 20px 56px;
+  padding: 0 20px;
   text-align: center;
 }
 
