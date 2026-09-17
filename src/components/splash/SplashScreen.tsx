@@ -10,6 +10,7 @@ import {
   SPLASH_REVEAL_EVENT,
   SPLASH_SESSION_KEY,
 } from "@/lib/splash-keys";
+import { hasSeenLaunchPopup } from "@/lib/entry-chrome";
 
 /**
  * SPLASH SCREEN — 배경 #2c3a2e
@@ -24,18 +25,6 @@ const HOLD_MS = 800;
 const CURTAIN_MS = 400;
 const TOTAL_MS = RISE_MS + HOLD_MS + CURTAIN_MS;
 const REVEAL_MS = RISE_MS + HOLD_MS;
-
-function launchPopupAlreadySeen() {
-  try {
-    /* v2 키만 인정 — 예전 seen 키는 무시 */
-    if (localStorage.getItem("hairup:launch-popup-dismissed-v2") === "1") {
-      return true;
-    }
-  } catch {
-    // ignore
-  }
-  return false;
-}
 
 function coverViewport(el: HTMLElement) {
   const vv = window.visualViewport;
@@ -78,7 +67,7 @@ export function SplashScreen() {
       }
       document.documentElement.classList.add("splash-seen");
       /* 팝업이 이어서 뜰 거면 스크롤 잠금 유지 — 바 출현으로 가로 점프 방지 */
-      if (launchPopupAlreadySeen()) {
+      if (hasSeenLaunchPopup()) {
         document.documentElement.classList.remove("entry-scroll-lock");
       }
       setIsDone(true);

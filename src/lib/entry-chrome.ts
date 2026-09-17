@@ -6,11 +6,12 @@ import { SPLASH_DONE_EVENT, SPLASH_SESSION_KEY } from "@/lib/splash-keys";
 
 /**
  * 런치 팝업 — 닫기/CTA 후에만 저장.
- * v2: 예전 버그가 open 시점에 seen 을 찍어 영구 차단하던 키와 분리.
+ * v3: 모바일 팝업 시안 적용. 예전에 PC 팝업만 닫은 사람도 한 번은 다시 보게.
  */
-export const LAUNCH_POPUP_SEEN_KEY = "hairup:launch-popup-dismissed-v2";
+export const LAUNCH_POPUP_SEEN_KEY = "hairup:launch-popup-dismissed-v3";
 const LEGACY_LAUNCH_POPUP_KEYS = [
   "hairup:launch-popup-seen",
+  "hairup:launch-popup-dismissed-v2",
 ] as const;
 
 /** 약관에서 홈으로 돌아올 때 복원할 스크롤 위치 */
