@@ -42,7 +42,7 @@ export function MobileAutomatedCrm() {
 
   return (
     <section id="automated-crm" className="M-CRM" aria-label="AUTOMATED CRM">
-      <p className="__03__AUTOMATED_CRM__">{automatedCrm.tag}</p>
+      <p className="M-CRM-TAG">{automatedCrm.tag}</p>
 
       <h2 className="M-CRM-HEADLINE">
         <GlyphLines lines={automatedCrm.headline} />
@@ -67,7 +67,7 @@ export function MobileAutomatedCrm() {
             <div
               key={item.index}
               className={[
-                isMain ? "RECTANGLE__MAIN_" : "RECTANGLE__NEXT_",
+                isMain ? "M-CRM-CARD" : "M-CRM-CARD-NEXT",
                 isLast ? "is-last" : "",
               ]
                 .filter(Boolean)
@@ -82,10 +82,10 @@ export function MobileAutomatedCrm() {
         <div className="M-CRM-SPACER-END" aria-hidden />
       </div>
 
-      <h3 className="TITLE">
+      <h3 className="M-CRM-TITLE">
         <GlyphLines lines={system.titleMobile} />
       </h3>
-      <p className="TEXT">
+      <p className="M-CRM-TEXT">
         <GlyphLines lines={system.bodyMobile} />
       </p>
     </section>

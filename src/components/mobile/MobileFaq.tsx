@@ -12,7 +12,7 @@ import { GlyphLines } from "@/components/copy/GlyphLines";
 import { faq, type FaqAnswerGroup } from "@/content/site";
 
 /**
- * 모바일 FAQ — hu_faq_01~03_m · 390
+ * 모바일 FAQ — hu_faq_01~04_m · 390
  * PC Faq.tsx 는 건드리지 않습니다.
  */
 export function MobileFaq() {
@@ -20,11 +20,11 @@ export function MobileFaq() {
 
   return (
     <section id="faq" className="M-FAQ">
-      <p className="__07__FAQ__">{faq.tagMobile}</p>
-      <h2 className="시작은_간단하게.__운영은_편리하게_">
+      <p className="M-FAQ-TAG">{faq.tagMobile}</p>
+      <h2 className="M-FAQ-HEAD">
         <GlyphLines lines={faq.headline} />
       </h2>
-      <p className="복잡한_준비는_필요하지_않습니다">
+      <p className="M-FAQ-BODY">
         <GlyphLines lines={faq.bodyMobile} />
       </p>
 
@@ -37,7 +37,7 @@ export function MobileFaq() {
               : [item.question];
           return (
             <div key={item.category}>
-              <div className="LINE" />
+              <div className="M-FAQ-LINE" />
               <div className={isOpen ? "M-FAQ-ITEM is-open" : "M-FAQ-ITEM"}>
                 <button
                   type="button"
@@ -46,7 +46,7 @@ export function MobileFaq() {
                   aria-label={item.question}
                   onClick={() => setOpen(isOpen ? null : item.category)}
                 >
-                  <span className="QUESTION">
+                  <span className="M-FAQ-QUESTION">
                     <GlyphLines lines={question} />
                   </span>
                   {isOpen ? <IcoMinus /> : <IcoPlus />}
@@ -58,7 +58,7 @@ export function MobileFaq() {
             </div>
           );
         })}
-        <div className="LINE" />
+        <div className="M-FAQ-LINE" />
       </div>
     </section>
   );
@@ -174,32 +174,42 @@ function MobileFaqPanel({
   );
 }
 
-/** hu_faq_02_m · .ICO-PLUS */
+/**
+ * hu_faq_02_m · 16×16 · stroke 1px #1C1A19
+ * 막대 풀폭 + round cap (PNG tip 비율)
+ */
 function IcoPlus() {
   return (
     <svg
-      className="ICO-PLUS"
+      className="M-FAQ-ICO"
       width="16"
       height="16"
       viewBox="0 0 16 16"
       aria-hidden
     >
-      <path d="M1 8H15" />
-      <path d="M8 1V15" />
+      <path d="M0.5 8H15.5" />
+      <path d="M8 0.5V15.5" />
     </svg>
   );
 }
 
+/** hu_faq_04_m · 컨테이너 16×16, 막대 17×1 중앙 */
 function IcoMinus() {
   return (
     <svg
-      className="ICO-PLUS"
+      className="M-FAQ-ICO"
       width="16"
       height="16"
       viewBox="0 0 16 16"
       aria-hidden
     >
-      <path d="M1 8H15" />
+      <rect
+        className="M-FAQ-ICO-MINUS-BAR"
+        x="-0.5"
+        y="7.5"
+        width="17"
+        height="1"
+      />
     </svg>
   );
 }

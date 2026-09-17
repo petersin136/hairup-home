@@ -1448,8 +1448,8 @@ html:not(.splash-seen) [data-site-header] {
   gap: 15px;
 }
 
-/* .RECTANGLE_1 — SOURCE: HU_EX_BG.PNG · 350×380 · r 8 */
-.M-EXPERIENCE .RECTANGLE_1 {
+/* .M-EXPERIENCE-CARD — SOURCE: HU_EX_BG.PNG · 350×380 · r 8 */
+.M-EXPERIENCE .M-EXPERIENCE-CARD {
   position: relative;
   left: auto;
   width: 350px;
@@ -1459,7 +1459,7 @@ html:not(.splash-seen) [data-site-header] {
   overflow: hidden;
 }
 
-.M-EXPERIENCE .RECTANGLE_1-BG {
+.M-EXPERIENCE .M-EXPERIENCE-BG {
   pointer-events: none;
   position: absolute;
   inset: 0;
@@ -1470,7 +1470,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* 좌·우 35 · 내부 스택을 카드 높이 정중앙 */
-.M-EXPERIENCE .M-EX-COPY {
+.M-EXPERIENCE .M-EXPERIENCE-COPY {
   position: absolute;
   z-index: 10;
   inset: 0 35px;
@@ -1481,7 +1481,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* 태그(12px Playfair) — 좌측 정렬 */
-.M-EXPERIENCE .__02__THE_EXPERIENCE__ {
+.M-EXPERIENCE .M-EXPERIENCE-TAG {
   margin: 0;
   font-size: 12px;
   font-family: var(--font-display), "Playfair Display", serif;
@@ -1497,14 +1497,14 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: text alphabetic;
 }
 
-.M-EXPERIENCE .__02__THE_EXPERIENCE__ em {
+.M-EXPERIENCE .M-EXPERIENCE-TAG em {
   font-style: italic;
   font-weight: 500;
   text-transform: none;
 }
 
 /* 태그 → 타이틀 28 */
-.M-EXPERIENCE .M-EX-TITLE {
+.M-EXPERIENCE .M-EXPERIENCE-HEAD {
   margin: 28px 0 0;
   font-size: 30px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
@@ -1518,7 +1518,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* 타이틀 → 설명 34 */
-.M-EXPERIENCE .M-EX-DESC {
+.M-EXPERIENCE .M-EXPERIENCE-BODY {
   margin: 34px 0 0;
   font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
@@ -1532,8 +1532,8 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
-/* .RECTANGLE + 버튼 텍스트 — 설명 → 버튼 50 · 280×52 */
-.M-EXPERIENCE .M-EX-BTN {
+/* 설명 → 버튼 50 · 280×52 */
+.M-EXPERIENCE .M-EXPERIENCE-BTN {
   margin: 50px 0 0;
   box-sizing: border-box;
   width: 280px;
@@ -1558,14 +1558,13 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
-.M-EXPERIENCE .M-EX-BTN:hover,
-.M-EXPERIENCE .M-EX-BTN:focus-visible {
+.M-EXPERIENCE .M-EXPERIENCE-BTN:hover,
+.M-EXPERIENCE .M-EXPERIENCE-BTN:focus-visible {
   background-color: rgb(44, 34, 29);
   color: rgb(250, 248, 245);
 }
 
-/* detail_1_m · .RECTANGLE_19_COPY */
-.M-EXPERIENCE .RECTANGLE_19_COPY {
+.M-EXPERIENCE .M-EXPERIENCE-CHAT {
   position: relative;
   width: 350px;
   max-width: 100%;
@@ -1586,8 +1585,8 @@ html:not(.splash-seen) [data-site-header] {
   background-color: #faf8f5;
 }
 
-/* hu_automated_01_m · .__03__AUTOMATED_CRM__ */
-.M-CRM .__03__AUTOMATED_CRM__ {
+/* hu_automated_01_m · 태그 */
+.M-CRM .M-CRM-TAG {
   margin: 0 0 0 26px;
   font-size: 12px;
   font-family: var(--font-display), "Playfair Display", serif;
@@ -1664,8 +1663,8 @@ html:not(.splash-seen) [data-site-header] {
   width: 50px;
 }
 
-.M-CRM .RECTANGLE__MAIN_,
-.M-CRM .RECTANGLE__NEXT_ {
+.M-CRM .M-CRM-CARD,
+.M-CRM .M-CRM-CARD-NEXT {
   box-sizing: border-box;
   flex-shrink: 0;
   width: 320px;
@@ -1678,21 +1677,21 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* 마지막 카드는 간격 없음 (끝 spacer 가 담당) */
-.M-CRM .RECTANGLE__MAIN_.is-last,
-.M-CRM .RECTANGLE__NEXT_.is-last {
+.M-CRM .M-CRM-CARD.is-last,
+.M-CRM .M-CRM-CARD-NEXT.is-last {
   margin-right: 0;
 }
 
-.M-CRM .RECTANGLE__MAIN_ {
+.M-CRM .M-CRM-CARD {
   opacity: 1;
 }
 
-.M-CRM .RECTANGLE__NEXT_ {
+.M-CRM .M-CRM-CARD-NEXT {
   opacity: 0.4;
 }
 
-/* 카드 → 하단 타이틀 27 · 좌측 26 · hu_automated_03_m .TITLE */
-.M-CRM .TITLE {
+/* 카드 → 하단 타이틀 27 · 좌측 26 */
+.M-CRM .M-CRM-TITLE {
   margin: 27px 26px 0;
   font-size: 18px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
@@ -1706,8 +1705,8 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
-/* 타이틀 → 본문 17 · 좌측 26 · hu_automated_03_m .TEXT */
-.M-CRM .TEXT {
+/* 타이틀 → 본문 17 · 좌측 26 */
+.M-CRM .M-CRM-TEXT {
   margin: 17px 26px 0;
   font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
@@ -1834,6 +1833,229 @@ html:not(.splash-seen) [data-site-header] {
   text-align: left;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
+}
+
+/* ==========================================================================
+   MOBILE TEMPLATE COLLECTION — 시안 hu_template_01~05_m · 390
+   헤더: 상단 140 · tag→title 28 · title→desc 34 · desc→카드 55
+   카드: 320 · radius 10 · 가로 스와이프 · 좌 20 · 카드 간격 12
+   목업 JPG 640×786(2x) → 표시 320×393 · 소스 전체 노출(cover 크롭 없음)
+   카드 내부: 이미지 393 · →태그 25 · 좌 22 · 태그→타이틀 18 · 타이틀→설명 12
+             설명→버튼 36 · 버튼 280×50 · 좌우 20 · 버튼→하단 25
+   카드→마퀴 140 · 마퀴→다음 140 (.M-MARQUEE 패딩)
+   ========================================================================== */
+.M-TEMPLATE {
+  box-sizing: border-box;
+  padding-top: 140px;
+  padding-bottom: 0;
+  background-color: #faf8f5;
+}
+
+.M-TEMPLATE-HEAD {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* 시안 .TEMPLATE-HEADER__TAG — Playfair 12/400 · 0.25em · 숫자 있어 text edge */
+.M-TEMPLATE .TEMPLATE-HEADER__TAG {
+  display: block;
+  margin: 0;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgb(44, 58, 46);
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  line-height: 1;
+  text-align: left;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+.M-TEMPLATE .TEMPLATE-HEADER__TAG em {
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0.25em;
+}
+
+/* 시안 .TEMPLATE-TITLE — 태그 → 타이틀 28 */
+.M-TEMPLATE .TEMPLATE-TITLE {
+  margin: 28px 0 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: rgb(28, 26, 25);
+  line-height: 1.333;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 시안 .TEMPLATE-DESC — 타이틀 → 설명 34 */
+.M-TEMPLATE .TEMPLATE-DESC {
+  margin: 34px 0 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(28, 26, 25, 0.8);
+  line-height: 1.467;
+  text-align: left;
+  letter-spacing: -0.01em;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 설명 → 카드 55 · 가로 스와이프 · 좌 20 · 끝 카드 우 20(시안 미기재, 좌측과 대칭) */
+.M-TEMPLATE-SWIPE {
+  margin-top: 55px;
+  /* 하단 shadow 20px 이 카드→마퀴 140 안으로 그려지게 패딩 후 당김 */
+  padding-bottom: 20px;
+  margin-bottom: -20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.M-TEMPLATE-SWIPE::-webkit-scrollbar {
+  display: none;
+}
+
+.M-TEMPLATE-TRACK {
+  display: flex;
+  width: max-content;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* 시안 .TEMPLATE-CARD — 폭 320 · 높이는 목업 320×393 + 하단 정보 */
+.M-TEMPLATE .TEMPLATE-CARD {
+  position: relative;
+  top: auto;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  width: 320px;
+  height: auto;
+  margin: 0;
+  padding-bottom: 25px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  transform: none;
+}
+
+.M-TEMPLATE .TEMPLATE-CARD + .TEMPLATE-CARD {
+  margin-left: 12px;
+}
+
+.M-TEMPLATE .TEMPLATE-CARD--DARK {
+  background-color: #111111;
+  box-shadow: none;
+}
+
+.M-TEMPLATE .TEMPLATE-CARD__IMG {
+  position: relative;
+  width: 320px;
+  height: 393px;
+  overflow: hidden;
+}
+
+.M-TEMPLATE .TEMPLATE-CARD__IMG img {
+  display: block;
+  width: 320px;
+  height: 393px;
+  object-fit: fill;
+}
+
+/* 이미지 → 태그 25 · 텍스트 왼쪽 22 */
+.M-TEMPLATE .TEMPLATE-CARD__TAG {
+  margin: 25px 0 0 22px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgb(44, 58, 46);
+  text-transform: uppercase;
+  text-align: left;
+  line-height: 1;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+/* 태그 → 타이틀 18 · 전대문자라 cap */
+.M-TEMPLATE .TEMPLATE-CARD__TITLE {
+  margin: 18px 0 0 22px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-size: 24px;
+  font-weight: 500;
+  color: rgb(28, 26, 25);
+  text-transform: uppercase;
+  text-align: left;
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 타이틀 → 설명 12 */
+.M-TEMPLATE .TEMPLATE-CARD__DESC {
+  margin: 12px 0 0 22px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: rgba(28, 26, 25, 0.8);
+  text-align: left;
+  line-height: 1;
+  white-space: nowrap;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-TEMPLATE .TEMPLATE-CARD--DARK .TEMPLATE-CARD__TAG,
+.M-TEMPLATE .TEMPLATE-CARD--DARK .TEMPLATE-CARD__TITLE {
+  color: #faf8f5;
+}
+
+.M-TEMPLATE .TEMPLATE-CARD--DARK .TEMPLATE-CARD__DESC {
+  color: rgba(250, 248, 245, 0.8);
+}
+
+/* 설명 → 버튼 36 · 좌우 20 · 280×50 · radius 6 */
+.M-TEMPLATE .TEMPLATE-CARD__BTN {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 280px;
+  height: 50px;
+  margin: 36px 20px 0;
+  background-color: rgb(44, 58, 46);
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.M-TEMPLATE .TEMPLATE-CARD--DARK .TEMPLATE-CARD__BTN {
+  background-color: #faf8f5;
+}
+
+.M-TEMPLATE .TEMPLATE-CARD__BTN-TEXT {
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgb(250, 248, 245);
+  text-align: center;
+  line-height: 1;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-TEMPLATE .TEMPLATE-CARD--DARK .TEMPLATE-CARD__BTN-TEXT {
+  color: rgb(44, 58, 46);
 }
 
 /* ==========================================================================
@@ -2210,7 +2432,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* ==========================================================================
-   MOBILE FAQ — hu_faq_01_m · hu_faq_02_m · hu_faq_03_m · 390
+   MOBILE FAQ — hu_faq_01_m · hu_faq_02_m · hu_faq_03_m · hu_faq_04_m · 390
    PC FAQ(.FAQ) 와 별개.
    ========================================================================== */
 .M-FAQ {
@@ -2222,8 +2444,8 @@ html:not(.splash-seen) [data-site-header] {
   text-align: center;
 }
 
-/* hu_faq_01_m · .__07__FAQ__ */
-.M-FAQ .__07__FAQ__ {
+/* hu_faq_01_m · 태그 ( 07. FAQ ) — Playfair lining nums */
+.M-FAQ .M-FAQ-TAG {
   margin: 0;
   font-size: 12px;
   font-family: var(--font-display), "Playfair Display", serif;
@@ -2240,7 +2462,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* 태그 → 타이틀 28 */
-.M-FAQ .시작은_간단하게\.__운영은_편리하게_ {
+.M-FAQ .M-FAQ-HEAD {
   margin: 28px 0 0;
   font-size: 30px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
@@ -2254,7 +2476,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* 타이틀 → 설명 34 */
-.M-FAQ .복잡한_준비는_필요하지_않습니다 {
+.M-FAQ .M-FAQ-BODY {
   margin: 34px 0 0;
   font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
@@ -2275,8 +2497,8 @@ html:not(.splash-seen) [data-site-header] {
   text-align: left;
 }
 
-/* hu_faq_02_m · .LINE */
-.M-FAQ .LINE {
+/* hu_faq_02_m · 구분선 */
+.M-FAQ .M-FAQ-LINE {
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -2295,6 +2517,10 @@ html:not(.splash-seen) [data-site-header] {
   overflow-anchor: none;
 }
 
+/*
+ * 닫힌 행 높이 75 — 한 줄은 75, 두 줄(유지보수·연간결제)은 잘리지 않게 min-height.
+ * 좌우 inset 20.
+ */
 .M-FAQ .M-FAQ-HIT {
   display: flex;
   align-items: center;
@@ -2314,8 +2540,8 @@ html:not(.splash-seen) [data-site-header] {
   color: inherit;
 }
 
-/* hu_faq_02_m · .QUESTION */
-.M-FAQ .QUESTION {
+/* hu_faq_02_m · hu_faq_04_m · 질문 텍스트 */
+.M-FAQ .M-FAQ-QUESTION {
   margin: 0;
   flex: 1;
   min-width: 0;
@@ -2325,14 +2551,14 @@ html:not(.splash-seen) [data-site-header] {
   line-height: 1.467;
   letter-spacing: 0;
   text-align: left;
-  color: rgb(28, 26, 25);
+  color: rgb(44, 58, 46);
   word-break: keep-all;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
 
-/* hu_faq_02_m · .ICO-PLUS */
-.M-FAQ .ICO-PLUS {
+/* hu_faq_02_m · 아이콘 컨테이너 16×16 · stroke 1 · #1C1A19 · round tip(plus) */
+.M-FAQ .M-FAQ-ICO {
   display: block;
   flex-shrink: 0;
   width: 16px;
@@ -2340,12 +2566,19 @@ html:not(.splash-seen) [data-site-header] {
   fill: #1c1a19;
   stroke: #1c1a19;
   stroke-width: 1px;
+  stroke-linecap: round;
   overflow: visible;
   pointer-events: none;
 }
 
-.M-FAQ .ICO-PLUS path {
+.M-FAQ .M-FAQ-ICO path {
   fill: none;
+}
+
+/* hu_faq_04_m · 마이너스 막대 17×1 — 16×16 컨테이너 중앙 */
+.M-FAQ .M-FAQ-ICO-MINUS-BAR {
+  fill: #1c1a19;
+  stroke: none;
 }
 
 .M-FAQ .M-FAQ-PANEL {
@@ -2361,18 +2594,18 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-FAQ .M-FAQ-PANEL-INNER {
-  /* 상단 여백 — trim 글리프가 overflow:hidden 에 잘리지 않게 */
-  padding: 8px 20px 28px;
+  /* hu_faq_04_m · 질문→답변 15. 좌우 20 · 하단 28(기존) */
+  padding: 15px 20px 28px;
 }
 
 .M-FAQ .M-FAQ-ANSWER {
   margin: 0;
-  font-size: 15px;
+  font-size: 14px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
   color: rgba(28, 26, 25, 0.8);
-  line-height: 1.467;
-  letter-spacing: -0.01em;
+  line-height: 1.5;
+  letter-spacing: 0;
   text-align: left;
   word-break: keep-all;
   text-box-trim: trim-both;
@@ -3593,13 +3826,12 @@ html:not(.splash-seen) [data-site-header] {
    ========================================================================== */
 
 /* 섹션 상단 → 태그 100 · 강조 문구 → 섹션 끝 80 */
-.DILEMMA-M {
+.M-DILEMMA {
   padding-top: 100px;
   padding-bottom: 80px;
 }
 
-/* detail_1_m · .__01__THE_DILEMMA__ */
-.__01__THE_DILEMMA__ {
+.M-DILEMMA .M-DILEMMA-TAG {
   margin: 0;
   font-size: 12px;
   font-family: var(--font-display), "Playfair Display", serif;
@@ -3616,14 +3848,14 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /* "the" 만 소문자 이탤릭 */
-.__01__THE_DILEMMA__ em {
+.M-DILEMMA .M-DILEMMA-TAG em {
   font-style: italic;
   font-weight: 500;
   text-transform: none;
 }
 
-/* detail_1_m · .MAIN TEXT — 태그 → 타이틀 22 */
-.DILEMMA-M-TITLE {
+/* 태그 → 타이틀 22 */
+.M-DILEMMA .M-DILEMMA-HEAD {
   margin: 28px 0 0;
   font-size: 30px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
@@ -3636,8 +3868,8 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
-/* detail_1_m · .SUB TEXT — 타이틀 → 설명 28 */
-.DILEMMA-M-DESC {
+/* 타이틀 → 설명 28 */
+.M-DILEMMA .M-DILEMMA-BODY {
   margin: 34px 0 0;
   font-size: 15px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
@@ -3651,17 +3883,16 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 /*
- * detail_2_m — 설명 → RECTANGLE_1 50.
+ * 설명 → 이미지 50.
  * 두 사각형이 position: absolute 라 담는 상자에 높이를 줍니다(280 + 35 + 200).
  */
-.DILEMMA-M-FIGURES {
+.M-DILEMMA .M-DILEMMA-FIGURES {
   position: relative;
   margin-top: 50px;
   height: 515px;
 }
 
-/* detail_2_m · .RECTANGLE_1 — 좌측 여백 20 */
-.DILEMMA-M-FIGURES .RECTANGLE_1 {
+.M-DILEMMA .M-DILEMMA-IMG-1 {
   position: absolute;
   top: 0;
   left: 20px;
@@ -3671,8 +3902,7 @@ html:not(.splash-seen) [data-site-header] {
   overflow: hidden;
 }
 
-/* detail_2_m · .RECTANGLE_2 — RECTANGLE_1 아래 35 · 우측 여백 20 */
-.DILEMMA-M-FIGURES .RECTANGLE_2 {
+.M-DILEMMA .M-DILEMMA-IMG-2 {
   position: absolute;
   top: 315px;
   right: 20px;
@@ -3682,8 +3912,7 @@ html:not(.splash-seen) [data-site-header] {
   overflow: hidden;
 }
 
-/* detail_2_m · 강조 문구 — RECTANGLE_2 → 강조 문구 80 */
-.DILEMMA-M-EMPHASIS {
+.M-DILEMMA .M-DILEMMA-EMPHASIS {
   margin: 80px 0 0;
   font-size: 18px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
@@ -4566,6 +4795,150 @@ html:not(.splash-seen) [data-site-header] {
   text-decoration: none;
   word-spacing: -0.057em;
   flex-shrink: 0;
+}
+
+/* ==========================================================================
+   MOBILE LAUNCH POPUP — hu_popup_01_m · hu_popup_02_m · hu_popup_03_m · 340×500
+   PC popup-card 와 별개. 1440 미만에서 LaunchOfferPopup 이 이 마크업을 씀.
+   ========================================================================== */
+.M-POPUP {
+  box-sizing: border-box;
+  width: 340px;
+  height: 500px;
+  background-color: rgb(250, 248, 245);
+  border-radius: 12px;
+  overflow: hidden;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+.M-POPUP-TOP {
+  position: relative;
+  width: 340px;
+  height: 268px;
+}
+
+.M-POPUP-IMAGE {
+  display: block;
+  width: 340px;
+  height: 268px;
+  object-fit: cover;
+}
+
+.M-POPUP-CLOSE {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 29px;
+  height: 29px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(28, 26, 25, 0.35);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 10;
+  box-sizing: border-box;
+  line-height: 0;
+}
+
+.M-POPUP-CLOSE-ICO {
+  display: block;
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.M-POPUP-CLOSE-ICO path {
+  fill: none;
+  stroke: rgb(250, 248, 245);
+  stroke-width: 1.5px;
+  stroke-linecap: round;
+}
+
+.M-POPUP-BODY {
+  box-sizing: border-box;
+  padding: 24px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.M-POPUP-DESC {
+  margin: 0;
+  font-size: 14px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  color: rgb(28, 26, 25);
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-POPUP-DISCOUNT {
+  margin: 22px 0 0;
+  font-size: 44px;
+  font-family: var(--font-display), "Playfair Display", serif;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: rgb(44, 58, 46);
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+  line-height: 1;
+  white-space: nowrap;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+.M-POPUP-DISCOUNT-PERCENT {
+  font-size: 27px;
+  font-weight: 400;
+}
+
+.M-POPUP-NOTICE {
+  margin-left: 7px;
+  font-size: 14px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-align: center;
+  color: rgb(140, 132, 122);
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.M-POPUP-BTN {
+  margin: 22px 0 0;
+  width: 300px;
+  height: 44px;
+  background-color: rgb(44, 58, 46);
+  border-radius: 8px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-align: center;
+  color: rgb(250, 248, 245);
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
 }
 
 /* --- hu_FOOTER PC -------------------------------------------------------- */

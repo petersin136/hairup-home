@@ -14,6 +14,7 @@ import {
 
 /** 스플래시 커튼이 완전히 사라진 뒤 팝업까지의 여유 */
 const POPUP_AFTER_SPLASH_MS = 400;
+const DESKTOP_MQ = "(min-width: 1440px)";
 
 function lockScroll() {
   document.documentElement.classList.add("entry-scroll-lock");
@@ -24,7 +25,8 @@ function unlockScroll() {
 }
 
 /**
- * 런치 오퍼 팝업 — 시안 규격 그대로 (440 × 600)
+ * 런치 오퍼 팝업
+ * PC 440×600 · 모바일 hu_popup_01~03_m 340×500 (1440 미만)
  *
  * - 닫기/CTA 전까지 저장하지 않음
  * - 예전 localStorage 키는 무시 (v2)
@@ -34,9 +36,15 @@ export function LaunchOfferPopup() {
   const titleId = useId();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
 
   useEffect(() => {
     setMounted(true);
+    const mq = window.matchMedia(DESKTOP_MQ);
+    const sync = () => setIsDesktop(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
   }, []);
 
   useEffect(() => {
@@ -101,11 +109,82 @@ export function LaunchOfferPopup() {
     setOpen(false);
   };
 
-  if (!open || !mounted) return null;
+  if (!open || !mounted || isDesktop === null) return null;
+
+  const overlay = (
+    <div className="popup-overlay" role="presentation" onClick={dismiss} />
+  );
+
+  if (!isDesktop) {
+    return createPortal(
+      <>
+        {overlay}
+        <div
+          role="dialog"
+          aria-modal
+          aria-labelledby={titleId}
+          className="M-POPUP"
+        >
+          <div className="M-POPUP-TOP">
+            <Image
+              src={launchPopup.imageMobile}
+              alt=""
+              width={340}
+              height={268}
+              className="M-POPUP-IMAGE"
+              priority
+              unoptimized
+            />
+            <button
+              type="button"
+              className="M-POPUP-CLOSE"
+              aria-label="닫기"
+              onClick={dismiss}
+            >
+              <svg
+                className="M-POPUP-CLOSE-ICO"
+                width="9"
+                height="9"
+                viewBox="0 0 9 9"
+                aria-hidden
+              >
+                <path d="M1.5 1.5l6 6M7.5 1.5l-6 6" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="M-POPUP-BODY">
+            <p id={titleId} className="M-POPUP-DESC">
+              <GlyphLines lines={launchPopup.descMobile} />
+            </p>
+
+            <p className="M-POPUP-DISCOUNT">
+              {launchPopup.benefit.upto}&nbsp;{launchPopup.benefit.num}
+              <span className="M-POPUP-DISCOUNT-PERCENT">
+                {launchPopup.benefit.unit}
+              </span>
+              <span className="M-POPUP-NOTICE">{launchPopup.benefit.limited}</span>
+            </p>
+
+            <a
+              href={launchPopup.cta.href}
+              className="M-POPUP-BTN"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={dismiss}
+            >
+              {launchPopup.cta.label}
+            </a>
+          </div>
+        </div>
+      </>,
+      document.body,
+    );
+  }
 
   return createPortal(
     <>
-      <div className="popup-overlay" role="presentation" onClick={dismiss} />
+      {overlay}
       <div
         role="dialog"
         aria-modal

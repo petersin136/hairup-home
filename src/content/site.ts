@@ -37,12 +37,20 @@ export const topBanner = {
   krMobileBold: "최대 40% 지원",
 } as const;
 
-/** 런치 오퍼 팝업 — 시안 POPUP · 440 × 600 */
+/** 런치 오퍼 팝업 — 시안 POPUP · 440 × 600 / 모바일 hu_popup_01~03_m · 340 × 500 */
 export const launchPopup = {
   image: "/images/popup-top.png",
+  /** 모바일 시안 HU_POPUP IMG_M.JPG — 소스 2x 680×536 → 표시 340×268 */
+  imageMobile: "/images/hu_popup_img_m.jpg",
   desc: [
     "우리 헤어샵을 위해 정교하게 맞춰지는 AI 살롱 매니저.",
     "완성도 높은 첫 시작을 위한 1:1 맞춤 세팅 오퍼를 제안합니다.",
+  ],
+  /** 모바일 시안 hu_popup_02_m — 3줄 */
+  descMobile: [
+    "우리 헤어샵을 위해 정교하게 맞춰지는",
+    "헤어업 AI 살롱 매니저.",
+    "첫 시작을 위한 1:1 맞춤 세팅 오퍼를 제안합니다.",
   ],
   benefit: {
     upto: "Up to",
@@ -349,6 +357,8 @@ export const templateCollection = {
     pc: "VIEW ON PC",
     mobile: "VIEW ON MOBILE",
   },
+  /** 모바일 시안 hu_template_*_m — 카드 버튼 1개 */
+  ctaMobile: "웹 미리보기",
   /* PC hu_TEMPLATE PC 04 — 기본 영문, 호버 시 한글 */
   cardCtas: {
     demo: { label: "VIEW DEMO", labelKr: "웹 미리보기" },
@@ -359,7 +369,8 @@ export const templateCollection = {
     },
   },
   /*
-   * image (모바일) — PC 활성 카드와 동일한 840×650 PNG 원본.
+   * image (모바일 구형) — PC 활성 카드와 동일한 840×650 PNG 원본.
+   * imageMobile — 시안 목업 JPG (01 Signature · 02 Neutral · 03 Lookbook).
    * imageActive / imageWaiting 은 시안이 지정한 840×650 · 688×532 전용 소스입니다.
    */
   templates: [
@@ -368,8 +379,10 @@ export const templateCollection = {
       cardTag: "TEMPLATE 01",
       name: "Studio Signature",
       cardDesc: "올인원 스탠다드 · 로컬 헤어숍 예약 최적화",
+      cardDescMobile: "올인원 스탠다드 · 로컬 헤어샵 예약 최적화",
       href: "https://maranathahomepage.vercel.app/",
       image: "/templates/hus_TEMPLATE(840)_01.png",
+      imageMobile: "/templates/m-studio-signature.jpg",
       imageActive: "/templates/hus_TEMPLATE(840)_01.png",
       imageWaiting: "/templates/hus_TEMPLATE(688)_01.png",
     },
@@ -378,8 +391,10 @@ export const templateCollection = {
       cardTag: "TEMPLATE 02",
       name: "Studio Neutral",
       cardDesc: "브랜드 풀패키지 쇼룸 · 프리미엄 살롱 추천",
+      cardDescMobile: "브랜드 플래그십 쇼룸 · 프리미엄 살롱 추천",
       href: "https://hairup-template3.vercel.app/",
       image: "/templates/hus_TEMPLATE(840)_02.png",
+      imageMobile: "/templates/m-studio-neutral.jpg",
       imageActive: "/templates/hus_TEMPLATE(840)_02.png",
       imageWaiting: "/templates/hus_TEMPLATE(688)_02.png",
     },
@@ -388,9 +403,11 @@ export const templateCollection = {
       cardTag: "TEMPLATE 03",
       name: "Studio Lookbook",
       cardDesc: "매거진 아카이브 · 하이엔드 1인 헤어샵 추천",
+      cardDescMobile: "매거진 에디토리얼 · 하이엔드 모던 헤어샵 추천",
       cardTheme: "dark",
       href: "https://hair-up-template-2.vercel.app/",
       image: "/templates/hus_TEMPLATE(840)_03.png",
+      imageMobile: "/templates/m-studio-lookbook.jpg",
       imageActive: "/templates/hus_TEMPLATE(840)_03.png",
       imageWaiting: "/templates/hus_TEMPLATE(688)_03.png",
     },
@@ -524,11 +541,11 @@ export const faq = {
           { text: "- 기존 템플릿 내 특정 섹션 삭제 (타 템플릿 섹션 이식 및 교차 혼합 불가)" },
         ],
         [
-          { text: "• 연 5회 무상 수정 (서비스 개시일 기준 1년 단위 / 미사용분 이월 불가)", bold: true },
+          { text: "• 연 5회 무상 수정 (서비스 개시일 기준 1년 단위)", bold: true },
           { text: "- 매장 인테리어, 시술 사진, 디자이너 프로필 사진 교체" },
           { text: "- 브랜드 소개 및 BOOKING 섹션 안내 문구 변경" },
           { text: "- 띠배너 공지 수정, 리뷰 업데이트, 신규 디자이너 추가" },
-          { text: "= 단위 작업 1건당 1회 차감" },
+          { text: "= 단위 작업 1건당 1회 차감 / 미사용분 이월 불가" },
         ],
         [
           { text: "• 유상 수정", bold: true },
@@ -602,13 +619,13 @@ export const pricing = {
       {
         num: "100",
         unit: "만 원",
-        unitMobile: "만원",
+        unitMobile: "만 원",
         label: "초기 세팅비 1회",
       },
       {
         num: "7.9",
         unit: "만 원",
-        unitMobile: "만원",
+        unitMobile: "만 원",
         label: "월 구독료",
       },
     ],

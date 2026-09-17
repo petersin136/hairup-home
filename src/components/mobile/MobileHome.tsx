@@ -159,24 +159,24 @@ export function MobileHome() {
         </section>
 
         {/* Dilemma — 모바일 시안 hu_dilemma_m · 390 기준 */}
-        <section id="dilemma" className="DILEMMA-M bg-porcelain">
-          <p className="__01__THE_DILEMMA__">
+        <section id="dilemma" className="M-DILEMMA bg-porcelain">
+          <p className="M-DILEMMA-TAG">
             {dilemma.tag.before}
             <em>{dilemma.tag.article}</em>
             {dilemma.tag.after}
           </p>
 
-          <h2 className="DILEMMA-M-TITLE">
+          <h2 className="M-DILEMMA-HEAD">
             <GlyphLines lines={dilemma.headline} />
           </h2>
 
-          <p className="DILEMMA-M-DESC">
+          <p className="M-DILEMMA-BODY">
             <GlyphLines lines={dilemma.bodyMobile} />
           </p>
 
-          <div className="DILEMMA-M-FIGURES">
+          <div className="M-DILEMMA-FIGURES">
             {/* PC버전에서 머리자르고 있는 사진 */}
-            <div className="RECTANGLE_1">
+            <div className="M-DILEMMA-IMG-1">
               <Image
                 src={dilemma.images[0]}
                 alt=""
@@ -187,7 +187,7 @@ export function MobileHome() {
               />
             </div>
             {/* PC버전에서 손과 핸드폰 있는 사진 */}
-            <div className="RECTANGLE_2">
+            <div className="M-DILEMMA-IMG-2">
               <Image
                 src={dilemma.images[1]}
                 alt=""
@@ -199,15 +199,15 @@ export function MobileHome() {
             </div>
           </div>
 
-          <p className="DILEMMA-M-EMPHASIS">
+          <p className="M-DILEMMA-EMPHASIS">
             <GlyphLines lines={dilemma.emphasisMobile} />
           </p>
         </section>
 
         {/* Experience — 모바일 시안 hu_experience_m · 390 기준 */}
         <section id="ai-manager" className="M-EXPERIENCE bg-porcelain">
-          {/* .RECTANGLE_1 — HU_EX_BG.PNG 2x 700×760 → 표시 350×380 */}
-          <div className="RECTANGLE_1">
+          {/* HU_EX_BG.PNG 2x 700×760 → 표시 350×380 */}
+          <div className="M-EXPERIENCE-CARD">
             <Image
               src={experience.mobileBg}
               alt=""
@@ -216,34 +216,33 @@ export function MobileHome() {
               unoptimized
               quality={100}
               sizes="350px"
-              className="RECTANGLE_1-BG"
+              className="M-EXPERIENCE-BG"
               priority={false}
             />
-            <div className="M-EX-COPY">
-              <p className="__02__THE_EXPERIENCE__">
+            <div className="M-EXPERIENCE-COPY">
+              <p className="M-EXPERIENCE-TAG">
                 {experience.tag.before}
                 <em>{experience.tag.article}</em>
                 {experience.tag.after}
               </p>
-              <h2 className="M-EX-TITLE">
+              <h2 className="M-EXPERIENCE-HEAD">
                 <GlyphLines lines={experience.headlinePc} />
               </h2>
-              <p className="M-EX-DESC">
+              <p className="M-EXPERIENCE-BODY">
                 <GlyphLines lines={experience.bodyMobile} />
               </p>
               <a
                 href={experience.kakaoDemo.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="M-EX-BTN"
+                className="M-EXPERIENCE-BTN"
               >
                 {experience.kakaoDemo.label}
               </a>
             </div>
           </div>
 
-          {/* detail_1_m · .RECTANGLE_19_COPY — DemoChat fill */}
-          <div className="RECTANGLE_19_COPY">
+          <div className="M-EXPERIENCE-CHAT">
             <DemoChat fill />
           </div>
         </section>
@@ -288,69 +287,67 @@ export function MobileHome() {
           </div>
         </section>
 
-        {/* Template collection */}
-        <section id="template" className="bg-porcelain pt-[100px] pb-0">
-          <div className="px-5">
-            <p className="SECTION-TAG text-forest">
+        {/* Template collection — 시안 hu_template_01~05_m */}
+        <section id="template" className="M-TEMPLATE">
+          <div className="M-TEMPLATE-HEAD">
+            <p className="TEMPLATE-HEADER__TAG">
               {templateCollection.tagMobile.before}
               <em>{templateCollection.tagMobile.article}</em>
               {templateCollection.tagMobile.after}
             </p>
-            <h2 className="text-kr mt-[28px] text-[30px] font-bold leading-[1.3] text-ink">
+            <h2 className="TEMPLATE-TITLE text-kr">
               <GlyphLines lines={templateCollection.headline} />
             </h2>
-            <p className="text-kr mt-[34px] text-[15px] leading-[1.65] text-body">
+            <p className="TEMPLATE-DESC text-kr">
               <GlyphLines lines={templateCollection.body} />
             </p>
           </div>
 
           <div
-            className="mt-8 overflow-x-auto overscroll-x-contain pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="M-TEMPLATE-SWIPE"
             style={{ touchAction: "pan-x pan-y" }}
           >
-            <div className="flex w-max gap-4 px-5">
-              {templateCollection.templates.map((template) => (
-                <article
-                  key={template.index}
-                  className="relative h-[360px] w-[min(280px,78vw)] shrink-0 overflow-hidden rounded-[6px] bg-black"
-                >
-                  <Image
-                    src={template.image}
-                    alt={`${template.name} 템플릿 미리보기`}
-                    fill
-                    sizes="280px"
-                    className="object-cover"
-                    unoptimized
-                  />
-                  <div className="absolute inset-0 bg-black/45" aria-hidden />
-                  <div className="absolute inset-0 flex flex-col items-center justify-end px-4 pb-5">
-                    <p className="flex items-start justify-center font-display text-[18px] font-medium uppercase leading-none text-porcelain">
-                      <span className="mr-1.5 font-latin text-[12px] font-medium tracking-normal">
-                        {template.index} /
-                      </span>
-                      {template.name}
-                    </p>
-                    <div className="mt-5 flex w-full flex-col gap-2">
-                      <a
-                        href={template.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded-btn flex h-10 items-center justify-center border border-porcelain font-latin text-[13px] uppercase text-porcelain no-underline"
-                      >
-                        {templateCollection.ctas.pc}
-                      </a>
-                      <a
-                        href={template.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded-btn flex h-10 items-center justify-center border border-porcelain font-latin text-[13px] uppercase text-porcelain no-underline"
-                      >
-                        {templateCollection.ctas.mobile}
-                      </a>
+            <div className="M-TEMPLATE-TRACK">
+              {templateCollection.templates.map((template) => {
+                const isDark =
+                  "cardTheme" in template && template.cardTheme === "dark";
+                return (
+                  <article
+                    key={template.index}
+                    className={
+                      isDark
+                        ? "TEMPLATE-CARD TEMPLATE-CARD--DARK"
+                        : "TEMPLATE-CARD"
+                    }
+                  >
+                    <div className="TEMPLATE-CARD__IMG">
+                      <Image
+                        src={template.imageMobile}
+                        alt={`${template.name} 템플릿 미리보기`}
+                        width={320}
+                        height={393}
+                        sizes="320px"
+                        unoptimized
+                      />
                     </div>
-                  </div>
-                </article>
-              ))}
+                    <p className="TEMPLATE-CARD__TAG">{template.cardTag}</p>
+                    <p className="TEMPLATE-CARD__TITLE">{template.name}</p>
+                    <p className="TEMPLATE-CARD__DESC text-kr">
+                      {template.cardDescMobile}
+                    </p>
+                    <a
+                      className="TEMPLATE-CARD__BTN"
+                      href={template.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span className="TEMPLATE-CARD__BTN-TEXT text-kr">
+                        {templateCollection.ctaMobile}
+                      </span>
+                    </a>
+                  </article>
+                );
+              })}
             </div>
           </div>
 
