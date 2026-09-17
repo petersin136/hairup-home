@@ -6,11 +6,10 @@ import { GlyphLines } from "@/components/copy/GlyphLines";
 import { automatedCrm } from "@/content/site";
 
 /**
- * 03. AUTOMATED CRM 모바일 — hu_automated_01~04_m
+ * 03. AUTOMATED CRM 모바일 — hu_automated_04~07_m
  *
- * 카드 스냅 = STUDIO NEUTRAL Professional Team 과 동일 방식
- * (scroll-snap-type: x mandatory · scroll-padding · 앞/뒤 spacer · snap-align start)
- * 자유 스크롤이 아니라 스와이프마다 카드 단위로 자석 고정.
+ * 카드 스냅: 트랙을 좌 20 만큼 들여 쓰고(이전 카드는 클립),
+ * 스와이프 종료 시 stride 단위로 scrollLeft 를 강제 정렬.
  */
 const CARD = 320;
 const GAP = 12;
@@ -26,17 +25,47 @@ export function MobileAutomatedCrm() {
     const el = trackRef.current;
     if (!el) return;
 
+    let settling = false;
+    let endTimer = 0;
+
+    const indexFromScroll = () =>
+      Math.max(0, Math.min(last, Math.round(el.scrollLeft / STRIDE)));
+
+    const snapTo = (i: number) => {
+      const left = i * STRIDE;
+      if (Math.abs(el.scrollLeft - left) < 0.5) {
+        setActive(i);
+        return;
+      }
+      settling = true;
+      el.scrollTo({ left, behavior: "auto" });
+      setActive(i);
+      requestAnimationFrame(() => {
+        settling = false;
+      });
+    };
+
     const sync = () => {
-      const i = Math.round(el.scrollLeft / STRIDE);
-      setActive(Math.max(0, Math.min(last, i)));
+      if (settling) return;
+      setActive(indexFromScroll());
+      window.clearTimeout(endTimer);
+      endTimer = window.setTimeout(() => snapTo(indexFromScroll()), 80);
+    };
+
+    const onScrollEnd = () => {
+      if (settling) return;
+      window.clearTimeout(endTimer);
+      snapTo(indexFromScroll());
     };
 
     el.addEventListener("scroll", sync, { passive: true });
-    el.addEventListener("scrollend", sync);
-    sync();
+    el.addEventListener("scrollend", onScrollEnd);
+    snapTo(indexFromScroll());
+
     return () => {
+      window.clearTimeout(endTimer);
       el.removeEventListener("scroll", sync);
-      el.removeEventListener("scrollend", sync);
+      el.removeEventListener("scrollend", onScrollEnd);
     };
   }, [last]);
 
@@ -52,34 +81,34 @@ export function MobileAutomatedCrm() {
         <GlyphLines lines={automatedCrm.bodyMobile} />
       </p>
 
-      <div
-        ref={trackRef}
-        className="M-CRM-TRACK"
-        aria-roledescription="carousel"
-      >
-        {/* Professional Team 과 동일 — 좌측 거터 spacer */}
-        <div className="M-CRM-SPACER-START" aria-hidden />
+      {/* 좌 20 거터는 뷰포트 margin — 트랙 밖이라 이전 카드가 비치지 않음 */}
+      <div className="M-CRM-VIEWPORT">
+        <div
+          ref={trackRef}
+          className="M-CRM-TRACK"
+          aria-roledescription="carousel"
+        >
+          {automatedCrm.systems.map((item, i) => {
+            const isMain = i === active;
+            const isLast = i === last;
+            return (
+              <div
+                key={item.index}
+                className={[
+                  isMain ? "M-CRM-CARD" : "M-CRM-CARD-NEXT",
+                  isLast ? "is-last" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+                aria-hidden={!isMain}
+                aria-label={`${item.index}. ${item.titleMobile.join(" ")}`}
+              />
+            );
+          })}
 
-        {automatedCrm.systems.map((item, i) => {
-          const isMain = i === active;
-          const isLast = i === last;
-          return (
-            <div
-              key={item.index}
-              className={[
-                isMain ? "M-CRM-CARD" : "M-CRM-CARD-NEXT",
-                isLast ? "is-last" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              aria-hidden={!isMain}
-              aria-label={`${item.index}. ${item.titleMobile.join(" ")}`}
-            />
-          );
-        })}
-
-        {/* 마지막 카드도 좌측 20 스냅 가능하도록 (390 − 20 − 320) */}
-        <div className="M-CRM-SPACER-END" aria-hidden />
+          {/* 마지막 카드도 좌측 정렬 스냅 — 트랙폭(370) − 카드(320) = 50 */}
+          <div className="M-CRM-SPACER-END" aria-hidden />
+        </div>
       </div>
 
       <h3 className="M-CRM-TITLE">

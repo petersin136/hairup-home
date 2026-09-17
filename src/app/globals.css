@@ -1581,7 +1581,8 @@ html:not(.splash-seen) [data-site-header] {
 .M-CRM {
   box-sizing: border-box;
   padding-top: 140px;
-  padding-bottom: 140px;
+  /* 하단 여백은 다음 섹션(.M-KEY-BENEFITS) padding-top 이 담당 — 이중 패딩 방지 */
+  padding-bottom: 0;
   background-color: #faf8f5;
 }
 
@@ -1634,15 +1635,17 @@ html:not(.splash-seen) [data-site-header] {
   text-box-edge: cap alphabetic;
 }
 
-/* 설명 → 카드 50 · STUDIO NEUTRAL Professional Team 과 동일 스냅 패턴 */
+/* 설명 → 카드 50 · 좌 20 거터는 뷰포트가 담당(이전 카드 클립) */
+.M-CRM .M-CRM-VIEWPORT {
+  margin: 50px 0 0 20px;
+  overflow: hidden;
+}
+
 .M-CRM .M-CRM-TRACK {
   display: flex;
-  margin: 50px 0 0;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
-  scroll-padding-left: 20px;
-  scroll-padding-right: 20px;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -1651,13 +1654,7 @@ html:not(.splash-seen) [data-site-header] {
   display: none;
 }
 
-/* 좌측 거터 spacer — 시안 20 */
-.M-CRM .M-CRM-SPACER-START {
-  flex-shrink: 0;
-  width: 20px;
-}
-
-/* 마지막 카드 좌측 20 스냅용 — 390 − 20 − 320 = 50 */
+/* 마지막 카드 좌측 스냅용 — (390 − 20) − 320 = 50 */
 .M-CRM .M-CRM-SPACER-END {
   flex-shrink: 0;
   width: 50px;
@@ -1673,7 +1670,7 @@ html:not(.splash-seen) [data-site-header] {
   border-radius: 8px;
   background-color: #ebebeb;
   scroll-snap-align: start;
-  scroll-snap-stop: normal;
+  scroll-snap-stop: always;
 }
 
 /* 마지막 카드는 간격 없음 (끝 spacer 가 담당) */
@@ -1727,7 +1724,8 @@ html:not(.splash-seen) [data-site-header] {
    ========================================================================== */
 .M-KEY-BENEFITS {
   box-sizing: border-box;
-  padding-top: 100px;
+  /* 03→04 섹션 간격 150 (시안) · 이전 섹션 bottom 패딩과 합산하지 않음 */
+  padding-top: 150px;
   padding-left: 20px;
   padding-right: 20px;
 }
