@@ -2553,12 +2553,22 @@ html:not(.splash-seen) [data-site-header] {
 /*
  * 열림: 75 중앙정렬이면 질문 아래 공백이 커짐.
  * 상단만 맞춰 두고 아래 여백은 패널 padding 이 담당.
+ * 아이콘이 글리프(trim)보다 크면 HIT 가 늘어나 질문↔답변 간격이 벌어지므로 absolute.
  */
 .M-FAQ .M-FAQ-ITEM.is-open .M-FAQ-HIT {
+  position: relative;
   align-items: flex-start;
   min-height: 0;
   padding-top: 26px;
   padding-bottom: 0;
+  padding-right: 52px;
+}
+
+.M-FAQ .M-FAQ-ITEM.is-open .M-FAQ-ICO {
+  position: absolute;
+  top: 26px;
+  right: 20px;
+  margin-top: 0;
 }
 
 /* hu_faq_02_m · hu_faq_04_m · 질문 텍스트 */
@@ -2620,8 +2630,8 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-FAQ .M-FAQ-PANEL-INNER {
-  /* 질문 글리프 → 답변 상단 · 좌우 20 · 하단 */
-  padding: 8px 20px 24px;
+  /* 질문→답변 25. 좌우 20 · 하단 */
+  padding: 25px 20px 24px;
 }
 
 .M-FAQ .M-FAQ-ANSWER {
@@ -2642,9 +2652,9 @@ html:not(.splash-seen) [data-site-header] {
   font-weight: 600;
 }
 
-/* 단락(소제목 블록) 사이 */
+/* 인트로 → • 단락 · 단락 사이 */
 .M-FAQ .M-FAQ-GROUP + .M-FAQ-GROUP {
-  margin-top: 16px;
+  margin-top: 20px;
 }
 
 .M-FAQ .M-FAQ-LI,
