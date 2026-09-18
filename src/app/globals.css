@@ -2621,7 +2621,7 @@ html:not(.splash-seen) [data-site-header] {
 
 .M-FAQ .M-FAQ-PANEL-INNER {
   /* 질문 글리프 → 답변 상단 · 좌우 20 · 하단 */
-  padding: 12px 20px 24px;
+  padding: 8px 20px 24px;
 }
 
 .M-FAQ .M-FAQ-ANSWER {
@@ -2642,7 +2642,7 @@ html:not(.splash-seen) [data-site-header] {
   font-weight: 600;
 }
 
-/* 단락(소제목 블록) 사이 — 한 줄 분량보다 조금 작게 */
+/* 단락(소제목 블록) 사이 */
 .M-FAQ .M-FAQ-GROUP + .M-FAQ-GROUP {
   margin-top: 16px;
 }
@@ -2664,8 +2664,9 @@ html:not(.splash-seen) [data-site-header] {
   margin-top: 12px;
 }
 
-/* • 소제목 → - 하위 항목 */
-.M-FAQ .M-FAQ-LI + .M-FAQ-SUB {
+/* • 소제목 → - 하위 항목 · 본문 */
+.M-FAQ .M-FAQ-LI + .M-FAQ-SUB,
+.M-FAQ .M-FAQ-LI + .M-FAQ-P {
   margin-top: 4px;
 }
 
@@ -2687,10 +2688,9 @@ html:not(.splash-seen) [data-site-header] {
   margin-top: 4px;
 }
 
-/* • 소제목 바로 아래 본문(대시 없는 줄) */
-.M-FAQ .M-FAQ-LI + .M-FAQ-P,
+/* 본문 연속 줄 — margin 없이 line-height 만 */
 .M-FAQ .M-FAQ-P + .M-FAQ-P {
-  margin-top: 4px;
+  margin-top: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

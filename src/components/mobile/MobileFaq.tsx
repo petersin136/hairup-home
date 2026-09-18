@@ -78,50 +78,53 @@ function answerLineKind(text: string): "bullet" | "sub" | "note" | "plain" {
 function MobileFaqAnswer({ groups }: { groups: readonly FaqAnswerGroup[] }) {
   return (
     <div className="M-FAQ-ANSWER">
-      {groups.map((group, gi) => (
-        <div key={gi} className="M-FAQ-GROUP">
-          {group.map((line, li) => {
-            const kind = answerLineKind(line.text);
-            const prevKind =
-              li > 0 ? answerLineKind(group[li - 1].text) : null;
-            const content = line.bold ? (
-              <strong>{line.text}</strong>
-            ) : (
-              line.text
-            );
-            if (kind === "plain") {
-              /*
-               * block(•/-) 뒤에 <br> 를 또 넣으면 줄이 두 번 벌어짐.
-               * plain→plain 만 br, block 뒤 plain 은 블록으로 이어 붙임.
-               */
-              if (prevKind && prevKind !== "plain") {
+      {groups.map((group, gi) => {
+        let afterBlock = false;
+        return (
+          <div key={gi} className="M-FAQ-GROUP">
+            {group.map((line, li) => {
+              const kind = answerLineKind(line.text);
+              const content = line.bold ? (
+                <strong>{line.text}</strong>
+              ) : (
+                line.text
+              );
+              if (kind === "plain") {
+                /*
+                 * •/- 블록 뒤 본문은 M-FAQ-P 로만 이음.
+                 * display:block 뒤에 <br> 를 넣으면 줄이 한 번 더 벌어짐.
+                 * 인트로처럼 plain 만 있는 그룹은 기존처럼 br.
+                 */
+                if (afterBlock) {
+                  return (
+                    <span key={li} className="M-FAQ-P">
+                      {content}
+                    </span>
+                  );
+                }
                 return (
-                  <span key={li} className="M-FAQ-P">
+                  <Fragment key={li}>
+                    {li > 0 ? <br /> : null}
                     {content}
-                  </span>
+                  </Fragment>
                 );
               }
+              afterBlock = true;
+              const className =
+                kind === "bullet"
+                  ? "M-FAQ-LI"
+                  : kind === "note"
+                    ? "M-FAQ-NOTE"
+                    : "M-FAQ-SUB";
               return (
-                <Fragment key={li}>
-                  {li > 0 ? <br /> : null}
+                <span key={li} className={className}>
                   {content}
-                </Fragment>
+                </span>
               );
-            }
-            const className =
-              kind === "bullet"
-                ? "M-FAQ-LI"
-                : kind === "note"
-                  ? "M-FAQ-NOTE"
-                  : "M-FAQ-SUB";
-            return (
-              <span key={li} className={className}>
-                {content}
-              </span>
-            );
-          })}
-        </div>
-      ))}
+            })}
+          </div>
+        );
+      })}
     </div>
   );
 }
