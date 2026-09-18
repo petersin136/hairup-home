@@ -77,21 +77,7 @@ function MobilePlanCard({
       <ul className="M-PRICE-LIST">
         {plan.features.map((feature) => (
           <li key={feature.title}>
-            <svg
-              className="M-PRICE-CHECK"
-              width="14"
-              height="11"
-              viewBox="0 0 14 11"
-              aria-hidden
-            >
-              <path
-                d="M1.2 5.6L5.1 9.4L12.8 1.4"
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <span className="M-PRICE-CHECK" aria-hidden />
             <div>
               <p className="M-PRICE-FEAT-T text-kr">{feature.title}</p>
               <p className="M-PRICE-FEAT-D text-kr">

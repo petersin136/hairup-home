@@ -635,16 +635,23 @@ p:has(> .STARTER-PRICE-NUM-MONTH) {
 
 .PRICING-ICON-CHECK {
   flex-shrink: 0;
+  display: block;
+  width: 20px;
+  height: 18px;
   margin-right: 16px;
-  fill: none;
-  stroke: #2c3a2e;
-  stroke-width: 2.5px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  background-color: #2c3a2e;
+  -webkit-mask-image: url("/icons/pricing-check.png");
+  mask-image: url("/icons/pricing-check.png");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
 .PRICING-CARD-STARTER:has(.BTN-BRAND) .PRICING-ICON-CHECK {
-  stroke: rgb(250, 248, 245);
+  background-color: rgb(250, 248, 245);
 }
 
 .PRICING-FEATURE-TITLE {
@@ -1731,7 +1738,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-KEY-BENEFITS .M-KB-HEAD {
-  text-align: center;
+  text-align: left;
 }
 
 /* .__04__KEY_BENEFITS__ */
@@ -1744,7 +1751,7 @@ html:not(.splash-seen) [data-site-header] {
   font-feature-settings: "lnum" 1;
   color: rgb(44, 58, 46);
   text-transform: uppercase;
-  text-align: center;
+  text-align: left;
   letter-spacing: 0.025em;
   line-height: 1;
   text-box-trim: trim-both;
@@ -1765,7 +1772,7 @@ html:not(.splash-seen) [data-site-header] {
   font-weight: 700;
   line-height: 1.333;
   color: rgb(28, 26, 25);
-  text-align: center;
+  text-align: left;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
@@ -1779,7 +1786,7 @@ html:not(.splash-seen) [data-site-header] {
   line-height: 1.467;
   letter-spacing: -0.01em;
   color: rgba(28, 26, 25, 0.8);
-  text-align: center;
+  text-align: left;
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
@@ -1790,9 +1797,9 @@ html:not(.splash-seen) [data-site-header] {
   flex-direction: column;
 }
 
-/* desc→다음 썸네일 45 */
+/* desc→다음 썸네일 50 */
 .M-KEY-BENEFITS .M-KB-CARD + .M-KB-CARD {
-  margin-top: 45px;
+  margin-top: 50px;
 }
 
 /* .RECTANGLE — 350×220 · r 8 · 좌우 20(섹션 패딩) */
@@ -2273,20 +2280,24 @@ html:not(.splash-seen) [data-site-header] {
 
 .M-PRICE-CHECK {
   flex-shrink: 0;
-  width: 14px;
-  height: 11px;
-  margin-top: 3px;
+  display: block;
+  width: 16px;
+  height: 13px;
+  margin-top: 2px;
   margin-right: 12px;
-  overflow: visible;
-  color: #2c3a2e;
-  stroke: currentColor;
-  stroke-width: 2.8px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  background-color: #2c3a2e;
+  -webkit-mask-image: url("/icons/pricing-check.png");
+  mask-image: url("/icons/pricing-check.png");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
 .M-PRICE.is-brand .M-PRICE-CHECK {
-  color: rgb(250, 248, 245);
+  background-color: rgb(250, 248, 245);
 }
 
 .M-PRICE-FEAT-T {
@@ -2401,14 +2412,14 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-PRICE-YEAR-D {
-  margin: 15px 0 0;
+  margin: 25px 0 0;
   font-size: 16px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0;
   line-height: 1;
   text-align: left;
-  color: rgba(250, 248, 245, 0.8);
+  color: rgb(250, 248, 245);
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
@@ -2418,12 +2429,12 @@ html:not(.splash-seen) [data-site-header] {
   font-family: var(--font-playfair), "Playfair Display", Georgia, "Times New Roman",
     serif;
   font-size: 24px;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0;
   text-transform: uppercase;
   text-align: left;
   line-height: 1;
-  color: rgb(241, 202, 144);
+  color: rgb(255, 220, 170);
   font-variant-numeric: lining-nums;
   font-feature-settings: "lnum" 1;
   text-box-trim: trim-both;
@@ -2539,6 +2550,17 @@ html:not(.splash-seen) [data-site-header] {
   color: inherit;
 }
 
+/*
+ * 열림: 75 중앙정렬이면 질문 아래 공백이 커짐.
+ * 상단만 맞춰 두고 아래 여백은 패널 padding 이 담당.
+ */
+.M-FAQ .M-FAQ-ITEM.is-open .M-FAQ-HIT {
+  align-items: flex-start;
+  min-height: 0;
+  padding-top: 26px;
+  padding-bottom: 0;
+}
+
 /* hu_faq_02_m · hu_faq_04_m · 질문 텍스트 */
 .M-FAQ .M-FAQ-QUESTION {
   margin: 0;
@@ -2562,12 +2584,17 @@ html:not(.splash-seen) [data-site-header] {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
+  margin-top: 3px;
   fill: #1c1a19;
   stroke: #1c1a19;
   stroke-width: 1px;
   stroke-linecap: round;
   overflow: visible;
   pointer-events: none;
+}
+
+.M-FAQ .M-FAQ-ITEM:not(.is-open) .M-FAQ-ICO {
+  margin-top: 0;
 }
 
 .M-FAQ .M-FAQ-ICO path {
@@ -2593,8 +2620,8 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-FAQ .M-FAQ-PANEL-INNER {
-  /* hu_faq_04_m · 질문→답변 15. 좌우 20 · 하단 28(기존) */
-  padding: 15px 20px 28px;
+  /* 질문 글리프 → 답변 상단 · 좌우 20 · 하단 */
+  padding: 12px 20px 24px;
 }
 
 .M-FAQ .M-FAQ-ANSWER {
@@ -2615,12 +2642,15 @@ html:not(.splash-seen) [data-site-header] {
   font-weight: 600;
 }
 
+/* 단락(소제목 블록) 사이 — 한 줄 분량보다 조금 작게 */
 .M-FAQ .M-FAQ-GROUP + .M-FAQ-GROUP {
-  margin-top: 28px;
+  margin-top: 16px;
 }
 
 .M-FAQ .M-FAQ-LI,
-.M-FAQ .M-FAQ-SUB {
+.M-FAQ .M-FAQ-SUB,
+.M-FAQ .M-FAQ-NOTE,
+.M-FAQ .M-FAQ-P {
   display: block;
   box-sizing: border-box;
 }
@@ -2634,8 +2664,9 @@ html:not(.splash-seen) [data-site-header] {
   margin-top: 12px;
 }
 
+/* • 소제목 → - 하위 항목 */
 .M-FAQ .M-FAQ-LI + .M-FAQ-SUB {
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 .M-FAQ .M-FAQ-SUB {
@@ -2644,6 +2675,21 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-FAQ .M-FAQ-SUB + .M-FAQ-SUB {
+  margin-top: 4px;
+}
+
+/* hu_faq_09_m · 괄호 보조 줄 — 서브 본문과 동일 들여쓰기 */
+.M-FAQ .M-FAQ-NOTE {
+  padding-left: 2.35em;
+}
+
+.M-FAQ .M-FAQ-SUB + .M-FAQ-NOTE {
+  margin-top: 4px;
+}
+
+/* • 소제목 바로 아래 본문(대시 없는 줄) */
+.M-FAQ .M-FAQ-LI + .M-FAQ-P,
+.M-FAQ .M-FAQ-P + .M-FAQ-P {
   margin-top: 4px;
 }
 

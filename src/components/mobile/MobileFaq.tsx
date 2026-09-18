@@ -12,7 +12,7 @@ import { GlyphLines } from "@/components/copy/GlyphLines";
 import { faq, type FaqAnswerGroup } from "@/content/site";
 
 /**
- * 모바일 FAQ — hu_faq_01~04_m · 390
+ * 모바일 FAQ — hu_faq_01~04_m · 08~11_m · 390
  * PC Faq.tsx 는 건드리지 않습니다.
  */
 export function MobileFaq() {
@@ -35,6 +35,10 @@ export function MobileFaq() {
             "questionMobile" in item && item.questionMobile
               ? item.questionMobile
               : [item.question];
+          const answer =
+            "answerMobile" in item && item.answerMobile
+              ? item.answerMobile
+              : item.answer;
           return (
             <div key={item.category}>
               <div className="M-FAQ-LINE" />
@@ -52,7 +56,7 @@ export function MobileFaq() {
                   {isOpen ? <IcoMinus /> : <IcoPlus />}
                 </button>
                 <MobileFaqPanel open={isOpen}>
-                  <MobileFaqAnswer groups={item.answer} />
+                  <MobileFaqAnswer groups={answer} />
                 </MobileFaqPanel>
               </div>
             </div>
@@ -64,9 +68,10 @@ export function MobileFaq() {
   );
 }
 
-function answerLineKind(text: string): "bullet" | "sub" | "plain" {
+function answerLineKind(text: string): "bullet" | "sub" | "note" | "plain" {
   if (text.startsWith("•")) return "bullet";
   if (text.startsWith("-") || text.startsWith("=")) return "sub";
+  if (text.startsWith("(")) return "note";
   return "plain";
 }
 
@@ -77,12 +82,25 @@ function MobileFaqAnswer({ groups }: { groups: readonly FaqAnswerGroup[] }) {
         <div key={gi} className="M-FAQ-GROUP">
           {group.map((line, li) => {
             const kind = answerLineKind(line.text);
+            const prevKind =
+              li > 0 ? answerLineKind(group[li - 1].text) : null;
             const content = line.bold ? (
               <strong>{line.text}</strong>
             ) : (
               line.text
             );
             if (kind === "plain") {
+              /*
+               * block(•/-) 뒤에 <br> 를 또 넣으면 줄이 두 번 벌어짐.
+               * plain→plain 만 br, block 뒤 plain 은 블록으로 이어 붙임.
+               */
+              if (prevKind && prevKind !== "plain") {
+                return (
+                  <span key={li} className="M-FAQ-P">
+                    {content}
+                  </span>
+                );
+              }
               return (
                 <Fragment key={li}>
                   {li > 0 ? <br /> : null}
@@ -90,11 +108,14 @@ function MobileFaqAnswer({ groups }: { groups: readonly FaqAnswerGroup[] }) {
                 </Fragment>
               );
             }
+            const className =
+              kind === "bullet"
+                ? "M-FAQ-LI"
+                : kind === "note"
+                  ? "M-FAQ-NOTE"
+                  : "M-FAQ-SUB";
             return (
-              <span
-                key={li}
-                className={kind === "bullet" ? "M-FAQ-LI" : "M-FAQ-SUB"}
-              >
+              <span key={li} className={className}>
                 {content}
               </span>
             );

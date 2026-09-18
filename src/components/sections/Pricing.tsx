@@ -105,17 +105,7 @@ function PlanCard({
 }
 
 function CheckIcon() {
-  return (
-    <svg
-      className="PRICING-ICON-CHECK"
-      width="18"
-      height="16"
-      viewBox="0 0 18 16"
-      aria-hidden
-    >
-      <path d="M1.6 8.4L6.4 13.4L16.4 2.2" />
-    </svg>
-  );
+  return <span className="PRICING-ICON-CHECK" aria-hidden />;
 }
 
 export function Pricing() {
