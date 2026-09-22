@@ -8,8 +8,9 @@ import { automatedCrm } from "@/content/site";
 /**
  * 03. AUTOMATED CRM 모바일 — hu_automated_04~07_m
  *
- * 카드 스냅: 트랙을 좌 20 만큼 들여 쓰고(이전 카드는 클립),
- * 스와이프 종료 시 stride 단위로 scrollLeft 를 강제 정렬.
+ * 카드 스냅: 트랙을 좌 20 만큼 들여 쓰고(중간 슬라이드는 이전 카드 클립),
+ * 마지막은 end 스냅으로 좌측에 이전 카드가 일부 비침.
+ * 스와이프 종료 시 stride / maxScroll 로 scrollLeft 강제 정렬.
  */
 const CARD = 320;
 const GAP = 12;
@@ -28,11 +29,20 @@ export function MobileAutomatedCrm() {
     let settling = false;
     let endTimer = 0;
 
-    const indexFromScroll = () =>
-      Math.max(0, Math.min(last, Math.round(el.scrollLeft / STRIDE)));
+    const maxScroll = () =>
+      Math.max(0, el.scrollWidth - el.clientWidth);
+
+    const scrollLeftForIndex = (i: number) =>
+      i >= last ? maxScroll() : i * STRIDE;
+
+    const indexFromScroll = () => {
+      const max = maxScroll();
+      if (max > 0 && el.scrollLeft >= max - 1) return last;
+      return Math.max(0, Math.min(last, Math.round(el.scrollLeft / STRIDE)));
+    };
 
     const snapTo = (i: number) => {
-      const left = i * STRIDE;
+      const left = scrollLeftForIndex(i);
       if (Math.abs(el.scrollLeft - left) < 0.5) {
         setActive(i);
         return;
@@ -81,7 +91,7 @@ export function MobileAutomatedCrm() {
         <GlyphLines lines={automatedCrm.bodyMobile} />
       </p>
 
-      {/* 좌 20 거터는 뷰포트 margin — 트랙 밖이라 이전 카드가 비치지 않음 */}
+      {/* 좌 20 거터는 뷰포트 margin — 중간 슬라이드에서 이전 카드 클립 */}
       <div className="M-CRM-VIEWPORT">
         <div
           ref={trackRef}
@@ -105,9 +115,6 @@ export function MobileAutomatedCrm() {
               />
             );
           })}
-
-          {/* 마지막 카드도 좌측 정렬 스냅 — 트랙폭(370) − 카드(320) = 50 */}
-          <div className="M-CRM-SPACER-END" aria-hidden />
         </div>
       </div>
 

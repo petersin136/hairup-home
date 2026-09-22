@@ -1,0 +1,18 @@
+---
+description: 모바일 시안 기준 폭 390px · 소스 이미지 2x는 1x 표시 크기로 적용
+alwaysApply: true
+---
+
+# 모바일 아트보드 · 소스 이미지
+
+## Mobile Size
+- 모바일 UI·레이아웃 기준 폭은 **390px** (375px 아님).
+- 토큰: `--mobile-artboard: 390px` · `MOBILE_ARTBOARD_PX = 390`
+- 좌우 거터 시안값 20 → 콘텐츠 폭 **350** (`390 − 20×2`)
+- `MobileHome` 셸 `maxWidth: MOBILE_ARTBOARD_PX` 유지
+
+## Source img (2x)
+- 디자인 소스 이미지는 해상도 대응용 **2배수(2x)** 추출본이다.
+- CSS `width`/`height`, `next/image`의 `width`/`height`·`sizes`에는 **실제 표시 크기(1x)** 만 넣는다.
+- 예: 파일 700×760 → `width={350} height={380}` · `sizes="350px"` · CSS `350×380`
+- 파일 픽셀을 그대로 CSS에 넣지 말 것.

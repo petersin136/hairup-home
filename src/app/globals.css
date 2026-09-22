@@ -1661,12 +1661,6 @@ html:not(.splash-seen) [data-site-header] {
   display: none;
 }
 
-/* 마지막 카드 좌측 스냅용 — (390 − 20) − 320 = 50 */
-.M-CRM .M-CRM-SPACER-END {
-  flex-shrink: 0;
-  width: 50px;
-}
-
 .M-CRM .M-CRM-CARD,
 .M-CRM .M-CRM-CARD-NEXT {
   box-sizing: border-box;
@@ -1680,10 +1674,11 @@ html:not(.splash-seen) [data-site-header] {
   scroll-snap-stop: always;
 }
 
-/* 마지막 카드는 간격 없음 (끝 spacer 가 담당) */
+/* 마지막 카드: end 스냅 → 좌측에 이전 카드 일부 peek (단독 노출 방지) */
 .M-CRM .M-CRM-CARD.is-last,
 .M-CRM .M-CRM-CARD-NEXT.is-last {
   margin-right: 0;
+  scroll-snap-align: end;
 }
 
 .M-CRM .M-CRM-CARD {
@@ -1861,18 +1856,18 @@ html:not(.splash-seen) [data-site-header] {
   padding-right: 20px;
 }
 
-/* 시안 .TEMPLATE-HEADER__TAG — Playfair 12/400 · 0.25em · 숫자 있어 text edge */
+/* 시안 .TEMPLATE-HEADER__TAG — Playfair 12/500 · 0.025em · center */
 .M-TEMPLATE .TEMPLATE-HEADER__TAG {
   display: block;
   margin: 0;
   font-family: var(--font-display), "Playfair Display", serif;
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 500;
   color: rgb(44, 58, 46);
   text-transform: uppercase;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.025em;
   line-height: 1;
-  text-align: left;
+  text-align: center;
   font-variant-numeric: lining-nums;
   font-feature-settings: "lnum" 1;
   text-box-trim: trim-both;
@@ -1881,9 +1876,9 @@ html:not(.splash-seen) [data-site-header] {
 
 .M-TEMPLATE .TEMPLATE-HEADER__TAG em {
   font-style: italic;
-  font-weight: 400;
+  font-weight: 500;
   text-transform: none;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.025em;
 }
 
 /* 시안 .TEMPLATE-TITLE — 태그 → 타이틀 28 */
@@ -2069,7 +2064,7 @@ html:not(.splash-seen) [data-site-header] {
    카드: 350 · pad 45/35 · radius 10 · bg #F4F1ED
    내부: name→desc 20 · desc→price 35 · price gap 25 · price→bar 35
          bar→feat 25 · feat title→desc 12 · feat gap 40 · feat→btn 60
-   카드 간격 25 · 연간 배너 350×229 · pad 42/35
+   카드 간격 25 · 연간 배너 350 · pad 45/35 · 타이틀→본문 15 · 본문→SAVED 28
    ========================================================================== */
 /* 하단 0 — 다음 FAQ 상단 140 과 합쳐 섹션 간격 140 (템플릿→마퀴와 동일) */
 .M-PRICE-SEC {
@@ -2367,11 +2362,16 @@ html:not(.splash-seen) [data-site-header] {
 
 .M-PRICE-YEAR {
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 350px;
   max-width: 100%;
-  height: 229px;
+  /* 시안 상·하 45 — 상단 세리프 광학 −3 · 하단 SAVED 오버슛 +6 */
+  min-height: 229px;
+  height: auto;
   margin: 25px auto 0;
-  padding: 42px 20px 42px 35px;
+  padding: 42px 20px 51px 35px;
   border-radius: 8px;
   overflow: hidden;
   text-align: left;
@@ -2412,7 +2412,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-PRICE-YEAR-D {
-  margin: 25px 0 0;
+  margin: 15px 0 0;
   font-size: 16px;
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 500;
@@ -2425,7 +2425,7 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-PRICE-YEAR-SAVED {
-  margin: 25px 0 0;
+  margin: 28px 0 0;
   font-family: var(--font-playfair), "Playfair Display", Georgia, "Times New Roman",
     serif;
   font-size: 24px;
@@ -2559,14 +2559,14 @@ html:not(.splash-seen) [data-site-header] {
   position: relative;
   align-items: flex-start;
   min-height: 0;
-  padding-top: 26px;
+  padding-top: 30px;
   padding-bottom: 0;
-  padding-right: 52px;
+  padding-right: 40px;
 }
 
 .M-FAQ .M-FAQ-ITEM.is-open .M-FAQ-ICO {
   position: absolute;
-  top: 26px;
+  top: 30px;
   right: 20px;
   margin-top: 0;
 }
@@ -2630,8 +2630,8 @@ html:not(.splash-seen) [data-site-header] {
 }
 
 .M-FAQ .M-FAQ-PANEL-INNER {
-  /* 질문→답변 25. 좌우 20 · 하단 */
-  padding: 25px 20px 24px;
+  /* 시안 질문→답변 글리프 13 · 좌우 20 · 하단 30 */
+  padding: 23px 20px 30px;
 }
 
 .M-FAQ .M-FAQ-ANSWER {
@@ -2640,21 +2640,29 @@ html:not(.splash-seen) [data-site-header] {
   font-family: var(--font-kr), "Noto Sans KR", sans-serif;
   font-weight: 400;
   color: rgba(28, 26, 25, 0.8);
-  line-height: 1.5;
+  line-height: 21px;
   letter-spacing: 0;
   text-align: left;
   word-break: keep-all;
-  text-box-trim: trim-both;
-  text-box-edge: cap alphabetic;
 }
 
 .M-FAQ .M-FAQ-ANSWER strong {
   font-weight: 600;
+  color: rgb(28, 26, 25);
 }
 
-/* 인트로 → • 단락 · 단락 사이 */
+/*
+ * 시안 실측(2.5x → 1x): 본문 줄·대시 줄 모두 베이스라인 21.
+ * 단락(인트로↔•, •그룹↔•그룹) 은 빈 줄 1개 = 21.
+ * 줄마다 margin 8 을 넣으면 대시만 29 로 벌어짐.
+ */
 .M-FAQ .M-FAQ-GROUP + .M-FAQ-GROUP {
-  margin-top: 20px;
+  margin-top: 21px;
+}
+
+.M-FAQ .M-FAQ-GROUP:first-child {
+  text-box-trim: trim-start;
+  text-box-edge: cap alphabetic;
 }
 
 .M-FAQ .M-FAQ-LI,
@@ -2663,44 +2671,28 @@ html:not(.splash-seen) [data-site-header] {
 .M-FAQ .M-FAQ-P {
   display: block;
   box-sizing: border-box;
+  margin: 0;
+  line-height: 21px;
+  text-box-trim: none;
 }
 
-.M-FAQ .M-FAQ-LI {
-  padding-left: 1.2em;
-  text-indent: -1.2em;
+/*
+ * • / - 마커는 본문과 같은 왼쪽(20).
+ * 줄바꿈은 마커+공백 폭(8) 만큼만 들여 마커가 돌출.
+ */
+.M-FAQ .M-FAQ-LI,
+.M-FAQ .M-FAQ-SUB {
+  padding-left: 8px;
+  text-indent: -8px;
 }
 
 .M-FAQ .M-FAQ-LI + .M-FAQ-LI {
-  margin-top: 12px;
+  margin-top: 21px;
 }
 
-/* • 소제목 → - 하위 항목 · 본문 */
-.M-FAQ .M-FAQ-LI + .M-FAQ-SUB,
-.M-FAQ .M-FAQ-LI + .M-FAQ-P {
-  margin-top: 4px;
-}
-
-.M-FAQ .M-FAQ-SUB {
-  padding-left: 2.35em;
-  text-indent: -0.95em;
-}
-
-.M-FAQ .M-FAQ-SUB + .M-FAQ-SUB {
-  margin-top: 4px;
-}
-
-/* hu_faq_09_m · 괄호 보조 줄 — 서브 본문과 동일 들여쓰기 */
+/* 괄호 보조 줄 — 대시 본문열(8)에 맞춤, 마커 돌출 없음 */
 .M-FAQ .M-FAQ-NOTE {
-  padding-left: 2.35em;
-}
-
-.M-FAQ .M-FAQ-SUB + .M-FAQ-NOTE {
-  margin-top: 4px;
-}
-
-/* 본문 연속 줄 — margin 없이 line-height 만 */
-.M-FAQ .M-FAQ-P + .M-FAQ-P {
-  margin-top: 0;
+  padding-left: 8px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -5219,3 +5211,584 @@ html:not(.splash-seen) [data-site-header] {
   white-space: nowrap;
   flex-shrink: 0;
 }
+
+/* ==========================================================================
+   ADMIN LOGIN PC — 간격 시안 + hu_admin_detail_02_pc
+   BODY 전역은 건드리지 않고 .ADMIN-LOGIN-WRAPPER 에만 적용.
+   ========================================================================== */
+
+/* 로그인 전체 배경 (카드 바깥 래퍼) */
+.ADMIN-LOGIN-WRAPPER {
+  box-sizing: border-box;
+  background-color: #faf8f5;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* 1. 로그인 카드 컨테이너 */
+.ADMIN-LOGIN-CARD {
+  box-sizing: border-box;
+  width: 500px;
+  min-height: 621px;
+  margin: 0;
+  padding: 70px 46px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow:
+    0px 2px 4px 0px rgba(0, 0, 0, 0.02),
+    0px 12px 28px 0px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* 2. 상단 로고 */
+.ADMIN-LOGIN-CARD .ADMIN-LOGIN-LOGO-SVG {
+  width: 151px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  fill: #1c1a19;
+  color: #1c1a19;
+  flex-shrink: 0;
+}
+
+/* 3. 안내 설명 문구 — 로고→문구 26 */
+.ADMIN-LOGIN-DESC {
+  margin: 26px 0 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  text-align: center;
+  color: rgba(28, 26, 25, 0.7);
+  word-break: keep-all;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 필드 묶음 — 안내→이메일 80 */
+.ADMIN-LOGIN-FIELDS {
+  margin: 80px 0 0;
+  width: 100%;
+}
+
+.ADMIN-LOGIN-FIELD + .ADMIN-LOGIN-FIELD {
+  /* 이메일 라인 → 비밀번호 텍스트 28 */
+  margin-top: 28px;
+}
+
+/* 에러 메시지 → 다음 필드 26 (hu_admin_detail_04_pc) */
+.ADMIN-LOGIN-FIELD:has(.INPUT-ERROR-MSG) + .ADMIN-LOGIN-FIELD {
+  margin-top: 26px;
+}
+
+.ADMIN-LOGIN-INPUT-ROW {
+  position: relative;
+  width: 100%;
+}
+
+/* 4. 입력 폼 공통 */
+.ADMIN-LOGIN-CARD .INPUT-FIELD {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0 0 14px;
+  border: none;
+  border-bottom: 1px solid #979797;
+  border-radius: 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1;
+  letter-spacing: 0;
+  color: #1c1a19;
+  background: transparent;
+  box-sizing: border-box;
+  outline: none;
+  appearance: none;
+}
+
+.ADMIN-LOGIN-CARD .INPUT-FIELD.IS-ERROR {
+  /* 아이콘 20 + 여유 */
+  padding-right: 28px;
+  border-bottom-color: rgb(195, 60, 60);
+}
+
+.ADMIN-LOGIN-CARD .INPUT-FIELD::placeholder {
+  color: #979797;
+  opacity: 1;
+}
+
+.ADMIN-LOGIN-CARD .INPUT-FIELD:focus {
+  border-bottom-color: #1c1a19;
+}
+
+.ADMIN-LOGIN-CARD .INPUT-FIELD.IS-ERROR:focus {
+  border-bottom-color: rgb(195, 60, 60);
+}
+
+/* hu_admin_detail_05/06_pc · 비밀번호 마스킹 간격 */
+.ADMIN-LOGIN-CARD .INPUT-FIELD[type="password"] {
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: rgb(28, 26, 25);
+  letter-spacing: 0.1em;
+  /* 아이콘 18 + 여유 */
+  padding-right: 28px;
+}
+
+/* 플레이스홀더 한글은 시안상 일반 간격 (마스킹용 0.1em 제외) */
+.ADMIN-LOGIN-CARD .INPUT-FIELD[type="password"]::placeholder {
+  letter-spacing: 0;
+}
+
+/* 보기 모드(type=text)일 때도 아이콘 자리 확보 */
+.ADMIN-LOGIN-CARD
+  .ADMIN-LOGIN-INPUT-ROW:has(.INPUT-PASSWORD-TOGGLE)
+  .INPUT-FIELD[type="text"] {
+  padding-right: 28px;
+}
+
+.INPUT-PASSWORD-TOGGLE {
+  position: absolute;
+  right: 0;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* hu_admin_detail_05/06_pc · .INPUT-PASSWORD-ICON (open/close 동일 18 · #8E8E8E) */
+.INPUT-PASSWORD-ICON {
+  display: block;
+  width: 18px;
+  height: 18px;
+  fill: #8e8e8e;
+  pointer-events: none;
+}
+
+/* hu_admin_detail_04_pc · 에러 아이콘 20×20 */
+.INPUT-ERROR-ICON {
+  position: absolute;
+  right: 0;
+  bottom: 14px;
+  display: block;
+  width: 20px;
+  height: 20px;
+  fill: rgb(195, 60, 60);
+  pointer-events: none;
+}
+
+/* hu_admin_detail_04_pc · 에러 안내 · 라인→메시지 10 */
+.INPUT-ERROR-MSG {
+  margin: 10px 0 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: rgb(195, 60, 60);
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 비밀번호 라인 → 로그인 유지 30 — hu_admin_detail_03_pc */
+.KEEP-LOGIN-LABEL {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 30px 0 0;
+  cursor: pointer;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  color: #666666;
+  user-select: none;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* hu_admin_detail_07_pc · 로그인 실패 안내 · 비번 라인→에러 10 */
+.LOGIN-ERROR {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 0;
+  width: 100%;
+}
+
+.LOGIN-ERROR-ICON {
+  display: block;
+  flex-shrink: 0;
+  width: 19px;
+  height: 19px;
+  fill: rgb(195, 60, 60);
+}
+
+.LOGIN-ERROR-MSG {
+  margin: 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  color: rgb(195, 60, 60);
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 에러 → 로그인 유지 15 */
+.LOGIN-ERROR + .KEEP-LOGIN-LABEL {
+  margin-top: 15px;
+}
+
+/* 커스텀 체크박스 — 클릭 시 17px로 커지지 않게 16 고정 */
+.CHECKBOX-CUSTOM {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  border: 1.5px solid #979797;
+  border-radius: 1px;
+  appearance: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.CHECKBOX-CUSTOM:checked {
+  /* 크기 유지 · 시안에 checked 스타일 없음 — 보더만 강조 */
+  width: 16px;
+  height: 16px;
+  border-color: #1c1a19;
+  background-color: #1c1a19;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23ffffff' stroke-width='1.5' d='M3.5 8.2l3 3 6-6.5'/%3E%3C/svg%3E");
+  background-size: 12px 12px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 로그인 유지 → 버튼 48 — hu_admin_detail_03_pc · .BTN-ADMIN-LOGIN */
+.BTN-ADMIN-LOGIN {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 409px;
+  height: 55px;
+  margin: 48px 0 0;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background-color: rgb(44, 58, 46);
+  color: #ffffff;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.BTN-ADMIN-LOGIN:hover {
+  opacity: 0.92;
+}
+
+/* 버튼 → 링크 28 */
+.ADMIN-LOGIN-LINKS {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 409px;
+  margin: 28px 0 0;
+}
+
+.ADMIN-LOGIN-LINK {
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: #1c1a19;
+  text-decoration: none;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 카드 → 카피라이트 50 — hu_admin_detail_03_pc */
+.ADMIN-FOOTER-COPYRIGHT {
+  margin: 50px 0 0;
+  font-family: var(--font-latin), "Inter", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: #666666;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+
+/* ==========================================================================
+   ADMIN FIND PASSWORD PC — hu_admin_detail_08_pc · 09_pc
+   .LOGO / .COPYRIGHT / .INPUT-FIELD 는 푸터·로그인과 겹치므로
+   .AUTH-WRAPPER 하위로만 적용.
+   ========================================================================== */
+
+.AUTH-WRAPPER {
+  box-sizing: border-box;
+  background-color: #faf8f5;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* 비밀번호 찾기 카드 */
+.AUTH-WRAPPER .AUTH-CARD {
+  box-sizing: border-box;
+  width: 500px;
+  height: 516px;
+  margin: 0;
+  padding: 70px 46px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  box-shadow:
+    0px 2px 4px 0px rgba(0, 0, 0, 0.02),
+    0px 12px 28px 0px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow: visible;
+}
+
+/* 1. 로고 — 상단 패딩 70 포함, 아래로 26 */
+.AUTH-WRAPPER .LOGO {
+  width: 151px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  fill: #1c1a19;
+  color: #1c1a19;
+  flex-shrink: 0;
+}
+
+/* 2. 안내 문구 — 로고→문구 26 · 문구→인풋 80 */
+.AUTH-WRAPPER .AUTH-DESC {
+  margin: 26px 0 0;
+  flex-shrink: 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(28, 26, 25, 0.702);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  text-align: center;
+  word-break: keep-all;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 3. 이메일 입력 — 기본(플레이스홀더) · 라벨→라인 14 */
+.AUTH-WRAPPER .INPUT-FIELD {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 80px 0 0;
+  padding: 0 0 14px;
+  flex-shrink: 0;
+  border: none;
+  border-bottom: 1px solid rgb(151, 151, 151);
+  border-radius: 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-align: left;
+  color: rgb(151, 151, 151);
+  background: transparent;
+  outline: none;
+  appearance: none;
+}
+
+.AUTH-WRAPPER .INPUT-FIELD::placeholder {
+  color: rgb(151, 151, 151);
+  opacity: 1;
+  letter-spacing: -0.01em;
+}
+
+/* hu_admin_detail_09_pc · 활성화·입력 완료 */
+.AUTH-WRAPPER .INPUT-FIELD:focus,
+.AUTH-WRAPPER .INPUT-FIELD:not(:placeholder-shown) {
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: rgb(28, 26, 25);
+  text-align: left;
+  border-bottom: 1px solid rgb(28, 26, 25);
+}
+
+/* hu_admin_detail_12_pc · 미등록 계정 에러 */
+.AUTH-WRAPPER .INPUT-FIELD.IS-ERROR,
+.AUTH-WRAPPER .INPUT-FIELD.IS-ERROR:focus,
+.AUTH-WRAPPER .INPUT-FIELD.IS-ERROR:not(:placeholder-shown) {
+  border-bottom: 1px solid rgb(195, 60, 60);
+}
+
+/* 인풋→에러 10 · 아이콘+메시지 가로 배치 */
+.AUTH-WRAPPER .INPUT-ERROR {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 0;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.AUTH-WRAPPER .INPUT-ERROR-ICON {
+  position: static;
+  display: block;
+  flex-shrink: 0;
+  width: 19px;
+  height: 19px;
+  fill: rgb(195, 60, 60);
+  pointer-events: none;
+}
+
+.AUTH-WRAPPER .INPUT-ERROR-MSG {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+  color: rgb(195, 60, 60);
+  letter-spacing: -0.01em;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* hu_admin_detail_11_pc · 발송 완료 안내 · 인풋→문구 10 · 문구→버튼 48 */
+.AUTH-WRAPPER .RESET-SENT-MSG {
+  margin: 10px 0 0;
+  flex-shrink: 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgb(102, 102, 102);
+  line-height: 1.692;
+  letter-spacing: -0.01em;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 4. 인증 메일 발송 — 인풋→버튼 48 · 시안 비활성(회색) 상태 */
+.AUTH-WRAPPER .BTN-SUBMIT {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 409px;
+  height: 55px;
+  margin: 48px 0 0;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background-color: rgb(238, 238, 238);
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  color: rgb(163, 163, 163);
+  text-align: center;
+  cursor: pointer;
+}
+
+.AUTH-WRAPPER .BTN-SUBMIT:disabled {
+  cursor: default;
+}
+
+/* hu_admin_detail_10_pc · 이메일 입력 후 활성 */
+.AUTH-WRAPPER .BTN-SUBMIT.IS-ACTIVE {
+  width: 409px;
+  height: 55px;
+  background-color: rgb(44, 58, 46);
+  border-radius: 6px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  cursor: pointer;
+}
+
+/* 5. 로그인으로 돌아가기 — 버튼→링크 28 */
+.AUTH-WRAPPER .LINK-BACK {
+  display: block;
+  flex-shrink: 0;
+  margin: 28px 0 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: rgb(28, 26, 25);
+  text-align: center;
+  text-decoration: none;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* 6. 카피라이트 — 카드→카피 50 */
+.AUTH-WRAPPER .COPYRIGHT {
+  margin: 50px 0 0;
+  font-family: var(--font-latin), "Inter", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: rgb(102, 102, 102);
+  text-transform: none;
+  white-space: normal;
+  text-box-trim: trim-both;
+  text-box-edge: text alphabetic;
+}
+

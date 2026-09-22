@@ -75,53 +75,71 @@ function answerLineKind(text: string): "bullet" | "sub" | "note" | "plain" {
   return "plain";
 }
 
+function FaqLineText({
+  text,
+  bold,
+}: {
+  text: string;
+  bold?: boolean;
+}) {
+  const nodes = text.split("\n").map((part, i) => (
+    <Fragment key={i}>
+      {i > 0 ? <br /> : null}
+      {part}
+    </Fragment>
+  ));
+  return bold ? <strong>{nodes}</strong> : nodes;
+}
+
 function MobileFaqAnswer({ groups }: { groups: readonly FaqAnswerGroup[] }) {
   return (
     <div className="M-FAQ-ANSWER">
       {groups.map((group, gi) => {
+        const nodes: ReactNode[] = [];
+        let i = 0;
         let afterBlock = false;
+        while (i < group.length) {
+          const kind = answerLineKind(group[i].text);
+          if (kind === "plain") {
+            const run = [];
+            while (i < group.length && answerLineKind(group[i].text) === "plain") {
+              run.push(group[i]);
+              i += 1;
+            }
+            const body = run.map((line, li) => (
+              <Fragment key={li}>
+                {li > 0 ? <br /> : null}
+                <FaqLineText text={line.text} bold={line.bold} />
+              </Fragment>
+            ));
+            nodes.push(
+              afterBlock ? (
+                <span key={`p-${i}`} className="M-FAQ-P">
+                  {body}
+                </span>
+              ) : (
+                <Fragment key={`intro-${i}`}>{body}</Fragment>
+              ),
+            );
+            continue;
+          }
+          afterBlock = true;
+          const className =
+            kind === "bullet"
+              ? "M-FAQ-LI"
+              : kind === "note"
+                ? "M-FAQ-NOTE"
+                : "M-FAQ-SUB";
+          nodes.push(
+            <span key={i} className={className}>
+              <FaqLineText text={group[i].text} bold={group[i].bold} />
+            </span>,
+          );
+          i += 1;
+        }
         return (
           <div key={gi} className="M-FAQ-GROUP">
-            {group.map((line, li) => {
-              const kind = answerLineKind(line.text);
-              const content = line.bold ? (
-                <strong>{line.text}</strong>
-              ) : (
-                line.text
-              );
-              if (kind === "plain") {
-                /*
-                 * •/- 블록 뒤 본문은 M-FAQ-P 로만 이음.
-                 * display:block 뒤에 <br> 를 넣으면 줄이 한 번 더 벌어짐.
-                 * 인트로처럼 plain 만 있는 그룹은 기존처럼 br.
-                 */
-                if (afterBlock) {
-                  return (
-                    <span key={li} className="M-FAQ-P">
-                      {content}
-                    </span>
-                  );
-                }
-                return (
-                  <Fragment key={li}>
-                    {li > 0 ? <br /> : null}
-                    {content}
-                  </Fragment>
-                );
-              }
-              afterBlock = true;
-              const className =
-                kind === "bullet"
-                  ? "M-FAQ-LI"
-                  : kind === "note"
-                    ? "M-FAQ-NOTE"
-                    : "M-FAQ-SUB";
-              return (
-                <span key={li} className={className}>
-                  {content}
-                </span>
-              );
-            })}
+            {nodes}
           </div>
         );
       })}
