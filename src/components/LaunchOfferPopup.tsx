@@ -5,12 +5,13 @@ import { useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { GlyphLines } from "@/components/copy/GlyphLines";
-import { SPLASH_DONE_EVENT } from "@/lib/splash-keys";
 import { launchPopup } from "@/content/site";
 import {
   hasSeenLaunchPopup,
   markLaunchPopupSeen,
 } from "@/lib/entry-chrome";
+import { openConsultationModal } from "@/lib/consultation-modal";
+import { SPLASH_DONE_EVENT } from "@/lib/splash-keys";
 
 /** 스플래시 커튼이 완전히 사라진 뒤 팝업까지의 여유 */
 const POPUP_AFTER_SPLASH_MS = 400;
@@ -109,6 +110,11 @@ export function LaunchOfferPopup() {
     setOpen(false);
   };
 
+  const goConsult = () => {
+    dismiss();
+    openConsultationModal();
+  };
+
   if (!open || !mounted || isDesktop === null) return null;
 
   const overlay = (
@@ -166,15 +172,13 @@ export function LaunchOfferPopup() {
               <span className="M-POPUP-NOTICE">{launchPopup.benefit.limited}</span>
             </p>
 
-            <a
-              href={launchPopup.cta.href}
+            <button
+              type="button"
               className="M-POPUP-BTN"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={dismiss}
+              onClick={goConsult}
             >
               {launchPopup.cta.label}
-            </a>
+            </button>
           </div>
         </div>
       </>,
@@ -230,15 +234,13 @@ export function LaunchOfferPopup() {
             <span className="limited">{launchPopup.benefit.limited}</span>
           </p>
 
-          <a
-            href={launchPopup.cta.href}
+          <button
+            type="button"
             className="popup-cta-btn"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={dismiss}
+            onClick={goConsult}
           >
             {launchPopup.cta.label}
-          </a>
+          </button>
         </div>
       </div>
     </>,

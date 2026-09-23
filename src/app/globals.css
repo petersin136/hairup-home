@@ -690,6 +690,8 @@ p:has(> .STARTER-PRICE-NUM-MONTH) {
   height: 55px;
   margin-top: auto;
   align-self: center;
+  padding: 0;
+  border: none;
   border-radius: 4px;
   font-size: 17px;
   font-family: var(--font-latin), "Inter", sans-serif;
@@ -698,6 +700,7 @@ p:has(> .STARTER-PRICE-NUM-MONTH) {
   text-align: center;
   text-decoration: none;
   cursor: pointer;
+  appearance: none;
 }
 
 .BTN-STARTER {
@@ -3298,6 +3301,11 @@ html:not(.splash-seen) [data-site-header] {
   z-index: 1;
   margin-left: auto;
   flex-shrink: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* --- Hero PC (hu_HERO_PC · hu_HERO_VI_PC · hu_MAIN_SPACING_PC) ----------- */
@@ -3369,6 +3377,8 @@ html:not(.splash-seen) [data-site-header] {
   width: 200px;
   height: 55px;
   margin-top: 55px;
+  padding: 0;
+  border: none;
   background-color: #faf8f5;
   border-radius: 4px;
   font-family: var(--font-latin), "Inter", sans-serif;
@@ -3378,6 +3388,7 @@ html:not(.splash-seen) [data-site-header] {
   color: #2c3a2e;
   text-decoration: none;
   cursor: pointer;
+  appearance: none;
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
@@ -4198,6 +4209,8 @@ html:not(.splash-seen) [data-site-header] {
   width: 190px;
   height: 40px;
   margin-top: 12px;
+  padding: 0;
+  border: none;
   background-color: rgb(44, 58, 46);
   border-radius: 4px;
   font-size: 13px;
@@ -4205,6 +4218,8 @@ html:not(.splash-seen) [data-site-header] {
   color: rgb(250, 248, 245);
   text-align: center;
   text-decoration: none;
+  cursor: pointer;
+  appearance: none;
 }
 
 /* 한 줄 높이만 보이게 — 영·한 겹침 롤 */
@@ -5213,3 +5228,531 @@ html:not(.splash-seen) [data-site-header] {
   flex-shrink: 0;
 }
 
+
+/* ==========================================================================
+   CONSULTATION MODAL PC
+   hu_register_01 · detail_02(기본) · detail_03(인풋) · detail_04(활성) · detail_05(완료)
+   ========================================================================== */
+
+.MODAL-OVERLAY {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.MODAL-CARD {
+  box-sizing: border-box;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 1002;
+  width: 500px;
+  height: 697px;
+  margin: 0;
+  padding: 55px 35px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+}
+
+.MODAL-CARD.is-complete {
+  height: auto;
+}
+
+.MODAL-CLOSE-BTN {
+  box-sizing: border-box;
+  position: absolute;
+  top: 35px;
+  right: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: rgb(28, 26, 25);
+  opacity: 0.8;
+  cursor: pointer;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.MODAL-CLOSE-BTN svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.MODAL-TITLE {
+  margin: 0;
+  padding-right: 28px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1;
+  color: rgb(28, 26, 25);
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.MODAL-DESC {
+  margin: 25px 0 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(28, 26, 25, 0.7);
+  line-height: 1.563;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* detail_02 · MODAL-INPUT — 플레이스홀더→라인 15 · 필드 간격 30 */
+.MODAL-CARD .MODAL-INPUT {
+  box-sizing: border-box;
+  display: block;
+  width: 428px;
+  max-width: 100%;
+  height: 30px;
+  margin: 30px 0 0;
+  padding: 0 0 15px;
+  border: none;
+  border-bottom: 1px solid rgb(136, 136, 136);
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 14px;
+  color: rgb(136, 136, 136);
+  text-align: left;
+  outline: none;
+  appearance: none;
+}
+
+.MODAL-CARD .MODAL-INPUT.is-first {
+  margin-top: 55px;
+}
+
+.MODAL-CARD .MODAL-INPUT::placeholder {
+  color: rgb(136, 136, 136);
+  opacity: 1;
+}
+
+/* detail_02 · 지역 서브텍스트 */
+.MODAL-CARD .MODAL-INPUT.MODAL-INPUT-SUBTEXT::placeholder {
+  font-size: 12px;
+  letter-spacing: 0.025em;
+}
+
+/* detail_03 · 입력값 / 포커스 라인 */
+.MODAL-CARD .MODAL-INPUT:not(:placeholder-shown) {
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(28, 26, 25);
+  text-align: left;
+}
+
+.MODAL-CARD .MODAL-INPUT:focus {
+  border-bottom: 1px solid rgb(28, 26, 25);
+}
+
+.MODAL-CARD .MODAL-INPUT:not(:focus) {
+  border-bottom: 1px solid rgb(136, 136, 136);
+}
+
+/* 매장 상태 · 라인→라벨 30 · 라벨→버튼 15 · 버튼→다음 30 */
+.MODAL-STATUS {
+  margin: 30px 0 0;
+  padding: 0;
+  border: none;
+  min-inline-size: 0;
+}
+
+.MODAL-CARD .STATUS-LABEL {
+  padding: 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(28, 26, 25);
+  line-height: 1.929;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.MODAL-CARD .STATUS-BTN-ROW {
+  display: flex;
+  gap: 8px;
+  margin: 15px 0 0;
+  width: 428px;
+  max-width: 100%;
+}
+
+.MODAL-CARD .STATUS-BTN {
+  box-sizing: border-box;
+  flex: 0 0 210px;
+  width: 210px;
+  height: 38px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgb(213, 213, 213);
+  border-radius: 6px;
+  background-color: rgb(255, 255, 255);
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(136, 136, 136);
+  letter-spacing: -0.01em;
+  text-align: center;
+  cursor: pointer;
+  appearance: none;
+}
+
+/* detail_04 · STATUS-BTN.IS-ACTIVE */
+.MODAL-CARD .STATUS-BTN.IS-ACTIVE {
+  width: 210px;
+  height: 38px;
+  border-color: rgb(44, 58, 46);
+  background-color: rgb(44, 58, 46);
+  border-radius: 6px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(255, 255, 255);
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+/* 약관 · 라인→행 25 · 체크→텍스트 15 · 행→버튼 50 */
+.MODAL-TERMS {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 6px;
+  margin: 25px 0 0;
+  width: 428px;
+  max-width: 100%;
+}
+
+.MODAL-TERMS-LABEL {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.MODAL-CARD .TERMS-CHECKBOX-INPUT {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+  appearance: none;
+}
+
+.MODAL-CARD .TERMS-CHECKBOX {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  border: 1.5px solid rgb(136, 136, 136);
+  border-radius: 1px;
+  background-color: transparent;
+}
+
+/* detail_04 · TERMS-CHECKBOX.IS-CHECKED · TERMS-CHECK-ICON */
+.MODAL-CARD .TERMS-CHECKBOX.IS-CHECKED {
+  width: 16px;
+  height: 16px;
+  border-color: rgb(44, 58, 46);
+  border-radius: 1px;
+  background-color: rgb(44, 58, 46);
+}
+
+.MODAL-CARD .TERMS-CHECK-ICON {
+  display: block;
+  width: 11px;
+  height: auto;
+  fill: #ffffff;
+}
+
+.MODAL-CARD .TERMS-TEXT {
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  color: rgb(136, 136, 136);
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.MODAL-CARD .LINK-VIEW {
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  color: rgb(0, 102, 204);
+  text-align: left;
+  text-decoration: underline;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.MODAL-CARD .BTN-SUBMIT {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 430px;
+  max-width: 100%;
+  height: 55px;
+  margin: 50px 0 0;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background-color: rgb(238, 238, 238);
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgb(163, 163, 163);
+  text-align: center;
+  cursor: not-allowed;
+  appearance: none;
+}
+
+/* detail_04 · BTN-SUBMIT.IS-ACTIVE */
+.MODAL-CARD .BTN-SUBMIT.IS-ACTIVE {
+  width: 430px;
+  height: 55px;
+  background-color: rgb(44, 58, 46);
+  border-radius: 6px;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  cursor: pointer;
+}
+
+.MODAL-CARD .BTN-SUBMIT:disabled {
+  pointer-events: none;
+}
+
+/* detail_05 · 완료 화면 */
+.MODAL-CARD .LOGO {
+  display: block;
+  width: 130px;
+  color: #1c1a19;
+}
+
+.MODAL-CARD .LOGO svg {
+  display: block;
+  width: 130px;
+  height: auto;
+  fill: #1c1a19;
+}
+
+.MODAL-CARD .COMPLETE-TITLE {
+  margin: 25px 0 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1;
+  color: rgb(28, 26, 25);
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.MODAL-CARD .COMPLETE-DESC {
+  margin: 25px 0 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(28, 26, 25, 0.7);
+  line-height: 1.563;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.MODAL-CARD .BTN-CONFIRM {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 430px;
+  max-width: 100%;
+  height: 55px;
+  margin: 50px 0 0;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background-color: rgb(44, 58, 46);
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  cursor: pointer;
+  appearance: none;
+}
+
+/* ==========================================================================
+   CONSULTATION CONSENT PAGE — hu_register_detail_01_PC
+   ========================================================================== */
+
+.CONSENT-PAGE {
+  box-sizing: border-box;
+  min-height: 100%;
+  margin: 0;
+  padding: 80px 0 100px;
+  background-color: #faf8f5;
+}
+
+.CONSENT-PAGE-INNER {
+  box-sizing: border-box;
+  width: 604px;
+  max-width: calc(100% - 40px);
+  margin: 0 auto;
+}
+
+.CONSENT-PAGE .LOGO {
+  display: block;
+  width: 130px;
+  margin: 0;
+  color: #1c1a19;
+}
+
+.CONSENT-PAGE .LOGO svg {
+  display: block;
+  width: 130px;
+  height: auto;
+  fill: #1c1a19;
+}
+
+.CONSENT-PAGE .TERMS-TITLE {
+  margin: 20px 0 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1;
+  color: rgb(28, 26, 25);
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.CONSENT-PAGE .TERMS-DATE {
+  margin: 20px 0 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.6);
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.CONSENT-PAGE .TERMS-DIVIDER {
+  box-sizing: border-box;
+  width: 604px;
+  max-width: 100%;
+  height: 0;
+  margin: 45px 0 0;
+  border: none;
+  border-top: 1px solid rgb(28, 26, 25);
+}
+
+.CONSENT-PAGE .TERMS-SECTION {
+  margin: 20px 0 0;
+}
+
+.CONSENT-PAGE .TERMS-SECTION + .TERMS-DIVIDER {
+  margin-top: 45px;
+}
+
+.CONSENT-PAGE .TERMS-SECTION-TITLE {
+  margin: 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1;
+  color: rgb(28, 26, 25);
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.CONSENT-PAGE .TERMS-SUBTEXT {
+  margin: 17px 0 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: rgba(28, 26, 25, 0.8);
+  line-height: 1.588;
+  letter-spacing: -0.01em;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.CONSENT-PAGE .TERMS-SUBTEXT + .TERMS-SUBTEXT {
+  margin-top: 24px;
+}
+
+.CONSENT-PAGE .TERMS-NOTICE {
+  margin: 65px 0 0;
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 1.588;
+  letter-spacing: -0.01em;
+  text-align: left;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.CONSENT-PAGE .BTN-BACK {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 240px;
+  height: 55px;
+  margin: 65px auto 0;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background-color: rgb(44, 58, 46);
+  font-family: var(--font-kr), "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgb(250, 248, 245);
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  appearance: none;
+}

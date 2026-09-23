@@ -1,3 +1,4 @@
+import { ConsultationModal } from "@/components/consultation/ConsultationModal";
 import { HomeShell } from "@/components/HomeShell";
 import { LaunchOfferPopup } from "@/components/LaunchOfferPopup";
 import { SplashScreen } from "@/components/splash/SplashScreen";
@@ -11,6 +12,7 @@ export default function Home() {
     <>
       <SplashScreen />
       <LaunchOfferPopup />
+      <ConsultationModal />
       <RestoreHomeScroll />
       <HomeShell />
     </>

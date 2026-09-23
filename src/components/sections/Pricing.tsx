@@ -3,7 +3,7 @@
 import { GlyphLines } from "@/components/copy/GlyphLines";
 import { Canvas } from "@/components/layout/Canvas";
 import { pricing } from "@/content/site";
-import { onHashClick } from "@/lib/scroll-to-hash";
+import { openConsultationModal } from "@/lib/consultation-modal";
 
 /**
  * 06_Pricing Plan — hu_PRICING_DETAIL_PC_01–10
@@ -42,8 +42,6 @@ function PlanCard({
   brand?: boolean;
   plan: typeof pricing.starter | typeof pricing.branding;
 }) {
-  const ctaExternal = plan.cta.href.startsWith("http");
-
   return (
     <article className="PRICING-CARD-STARTER">
       <h3 className="STARTER-TITLE">{plan.name}</h3>
@@ -89,17 +87,14 @@ function PlanCard({
         ))}
       </ul>
 
-      <a
-        href={plan.cta.href}
-        onClick={(e) => onHashClick(e, plan.cta.href)}
-        {...(ctaExternal
-          ? { target: "_blank", rel: "noopener noreferrer" }
-          : {})}
+      <button
+        type="button"
         className={brand ? "BTN-BRAND" : "BTN-STARTER"}
+        onClick={() => openConsultationModal()}
       >
         <span>{plan.cta.labelEn}</span>
         <span>{plan.cta.label}</span>
-      </a>
+      </button>
     </article>
   );
 }

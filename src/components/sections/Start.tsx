@@ -1,6 +1,9 @@
+"use client";
+
 import { GlyphLines } from "@/components/copy/GlyphLines";
 import { Canvas } from "@/components/layout/Canvas";
 import { start } from "@/content/site";
+import { openConsultationModal } from "@/lib/consultation-modal";
 
 /**
  * 11_CTA — 시안 CTA-BANNER
@@ -44,14 +47,13 @@ export function Start() {
         <p className="BOTTOM-BANNER-DESC text-kr">
           <GlyphLines lines={start.body} />
         </p>
-        <a
-          href={start.cta.href}
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          type="button"
           className="BOTTOM-BANNER-BTN text-kr"
+          onClick={() => openConsultationModal()}
         >
           {start.cta.label}
-        </a>
+        </button>
       </div>
     </Canvas>
   );

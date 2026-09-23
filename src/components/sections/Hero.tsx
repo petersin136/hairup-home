@@ -1,11 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 
 import { GlyphLines } from "@/components/copy/GlyphLines";
 import { cta, hero } from "@/content/site";
-import { onHashClick } from "@/lib/scroll-to-hash";
+import { openConsultationModal } from "@/lib/consultation-modal";
 
 /**
  * 01_Hero — hu_HERO_PC · hu_HERO_VI_PC · hu_MAIN_SPACING_PC
@@ -42,10 +41,10 @@ export function Hero() {
               <GlyphLines lines={hero.body} />
             </p>
 
-            <Link
-              href={cta.href}
-              onClick={(e) => onHashClick(e, cta.href)}
+            <button
+              type="button"
               className="BTN-CREATE-BRAND"
+              onClick={() => openConsultationModal()}
             >
               <span className="BTN-CREATE-BRAND-ROLL">
                 <span className="TXT-EN">{cta.en}</span>
@@ -53,7 +52,7 @@ export function Hero() {
                   {cta.ko}
                 </span>
               </span>
-            </Link>
+            </button>
           </div>
         </div>
       </div>

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { GlyphLines } from "@/components/copy/GlyphLines";
 import { Canvas } from "@/components/layout/Canvas";
 import { templateCollection } from "@/content/site";
+import { openConsultationModal } from "@/lib/consultation-modal";
 
 /**
  * 07_Template Collection — 시안 hu_TEMPLATE PC 01–06
@@ -412,12 +413,11 @@ function TemplateCard({
             </span>
           </span>
         </a>
-        <a
+        <button
+          type="button"
           className="BTN-GET-STARTED"
-          href={templateCollection.cardCtas.start.href}
-          target="_blank"
-          rel="noopener noreferrer"
           tabIndex={centered ? undefined : -1}
+          onClick={() => openConsultationModal()}
         >
           <span className="TEMPLATE-BTN-ROLL">
             <span className="TXT-EN">{templateCollection.cardCtas.start.label}</span>
@@ -425,7 +425,7 @@ function TemplateCard({
               {templateCollection.cardCtas.start.labelKr}
             </span>
           </span>
-        </a>
+        </button>
       </div>
 
       {/* 대기 카드는 눌렀을 때만 가운데로 옵니다 */}
