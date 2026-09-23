@@ -27,6 +27,7 @@ import {
   start,
   templateCollection,
 } from "@/content/site";
+import { openConsultationModal } from "@/lib/consultation-modal";
 import { onHashClick, scrollToHash } from "@/lib/scroll-to-hash";
 import { saveReturnScroll } from "@/lib/entry-chrome";
 import { MOBILE_ARTBOARD_PX } from "@/lib/mobile-artboard";
@@ -134,10 +135,10 @@ export function MobileHome() {
                 <GlyphLines lines={hero.bodyMobile} />
               </p>
             </div>
-            <a
+            <button
+              type="button"
               className="CREATE-BRAND-BTN"
-              href={cta.href}
-              onClick={(e) => onHashClick(e, cta.href)}
+              onClick={() => openConsultationModal()}
             >
               <span className="CREATE-BRAND-TEXT">{cta.en}</span>
               <svg
@@ -154,7 +155,7 @@ export function MobileHome() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </a>
+            </button>
           </div>
         </section>
 
@@ -389,14 +390,13 @@ export function MobileHome() {
             <p className="M-CTA-DESC">
               <GlyphLines lines={start.bodyMobile} />
             </p>
-            <a
-              href={start.cta.href}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
               className="M-CTA-BTN"
+              onClick={() => openConsultationModal()}
             >
               {start.cta.label}
-            </a>
+            </button>
           </div>
         </section>
 

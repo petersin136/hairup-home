@@ -2,8 +2,8 @@
 
 import { GlyphLines } from "@/components/copy/GlyphLines";
 import { pricing } from "@/content/site";
+import { openConsultationModal } from "@/lib/consultation-modal";
 import { playfairDisplay } from "@/lib/fonts";
-import { onHashClick } from "@/lib/scroll-to-hash";
 
 const PLANS = [
   { tone: "starter" as const, plan: pricing.starter },
@@ -92,16 +92,13 @@ function MobilePlanCard({
           </li>
         ))}
       </ul>
-      <a
-        href={plan.cta.href}
-        onClick={(e) => onHashClick(e, plan.cta.href)}
-        {...(plan.cta.href.startsWith("http")
-          ? { target: "_blank", rel: "noopener noreferrer" }
-          : {})}
+      <button
+        type="button"
         className="M-PRICE-BTN"
+        onClick={() => openConsultationModal()}
       >
         {plan.cta.label}
-      </a>
+      </button>
     </article>
   );
 }

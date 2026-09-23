@@ -22,7 +22,6 @@ import {
 type ShopStatus = "preparing" | "operating" | null;
 type ModalStep = "form" | "complete";
 
-const DESKTOP_MQ = "(min-width: 1440px)";
 const CONSENT_HREF = "/consultation/consent";
 
 const EMPTY_DRAFT: ConsultationDraft = {
@@ -35,14 +34,14 @@ const EMPTY_DRAFT: ConsultationDraft = {
 };
 
 /**
- * PC 1:1 맞춤 상담 모달 — UX 순서 hu_register_01~09_pc
+ * 1:1 맞춤 상담 모달 — UX 순서 hu_register_01~09_pc
+ * PC·모바일 동일 플로우 (모바일은 390 기준 카드로 축소)
  * 01 빈폼 → 02~06 입력 → 07 동의체크 → 08 제출활성 → 09 완료
  * 보기 → consent(10) → 돌아가기 시 입력값 유지
  */
 export function ConsultationModal() {
   const titleId = useId();
   const [mounted, setMounted] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<ModalStep>("form");
   const [name, setName] = useState("");
@@ -94,7 +93,6 @@ export function ConsultationModal() {
 
   /** CTA로 열기 — 항상 01 빈 폼부터 */
   const openModal = useCallback(() => {
-    if (!window.matchMedia(DESKTOP_MQ).matches) return;
     resetForm();
     setOpen(true);
     document.documentElement.classList.add("entry-scroll-lock");
@@ -102,7 +100,6 @@ export function ConsultationModal() {
 
   /** 동의 페이지에서 복귀 — 입력값 유지 */
   const openModalRestored = useCallback(() => {
-    if (!window.matchMedia(DESKTOP_MQ).matches) return;
     const draft = loadConsultationDraft();
     applyDraft(draft ?? EMPTY_DRAFT);
     setOpen(true);
@@ -111,11 +108,6 @@ export function ConsultationModal() {
 
   useEffect(() => {
     setMounted(true);
-    const mq = window.matchMedia(DESKTOP_MQ);
-    const sync = () => setIsDesktop(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
   }, []);
 
   useEffect(() => {
@@ -157,7 +149,7 @@ export function ConsultationModal() {
     setStep("complete");
   }
 
-  if (!mounted || !isDesktop || !open) return null;
+  if (!mounted || !open) return null;
 
   return createPortal(
     <>
