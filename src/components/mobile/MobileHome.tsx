@@ -270,13 +270,16 @@ export function MobileHome() {
             {keyBenefits.cards.map((card) => (
               <article key={card.title} className="M-KB-CARD">
                 <div className="M-KB-THUMB">
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element -- srcset 2×/lg 분기 */}
+                  <img
                     src={card.image}
-                    alt=""
-                    fill
+                    srcSet={`${card.image} 1116w, ${card.imageLg} 1920w`}
                     sizes="350px"
-                    className="object-cover"
-                    unoptimized
+                    alt=""
+                    width={1116}
+                    height={720}
+                    decoding="async"
+                    className="M-KB-THUMB-IMG"
                   />
                 </div>
                 <h3 className="M-KB-CARD-TITLE">{card.title}</h3>

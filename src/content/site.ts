@@ -294,7 +294,9 @@ export const keyBenefits = {
         "어울릴까요?’ 같은 사소한 질문에도 AI가 자연스럽게",
         "제안하고 추천합니다.",
       ],
+      /** 표시용 2×(1116×720) · lg는 확대·고밀도용 1920×1080 */
       image: "/key-benefits/01-consult.jpg",
+      imageLg: "/key-benefits/01-consult-lg.jpg",
     },
     {
       title: "대화를 통한 자동 예약",
@@ -308,6 +310,7 @@ export const keyBenefits = {
         "고객이 “그럼 그때로 할게요” 한마디면 끝납니다.",
       ],
       image: "/key-benefits/02-booking.jpg",
+      imageLg: "/key-benefits/02-booking-lg.jpg",
     },
     {
       title: "알아서 정리되는 장부",
@@ -321,6 +324,7 @@ export const keyBenefits = {
         "이제 완전히 사라집니다.",
       ],
       image: "/key-benefits/03-ledger.jpg",
+      imageLg: "/key-benefits/03-ledger-lg.jpg",
     },
     {
       title: "노쇼 방지 안심 예약금",
@@ -333,6 +337,7 @@ export const keyBenefits = {
         "오지 않을 문의로 낭비하던 시간과 감정을 되찾으세요.",
       ],
       image: "/key-benefits/04-deposit.jpg",
+      imageLg: "/key-benefits/04-deposit-lg.jpg",
     },
   ],
 } as const;

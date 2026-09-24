@@ -1816,6 +1816,14 @@ html:not(.splash-seen) [data-site-header] {
   background-color: #e3ddd3;
 }
 
+.M-KEY-BENEFITS .M-KB-THUMB-IMG {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
 /* 썸네일→소타이틀 25 */
 .M-KEY-BENEFITS .M-KB-CARD-TITLE {
   margin: 25px 0 0;
@@ -4583,6 +4591,14 @@ html:not(.splash-seen) [data-site-header] {
   border-radius: 6px;
   overflow: hidden;
   background-color: #e3ddd3;
+}
+
+.BENEFIT-CARD-THUMB-IMG {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 /* .BENEFIT-CARD-TITLE — 시안에 line-height 없음. 한 줄 · ideographic */

@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import { keyBenefits } from "@/content/site";
 
 /**
@@ -12,6 +10,8 @@ import { keyBenefits } from "@/content/site";
  *
  * 영문 태그는 cap/alphabetic, 한글은 ideographic 으로 trim.
  * 여러 줄은 br 로 한 요소의 라인박스를 유지해 line-height 가 줄 사이에 남게 함.
+ *
+ * 이미지: 표시용 2× + lg srcset — 기본 화면은 축소 없이, 확대 시 고해상도.
  */
 export function KeyBenefits() {
   return (
@@ -41,13 +41,16 @@ export function KeyBenefits() {
           {keyBenefits.cards.map((card) => (
             <article key={card.title} className="BENEFIT-CARD">
               <div className="BENEFIT-CARD-THUMB">
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element -- srcset 2×/lg 분기 */}
+                <img
                   src={card.image}
-                  alt=""
-                  fill
+                  srcSet={`${card.image} 1116w, ${card.imageLg} 1920w`}
                   sizes="558px"
-                  className="object-cover"
-                  unoptimized
+                  alt=""
+                  width={1116}
+                  height={720}
+                  decoding="async"
+                  className="BENEFIT-CARD-THUMB-IMG"
                 />
               </div>
               <h3 className="BENEFIT-CARD-TITLE">{card.title}</h3>
