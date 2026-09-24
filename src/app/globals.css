@@ -3573,9 +3573,10 @@ html:not(.splash-seen) [data-site-header] {
   margin: 36px 0 0;
 }
 
-/* Dilemma 하단 카피 — Noto 24/500 · lh 1.5 · center↔bottom 170 대칭 */
+/* Dilemma 하단 카피 — Noto 24/500 · lh 1.5
+ * 위(센터 카드)↔카피 210 · 카피↔아래(Experience 카드) = 130+80 → 시각 대칭 */
 .DILEMMA-BOTTOM-TEXT {
-  margin: 170px 0 0;
+  margin: 210px 0 0;
   font-size: 24px;
   font-weight: 500;
   line-height: 1.5;
@@ -3588,10 +3589,11 @@ html:not(.splash-seen) [data-site-header] {
 /*
  * Firefox 는 text-box-trim 을 구현하지 않아 trim 선언이 통째로 무시됩니다.
  * 그러면 카피가 글리프 박스가 아니라 라인박스로 잡혀 간격이 벌어집니다.
- * 실제로 센터 카드↔하단 카피 170 이 178.6 으로, 섹션 높이가 1189 → 1247 이 됩니다.
+ * 실제로 센터 카드↔하단 카피 210 이 trim 미적용 시 벌어집니다.
  * 디자이너가 반복 반려한 원인이 이것입니다.
  *
- * 시안 수치(42/36/170)는 그대로 두고, trim 이 걷어낼 양만 직접 상쇄합니다.
+ * 시안 수치(42/36)와 하단 카피 시각 중앙(210/130)은 그대로 두고,
+ * trim 이 걷어낼 양만 직접 상쇄합니다.
  * 아래 오버슈트는 Chromium(trim 적용) 과 Firefox(미적용) 에서 각 카피의
  * 베이스라인 위치를 프로브로 재서 뽑은 차이값입니다. 결과 기하는 Chromium 과 동일합니다.
  */
@@ -3613,7 +3615,7 @@ html:not(.splash-seen) [data-site-header] {
   }
 
   #dilemma .DILEMMA-BOTTOM-TEXT {
-    margin-top: calc(170px - 10.906px);
+    margin-top: calc(210px - 10.906px);
     margin-bottom: -7.5px;
   }
 }

@@ -8,7 +8,8 @@ import { dilemma } from "@/content/site";
  * The Dilemma — hu_DILEMMA_SPACING_PC
  *
  * padding-top 200 · tag→title 42 · title→desc 36
- * desc→center card 93 · center→bottom 170 · padding-bottom 170
+ * desc→center card 93 · center→bottom-text 210 · padding-bottom 130
+ * (아래 Experience pad-top 80 포함 시 카피 위·아래 시각 간격 210 대칭)
  * 좌우 카드 여백 60 · center↔right 간격 70
  *
  * .DILEMMA-TAG          Playfair 13/500 · the 만 소문자 이탤릭
@@ -21,10 +22,16 @@ import { dilemma } from "@/content/site";
  * .CARD-ITEM-RIGHT   300×385 · r 10 · left 1080 · center 대비 -279
  */
 const PAD_TOP = 200;
-const PAD_BOTTOM = 170;
+/**
+ * 하단 카피 세로 중앙 — 위(센터 카드)↔카피 / 카피↔아래(Experience 카드) 시각 간격 대칭.
+ * Experience padding-top 80 을 아래 간격에 포함하므로
+ * margin-top 210 + padding-bottom 130 (= 위 210 · 아래 130+80).
+ * (예전 170/170 은 Dilemma 섹션 내부만 대칭이라 화면에서는 카피가 위로 뜸)
+ */
+const PAD_BOTTOM = 130;
 const GAP_DESC_CENTER = 93;
 /**
- * tag→title 42 · title→desc 36 · center→bottom 170 은 globals.css 로 옮겼습니다.
+ * tag→title 42 · title→desc 36 · center→bottom-text 210 은 globals.css 로 옮겼습니다.
  * Firefox 는 text-box-trim 을 구현하지 않아 @supports 로 라인박스 오버슈트를
  * 상쇄해야 하는데, 인라인 style 은 @supports 가 덮을 수 없습니다.
  */
